@@ -1,0 +1,93 @@
+// Web Security Intermediate - Application Defense & Vulnerability Assessment
+
+What is the primary difference between XSS (Cross-Site Scripting) and CSRF (Cross-Site Request Forgery)?
+XSS executes malicious scripts in the victim's browser to steal data or perform actions, while CSRF tricks the victim into performing actions they didn't intend on a website where they're authenticated.
+
+What is the most effective method to prevent SQL injection attacks?
+Use parameterized queries (prepared statements) with proper input validation and least privilege database access to prevent malicious SQL code execution.
+
+What is the primary purpose of Content Security Policy (CSP) in web security?
+To prevent XSS attacks by specifying which dynamic resources (scripts, styles, images) are allowed to load, reducing the attack surface for code injection.
+
+What is the difference between authentication and authorization in web applications?
+Authentication verifies who the user is (identity), while authorization determines what the user is allowed to do (permissions) after authentication.
+
+What is the most critical security consideration when implementing file upload functionality?
+Validate file content using magic bytes rather than extensions, store files outside web root, implement size limits, and scan for malware before processing.
+
+What is the primary purpose of OWASP Top 10 in web security?
+To provide awareness and guidance on the most critical web application security risks, helping developers prioritize security efforts effectively.
+
+What is the difference between stored XSS and reflected XSS?
+Stored XSS persists malicious scripts in the database or files affecting multiple users, while reflected XSS reflects malicious scripts in immediate responses affecting individual users.
+
+What is the most effective method to prevent session hijacking attacks?
+Implement secure session management with HTTPS-only cookies, proper session timeout, regeneration on privilege changes, and secure random session IDs.
+
+What is the primary security benefit of implementing HTTPS (TLS/SSL)?
+Encrypts data in transit between client and server, preventing eavesdropping, man-in-the-middle attacks, and ensuring data integrity and authenticity.
+
+What is the difference between black-box and white-box web application security testing?
+Black-box testing examines applications from external perspective without knowledge of internal structure, while white-box testing has full access to source code and architecture.
+
+What is the most critical consideration when implementing API security?
+Use proper authentication (OAuth 2.0, JWT), implement rate limiting, validate all inputs, and use HTTPS to protect API endpoints from unauthorized access.
+
+What is the primary purpose of input validation in web security?
+To prevent injection attacks by ensuring user input conforms to expected format, length, and character sets before processing by the application.
+
+What is the difference between symmetric and asymmetric encryption in web applications?
+Symmetric encryption uses the same key for encryption/decryption (faster), while asymmetric uses public/private key pairs (slower but enables secure key exchange).
+
+What is the most effective method to prevent Cross-Site Scripting (XSS) attacks?
+Implement output encoding based on context (HTML, JavaScript, CSS), use CSP headers, validate inputs, and use safe frameworks that auto-escape content.
+
+What is the primary security consideration for cookie management?
+Set Secure and HttpOnly flags, implement proper expiration, use SameSite attribute, and avoid storing sensitive information in cookies.
+
+What is the difference between vulnerability scanning and penetration testing for web applications?
+Vulnerability scanning automatically identifies known vulnerabilities, while penetration testing actively exploits vulnerabilities to assess real-world impact.
+
+What is the most critical security consideration when implementing user authentication?
+Use strong password policies, multi-factor authentication, secure password storage (bcrypt/scrypt), and account lockout mechanisms to prevent brute force attacks.
+
+What is the primary purpose of security headers in web applications?
+To provide additional layers of protection by instructing browsers on security policies like XSS protection, clickjacking prevention, and content type restrictions.
+
+What is the difference between server-side and client-side security controls?
+Server-side controls enforce security rules on the server, while client-side controls provide additional protection in the browser but can be bypassed by attackers.
+
+What is the most effective method to prevent insecure direct object references (IDOR)?
+Implement proper authorization checks for every object access, use indirect references, and validate user permissions before allowing data access.
+
+What is the primary security consideration when implementing third-party integrations?
+Validate all data from external sources, implement proper authentication, use HTTPS for all communications, and monitor for unusual activity from integrated services.
+
+What is the difference between business logic flaws and technical vulnerabilities?
+Business logic flaws exploit application workflow and design weaknesses, while technical vulnerabilities exploit implementation errors in code or configuration.
+
+What is the most effective method to prevent clickjacking attacks?
+Implement X-Frame-Options headers, use Content Security Policy with frame-ancestors directive, and JavaScript frame-busting techniques.
+
+What is the primary security consideration for error handling in web applications?
+Display generic error messages to users while logging detailed errors for analysis, preventing information disclosure that could aid attackers.
+
+What is the difference between white-box and black-box input validation?
+White-box validation uses knowledge of application internals to create comprehensive validation rules, while black-box validation tests inputs without internal knowledge.
+
+What is the most effective method to prevent insecure deserialization attacks?
+Avoid deserializing untrusted data, use safe serialization formats (JSON), implement integrity checks, and validate all serialized data before processing.
+
+What is the primary security consideration for web application firewalls (WAF)?
+Properly configure rules for specific application rather than using default settings, regularly update signatures, and monitor for false positives/negatives.
+
+What is the difference between synchronous and asynchronous security testing?
+Synchronous testing provides immediate results but may miss time-based vulnerabilities, while asynchronous testing can detect timing attacks and race conditions.
+
+What is the most effective method to prevent HTTP parameter pollution?
+Validate parameter names and values, use strict parameter parsing, implement parameter whitelisting, and normalize input before processing.
+
+What is the primary security consideration when implementing REST APIs?
+Use proper HTTP methods (GET, POST, PUT, DELETE), implement authentication/authorization, validate all inputs, and use rate limiting to prevent abuse.
+
+This intermediate web security deck provides essential knowledge for identifying, preventing, and testing common web application vulnerabilities with practical defense strategies.

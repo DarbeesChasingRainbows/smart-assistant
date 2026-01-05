@@ -1,0 +1,38 @@
+:8000 {
+	# 1. Garage App (Standard Routes)
+	handle /garage* {
+		reverse_proxy garage-frontend:8000
+	}
+
+	# 2. Flashcards App (Standard Routes)
+	handle /flashcards* {
+		reverse_proxy flashcards-frontend:8000
+	}
+
+	# 3. THE FIX: Asset "Catch & Rewrite"
+	# Catches broken /assets/ links, prepends the prefix, and forwards them.
+	handle /assets/* {
+		
+		# Fix for Garage Assets
+		@from_garage header_regexp Referer /garage
+		handle @from_garage {
+			rewrite * /garage{path}  # <--- MAGIC LINE: Adds /garage prefix
+			reverse_proxy garage-frontend:8000
+		}
+
+		# Fix for Flashcards Assets
+		@from_flashcards header_regexp Referer /flashcards
+		handle @from_flashcards {
+			rewrite * /flashcards{path} # <--- MAGIC LINE: Adds /flashcards prefix
+			reverse_proxy flashcards-frontend:8000
+		}
+
+		# Default to main frontend (no rewrite needed)
+		reverse_proxy frontend:8000
+	}
+
+	# 4. Default Root
+	handle {
+		reverse_proxy frontend:8000
+	}
+}

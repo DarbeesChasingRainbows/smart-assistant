@@ -1,0 +1,96 @@
+// Permaculture Design Intermediate - Basic Principles & Applications
+
+What is the primary difference between permaculture and conventional gardening?
+Permaculture designs integrated systems mimicking natural ecosystems, while conventional gardening often focuses on individual elements without considering relationships.
+
+What is the most important permaculture principle for beginners?
+"Observe and Interact" - taking time to understand your site's patterns, problems, and opportunities before making changes.
+
+What is the difference between permaculture zones and sectors?
+Zones organize elements based on frequency of use (Zone 0-5), while sectors analyze external energies (sun, wind, water) moving through the site.
+
+What is the primary purpose of zone planning in permaculture design?
+Place frequently used elements closest to home for efficiency, while placing low-maintenance elements farther away.
+
+What is the most common mistake made by beginning permaculture designers?
+Trying to implement too many complex ideas at once instead of observing and starting with simple, high-impact changes.
+
+What is the difference between a guild and companion planting?
+A guild is a multi-species group with multiple beneficial relationships, while companion planting typically focuses on two-species beneficial pairings.
+
+What is the primary benefit of using swales in landscape design?
+Capture and slow rainwater runoff, allowing it to infiltrate soil and recharge groundwater while preventing erosion.
+
+What is the most effective way to start applying permaculture on a small property?
+Begin with Zone 1 - kitchen garden, herb spiral, and compost system closest to your home for immediate benefits and learning.
+
+What is the difference between annual and perennial systems in permaculture?
+Annual systems require yearly replanting and intensive management, while perennial systems provide long-term yields with reduced maintenance.
+
+What is the primary purpose of stacking in permaculture design?
+Create multiple vertical layers of plants (canopy, understory, shrubs, herbs, groundcover, roots) to maximize space and diversity.
+
+What is the most common water harvesting technique for home landscapes?
+Rain barrels connected to downspouts provide simple, effective water collection for irrigation needs.
+
+What is the difference between edge effect and microclimate?
+Edge effect refers to increased diversity at boundaries between ecosystems, while microclimate describes small areas with different conditions than surroundings.
+
+What is the primary benefit of integrating animals into permaculture systems?
+Animals provide pest control, fertilization, weed management, and food production while closing nutrient cycles.
+
+What is the most effective way to create soil fertility in new permaculture gardens?
+Sheet mulching (lasagna gardening) builds soil quickly by layering cardboard, compost, and organic materials without tilling.
+
+What is the difference between patterns and details in permaculture design?
+Patterns are broad-scale arrangements and relationships, while details are specific elements and species choices within those patterns.
+
+What is the primary purpose of sector analysis?
+Identify external energies (sun, wind, fire, water, wildlife) to design systems that work with rather than against natural forces.
+
+What is the most common permaculture technique for urban gardens?
+Vertical gardening and container systems maximize limited space while creating productive growing areas.
+
+What is the difference between input-driven and self-maintaining systems?
+Input-driven systems require external resources and management, while self-maintaining systems increasingly care for themselves over time.
+
+What is the primary benefit of food forests compared to conventional gardens?
+Food forests provide multiple yields with minimal maintenance while creating habitat and building soil through natural succession.
+
+What is the most effective way to apply permaculture ethics to daily life?
+Earth Care through conservation practices, People Care through community building, and Fair Share through responsible consumption.
+
+What is the difference between intensive and extensive permaculture systems?
+Intensive systems require frequent attention and high inputs for high yields, while extensive systems need minimal management for sustainable yields.
+
+What is the primary purpose of diversity in permaculture design?
+Diverse systems are more resilient to pests, diseases, and climate fluctuations while providing varied yields throughout seasons.
+
+What is the most common permaculture design method for slopes?
+Contour planting, terracing, and swales on contour slow water runoff, prevent erosion, and create growing space.
+
+What is the difference between functional and ornamental design in permaculture?
+Functional design prioritizes useful relationships and yields, while ornamental design focuses primarily on aesthetic appearance.
+
+What is the primary benefit of closed-loop systems in permaculture?
+Closed loops minimize waste by using outputs from one element as inputs for another, reducing external dependencies.
+
+What is the most effective way to design for energy efficiency?
+Place elements based on frequency of use, solar access, and natural patterns to reduce physical work and resource consumption.
+
+What is the difference between natural building and conventional construction?
+Natural building uses local, renewable materials and passive design principles, while conventional construction often relies on manufactured materials and mechanical systems.
+
+What is the primary purpose of succession planning in permaculture?
+Guide ecosystem development through stages, ensuring continuous yields while building increasingly complex and stable systems.
+
+What is the most common mistake in urban permaculture design?
+Not accounting for limited space, light restrictions, and neighbor considerations when designing intensive systems.
+
+What is the difference between permaculture and organic gardening?
+Permaculture is a design system for sustainable human settlements, while organic gardening primarily focuses on growing methods without synthetic inputs.
+
+What is the primary benefit of applying permaculture principles to existing landscapes?
+Gradually transform conventional gardens into more productive, resilient systems while maintaining existing functional elements.
+
+This intermediate permaculture design deck provides practical knowledge for applying basic permaculture principles and techniques in home and community settings.

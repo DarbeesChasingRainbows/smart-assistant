@@ -1,0 +1,90 @@
+// Propagation Techniques Intermediate - Basic Methods & Home Applications
+
+What is the primary difference between sexual and asexual plant propagation?
+Sexual propagation uses seeds creating genetic variation, while asexual propagation produces genetically identical plants from vegetative parts.
+
+What is the most important factor for successful seed germination?
+Consistent moisture, proper temperature, and adequate oxygen - seeds need water to activate enzymes but can't be waterlogged.
+
+What is the difference between scarification and stratification in seed treatment?
+Scarification breaks physical seed coats to allow water absorption, while stratification provides cold treatment to break physiological dormancy.
+
+What is the primary benefit of starting seeds indoors rather than direct sowing?
+Extends growing season, provides controlled environment for germination, and protects seeds from pests and weather.
+
+What is the most common cause of seedling failure after germination?
+Damping off disease caused by overwatering and poor air circulation, leading to stem rot at soil line.
+
+What is the difference between softwood and hardwood cuttings?
+Softwood cuttings are taken from new growth in spring, while hardwood cuttings are taken from dormant mature wood in late fall or winter.
+
+What is the primary purpose of rooting hormone in cuttings?
+Stimulates root initiation and increases success rates by providing auxin hormones that encourage cell division at cut ends.
+
+What is the most effective way to prevent cuttings from wilting before rooting?
+Maintain high humidity around cuttings through misting, humidity domes, or covering with plastic bags.
+
+What is the difference between heel cuttings and straight cuttings?
+Heel cuttings include a small section of older wood at the base, while straight cuttings are taken cleanly without attached older tissue.
+
+What is the primary benefit of using bottom heat for propagation?
+Increases rooting speed and success rates by maintaining optimal root zone temperature (70-75°F) for root development.
+
+What is the most common method for propagating houseplants?
+Stem cuttings placed in water or well-draining media, providing simple and reliable propagation for most popular houseplants.
+
+What is the difference between division and layering propagation?
+Division separates established plant clumps into smaller sections, while layering roots stems while still attached to parent plant.
+
+What is the primary purpose of removing lower leaves from cuttings?
+Reduces water loss through transpiration and prevents leaves from rotting when inserted into propagation media.
+
+What is the most effective propagation media for most cuttings?
+Well-draining mix of perlite and peat moss or coco coir, providing moisture retention while preventing rot.
+
+What is the difference between simple layering and air layering?
+Simple layering bends stems to ground level, while air layering roots stems while still attached above ground without burying the stem.
+
+What is the primary benefit of grafting fruit trees?
+Combines desirable fruit characteristics of scion with disease resistance and vigor of rootstock, maintaining true-to-type fruit production.
+
+What is the most common type of grafting for home gardeners?
+Whip grafting or splice grafting for similar diameter scions and rootstocks, providing reliable union formation.
+
+What is the difference between budding and grafting?
+Budding uses single buds inserted under bark, while grafting uses larger scion pieces with multiple buds.
+
+What is the primary purpose of callus formation in graft unions?
+Callus tissue forms bridge between scion and rootstock before vascular connection, essential for successful graft take.
+
+What is the most effective way to propagate succulent plants?
+Leaf cuttings or stem cuttings allowed to callus before planting in well-draining soil to prevent rot.
+
+What is the difference between herbaceous and woody plant propagation?
+Herbaceous plants root quickly from soft cuttings, while woody plants often require specific timing and hormone treatments.
+
+What is the primary benefit of using mist systems for cutting propagation?
+Maintains constant leaf moisture to prevent wilting while roots form, significantly increasing success rates.
+
+What is the most common method for propagating perennial flowers?
+Division of established clumps in spring or fall, providing reliable propagation and rejuvenation of mature plants.
+
+What is the difference between seed viability and seed vigor?
+Viability indicates if seeds can germinate, while vigor measures seedling growth rate and health after germination.
+
+What is the primary purpose of acclimatization for propagated plants?
+Gradually expose tender plants to outdoor conditions to prevent shock and ensure successful transition to garden environment.
+
+What is the most effective way to store seeds for long-term viability?
+Cool, dry, dark conditions with low humidity, using airtight containers to prevent moisture absorption and fungal growth.
+
+What is the difference between monocot and dicot seed propagation?
+Monocots (grasses, lilies) have one seed leaf and often need different germination conditions than dicots with two seed leaves.
+
+What is the primary benefit of propagating from cuttings rather than seeds?
+Produces genetically identical plants maintaining desirable characteristics, often faster than growing from seed.
+
+What is the most common mistake in home propagation attempts?
+Overwatering leading to rot, or underwatering causing desiccation - maintaining proper moisture balance is critical.
+
+This intermediate propagation techniques deck provides practical knowledge for successful plant propagation at home using basic methods and common techniques.

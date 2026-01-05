@@ -1,0 +1,248 @@
+// Herbalism Expert - Clinical Scenarios & Differential Diagnosis
+
+Scenario: A 42-year-old female presents with recurrent urinary tract infections (4 episodes in past year), chronic stress, and mild hypertension. She currently takes lisinopril 10mg daily and reports antibiotic resistance concerns. Physical examination reveals mild suprapubic tenderness, and recent urine culture shows E. coli resistant to trimethoprim-sulfamethoxazole. She seeks herbal alternatives for prevention and management.
+
+Question: Which THREE herbal actions and considerations are most critical for this patient's comprehensive treatment plan, and what monitoring is essential? (Select ALL that apply)
+A) Cranberry proanthocyanidins preventing bacterial adhesion to bladder epithelium
+B) Uva ursi arbutin conversion to hydroquinone for antimicrobial urinary tract effects
+C) Adaptogenic herbs modulating HPA-axis stress response affecting immune function
+D) Diuretic herbs increasing urinary flow for mechanical bacterial clearance
+E) ACE-inhibitor herbs potentially interacting with lisinopril causing hypotension
+F) Immunomodulating herbs enhancing leukocyte activity and mucosal immunity
+
+Answer: A, C, F
+Cranberry proanthocyanidins (A) prevent E. coli adhesion to bladder wall, reducing infection recurrence. Adaptogenic herbs (C) address chronic stress affecting immune competence and UTI susceptibility. Immunomodulating herbs (F) enhance local and systemic immunity for infection prevention. Uva ursi requires acidic urine and has safety concerns, diuretics may worsen hypertension, and ACE-inhibitor herbs could cause dangerous hypotension with lisinopril.
+
+Scenario: A 58-year-old male with type 2 diabetes (HbA1c 8.2%), peripheral neuropathy, and non-alcoholic fatty liver disease seeks herbal adjunct therapy. He takes metformin 1000mg twice daily and gabapentin 300mg three times daily. He reports fatigue, poor wound healing, and elevated liver enzymes (ALT 85, AST 72).
+
+Question: Which THREE herbal mechanisms and safety considerations are most important for this patient's condition, and what laboratory monitoring is required? (Select ALL that apply)
+A) Bitter melon charantin enhancing insulin sensitivity and glucose utilization
+B) Milk thistle silymarin promoting hepatocyte regeneration and liver protection
+C) Alpha-lipoic acid antioxidant effects improving peripheral neuropathy symptoms
+D) Ginseng saponins potentially causing hypoglycemia when combined with metformin
+E) Ginkgo biloba flavonoids improving peripheral circulation and neuropathy
+F) Berberine AMPK activation improving insulin sensitivity and lipid metabolism
+
+Answer: B, D, F
+Milk thistle silymarin (B) protects and regenerates liver tissue in fatty liver disease. Berberine (F) activates AMPK pathways improving insulin sensitivity and lipid metabolism, complementary to metformin. Ginseng interactions (D) require careful monitoring as saponins can potentiate metformin causing hypoglycemia. Bitter melon lacks sufficient evidence, alpha-lipoic acid isn't botanical, and ginkgo may increase bleeding risk with diabetes medications.
+
+Scenario: A 35-year-old female with severe premenstrual syndrome, menstrual cramps, and hormonal acne seeks herbal management. She has a 28-day cycle with heavy bleeding for days 1-3, severe breast tenderness, and emotional lability. She uses oral contraceptives and reports anxiety about potential herb-drug interactions.
+
+Question: Which THREE herbal actions and interactions are most critical for this patient's hormonal balance, and what contraceptive considerations apply? (Select ALL that apply)
+A) Vitex agnus-castus dopaminergic effects reducing prolactin and balancing LH/FSH
+B) Chaste tree berry flavonoids enhancing progesterone receptor sensitivity
+C) Peppermint essential oil menthol reducing prostaglandin-mediated uterine cramping
+D) Dong quai phytoestrogens potentially interfering with oral contraceptive efficacy
+E) Black cohosh triterpene glycosides modulating estrogen receptor activity
+F) Ginger shogaol compounds reducing inflammatory prostaglandin synthesis
+
+Answer: A, D, F
+Vitex (A) addresses hormonal imbalance through dopaminergic prolactin reduction and LH/FSH normalization. Dong quai (D) contains phytoestrogens that may reduce oral contraceptive efficacy requiring additional contraception. Ginger (F) reduces inflammatory prostaglandins alleviating menstrual cramps. Black cohosh has limited evidence for PMS, peppermint isn't hormonal, and chaste tree flavonoids aren't the primary mechanism.
+
+Scenario: A 67-year-old male with benign prostatic hyperplasia (IPSS score 19), nocturia 3-4 times nightly, and mild erectile dysfunction seeks herbal alternatives to finasteride. He has controlled hypertension and takes amlodipine 5mg daily. PSA is 2.8 ng/mL and prostate volume 45cc on ultrasound.
+
+Question: Which THREE herbal mechanisms and cardiovascular considerations are most important for this patient's condition, and what monitoring is essential? (Select ALL that apply)
+A) Saw palmetto fatty acids inhibiting 5-alpha-reductase and reducing prostate inflammation
+B) Pygeum africanum phytosterols improving bladder emptying and reducing nocturia
+C) Stinging nettle root lignans modulating sex hormone-binding globulin levels
+D) Ginkgo biloba vasodilation potentially enhancing amlodipine hypotensive effects
+E) Pumpkin seed oil zinc inhibition of prostate epithelial cell proliferation
+F) Asian ginseng ginsenosides potentially improving erectile dysfunction and libido
+
+Answer: A, B, D
+Saw palmetto (A) inhibits 5-alpha-reductase similar to finasteride with fewer side effects. Pygeum (B) improves bladder emptying and reduces nocturia through phytosterol actions. Ginkgo (D) may potentiate amlodipine causing hypotension requiring blood pressure monitoring. Stinging nettle evidence is limited, pumpkin seed zinc levels are insufficient, and Asian ginseng may interact with cardiovascular medications.
+
+Scenario: A 29-year-old female with generalized anxiety disorder, panic attacks, and insomnia seeks herbal alternatives to SSRIs. She reports palpitations, racing thoughts, and difficulty falling asleep. She avoids caffeine and exercises regularly. She has a family history of bipolar disorder and is concerned about herbal triggering of mania.
+
+Question: Which THREE herbal mechanisms and safety considerations are most critical for this patient's anxiety management, and what psychiatric monitoring is required? (Select ALL that apply)
+A) Lavender linalool GABAergic modulation reducing anxiety and promoting sleep
+B) Passionflower flavonoids enhancing GABA receptor binding and reducing panic
+C) St. John's Wort hyperforin reuptake inhibition potentially triggering mania
+D) Kava kavalactones GABA-A receptor modulation with hepatotoxicity concerns
+E) Ashwagandha withanolides reducing cortisol and modulating stress response
+F) Lemon balm rosmarinic acid acetylcholinesterase inhibition improving cognition
+
+Answer: C, D, E
+St. John's Wort (C) requires careful monitoring in bipolar patients due to mania risk from neurotransmitter effects. Kava (D) provides effective GABAergic anxiolysis but requires liver function monitoring due to hepatotoxicity risk. Ashwagandha (E) addresses anxiety through cortisol modulation without mania risk. Lavender and passionflower are safer but less comprehensive, while lemon balm primarily affects cognition rather than anxiety.
+
+Scenario: A 45-year-old female with rheumatoid arthritis, chronic inflammation, and methotrexate intolerance seeks herbal anti-inflammatory alternatives. She reports morning stiffness lasting 2 hours, joint swelling in hands and wrists, and fatigue. ESR is 45 mm/hr and CRP is 12 mg/L. She takes NSAIDs as needed and reports GI upset.
+
+Question: Which THREE herbal anti-inflammatory mechanisms and safety considerations are most important, and what laboratory monitoring is required? (Select ALL that apply)
+A) Turmeric curcumin COX-2 inhibition reducing prostaglandin-mediated inflammation
+B) Devil's claw harpagosides inhibiting inflammatory cytokines and reducing pain
+C) Boswellia serrata boswellic acids inhibiting 5-lipoxygenase and leukotriene synthesis
+D) Willow bark salicin providing COX inhibition without GI mucosal damage
+E) Thunder god vine triptolide immunosuppression potentially causing hepatotoxicity
+F) Ginger shogaols reducing NF-kB activation and inflammatory gene expression
+
+Answer: A, C, E
+Turmeric curcumin (A) provides COX-2 inhibition comparable to NSAIDs without GI toxicity. Boswellia (C) uniquely inhibits 5-lipoxygenase complementing COX inhibition for comprehensive anti-inflammatory effects. Thunder god vine (E) offers potent immunosuppression but requires liver function monitoring due to hepatotoxicity risk. Devil's claw evidence is limited, willow bark may affect bleeding, and ginger provides milder anti-inflammatory effects.
+
+Scenario: A 52-year-old female with perimenopausal symptoms including hot flashes, night sweats, insomnia, and vaginal dryness seeks herbal alternatives to hormone replacement therapy. She has a uterus, family history of breast cancer, and elevated cholesterol. She reports mood swings and decreased libido.
+
+Question: Which THREE herbal mechanisms and cancer safety considerations are most critical, and what cancer screening is required? (Select ALL that apply)
+A) Black cohosh triterpene glycosides acting as selective estrogen receptor modulators
+B) Soy isoflavones phytoestrogen binding potentially stimulating estrogen-sensitive tissues
+C) Red clover isoflavones improving lipid profile and reducing cardiovascular risk
+D) Maca Lepidium alkaloids enhancing libido and mood without hormonal activity
+E) Dong quai coumarins potentially increasing estrogen-sensitive cancer risk
+F) Evening primrose oil gamma-linolenic acid reducing prostaglandin-mediated symptoms
+
+Answer: A, B, E
+Black cohosh (A) provides SERM-like activity reducing hot flashes without stimulating breast tissue. Soy isoflavones (B) require careful consideration in breast cancer family history due to potential estrogen receptor stimulation. Dong quai (E) contains coumarins that may increase estrogen-sensitive cancer risk requiring avoidance. Red clover is similar to soy concerns, maca isn't hormonal, and evening primrose oil addresses prostaglandins rather than hormonal symptoms.
+
+Scenario: A 38-year-old male with irritable bowel syndrome with diarrhea predominance, abdominal pain, and bloating seeks herbal management. He reports stress exacerbation, food intolerances, and occasional urgency. Colonoscopy was normal and celiac testing was negative. He takes loperamide as needed.
+
+Question: Which THREE herbal mechanisms and gut microbiome considerations are most important, and what dietary integration is essential? (Select ALL that apply)
+A) Peppermint essential oil carminative effects reducing intestinal gas and cramping
+B) Psyllium husk soluble fiber modulating bowel consistency and microbiome diversity
+C) Berberine-containing herbs antimicrobial effects altering gut flora composition
+D) Chamomile bisabolol anti-inflammatory effects soothing intestinal mucosa
+E) Artichoke leaf cynarin stimulating bile production and fat digestion
+F) Marshmallow root mucilage protecting irritated intestinal epithelium
+
+Answer: A, B, F
+Peppermint (A) provides carminative effects reducing gas and abdominal cramping through smooth muscle relaxation. Psyllium (B) adds soluble fiber to normalize stool consistency and support beneficial gut microbiome. Marshmallow (F) mucilage protects irritated intestinal lining reducing inflammation and urgency. Berberine may disrupt beneficial flora, chamomile provides milder effects, and artichoke primarily affects digestion rather than IBS symptoms.
+
+Scenario: A 61-year-old female with osteoporosis (T-score -2.8), vitamin D deficiency, and multiple fractures seeks herbal bone support alternatives to bisphosphonates. She takes calcium 1200mg and vitamin D3 2000 IU daily. She reports back pain, limited mobility, and concerns about medication side effects.
+
+Question: Which THREE herbal bone-support mechanisms and medication interactions are most critical, and what bone density monitoring is required? (Select ALL that apply)
+A) Horsetail silica providing structural component for collagen matrix formation
+B) Red clover isoflavones stimulating osteoblastic activity and bone formation
+C) Black cohosh potentially interfering with bisphosphonate metabolism if used
+D) Vitamin K2-containing herbs enhancing calcium deposition in bone matrix
+E) Licorice glycyrrhizin potentially causing calcium loss through cortisol effects
+F) Oat straw minerals providing calcium, magnesium, and trace elements
+
+Answer: A, D, E
+Horsetail (A) provides bioavailable silica essential for collagen matrix formation in bone. Vitamin K2 (D) from herbs like alfalfa enhances osteocalcin activation directing calcium into bone matrix. Licorice (E) should be avoided as glycyrrhizin can cause cortisol-mediated calcium loss worsening osteoporosis. Red cloof may interfere with medications, black cohosh isn't relevant to bone, and oat straw mineral content is insufficient for therapeutic effect.
+
+Scenario: A 33-year-old female with chronic migraine headaches, menstrual-associated migraines, and NSAID overuse seeks herbal prophylaxis. She reports 8-10 headache days monthly, photophobia, and nausea. She takes sumatriptan during attacks and reports medication rebound headaches.
+
+Question: Which THREE herbal mechanisms and vascular considerations are most important, and what headache diary tracking is essential? (Select ALL that apply)
+A) Feverfew parthenolide inhibition of serotonin release and platelet aggregation
+B) Butterbur petasin reducing vascular inflammation and cerebral vasospasm
+C) Ginger anti-inflammatory effects reducing prostaglandin-mediated migraine pain
+D) Ginkgo biloba vasodilation potentially increasing cerebral blood flow
+E) Peppermint essential oil menthol providing topical headache relief
+F) Coenzyme Q10 mitochondrial energy production reducing migraine frequency
+
+Answer: A, B, C
+Feverfew (A) provides prophylactic effects through serotonin inhibition and platelet aggregation reduction. Butterbur (B) reduces vascular inflammation and prevents cerebral vasospasm, both key in migraine pathophysiology. Ginger (C) addresses inflammatory prostaglandins contributing to migraine pain. Ginkgo may worsen migraines through vasodilation, peppermint provides only symptomatic relief, and CoQ10 isn't botanical.
+
+Scenario: A 56-year-old male with non-alcoholic steatohepatitis, metabolic syndrome, and elevated liver enzymes seeks herbal liver support. He has BMI 32, triglycerides 280, and ALT 98. He takes atorvastatin 40mg and metformin 1000mg twice daily. He reports fatigue and right upper quadrant discomfort.
+
+Question: Which THREE herbal hepatoprotective mechanisms and statin interactions are most critical, and what liver function monitoring is required? (Select ALL that apply)
+A) Milk thistle silymarin antioxidant protection and hepatocyte regeneration
+B) Berberine AMPK activation improving insulin resistance and hepatic steatosis
+C) Dandelion root cholagogue effects enhancing bile flow and fat metabolism
+D) Green tea catechins potentially causing hepatotoxicity in high doses
+E) Artichoke leaf cynarin stimulating bile production and cholesterol reduction
+F) Schisandra lignans inducing phase II detoxification enzymes
+
+Answer: A, B, D
+Milk thistle (A) provides direct hepatoprotection through antioxidant effects and hepatocyte regeneration. Berberine (B) addresses underlying insulin resistance driving fatty liver disease through AMPK activation. Green tea (D) requires monitoring as high-dose catechins can cause hepatotoxicity, especially with statins. Dandelion provides milder effects, artichoke primarily affects cholesterol, and schisandra may interact with medications.
+
+Scenario: A 41-year-old female with atopic dermatitis, chronic eczema, and allergic rhinitis seeks herbal anti-inflammatory alternatives to topical steroids. She reports seasonal exacerbation, food sensitivities, and pruritus affecting sleep. Skin examination shows lichenified plaques on antecubital fossae.
+
+Question: Which THREE herbal anti-inflammatory mechanisms and allergic considerations are most important, and what allergy testing is recommended? (Select ALL that apply)
+A) Turmeric curcumin topical application reducing skin inflammation and pruritus
+B) Licorice glycyrrhizin topical corticosteroid-sparing effects
+C) Stinging nettle histamine reduction reducing allergic rhinitis symptoms
+D) Chamomile bisabolol soothing irritated skin and reducing inflammation
+E) Evening primrose oil gamma-linolenic acid improving skin barrier function
+F) Burdock root blood purification and toxin elimination effects
+
+Answer: A, B, E
+Turmeric (A) provides potent topical anti-inflammatory effects reducing eczema inflammation and pruritus. Licorice (B) offers corticosteroid-sparing effects through glycyrrhizin anti-inflammatory action. Evening primrose oil (E) improves skin barrier function through essential fatty acids reducing eczema severity. Stinging nettle primarily affects systemic allergies, chamomile provides milder effects, and burdock blood purification concepts lack scientific validation.
+
+Scenario: A 48-year-old male with chronic fatigue syndrome, fibromyalgia, and cognitive impairment seeks herbal energy support. He reports unrefreshing sleep, widespread pain, and difficulty concentrating. He takes antidepressants and reports medication side effects. Thyroid testing was normal.
+
+Question: Which THREE herbal mechanisms and neurotransmitter considerations are most critical, and what cognitive function testing is required? (Select ALL that apply)
+A) Rhodiola rosea salidroside adaptogenic effects reducing fatigue and improving cognition
+B) Asian ginseng ginsenosides enhancing energy production and mental performance
+C) St. John's Wort hyperforin potentially interacting with antidepressant medications
+D) Ginkgo biloba cerebral blood flow enhancement improving cognitive function
+E) Eleuthero senticosus eleutherosides modulating HPA-axis stress response
+F) Lemon balm rosmarinic acid acetylcholinesterase inhibition enhancing memory
+
+Answer: A, C, E
+Rhodiola (A) provides adaptogenic support reducing fatigue and improving cognitive function through salidroside mechanisms. St. John's Wort (C) requires careful monitoring due to potential interactions with antidepressants causing serotonin syndrome. Eleuthero (E) addresses HPA-axis dysfunction common in chronic fatigue through adaptogenic effects. Asian ginseng may be overstimulating, ginkgo evidence is limited for CFS, and lemon balm provides mild cognitive enhancement.
+
+Scenario: A 39-year-old female with polycystic ovary syndrome, insulin resistance, and hirsutism seeks herbal hormonal regulation. She reports irregular cycles, acne, and difficulty conceiving. LH:FSH ratio is 3:1 and testosterone is elevated. She takes metformin and seeks fertility support.
+
+Question: Which THREE herbal mechanisms and fertility considerations are most important, and what hormonal monitoring is required? (Select ALL that apply)
+A) Spearmint anti-androgen effects reducing testosterone and hirsutism
+B) Inositol myo-inositol insulin sensitization improving ovulatory function
+C) Vitex agnus-castus prolactin reduction and LH/FSH ratio normalization
+D) Licorice glycyrrhizin potentially increasing testosterone levels
+E) Cinnamon insulin sensitization improving metabolic parameters
+F) Black cohosh estrogenic effects potentially interfering with fertility
+
+Answer: A, B, C
+Spearmint (A) provides anti-androgen effects reducing testosterone and improving hirsutism. Inositol (B) improves insulin sensitivity restoring ovulatory function in PCOS. Vitex (C) normalizes LH/FSH ratio through prolactin reduction improving fertility. Licorice may worsen hyperandrogenism, black cohosh isn't indicated for PCOS, and cinnamon provides milder insulin-sensitizing effects than inositol.
+
+Scenario: A 64-year-old male with chronic obstructive pulmonary disease, chronic bronchitis, and frequent respiratory infections seeks herbal respiratory support. He has 40-pack-year smoking history, dyspnea on exertion, and productive cough. He uses albuterol inhaler and takes tiotropium.
+
+Question: Which THREE herbal respiratory mechanisms and pulmonary safety considerations are most critical, and what pulmonary function testing is required? (Select ALL that apply)
+A) Mullein leaf demulcent effects soothing bronchial irritation and reducing cough
+B) Elecampane inulin expectorant effects clearing mucus and improving pulmonary function
+C) Licorice glycyrrhizin anti-inflammatory effects but potentially causing hypertension
+D) Thyme essential oil thymol antimicrobial effects reducing infection frequency
+E) Ephedra-containing stimulants potentially causing tachycardia with COPD medications
+F) Marshmallow root mucilage protecting respiratory epithelium from irritation
+
+Answer: A, B, C
+Mullein (A) provides demulcent protection soothing irritated bronchial tissue and reducing cough frequency. Elecampane (B) offers expectorant effects through inulin content clearing mucus and improving pulmonary function. Licorice (C) provides anti-inflammatory benefits but requires blood pressure monitoring due to potential hypertension from glycyrrhizin. Thyme isn't evidence-based, ephedra is contraindicated, and marshmallow provides milder effects than mullein.
+
+Scenario: A 43-year-old female with interstitial cystitis, chronic pelvic pain, and urinary frequency seeks herbal bladder support. She reports pain with bladder filling, food triggers, and limited treatment options. Cystoscopy shows Hunner's ulcers and she avoids acidic foods.
+
+Question: Which THREE herbal mechanisms and bladder irritation considerations are most important, and what pain management monitoring is required? (Select ALL that apply)
+A) Aloe vera mucilage coating bladder epithelium and reducing irritation
+B) Quercetin flavonoids reducing mast cell degranulation and inflammation
+C) Cranberry proanthocyanidins potentially irritating acidic bladder
+D) Marshmallow root demulcent effects soothing irritated bladder lining
+E) Gotu kola centellosides enhancing bladder tissue repair and healing
+F) Goldenrod anti-inflammatory effects reducing urinary tract inflammation
+
+Answer: A, B, D
+Aloe vera (A) provides mucilage coating protecting irritated bladder epithelium from urine irritation. Quercetin (B) reduces mast cell degranulation decreasing inflammation and pain frequency. Marshmallow (D) offers demulcent effects soothing bladder lining and reducing urgency. Cranberry acidity may worsen interstitial cystitis, gotu kola evidence is limited, and goldenrod primarily addresses urinary tract inflammation rather than interstitial cystitis.
+
+Scenario: A 51-year-old male with erectile dysfunction, cardiovascular risk factors, and performance anxiety seeks herbal alternatives to PDE5 inhibitors. He has hypertension, takes lisinopril, and reports occasional chest pain. Cardiovascular evaluation was normal.
+
+Question: Which THREE herbal mechanisms and cardiovascular safety considerations are most critical, and what cardiac monitoring is required? (Select ALL that apply)
+A) Asian ginseng ginsenosides nitric oxide enhancement improving erectile function
+B) Ginkgo biloba vasodilation potentially causing hypotension with lisinopril
+C) Yohimbine alpha-2 antagonism potentially increasing blood pressure and anxiety
+D) Maca Lepidium alkaloids enhancing libido without cardiovascular effects
+E) Horny goat weed icariin PDE5 inhibition similar to medications but with less precision
+F) Tribulus terrestris protodioscin testosterone enhancement with cardiovascular risks
+
+Answer: B, C, D
+Ginkgo (B) may potentiate lisinopril causing hypotension requiring blood pressure monitoring. Yohimbine (C) can increase blood pressure and anxiety contraindicating its use in this patient. Maca (D) provides libido enhancement without cardiovascular effects making it the safest option. Asian ginseng may affect blood pressure, horny goat weed lacks standardization, and tribulus has cardiovascular risk concerns.
+
+Scenario: A 37-year-old female with autoimmune thyroiditis, hypothyroidism, and fatigue seeks herbal thyroid support alternatives to levothyroxine optimization. She has positive TPO antibodies, TSH 4.8, and reports hair loss, cold intolerance, and weight gain.
+
+Question: Which THREE herbal mechanisms and autoimmune considerations are most important, and what thyroid monitoring is required? (Select ALL that apply)
+A) Ashwagandha withanolides potentially improving thyroid hormone conversion
+B) Bugleweed lithospermic acid reducing thyroid hormone production
+C) Selenium-containing herbs supporting antioxidant thyroid protection
+D) Bladderwrack iodine content potentially exacerbating autoimmune thyroiditis
+E) Guggulu commiphora thyroid stimulation potentially increasing antibody production
+F) Lemon balm rosmarinic acid reducing TSH receptor antibodies
+
+Answer: A, C, D
+Ashwagandha (A) may improve T4 to T3 conversion through adaptogenic effects supporting thyroid function. Selenium (C) from herbs like Brazil nuts provides antioxidant protection reducing thyroid inflammation. Bladderwrack (D) should be avoided as iodine may exacerbate autoimmune thyroiditis. Bugleweed reduces hormone production unnecessarily, guggulu may increase antibodies, and lemon balm effects are insufficient.
+
+Scenario: A 46-year-old female with chronic stress, adrenal fatigue, and cortisol dysregulation seeks herbal adaptogen support. She reports fatigue, anxiety, sleep disturbances, and salt cravings. Morning cortisol is elevated and evening cortisol remains high.
+
+Question: Which THREE herbal adaptogenic mechanisms and HPA-axis considerations are most critical, and what cortisol rhythm testing is required? (Select ALL that apply)
+A) Rhodiola rosea salidroside cortisol modulation and stress resistance enhancement
+B) Ashwagandha withanolides HPA-axis regulation and cortisol reduction
+C) Licorice glycyrrhizin cortisol prolongation potentially worsening dysregulation
+D) Holy basil tulsi adaptogenic effects reducing psychological stress
+E) Asian ginseng ginsenosides potentially overstimulating exhausted adrenals
+F) Schisandra lignans stress adaptation and adrenal support
+
+Answer: A, B, C
+Rhodiola (A) provides cortisol modulation and enhances stress resistance through salidroside mechanisms. Ashwagandha (B) regulates HPA-axis dysfunction reducing elevated cortisol levels. Licorice (C) should be avoided as glycyrrhizin prolongs cortisol action worsening dysregulation. Holy basil provides milder effects, Asian ginseng may overstimulate, and schisandra evidence is limited for cortisol regulation.

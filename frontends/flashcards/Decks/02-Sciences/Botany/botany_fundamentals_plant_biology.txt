@@ -1,0 +1,201 @@
+// Botany Fundamentals & Plant Biology Deck
+
+What is the primary purpose of studying botany?
+To understand plant life, their structure, function, evolution, and relationships with environment and other organisms, forming foundation for agriculture, medicine, and environmental science.
+
+What is the difference between botany and plant biology?
+Botany is the traditional study of plants including classification and ecology, while plant biology focuses specifically on plant physiological and molecular processes.
+
+What is the primary purpose of plant classification systems?
+To organize plant diversity into hierarchical groups based on evolutionary relationships and shared characteristics, enabling systematic study and communication.
+
+What is the difference between taxonomy and systematics in botany?
+Taxonomy focuses on naming and classifying organisms, while systematics studies evolutionary relationships and classification based on phylogeny.
+
+What is the primary purpose of plant cell structure understanding?
+To comprehend how plant cells function, grow, and specialize, forming the basis for understanding plant physiology, development, and adaptation.
+
+What is the difference between plant and animal cells?
+Plant cells have cell walls, chloroplasts, and large central vacuoles, while animal cells lack these structures but have centrioles and more flexible membranes.
+
+What is the primary purpose of photosynthesis in plants?
+To convert light energy into chemical energy, producing glucose and oxygen from carbon dioxide and water, forming the foundation of most terrestrial ecosystems.
+
+What is the difference between photosynthesis and respiration in plants?
+Photosynthesis produces glucose and oxygen using light energy, while respiration breaks down glucose to release energy for cellular processes.
+
+What is the primary purpose of plant tissues and their organization?
+To provide specialized structures for different functions like protection, transport, support, and storage, enabling efficient plant growth and survival.
+
+What is the difference between meristematic and permanent tissues in plants?
+Meristematic tissues contain actively dividing cells for growth, while permanent tissues have differentiated cells for specific functions.
+
+What is the primary purpose of plant root systems?
+To anchor plants, absorb water and nutrients, store food, and interact with soil microorganisms, essential for plant survival and growth.
+
+What is the difference between taproot and fibrous root systems?
+Taproot systems have one dominant primary root with lateral branches, while fibrous systems have many similarly sized roots spreading horizontally.
+
+What is the primary purpose of plant stems and shoot systems?
+To provide structural support, transport materials between roots and leaves, and position leaves for optimal light exposure.
+
+What is the difference between herbaceous and woody stems?
+Herbaceous stems are flexible and non-woody, while woody stems have rigid lignified tissue providing long-term structural support.
+
+What is the primary purpose of leaves in plant biology?
+To conduct photosynthesis, gas exchange, and transpiration, serving as the primary sites of energy production and water regulation.
+
+What is the difference between simple and compound leaves?
+Simple leaves have single undivided blades, while compound leaves have blades divided into multiple leaflets.
+
+What is the primary purpose of plant vascular systems?
+To transport water, nutrients, and photosynthetic products throughout the plant, connecting roots, stems, and leaves.
+
+What is the difference between xylem and phloem in plant transport?
+Xylem transports water and minerals upward from roots, while phloem distributes sugars and organic compounds bidirectionally.
+
+What is the primary purpose of plant growth and development processes?
+To enable plants to increase in size, differentiate specialized structures, and respond to environmental cues throughout their life cycles.
+
+What is the difference between primary and secondary growth in plants?
+Primary growth increases length at apical meristems, while secondary growth increases diameter at lateral meristems in woody plants.
+
+What is the primary purpose of plant hormones and growth regulators?
+To coordinate growth, development, and responses to environmental stimuli through chemical signaling systems.
+
+What is the difference between auxins and cytokinins in plant development?
+Auxins promote cell elongation and apical dominance, while cytokinins promote cell division and lateral bud growth.
+
+What is the primary purpose of plant reproduction strategies?
+To ensure species continuation through sexual and asexual methods, adapting to environmental conditions and maximizing reproductive success.
+
+What is the difference between sexual and asexual reproduction in plants?
+Sexual reproduction involves genetic recombination through flowers and seeds, while asexual reproduction produces genetically identical offspring through vegetative methods.
+
+What is the primary purpose of plant flowers and inflorescences?
+To facilitate sexual reproduction through pollination and fertilization, producing seeds for species propagation.
+
+What is the difference between complete and incomplete flowers?
+Complete flowers have all four floral parts (sepals, petals, stamens, carpels), while incomplete flowers lack one or more parts.
+
+What is the primary purpose of plant fruits and seed dispersal?
+To protect developing seeds and facilitate their dispersal to new locations, ensuring species survival and colonization.
+
+What is the difference between dry and fleshy fruits?
+Dry fruits have hard pericarps at maturity, while fleshy fruits have soft, often edible pericarps aiding animal dispersal.
+
+What is the primary purpose of plant seeds and germination?
+To protect embryonic plants, provide stored nutrients, and enable growth into new plants when conditions are favorable.
+
+What is the difference between epigeous and hypogeous germination?
+Epigeous germination pulls cotyledons above ground, while hypogeous germination keeps cotyledons below ground.
+
+What is the primary purpose of plant genetics and heredity?
+To understand how traits are inherited and expressed, enabling plant breeding, genetic modification, and evolutionary studies.
+
+What is the difference between genotype and phenotype in plants?
+Genotype is the genetic makeup of an organism, while phenotype is the observable characteristics resulting from genotype and environment.
+
+What is the primary purpose of plant ecology and environmental interactions?
+To understand how plants interact with their environment and other organisms, forming the basis for ecosystem function and conservation.
+
+What is the difference between biotic and abiotic factors in plant ecology?
+Biotic factors include living organisms like pollinators and competitors, while abiotic factors include non-living elements like climate and soil.
+
+What is the primary purpose of plant adaptations to environmental conditions?
+To enable survival and reproduction in specific habitats through structural, physiological, and behavioral modifications.
+
+What is the difference between structural and physiological adaptations in plants?
+Structural adaptations involve physical features like thick leaves, while physiological adaptations involve internal processes like CAM photosynthesis.
+
+What is the primary purpose of plant water relations and transport?
+To maintain water balance, transport nutrients, and regulate internal water potential for optimal cellular function.
+
+What is the difference between transpiration and guttation in plants?
+Transpiration is water vapor loss through stomata, while guttation is liquid water excretion through hydathodes under high root pressure.
+
+What is the primary purpose of plant mineral nutrition?
+To acquire essential elements from soil for growth, development, and metabolic functions, requiring specific transport and utilization mechanisms.
+
+What is the difference between macronutrients and micronutrients in plant nutrition?
+Macronutrients are required in large amounts (nitrogen, phosphorus, potassium), while micronutrients are needed in small amounts (iron, zinc, copper).
+
+What is the primary purpose of plant secondary metabolites?
+To provide defense against herbivores and pathogens, attract pollinators, and serve various ecological functions beyond basic metabolism.
+
+What is the difference between primary and secondary metabolites in plants?
+Primary metabolites are essential for growth and reproduction, while secondary metabolites serve ecological and defensive functions.
+
+What is the primary purpose of plant responses to environmental stress?
+To maintain homeostasis and survival under adverse conditions through physiological, biochemical, and molecular adjustments.
+
+What is the difference between abiotic and biotic stress responses in plants?
+Abiotic stress responses address environmental factors like drought and temperature, while biotic responses address living threats like pathogens and herbivores.
+
+What is the primary purpose of plant biotechnology applications?
+To modify plants for improved traits, produce valuable compounds, and develop new varieties through genetic engineering and molecular techniques.
+
+What is the difference between traditional breeding and genetic engineering in plants?
+Traditional breeding selects for natural variation, while genetic engineering directly modifies genes for specific traits.
+
+What is the primary purpose of plant diversity and conservation?
+To maintain genetic resources, ecosystem services, and potential benefits for medicine, agriculture, and environmental stability.
+
+What is the difference between in situ and ex situ plant conservation?
+In situ conservation protects plants in their natural habitats, while ex situ conservation maintains them in botanical gardens, seed banks, or tissue culture.
+
+What is the primary purpose of economic botany and ethnobotany?
+To study plant uses by humans and cultures, including food, medicine, materials, and cultural significance across different societies.
+
+What is the difference between economic and ethnobotanical perspectives?
+Economic botany focuses on commercial plant uses, while ethnobotany examines cultural and traditional plant knowledge and practices.
+
+What is the primary purpose of plant anatomy and morphology studies?
+To understand internal and external plant structures, their development, and relationships to function and classification.
+
+What is the difference between anatomy and morphology in botany?
+Anatomy studies internal plant structures at microscopic level, while morphology examines external form and structure.
+
+What is the primary purpose of plant physiology research?
+To understand plant functions and processes at molecular, cellular, and organismal levels, explaining how plants work.
+
+What is the difference between plant physiology and plant ecology?
+Physiology studies internal plant functions, while ecology examines plant interactions with environment and other organisms.
+
+What is the primary purpose of plant evolution and phylogeny?
+To understand plant origins, diversification, and evolutionary relationships, explaining the history and development of plant life.
+
+What is the difference between convergent and divergent evolution in plants?
+Convergent evolution produces similar traits in unrelated plants due to similar environments, while divergent evolution creates diversity from common ancestors.
+
+What is the primary purpose of plant molecular biology?
+To study plant processes at molecular level, including gene expression, protein function, and biochemical pathways.
+
+What is the difference between molecular biology and biochemistry in plants?
+Molecular biology focuses on nucleic acids and gene expression, while biochemistry examines chemical reactions and metabolic pathways.
+
+What is the primary purpose of plant pathology and disease management?
+To understand plant diseases, their causes, and develop strategies for prevention and treatment in agriculture and natural ecosystems.
+
+What is the difference between biotic and abiotic plant diseases?
+Biotic diseases are caused by living organisms like fungi and bacteria, while abiotic diseases result from environmental factors like nutrient deficiencies.
+
+What is the primary purpose of horticulture and crop science?
+To improve plant cultivation, yield, and quality through scientific methods, breeding, and management practices.
+
+What is the difference between horticulture and agronomy in plant science?
+Horticulture focuses on fruits, vegetables, and ornamental plants, while agronomy emphasizes field crops and soil management.
+
+What is the primary purpose of plant phenology and seasonal responses?
+To understand timing of plant life events and their relationship to environmental cues like temperature and day length.
+
+What is the difference between phenology and phenotypic plasticity in plants?
+Phenology studies timing of recurring life events, while phenotypic plasticity examines how environment affects plant form and function.
+
+What is the primary purpose of plant communication and signaling?
+To understand how plants perceive and respond to internal and external signals through chemical and electrical communication systems.
+
+What is the difference between local and systemic signaling in plants?
+Local signaling affects nearby cells and tissues, while systemic signaling coordinates responses throughout the entire plant.
+
+This comprehensive botany fundamentals deck provides 100 questions covering essential plant biology concepts, from cellular structure to ecological interactions, providing foundation for advanced botanical study and practical applications.

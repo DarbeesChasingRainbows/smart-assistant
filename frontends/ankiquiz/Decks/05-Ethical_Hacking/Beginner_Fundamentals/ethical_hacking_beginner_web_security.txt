@@ -1,0 +1,300 @@
+// Beginner Web Application Security Deck
+
+What is the primary difference between HTTP and HTTPS protocols?
+HTTP transmits data in plain text making it interceptable, while HTTPS uses SSL/TLS encryption to protect data confidentiality and integrity.
+
+What is the basic command to test HTTP methods with curl?
+"curl -X OPTIONS [target_url]" which tests supported HTTP methods and can help identify potential security misconfigurations.
+
+What is the difference between GET and POST parameters in web applications?
+GET parameters appear in URLs and have length limits, while POST parameters appear in request bodies and can handle larger amounts of data.
+
+What is the primary purpose of HTTP headers in web security?
+Headers control caching, authentication, content type, and security policies, making them crucial for understanding application behavior and potential vulnerabilities.
+
+What is the basic command to view HTTP headers with curl?
+"curl -I [target_url]" which displays all HTTP headers sent by the server, revealing server information and security configurations.
+
+What is the difference between request headers and response headers?
+Request headers are sent by the client to provide information about the request, while response headers are sent by the server with information about the response.
+
+What is the primary purpose of the "User-Agent" header in web testing?
+To identify the client browser and operating system, useful for testing browser-specific vulnerabilities and bypassing browser restrictions.
+
+What is the basic command to change User-Agent with curl?
+"curl -A "Mozilla/5.0" [target_url]" which sends a request with a custom User-Agent header to mimic a specific browser.
+
+What is the difference between cookies and session management?
+Cookies store data client-side for session tracking, while session management maintains server-side state associated with session identifiers.
+
+What is the primary purpose of the "Referer" header in web security?
+To indicate which page linked to the current request, useful for understanding application flow and testing referrer-based vulnerabilities.
+
+What is the basic command to test Referer header manipulation?
+"curl -e "http://malicious.com" [target_url]" which sends a request with a fake Referer header to test referrer-based security controls.
+
+What is the difference between status codes 200, 403, and 500?
+200 indicates successful request, 403 indicates forbidden access, and 500 indicates server error, each revealing different security information.
+
+What is the primary purpose of directory enumeration in web security?
+To discover hidden directories, files, and administrative interfaces that may contain sensitive information or additional attack surfaces.
+
+What is the basic command to perform directory enumeration with Gobuster?
+"gobuster dir -u [target_url] -w [wordlist]" which systematically scans for directories using the specified wordlist.
+
+What is the difference between directory brute forcing and file enumeration?
+Directory brute forcing discovers folder paths, while file enumeration searches for specific files within those directories.
+
+What is the primary purpose of the "dirb" tool in web testing?
+To perform directory and file brute forcing using predefined wordlists to discover hidden web content.
+
+What is the basic command to run dirb against a target?
+"dirb [target_url]" which starts directory enumeration using default wordlists against the specified target.
+
+What is the difference between recursive and non-recursive directory enumeration?
+Recursive enumeration continues scanning discovered subdirectories, while non-recursive only scans the initial target directory.
+
+What is the primary purpose of the "dirsearch" tool in modern web testing?
+To perform fast, Python-based directory enumeration with advanced features like recursive scanning and status code filtering.
+
+What is the basic command to run dirsearch with custom wordlist?
+"python3 dirsearch.py -u [target_url] -w [wordlist]" which performs directory enumeration using the specified wordlist.
+
+What is the difference between content discovery and vulnerability scanning?
+Content discovery finds files and directories, while vulnerability scanning tests for security weaknesses in discovered content.
+
+What is the primary purpose of web technology fingerprinting?
+To identify frameworks, servers, and technologies used by web applications for targeted vulnerability research.
+
+What is the basic command to fingerprint technologies with WhatWeb?
+"whatweb [target_url]" which analyzes the website and reports detected technologies, frameworks, and server information.
+
+What is the difference between server fingerprinting and framework identification?
+Server fingerprinting identifies web server software, while framework identification identifies the application framework and libraries.
+
+What is the primary purpose of the "Wappalyzer" browser extension?
+To identify technologies used by websites through browser-based analysis, useful for quick reconnaissance during web testing.
+
+What is the basic process to use Wappalyzer for technology identification?
+Install the browser extension, visit the target website, and view the detected technologies in the browser toolbar icon.
+
+What is the difference between passive and active technology fingerprinting?
+Passive fingerprinting analyzes existing responses, while active fingerprinting sends specific requests to probe for technologies.
+
+What is the primary purpose of robots.txt analysis in web security?
+To discover website structure, administrative paths, and areas the website owner doesn't want search engines to index.
+
+What is the basic command to retrieve robots.txt with curl?
+"curl [target_url]/robots.txt" which downloads and displays the robots.txt file for analysis.
+
+What is the difference between Allow and Disallow directives in robots.txt?
+Allow specifies paths that can be crawled, while Disallow specifies paths that should not be crawled by search engines.
+
+What is the primary purpose of sitemap.xml analysis in web reconnaissance?
+To discover complete website structure, all available pages, and potential administrative interfaces for testing.
+
+What is the basic command to retrieve sitemap.xml with curl?
+"curl [target_url]/sitemap.xml" which downloads and displays the sitemap file containing website structure information.
+
+What is the difference between XML sitemaps and HTML sitemaps?
+XML sitemaps are machine-readable for search engines, while HTML sitemaps are human-readable pages linking to site content.
+
+What is the primary purpose of web archive analysis in security testing?
+To discover forgotten pages, old vulnerabilities, and historical functionality that may still be accessible.
+
+What is the basic command to extract URLs from Wayback Machine with waybackurls?
+"echo [domain] | waybackurls" which retrieves all archived URLs for the specified domain from the Wayback Machine.
+
+What is the difference between current website analysis and historical analysis?
+Current analysis examines the live website, while historical analysis looks at previous versions and forgotten functionality.
+
+What is the primary purpose of JavaScript file analysis in web security?
+To discover hidden endpoints, API keys, and client-side logic that may reveal additional attack surfaces.
+
+What is the basic command to extract URLs from JavaScript with LinkFinder?
+"python3 LinkFinder.py -i [js_file] -o cli" which extracts URLs and endpoints from the specified JavaScript file.
+
+What is the difference between static and dynamic JavaScript analysis?
+Static analysis examines code without execution, while dynamic analysis observes JavaScript behavior during runtime.
+
+What is the primary purpose of the "JSFinder" tool in JavaScript security?
+To extract endpoints, API keys, and sensitive information from JavaScript files using pattern matching.
+
+What is the basic command to analyze JavaScript with JSFinder?
+"python3 JSFinder.py -u [target_url]" which analyzes JavaScript files on the target website for sensitive information.
+
+What is the difference between endpoint extraction and API key discovery?
+Endpoint extraction finds URLs and API paths, while API key discovery searches for authentication tokens and secrets.
+
+What is the primary purpose of form analysis in web application security?
+To identify input fields, hidden parameters, and potential injection points for vulnerability testing.
+
+What is the basic command to analyze forms with Burp Suite?
+Use Burp Suite proxy to intercept requests, then analyze form submissions in the HTTP history for parameters and structure.
+
+What is the difference between visible and hidden form fields?
+Visible fields are user-input elements seen on the page, while hidden fields contain data not displayed but submitted with forms.
+
+What is the primary purpose of parameter mining in web security?
+To discover all input parameters including hidden ones that might be vulnerable to injection attacks.
+
+What is the basic command to extract parameters with Arjun?
+"python3 arjun -u [target_url]" which discovers hidden HTTP parameters by testing common parameter names.
+
+What is the difference between GET parameter mining and POST parameter mining?
+GET mining discovers URL parameters, while POST mining finds parameters in request bodies that might not be visible.
+
+What is the primary purpose of error message analysis in web security?
+To gather information about database structure, application internals, and potential vulnerabilities from error responses.
+
+What is the basic technique to provoke error messages for analysis?
+Submit invalid input, special characters, or malformed requests to trigger application errors that reveal system information.
+
+What is the difference between informative and generic error messages?
+Informative errors reveal technical details about the system, while generic errors provide minimal information for security.
+
+What is the primary purpose of HTTP verb tampering in web testing?
+To test for access control bypasses by changing HTTP methods to access functionality that should be restricted.
+
+What is the basic command to test HTTP verbs with curl?
+"curl -X PUT [target_url]" which tests if the PUT method is enabled on the target URL for potential access control bypass.
+
+What is the difference between HTTP method enumeration and verb tampering?
+Method enumeration discovers supported HTTP verbs, while verb tampering tests if changing verbs bypasses security controls.
+
+What is the primary purpose of IDOR (Insecure Direct Object Reference) testing?
+To test if users can access resources they shouldn't by manipulating identifiers in URLs or parameters.
+
+What is the basic technique to test for IDOR vulnerabilities?
+Change numeric IDs in URLs or parameters to see if you can access other users' data without proper authorization.
+
+What is the difference between horizontal and vertical privilege escalation in web applications?
+Horizontal escalation accesses data at the same privilege level, while vertical escalation gains higher privilege levels.
+
+What is the primary purpose of file upload testing in web security?
+To test for malicious file upload, path traversal, and arbitrary file execution vulnerabilities.
+
+What is the basic test for file upload restrictions?
+Try uploading different file types (.php, .html, .jpg) to see what restrictions exist and if they can be bypassed.
+
+What is the difference between client-side and server-side file upload validation?
+Client-side validation can be bypassed by manipulating requests, while server-side validation provides actual security enforcement.
+
+What is the primary purpose of Cross-Site Scripting (XSS) testing?
+To test if malicious JavaScript can be injected and executed in other users' browsers, leading to session hijacking and data theft.
+
+What is the basic XSS payload for testing?
+"<script>alert('XSS')</script>" which tests if JavaScript injection is possible in the target input field.
+
+What is the difference between reflected, stored, and DOM-based XSS?
+Reflected XSS is immediately reflected in responses, stored XSS is permanently saved, and DOM-based XSS manipulates the browser DOM.
+
+What is the primary purpose of SQL injection testing?
+To test if malicious SQL queries can be injected to bypass authentication or extract database information.
+
+What is the basic SQL injection test payload?
+"' OR '1'='1" which attempts to bypass login or manipulate SQL queries to return unexpected results.
+
+What is the difference between error-based and blind SQL injection?
+Error-based injection uses database error messages to extract information, while blind injection requires inference techniques.
+
+What is the primary purpose of command injection testing?
+To test if operating system commands can be executed through web application input fields.
+
+What is the basic command injection test payload?
+"; ls -la" which attempts to append a directory listing command to the legitimate application command.
+
+What is the difference between OS command injection and code injection?
+OS command injection executes system commands, while code injection executes application-specific programming code.
+
+What is the primary purpose of Server-Side Request Forgery (SSRF) testing?
+To test if the application can be tricked into making requests to internal networks or unauthorized resources.
+
+What is the basic SSRF test payload?
+"http://127.0.0.1" which attempts to make the server request localhost, potentially accessing internal services.
+
+What is the difference between blind and direct SSRF vulnerabilities?
+Direct SSRF returns the response from internal requests, while blind SSRF requires inference techniques to confirm exploitation.
+
+What is the primary purpose of XML External Entity (XXE) injection testing?
+To test if malicious XML entities can be injected to read files or access internal network resources.
+
+What is the basic XXE injection payload?
+"<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>" which attempts to read system files through XML entity injection.
+
+What is the difference between blind XXE and direct XXE vulnerabilities?
+Direct XXE returns file contents in responses, while blind XXE requires out-of-band techniques to extract data.
+
+What is the primary purpose of NoSQL injection testing?
+To test for injection vulnerabilities in NoSQL databases like MongoDB that use different syntax than SQL.
+
+What is the basic NoSQL injection test payload?
+"' || '1'=='1" which attempts to bypass authentication in MongoDB-style NoSQL databases.
+
+What is the difference between SQL and NoSQL injection techniques?
+SQL injection uses SQL syntax, while NoSQL injection uses database-specific operators and syntax for NoSQL systems.
+
+What is the primary purpose of template injection testing?
+To test if malicious template code can be injected to achieve code execution or information disclosure.
+
+What is the basic template injection test payload?
+"{{7*7}}" which tests if template engines process template syntax, returning 49 if vulnerable.
+
+What is the difference between server-side and client-side template injection?
+Server-side template injection executes on the server with system access, while client-side executes in the browser with limited capabilities.
+
+What is the primary purpose of deserialization testing?
+To test if malicious serialized objects can be injected to achieve code execution or bypass security controls.
+
+What is the basic deserialization test technique?
+Modify serialized object data in requests to test if the application processes malicious object structures.
+
+What is the difference between XML and JSON deserialization vulnerabilities?
+XML deserialization may be vulnerable to XXE, while JSON deserialization may allow object injection and code execution.
+
+What is the primary purpose of HTTP header security testing?
+To test for missing security headers, misconfigurations, and header-based vulnerabilities.
+
+What is the basic command to check security headers with curl?
+"curl -I [target_url]" which displays all HTTP headers for security analysis including missing security headers.
+
+What is the difference between required and recommended security headers?
+Required headers (like HSTS) prevent specific attacks, while recommended headers provide additional security layers.
+
+What is the primary purpose of Content Security Policy (CSP) testing?
+To test if CSP headers properly prevent XSS attacks and unauthorized resource loading.
+
+What is the basic CSP bypass test technique?
+Attempt to load external scripts or use inline JavaScript to test if CSP enforcement is working properly.
+
+What is the difference between strict and lenient CSP policies?
+Strict CSP policies allow only specific trusted sources, while lenient policies permit broader resource loading.
+
+What is the primary purpose of CORS (Cross-Origin Resource Sharing) testing?
+To test if cross-origin requests are properly restricted to prevent unauthorized data access.
+
+What is the basic CORS testing technique?
+Send requests from different origins to test if the application properly validates and restricts cross-origin access.
+
+What is the difference between same-origin policy and CORS?
+Same-origin policy blocks cross-origin requests by default, while CORS allows controlled cross-origin access through headers.
+
+What is the primary purpose of web cache poisoning testing?
+To test if malicious responses can be cached and served to other users, leading to security bypasses.
+
+What is the basic web cache poisoning test technique?
+Manipulate request headers to cache malicious responses that will be served to subsequent users.
+
+What is the difference between client-side and server-side web cache poisoning?
+Client-side poisoning affects browser caches, while server-side poisoning affects proxy or application caches.
+
+What is the primary purpose of race condition testing in web applications?
+To test if concurrent requests can bypass security controls or cause unexpected behavior.
+
+What is the basic race condition testing technique?
+Send multiple simultaneous requests to test if the application properly handles concurrent operations.
+
+What is the difference between TOCTOU (Time-of-Check-Time-of-Use) and general race conditions?
+TOCTOU specifically involves time gaps between checking and using resources, while race conditions involve any concurrent operation conflicts.
+
+This beginner web application security deck provides 100 questions covering essential web security concepts and testing methodologies needed for ethical hacking foundation.

@@ -1,0 +1,237 @@
+// Biblical Hebrew Old Testament & Textual Studies Deck
+
+What is the primary purpose of studying the Hebrew Old Testament in original language?
+To understand the precise meaning, literary artistry, and theological depth of the Hebrew Scriptures without translation intermediaries.
+
+What is the difference between the Hebrew Bible and Christian Old Testament in organization?
+The Hebrew Bible (Tanakh) organizes books as Torah, Prophets, and Writings, while Christian Old Testament follows different order and sometimes includes additional books.
+
+What is the primary purpose of Old Testament textual criticism in Hebrew studies?
+To reconstruct the original text by comparing manuscript variants, identifying copying errors, and establishing the most reliable readings.
+
+What is the difference between the Masoretic Text and Dead Sea Scrolls in textual studies?
+Masoretic Text represents the standardized medieval tradition, while Dead Sea Scrolls provide earlier readings showing textual diversity.
+
+What is the primary purpose of the Masoretes in preserving Hebrew Scripture?
+To standardize the text, add vowel points and accents for pronunciation, and create marginal notes (masora) for textual preservation.
+
+What is the difference between the Babylonian and Palestinian Masoretic traditions?
+Babylonian tradition (Leningrad Codex) became standard for modern editions, while Palestinian tradition has slightly different vocalization and accent systems.
+
+What is the primary purpose of Hebrew manuscript families in textual criticism?
+To group related manuscripts showing common readings and errors, helping trace the history of text transmission.
+
+What is the difference between major Hebrew manuscript traditions like Aleppo Codex and Leningrad Codex?
+Aleppo Codex (10th century) was considered most authoritative but partially damaged, while Leningrad Codex (11th century) is oldest complete manuscript.
+
+What is the primary purpose of Hebrew biblical genres in literary analysis?
+To understand different types of literature (law, history, poetry, prophecy) and their characteristic features for proper interpretation.
+
+What is the difference between narrative and poetry genres in the Hebrew Old Testament?
+Narrative uses prose with chronological progression, while poetry uses parallelism, imagery, and rhythmic patterns for artistic expression.
+
+What is the primary purpose of Pentateuchal studies in Old Testament scholarship?
+To understand the composition, sources, and theological themes of the first five books as foundation for Hebrew Scripture.
+
+What is the difference between Documentary Hypothesis and Supplementary Hypothesis in Pentateuchal studies?
+Documentary Hypothesis proposes four major sources (J, E, D, P), while Supplementary Hypothesis sees gradual growth and expansion of basic material.
+
+What is the primary purpose of Deuteronomistic History in biblical studies?
+To understand the theological interpretation of Israel's history from Joshua to Kings, emphasizing covenant faithfulness.
+
+What is the difference between Deuteronomistic History and Chronicler's History?
+Deuteronomistic History (Joshua-Kings) emphasizes covenant and judgment, while Chronicler's History (Chronicles-Ezra-Nehemiah) emphasizes temple and worship.
+
+What is the primary purpose of Hebrew prophetic literature analysis?
+To understand the role, message, and literary characteristics of prophets as covenant messengers calling Israel to faithfulness.
+
+What is the difference between classical prophecy and apocalyptic literature in the Old Testament?
+Classical prophecy addresses contemporary situations with ethical calls, while apocalyptic literature uses symbolic visions for eschatological hope.
+
+What is the primary purpose of Hebrew wisdom literature studies?
+To understand practical and philosophical reflection on life, God, and human existence through books like Proverbs, Job, and Ecclesiastes.
+
+What is the difference between proverbial wisdom and speculative wisdom in Hebrew literature?
+Proverbial wisdom offers practical guidance for daily life, while speculative wisdom wrestles with profound theological questions (Job, Ecclesiastes).
+
+What is the primary purpose of Hebrew poetry analysis in biblical interpretation?
+To understand the artistic devices, parallelism, and imagery that convey meaning beyond literal prose expression.
+
+What is the difference between synonymous and synthetic parallelism in Hebrew poetry?
+Synonymous parallelism restates ideas in similar terms, while synthetic parallelism develops or completes ideas in the second line.
+
+What is the primary purpose of Hebrew chiastic structures in literary analysis?
+To identify inverted parallel patterns (A-B-B'-A') that organize texts and emphasize central points through literary artistry.
+
+What is the difference between chiasmus and inclusio in Hebrew literary structures?
+Chiasmus creates inverted parallel structure across multiple elements, while inclusio brackets a section with similar beginning and ending elements.
+
+What is the primary purpose of Hebrew narrative techniques in storytelling?
+To understand how biblical authors craft narratives through characterization, plot development, and theological perspective.
+
+What is the difference between direct speech and narrative summary in Hebrew storytelling?
+Direct speech presents characters' exact words with quotation formulas, while narrative summary reports events and dialogue indirectly.
+
+What is the primary purpose of Hebrew covenant theology in Old Testament studies?
+To understand the foundational concept of covenant relationship between God and Israel as organizing principle of biblical theology.
+
+What is the difference between conditional and unconditional covenants in the Old Testament?
+Conditional covenants require human faithfulness (Sinai covenant), while unconditional covenants depend on divine faithfulness (Abrahamic, Davidic covenants).
+
+What is the primary purpose of Hebrew law codes in biblical interpretation?
+To understand different types of law (ceremonial, civil, moral) and their role in shaping Israelite identity and relationship with God.
+
+What is the difference between apodictic and casuistic law in Hebrew legal material?
+Apodictic law states absolute commands (You shall not murder), while casuistic law presents case-by-case rulings (If a man steals...).
+
+What is the primary purpose of Hebrew worship and temple studies?
+To understand the central role of worship, sacrifice, and sacred space in Israelite religion and biblical theology.
+
+What is the difference between tabernacle and temple theology in the Old Testament?
+Tabernacle represents portable worship presence in wilderness, while temple represents permanent worship center in Jerusalem.
+
+What is the primary purpose of Hebrew eschatology in biblical theology?
+To understand teachings about last things, including divine judgment, restoration, and the ultimate fulfillment of God's purposes.
+
+What is the difference between prophetic and apocalyptic eschatology in the Old Testament?
+Prophetic eschatology calls for present faithfulness with future hope, while apocalyptic eschatology uses symbolic visions for end-time events.
+
+What is the primary purpose of Hebrew Christology or Messianism in Old Testament studies?
+To understand messianic expectations and prophecies that find fulfillment in New Testament understanding of Jesus as Messiah.
+
+What is the difference between direct messianic prophecy and typological messianism?
+Direct prophecy explicitly predicts the Messiah (Isaiah 53), while typology sees persons/events as prefiguring the Messiah (Psalm 22, Davidic kingship).
+
+What is the primary purpose of Hebrew creation theology in biblical studies?
+To understand foundational concepts of God as Creator, the goodness of creation, and humanity's role in the created order.
+
+What is the difference between Genesis 1 and Genesis 2 creation accounts?
+Genesis 1 presents cosmic, orderly creation with divine speech, while Genesis 2 offers more personal, anthropomorphic creation narrative.
+
+What is the primary purpose of Hebrew wisdom themes in biblical theology?
+To understand practical and philosophical reflections on God's relationship to human experience and the meaning of life.
+
+What is the difference between retributive theology and skeptical wisdom in Hebrew wisdom literature?
+Retributive wisdom (Proverbs) sees divine justice in cause-effect relationships, while skeptical wisdom (Job, Ecclesiastes) questions simple retribution.
+
+What is the primary purpose of Hebrew historical books in biblical interpretation?
+To understand Israel's history as theological interpretation of God's dealings with His people in specific historical contexts.
+
+What is the difference between Deuteronomistic and Chronistic perspectives on Israel's history?
+Deuteronomistic history emphasizes covenant faithfulness and judgment, while Chronistic history emphasizes temple worship and divine faithfulness.
+
+What is the primary purpose of Hebrew prophetic call narratives in biblical studies?
+To understand how prophets are commissioned, their message authenticity, and the nature of prophetic authority.
+
+What is the difference between classical and non-classical prophetic calls in the Old Testament?
+Classical calls (Isaiah 6, Jeremiah 1) feature dramatic divine encounters, while non-classical calls (Amos 7, Hosea 1) appear in life contexts.
+
+What is the primary purpose of Hebrew exile and restoration theology?
+To understand theological responses to national crisis, including judgment, hope, and the redefinition of Israel's identity and mission.
+
+What is the difference between pre-exilic and post-exilic prophetic theology?
+Pre-exilic prophecy often warns of judgment, while post-exilic prophecy emphasizes restoration, rebuilding, and renewed covenant relationship.
+
+What is the primary purpose of Hebrew psalm studies in biblical interpretation?
+To understand worship poetry, prayer, and theological reflection expressed through the Psalter's diverse genres and themes.
+
+What is the difference between individual and communal laments in Hebrew psalms?
+Individual laments express personal suffering and petition, while communal laments address national crisis and corporate prayer.
+
+What is the primary purpose of Hebrew wisdom sayings in Proverbs analysis?
+To understand practical guidance for righteous living through concise, memorable sayings based on observation and experience.
+
+What is the difference between wisdom sayings and instruction speeches in Proverbs?
+Wisdom sayings offer concise, general observations, while instruction speeches provide extended parental teaching with theological framework.
+
+What is the primary purpose of Hebrew apocalyptic literature in biblical studies?
+To understand symbolic visions that reveal divine perspective on history and hope for divine intervention in crisis.
+
+What is the difference between apocalyptic and prophetic literature in the Old Testament?
+Apocalyptic literature uses symbolic visions and otherworldly mediation, while prophetic literature addresses contemporary situations directly.
+
+What is the primary purpose of Hebrew covenant renewal themes in biblical theology?
+To understand patterns of covenant breaking, judgment, and restoration that shape Israel's relationship with God throughout biblical history.
+
+What is the difference between Sinai covenant and Abrahamic covenant in biblical theology?
+Sinai covenant is conditional with law requirements, while Abrahamic covenant is unconditional based on divine promise and faith.
+
+What is the primary purpose of Hebrew divine names and titles in theological study?
+To understand how different names for God reveal aspects of His character and relationship to humanity.
+
+What is the difference between Yahweh (YHWH) and Elohim as divine names in the Old Testament?
+Yahweh is the personal covenant name, while Elohim is the generic creator name, each emphasizing different aspects of divine nature.
+
+What is the primary purpose of Hebrew angelology and spiritual beings in biblical studies?
+To understand the role of spiritual beings as messengers and agents in God's interaction with humanity.
+
+What is the difference between angels and other spiritual beings in Hebrew thought?
+Angels serve primarily as messengers, while other beings like cherubim and seraphim have specific roles in God's presence and worship.
+
+What is the primary purpose of Hebrew afterlife concepts in Old Testament theology?
+To understand developing ideas about death, Sheol, resurrection, and eternal life in Hebrew thought.
+
+What is the difference between early and late Old Testament concepts of afterlife?
+Early texts focus on Sheol as shadowy existence, while later texts develop more nuanced concepts of resurrection and eternal life (Daniel 12).
+
+What is the primary purpose of Hebrew ethical monotheism in biblical theology?
+To understand the revolutionary claim that one God requires ethical behavior as foundation for true religion.
+
+What is the difference between ethical monotheism and ancient Near Eastern polytheism?
+Ethical monotheism links worship with moral requirements, while polytheism often separates ritual from ethical behavior.
+
+What is the primary purpose of Hebrew holy war concepts in biblical interpretation?
+To understand theological justification for conquest and the relationship between divine command and human warfare.
+
+What is the difference between conquest and holy war theology in the Old Testament?
+Conquest narratives describe historical events, while holy war theology provides theological interpretation of divine involvement in human warfare.
+
+What is the primary purpose of Hebrew purity and holiness concepts in biblical studies?
+To understand how concepts of ritual and moral purity shape Israelite identity and relationship with God.
+
+What is the difference between ritual purity and ethical holiness in Hebrew thought?
+Ritual purity concerns ceremonial cleanliness, while ethical holiness involves moral character and social justice.
+
+What is the primary purpose of Hebrew social justice themes in biblical theology?
+To understand God's concern for vulnerable groups and the ethical requirements of covenant relationship.
+
+What is the difference between individual and social dimensions of justice in the Old Testament?
+Individual justice focuses on personal righteousness, while social justice addresses systemic issues and protection of vulnerable groups.
+
+What is the primary purpose of Hebrew creation care theology in biblical studies?
+To understand human responsibility for the created world as stewards of God's good creation.
+
+What is the difference between dominion and stewardship concepts in Hebrew creation theology?
+Dominion emphasizes authority over creation, while stewardship emphasizes responsible care and management of God's world.
+
+What is the primary purpose of Hebrew prayer and worship studies in biblical interpretation?
+To understand how Israel communicated with God through various prayer types and worship expressions.
+
+What is the difference between individual prayer and corporate worship in Hebrew tradition?
+Individual prayer expresses personal relationship with God, while corporate worship emphasizes communal identity and covenant relationship.
+
+What is the primary purpose of Hebrew biblical archaeology in Old Testament studies?
+To understand the historical and cultural context of biblical events through physical evidence and material culture.
+
+What is the difference between biblical archaeology and textual studies in Old Testament interpretation?
+Archaeology provides material context and cultural background, while textual studies focus on literary and theological analysis of the biblical text.
+
+What is the primary purpose of Hebrew comparative ancient Near Eastern studies?
+To understand biblical literature in context of surrounding cultures and their influence on Israelite thought.
+
+What is the difference between commonalities and distinctive features in comparative studies?
+Commonalities show shared cultural heritage, while distinctive features reveal unique Israelite theological contributions.
+
+What is the primary purpose of Hebrew Septuagint studies in textual criticism?
+To understand how the Hebrew Bible was translated into Greek and how this translation influences interpretation.
+
+What is the difference between Masoretic Text and Septuagint readings in textual studies?
+Masoretic Text represents Hebrew tradition, while Septuagint often preserves different Hebrew readings and interpretive traditions.
+
+What is the primary purpose of Hebrew Dead Sea Scrolls studies in biblical scholarship?
+To understand the textual diversity and interpretive traditions in Second Temple Judaism before standardization.
+
+What is the difference between sectarian and biblical texts among Dead Sea Scrolls?
+Sectarian texts reflect community-specific teachings, while biblical scrolls show pre-Masoretic textual traditions.
+
+This comprehensive Old Testament studies deck provides 100 questions covering essential textual criticism, literary analysis, theological themes, and historical context needed for advanced Hebrew scholarship and biblical interpretation.

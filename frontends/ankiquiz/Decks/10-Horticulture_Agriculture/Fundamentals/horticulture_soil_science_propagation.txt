@@ -1,0 +1,270 @@
+// Horticulture Soil Science & Plant Propagation Deck
+
+What is the primary composition of soil?
+Minerals (sand, silt, clay), organic matter, water, and air.
+
+What are the three main soil particles by size, from largest to smallest?
+Sand (largest), Silt (medium), Clay (smallest).
+
+What is "soil texture"?
+The relative proportions of sand, silt, and clay in a soil, which determine its feel and physical properties.
+
+What is "soil structure"?
+The arrangement of soil particles into aggregates or clumps (peds), affecting pore space and water movement.
+
+What is "cation exchange capacity" (CEC)?
+A measure of the soil's ability to hold and exchange positively charged nutrient ions (cations) like calcium, magnesium, and potassium; higher CEC indicates higher fertility potential.
+
+What is the optimal pH range for most vegetable crops?
+6.0 to 7.0 (slightly acidic to neutral).
+
+What happens to nutrient availability in highly acidic soil (low pH)?
+Macronutrients (N, P, K) become less available, while some micronutrients (like Aluminum and Manganese) can become toxic.
+
+What happens to nutrient availability in highly alkaline soil (high pH)?
+Micronutrients like Iron, Manganese, and Zinc often become unavailable, leading to deficiencies (e.g., chlorosis).
+
+What is "chlorosis" in plants?
+Yellowing of leaf tissue due to a lack of chlorophyll, often caused by nutrient deficiency (often Iron or Nitrogen) or high pH.
+
+What is the purpose of adding agricultural lime to soil?
+To raise the pH (reduce acidity) and provide calcium (and magnesium if using dolomitic lime).
+
+What is the purpose of adding elemental sulfur to soil?
+To lower the pH (increase acidity) over time as bacteria convert it to sulfuric acid.
+
+What is the "Soil Food Web"?
+The community of organisms living all or part of their lives in the soil, including bacteria, fungi, protozoa, nematodes, earthworms, and arthropods.
+
+What is the primary function of mycorrhizal fungi?
+They form symbiotic relationships with plant roots, extending the root system's reach to absorb water and nutrients (especially Phosphorus) in exchange for sugars.
+
+What is the difference between "aerobic" and "anaerobic" composting?
+Aerobic composting uses oxygen-loving bacteria (requires turning/air) and is generally faster/hotter; anaerobic lacks oxygen (e.g., bokashi) and can be smelly/slower but conserves more mass.
+
+What is the C:N ratio in composting?
+The ratio of Carbon (browns) to Nitrogen (greens); the ideal ratio for rapid decomposition is approximately 30:1.
+
+What are "browns" in composting?
+Carbon-rich materials like dry leaves, straw, cardboard, sawdust, and paper.
+
+What are "greens" in composting?
+Nitrogen-rich materials like kitchen scraps, grass clippings, coffee grounds, and manure.
+
+What is "vermicomposting"?
+The use of earthworms (specifically red wigglers) to convert organic waste into fertilizer (worm castings).
+
+What is "NPK"?
+The three primary macronutrients labeled on fertilizer: Nitrogen (N), Phosphorus (P), and Potassium (K).
+
+What are the symptoms of Nitrogen deficiency?
+Yellowing of older leaves (mobile nutrient moves to new growth) and stunted growth.
+
+What are the symptoms of Phosphorus deficiency?
+Purple or reddish discoloration on leaves, stunted growth, and poor root/fruit development.
+
+What are the symptoms of Potassium deficiency?
+Scorched or browning edges on older leaves, weak stems, and poor fruit quality.
+
+What are the symptoms of Calcium deficiency?
+Blossom end rot in tomatoes/peppers and distorted new growth (immobile nutrient).
+
+What is the difference between sexual and asexual propagation?
+Sexual propagation involves seeds (genetic recombination); asexual propagation uses vegetative parts (cloning) to produce identical offspring.
+
+What is "scarification" of seeds?
+Physically altering the seed coat (scratching, nicking) to allow water absorption and promote germination.
+
+What is "stratification" of seeds?
+Simulating natural winter conditions (cold and moist) to break seed dormancy.
+
+What is "damping off"?
+A fungal disease that attacks seedlings at the soil line, causing them to rot and fall over.
+
+What is the purpose of "thinning" seedlings?
+Removing excess seedlings to reduce competition for light, water, and nutrients, ensuring the remaining plants have space to grow.
+
+What is a "stem cutting"?
+A piece of stem (usually with nodes) removed from a parent plant to grow a new plant (asexual propagation).
+
+What is "rooting hormone" (auxin)?
+A synthetic or natural substance applied to cuttings to stimulate root initiation and development.
+
+What is "layering" in propagation?
+Encouraging a stem to form roots while still attached to the parent plant, often by burying a section of it in soil.
+
+What is "air layering"?
+A method of layering where roots are induced to form on an aerial stem by wounding it and wrapping it in moist medium (moss) and plastic.
+
+What is "grafting"?
+Joining tissues of plants so they continue to grow together; usually a scion (top) and rootstock (bottom).
+
+What is "budding" (chip or T-budding)?
+A form of grafting where a single bud is used as the scion.
+
+What is "division" in propagation?
+Splitting a mature perennial plant (crown and roots) into smaller sections to create new individual plants.
+
+What is "tissue culture" (micropropagation)?
+Growing plant cells, tissues, or organs in a sterile environment on a nutrient medium to produce large numbers of clones.
+
+What is the "cambium" layer?
+The thin layer of actively dividing cells between the bark (phloem) and the wood (xylem); crucial alignment point in grafting.
+
+What is an "F1 Hybrid"?
+The first generation offspring of two distinct, true-breeding parent lines; often exhibits "hybrid vigor" but seeds do not breed true.
+
+What is an "open-pollinated" variety?
+A variety that breeds true to type when pollinated by itself or another plant of the same variety.
+
+What is an "heirloom" variety?
+An open-pollinated variety that has been passed down for generations (usually 50+ years) and is valued for flavor/history.
+
+What is "seed saving"?
+Collecting and storing seeds from mature plants for future planting; requires knowledge of isolation distances to prevent cross-pollination.
+
+What is "dry processing" of seeds?
+Allowing seeds to dry on the plant (e.g., beans, corn) before harvesting and threshing.
+
+What is "wet processing" of seeds?
+Harvesting seeds from fleshy fruits (e.g., tomatoes, cucumbers) and often fermenting them to remove the gel coating before drying.
+
+What is "viability" of seeds?
+The ability of a seed to germinate and produce a healthy seedling.
+
+What is the primary cause of seed deterioration in storage?
+High humidity and high temperature.
+
+What is "hardpan" or "plow pan"?
+A compacted layer of soil below the surface that restricts root growth and water drainage, often caused by repeated tilling at the same depth.
+
+What is "no-till" gardening?
+A method of gardening that avoids disturbing the soil structure (tilling), relying on mulching and biological activity to aerate the soil.
+
+What is "biochar" primarily used for in soil?
+To provide a persistent structure that houses soil microbes, retains water/nutrients, and sequesters carbon (not a direct fertilizer).
+
+What is "rhizobia"?
+Nitrogen-fixing bacteria that form symbiotic nodules on the roots of legume plants.
+
+What is "inoculation" of legume seeds?
+Coating seeds with specific rhizobia bacteria before planting to ensure nitrogen fixation occurs.
+
+What is the purpose of "double digging"?
+A soil preparation method that loosens the soil to a depth of two shovel blades (spades) to improve aeration and drainage.
+
+What is a "soil test"?
+A chemical analysis of a soil sample to determine nutrient levels, pH, and organic matter content.
+
+What is "topdressing"?
+Applying fertilizer or compost to the surface of the soil around growing plants without working it in.
+
+What is "side-dressing"?
+Applying fertilizer in a band along the side of a row of crops.
+
+What is "foliar feeding"?
+Applying liquid fertilizer directly to plant leaves for rapid nutrient absorption.
+
+What is "hydroponic" growing medium?
+Inert materials like rockwool, perlite, clay pebbles (LECA), or coconut coir used to support roots in hydroponics.
+
+What is "perlite"?
+A volcanic glass expanded by heat; used in potting mixes to improve aeration and drainage (white, lightweight).
+
+What is "vermiculite"?
+A micaceous mineral expanded by heat; used in potting mixes to retain water and nutrients (gold/brown, flaky).
+
+What is "peat moss"?
+Partially decomposed sphagnum moss; retains water and adds acidity, but harvesting raises environmental concerns.
+
+What is "coconut coir"?
+A sustainable alternative to peat moss made from coconut husks; retains water well and has a neutral pH.
+
+What is "green sand"?
+A slow-release organic fertilizer rich in potassium and micronutrients, derived from ancient sea beds.
+
+What is "blood meal"?
+A fast-release, high-nitrogen organic fertilizer (dried blood).
+
+What is "bone meal"?
+A slow-release organic fertilizer rich in phosphorus and calcium.
+
+What is "feather meal"?
+A slow-release, high-nitrogen organic fertilizer.
+
+What is "kelp meal"?
+A source of potassium and micronutrients, often used to supply trace minerals and growth hormones.
+
+What is "compost tea"?
+A liquid extract of compost, often aerated to multiply beneficial microbes, used as a soil drench or foliar spray.
+
+What is "biopriming"?
+Treating seeds with beneficial microorganisms (like Trichoderma) to protect against pathogens and improve germination.
+
+What is "hardening off"?
+The process of gradually exposing seedlings to outdoor conditions (UV, wind, temp fluctuations) to thicken the cuticle and reduce transplant shock.
+
+What is "transplant shock"?
+Stress caused to a plant when moved, resulting in wilting, stunted growth, or leaf drop.
+
+What is the ideal time of day to take cuttings?
+Early morning, when the plant is fully turgid (hydrated).
+
+What is a "hardening" or "callus" on a cutting?
+The tissue that forms over the wound of a cutting, preventing rot and preceding root formation.
+
+What is the function of "bottom heat" in propagation?
+Warming the rooting medium to encourage faster root development in cuttings and germination in seeds.
+
+What is "totipotency"?
+The ability of a single plant cell to divide and produce all the differentiated cells in an organism (basis of tissue culture).
+
+What is "micro-grafting"?
+Grafting performed on very small plant parts, often in tissue culture.
+
+What is "scion wood"?
+Dormant, one-year-old wood collected in winter for grafting in spring.
+
+What is a "nurse root" graft?
+Grafting a scion onto a piece of root to support it until it forms its own roots.
+
+What is "stool layering" or "mound layering"?
+Cutting a plant back to the ground and mounding soil over the new shoots to encourage rooting at their bases (common for rootstocks).
+
+What is "serpentine layering"?
+Burying a long stem at multiple points (nodes) to produce multiple new plants.
+
+What is the purpose of "wounding" the base of a cutting?
+Removing a sliver of bark/tissue to expose the cambium and stimulate callus/root formation.
+
+What is the "germination rate"?
+The percentage of seeds that sprout under proper conditions.
+
+What is "seed vigor"?
+The strength and uniformity of seedling growth; declines faster than viability in storage.
+
+What is "orthodox seed"?
+Seeds that can be dried to low moisture content and stored at low temperatures for long periods (most veggies/grains).
+
+What is "recalcitrant seed"?
+Seeds that die if dried or frozen and must be kept moist/planted immediately (e.g., oak, mango, avocado).
+
+What is "soil solarization"?
+Covering moist soil with clear plastic in summer to trap heat and kill pathogens, nematodes, and weed seeds.
+
+What is "crop rotation"?
+Changing the type of crop grown in a specific area each season to prevent pest/disease buildup and manage soil fertility.
+
+What is "green manure"?
+A cover crop grown and then tilled into the soil while green to add nitrogen and organic matter.
+
+What is "allelopathy" in weed control?
+Using plants (like rye) that release chemicals to inhibit weed germination.
+
+What is "biological control" of pests?
+Using living organisms (predators, parasites, pathogens) to control pest populations (e.g., releasing ladybugs for aphids).
+
+What is "integrated pest management" (IPM)?
+A decision-based approach involving monitoring, identifying pests, setting thresholds, and using least-toxic control methods first.
+
+This deck covers the essential science of soil and the techniques for plant propagation, crucial for any horticultural practice.

@@ -1,0 +1,52 @@
+# Deno build artifacts
+**/_fresh/
+**/dist/
+**/build/
+
+# Dependencies
+**/node_modules/
+
+# Cache
+**/.cache/
+**/.deno/
+
+# IDE files
+**/.vscode/
+**/.idea/
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Git
+**/.git/
+**/.gitignore
+
+# Logs
+**/*.log
+**/logs/
+
+# Local configuration
+**/.env
+**/.env.local
+**/.env.production
+
+# Documentation
+**/*.md
+**/docs/
+
+# Test files
+**/test-results/
+**/coverage/
+
+# Temporary files
+**/*.tmp
+**/*.temp
+
+# Backup files
+**/*.bak
+**/*.backup
+**/*.zip
+
+# Lock files (copy these explicitly if needed)
+# deno.lock

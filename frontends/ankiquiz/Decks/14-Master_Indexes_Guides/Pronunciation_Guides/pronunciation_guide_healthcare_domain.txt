@@ -1,0 +1,458 @@
+# Healthcare Domain Pronunciation Guide
+
+## Overview
+This guide provides phonetic pronunciation for medical terminology, anatomical terms, and physiological concepts used throughout the Healthcare domain collections (Basic Sciences, Anatomy & Physiology, First Aid). Pronunciations use simplified phonetic spelling with emphasis on syllable stress for effective medical communication.
+
+## General Medical Terminology
+
+### A
+**abdominal** (ab-DOM-ih-nul) - Related to the abdomen region
+**anatomical** (an-uh-TOM-ih-kul) - Related to body structure
+**anterior** (an-TEER-ee-or) - Front of the body
+**auscultation** (aw-skul-TAY-shun) - Listening to body sounds
+**autonomic** (aw-toh-NOM-ik) - Involuntary nervous system
+
+### B
+**bilateral** (by-LAT-er-ul) - Both sides of the body
+**biopsy** (BY-op-see) - Tissue sample for examination
+**bradycardia** (brad-ee-KAR-dee-uh) - Slow heart rate
+**bronchial** (BRONG-kee-ul) - Related to bronchi
+**buccal** (BUCK-ul) - Inside of cheek
+
+### C
+**cardiac** (KAR-dee-ak) - Related to the heart
+**carpal** (KAR-pul) - Wrist bones
+**caudal** (KAW-dul) - Toward the tail/lower body
+**cerebral** (seh-REE-brul) - Related to the brain
+**cervical** (SUR-vih-kul) - Neck region
+**clinical** (KLIN-ih-kul) - Related to patient care
+**contralateral** (kon-truh-LAT-er-ul) - Opposite side of body
+**coronal** (kor-OH-nul) - Frontal body plane
+**cranial** (KRAY-nee-ul) - Skull region
+**cutaneous** (kyoo-TAY-nee-us) - Related to skin
+
+### D
+**deep** (DEEP) - Far from body surface
+**distal** (DISS-tul) - Far from point of attachment
+**dorsal** (DOR-sul) - Back of body
+**dysfunction** (diss-FUNK-shun) - Impaired function
+
+### E
+**endocrine** (EN-doh-kryn) - Hormone-producing glands
+**epigastric** (ep-ih-GAS-trik) - Upper central abdomen
+**erythema** (er-ih-THEE-muh) - Skin redness
+**etiology** (ee-tee-OL-uh-jee) - Cause of disease
+
+### F
+**fascia** (FASH-ee-uh) - Connective tissue
+**femoral** (FEM-or-ul) - Thigh region
+**fibular** (FIB-yoo-lur) - Outer lower leg
+**flexion** (FLEK-shun) - Bending joint
+**frontal** (FRUN-tul) - Forehead region
+
+### I
+**iliac** (IL-ee-ak) - Hip bone region
+**inferior** (in-FEER-ee-or) - Below or lower
+**inguinal** (ING-gwih-nul) - Groin region
+**intercostal** (in-ter-KOSS-tul) - Between ribs
+**ipsilateral** (ip-sih-LAT-er-ul) - Same side of body
+
+### L
+**lateral** (LAT-er-ul) - Side of body
+**lumbar** (LUM-bar) - Lower back
+**lymphatic** (lim-FAT-ik) - Related to lymph system
+
+### M
+**medial** (MEE-dee-ul) - Middle of body
+**median** (MEE-dee-un) - Midline of body
+**metacarpal** (met-uh-KAR-pul) - Hand bones
+**metatarsal** (met-uh-TAR-sul) - Foot bones
+**muscular** (MUS-kyoo-lur) - Related to muscles
+
+### P
+**palpation** (pal-PAY-shun) - Touch examination
+**parasympathetic** (par-uh-sim-puh-THET-ik) - Rest and digest system
+**pathology** (puh-THOL-uh-jee) - Study of disease
+**peripheral** (puh-RIF-er-ul) - Outer regions
+**physiological** (fiz-ee-oh-LOJ-ih-kul) - Related to body function
+**posterior** (pos-TEER-ee-or) - Back of body
+**proximal** (PROK-sih-mul) - Near point of attachment
+
+### S
+**sagittal** (SAJ-ih-tul) - Divides left and right
+**skeletal** (SKEL-uh-tul) - Related to bones
+**superficial** (soo-per-FISH-ul) - Near body surface
+**superior** (soo-PEER-ee-or) - Above or higher
+**sympathetic** (sim-puh-THET-ik) - Fight or flight system
+**systemic** (sis-TEM-ik) - Affecting whole body
+
+### T
+**tarsal** (TAR-sul) - Ankle bones
+**thoracic** (thoh-RAS-ik) - Chest region
+**transverse** (trans-VERSE) - Divides top and bottom
+
+## Cardiovascular System Terms
+
+### A
+**aorta** (ay-OR-tuh) - Main artery from heart
+**atrial** (AY-tree-ul) - Related to atrium
+**atrioventricular** (ay-tree-oh-ven-TRIK-yoo-lur) - Between atria and ventricles
+**auscultation** (aw-skul-TAY-shun) - Heart sound listening
+
+### C
+**cardiac** (KAR-dee-ak) - Heart-related
+**cardiology** (kar-dee-OL-uh-jee) - Heart specialty
+**coronary** (KOR-uh-nair-ee) - Heart blood supply
+**cyanosis** (sy-uh-NO-sis) - Bluish skin color
+
+### D
+**diastole** (dy-ASS-tuh-lee) - Heart relaxation phase
+**diastolic** (dy-uh-STOL-ik) - Relating to relaxation
+
+### E
+**electrocardiogram** (ee-lek-troh-KAR-dee-oh-gram) - Heart electrical test
+**endocardium** (en-doh-KAR-dee-um) - Heart lining
+
+### H
+**heart** (HART) - Cardiac pump organ
+**hypertension** (hy-per-TEN-shun) - High blood pressure
+**hypotension** (hy-poh-TEN-shun) - Low blood pressure
+
+### I
+**infarction** (in-FARK-shun) - Tissue death from lack of blood
+**ischemia** (iss-KEE-mee-uh) - Inadequate blood supply
+
+### M
+**mitral** (MY-trul) - Heart valve
+**murmur** (MUR-mur) - Abnormal heart sound
+**myocardial** (my-oh-KAR-dee-ul) - Heart muscle
+**myocardium** (my-oh-KAR-dee-um) - Heart muscle tissue
+
+### P
+**pericardial** (per-ih-KAR-dee-ul) - Around heart
+**pericardium** (per-ih-KAR-dee-um) - Heart sac
+**pulmonary** (PUL-muh-nair-ee) - Lung-related
+
+### S
+**systole** (SIS-tuh-lee) - Heart contraction phase
+**systolic** (sis-TOL-ik) - Relating to contraction
+
+### V
+**vascular** (VAS-kyoo-lur) - Blood vessel-related
+**vein** (VAYN) - Blood vessel to heart
+**ventricle** (VEN-trih-kul) - Heart chamber
+**ventricular** (ven-TRIK-yoo-lur) - Related to ventricle
+
+## Respiratory System Terms
+
+### A
+**alveolar** (al-VEE-oh-lur) - Air sac related
+**alveoli** (al-VEE-oh-lye) - Air sacs in lungs
+**auscultation** (aw-skul-TAY-shun) - Lung sound listening
+
+### B
+**bronchi** (BRONG-kye) - Large airways
+**bronchial** (BRONG-kee-ul) - Airway related
+**bronchioles** (BRONG-kee-ohlz) - Small airways
+**bronchitis** (brong-KY-tiss) - Airway inflammation
+
+### D
+**diaphragm** (DY-uh-fram) - Breathing muscle
+
+### L
+**larynx** (LAR-inks) - Voice box
+**lobar** (LOH-bar) - Lung lobe related
+
+### P
+**pleural** (PLOOR-ul) - Lung lining related
+**pneumonia** (noo-MOH-nyuh) - Lung infection
+**pulmonary** (PUL-muh-nair-ee) - Lung related
+
+### R
+**respiration** (res-puh-RAY-shun) - Breathing process
+**respiratory** (RES-pih-ruh-tor-ee) - Breathing related
+
+### T
+**trachea** (TRAY-kee-uh) - Windpipe
+**thoracic** (thoh-RAS-ik) - Chest related
+
+## Digestive System Terms
+
+### A
+**abdominal** (ab-DOM-ih-nul) - Belly related
+**alimentary** (al-uh-MEN-tair-ee) - Digestive tract
+
+### C
+**cecum** (SEE-kum) - Large intestine start
+**colon** (KOH-lun) - Large intestine
+**colonic** (ko-LON-ik) - Colon related
+
+### D
+**duodenal** (doo-oh-DEE-nul) - First intestine part
+**duodenum** (doo-oh-DEE-num) - First intestine section
+
+### E
+**esophageal** (ee-sof-uh-JEE-ul) - Swallowing tube related
+**esophagus** (ee-SOF-uh-gus) - Swallowing tube
+
+### G
+**gastric** (GAS-trik) - Stomach related
+**gastrointestinal** (gas-troh-in-TES-tih-nul) - Digestive tract
+
+### H
+**hepatic** (heh-PAT-ik) - Liver related
+**hepatitis** (hep-uh-TY-tiss) - Liver inflammation
+
+### I
+**ileal** (IL-ee-ul) - Last intestine part
+**ileum** (IL-ee-um) - Last intestine section
+**intestinal** (in-TES-tih-nul) - Intestine related
+
+### J
+**jejunal** (jeh-JOO-nul) - Middle intestine part
+**jejunum** (jeh-JOO-num) - Middle intestine section
+
+### P
+**pancreatic** (pan-kree-AT-ik) - Pancreas related
+**peristalsis** (per-ih-STAL-sis) - Wave-like muscle movement
+
+## Nervous System Terms
+
+### A
+**autonomic** (aw-toh-NOM-ik) - Involuntary nervous system
+
+### C
+**central** (SEN-trul) - Brain and spinal cord
+**cerebellar** (ser-uh-BEL-ur) - Cerebellum related
+**cerebral** (seh-REE-brul) - Cerebrum related
+**cerebrospinal** (seh-ree-broh-SPY-nul) - Brain and spinal fluid
+
+### D
+**dermatome** (DER-muh-tohm) - Skin nerve area
+
+### M
+**medulla** (meh-DUL-uh) - Brain stem part
+**myotome** (MY-uh-tohm) - Muscle nerve area
+
+### N
+**neural** (NOOR-ul) - Nerve related
+**neurological** (noor-oh-LOJ-ih-kul) - Nervous system related
+**neuropathy** (noo-ROP-uh-thee) - Nerve disease
+
+### P
+**parasympathetic** (par-uh-sim-puh-THET-ik) - Rest and digest system
+**peripheral** (puh-RIF-er-ul) - Outside nervous system
+**plexus** (PLEK-sus) - Nerve network
+
+### S
+**spinal** (SPY-nul) - Spine related
+**sympathetic** (sim-puh-THET-ik) - Fight or flight system
+
+## Musculoskeletal System Terms
+
+### A
+**articular** (ar-TIK-yoo-lur) - Joint related
+
+### C
+**carpal** (KAR-pul) - Wrist bones
+**cervical** (SUR-vih-kul) - Neck region
+**clavicular** (klav-IK-yoo-lur) - Collarbone related
+
+### F
+**femoral** (FEM-or-ul) - Thigh bone related
+**fibular** (FIB-yoo-lur) - Calf bone related
+**flexion** (FLEK-shun) - Bending movement
+
+### H
+**humeral** (HYOO-mer-ul) - Upper arm bone related
+
+### M
+**metacarpal** (met-uh-KAR-pul) - Hand bones
+**metatarsal** (met-uh-TAR-sul) - Foot bones
+**muscular** (MUS-kyoo-lur) - Muscle related
+
+### P
+**patellar** (puh-TEL-ur) - Kneecap related
+**pelvic** (PEL-vik) - Hip region
+
+### R
+**radial** (RAY-dee-ul) - Forearm bone related
+**rotation** (roh-TAY-shun) - Turning movement
+
+### S
+**skeletal** (SKEL-uh-tul) - Bone related
+**spinal** (SPY-nul) - Spine related
+
+### T
+**tarsal** (TAR-sul) - Ankle bones
+**thoracic** (thoh-RAS-ik) - Chest related
+**tibial** (TIB-ee-ul) - Shin bone related
+
+## Endocrine System Terms
+
+### E
+**endocrine** (EN-doh-kryn) - Hormone system
+**endocrinology** (en-doh-krin-OL-uh-jee) - Hormone specialty
+
+### H
+**hormonal** (hor-MOH-nul) - Hormone related
+**hyperthyroidism** (hy-per-THY-royd-izm) - Overactive thyroid
+**hypothyroidism** (hy-poh-THY-royd-izm) - Underactive thyroid
+
+### M
+**metabolic** (met-uh-BOL-ik) - Metabolism related
+**metabolism** (meh-TAB-uh-lizm) - Chemical processes
+
+### P
+**pancreatic** (pan-kree-AT-ik) - Pancreas related
+**parathyroid** (par-uh-THY-royd) - Near thyroid glands
+
+### T
+**thyroid** (THY-royd) - Neck hormone gland
+
+## Pathophysiology Terms
+
+### A
+**acute** (uh-KYOOT) - Sudden onset
+**autoimmune** (aw-toh-im-YOON) - Immune system attacks self
+
+### C
+**chronic** (KRON-ik) - Long-lasting
+**congenital** (kon-JEN-ih-tul) - Present at birth
+
+### D
+**diabetes** (dy-uh-BEE-teez) - High blood sugar disease
+**diagnosis** (dy-ag-NOH-sis) - Disease identification
+
+### E
+**edema** (eh-DEE-muh) - Swelling
+**etiology** (ee-tee-OL-uh-jee) - Disease cause
+
+### H
+**hypertension** (hy-per-TEN-shun) - High blood pressure
+**hypotension** (hy-poh-TEN-shun) - Low blood pressure
+
+### I
+**inflammation** (in-fluh-MAY-shun) - Tissue response to injury
+**ischemia** (iss-KEE-mee-uh) - Inadequate blood supply
+
+### M
+**metabolic** (met-uh-BOL-ik) - Chemical process related
+**myocardial** (my-oh-KAR-dee-ul) - Heart muscle related
+
+### N
+**necrosis** (neh-KROH-sis) - Tissue death
+
+### P
+**pathology** (puh-THOL-uh-jee) - Disease study
+**pathophysiology** (path-oh-fiz-ee-OL-uh-jee) - Disease function study
+
+### S
+**symptom** (SIMP-tum) - Disease sign
+**syndrome** (SIN-drohm) - Group of symptoms
+
+## Clinical Assessment Terms
+
+### A
+**assessment** (uh-SESS-ment) - Patient evaluation
+**auscultation** (aw-skul-TAY-shun) - Sound examination
+
+### D
+**diagnosis** (dy-ag-NOH-sis) - Disease identification
+**diastolic** (dy-uh-STOL-ik) - Relaxation pressure
+
+### I
+**inspection** (in-SPEK-shun) - Visual examination
+
+### M
+**measurement** (MEZH-ur-ment) - Taking measurements
+
+### P
+**palpation** (pal-PAY-shun) - Touch examination
+**percussion** (per-KUSH-un) - Tapping examination
+**pulse** (PULS) - Heart beat
+
+### S
+**stethoscope** (STETH-uh-skohp) - Listening instrument
+**systolic** (sis-TOL-ik) - Contraction pressure
+
+## Emergency Medical Terms
+
+### A
+**anaphylaxis** (an-uh-fih-LAK-sis) - Severe allergic reaction
+**arrhythmia** (uh-RITH-mee-uh) - Irregular heart rhythm
+
+### C
+**cardiopulmonary** (kar-dee-oh-PUL-muh-nair-ee) - Heart and lung
+**cerebrovascular** (seh-ree-broh-VAS-kyoo-lur) - Brain blood vessels
+
+### D
+**defibrillation** (dee-fib-rih-LAY-shun) - Heart shock treatment
+
+### E
+**emergency** (ih-MUR-jen-see) - Urgent situation
+
+### H
+**hemorrhage** (HEM-uh-rij) - Bleeding
+**hypoxia** (hy-POK-see-uh) - Low oxygen
+
+### I
+**infarction** (in-FARK-shun) - Tissue death
+**ischemia** (iss-KEE-mee-uh) - Blood supply lack
+
+### M
+**myocardial** (my-oh-KAR-dee-ul) - Heart muscle
+
+### R
+**resuscitation** (ree-sus-ih-TAY-shun) - Reviving from death
+
+### T
+**tachycardia** (tak-ee-KAR-dee-uh) - Fast heart rate
+**trauma** (TRAW-muh) - Injury
+
+## Specialized Pathology Terms
+
+### A
+**aneurysm** (AN-yoo-rizm) - Blood vessel weakening and bulging
+
+### C
+**cholecystitis** (koh-lee-sis-TY-tiss) - Gallbladder inflammation
+**cholelithiasis** (koh-lee-lih-THY-uh-sis) - Gallstone formation
+**consolidation** (kon-sol-ih-DAY-shun) - Lung tissue filling with fluid
+
+### D
+**dermatomal** (dur-muh-TOH-mul) - Related to skin nerve distribution
+
+### E
+**enteric** (en-TAIR-ik) - Related to digestive system nerves
+
+### I
+**ileal** (IL-ee-ul) - Related to last small intestine section
+
+### M
+**meningeal** (men-IN-jee-ul) - Related to brain covering membranes
+
+### P
+**peristalsis** (per-ih-STAL-sis) - Wave-like intestinal movement
+**posterior** (pos-TEER-ee-or) - Back of body
+
+### S
+**subarachnoid** (sub-uh-RAK-noyd) - Under brain covering membranes
+
+## Usage Notes
+
+1. **Stress Marks**: Capitalized syllables receive primary stress
+2. **Syllable Separation**: Hyphens indicate syllable breaks
+3. **Medical Accuracy**: Pronunciations follow standard medical terminology conventions
+4. **Clinical Context**: Terms organized by body system for clinical relevance
+5. **Professional Communication**: Essential for healthcare documentation and patient care
+
+## Study Tips
+
+- **Practice**: Say terms aloud multiple times for mastery
+- **Break Down**: Focus on one syllable at a time for complex terms
+- **Context**: Learn pronunciations within clinical scenarios
+- **Regular Review**: Practice regularly to maintain accuracy
+- **Professional Use**: Apply pronunciations in clinical documentation
+
+This pronunciation guide supports effective medical communication and professional development in Healthcare education and clinical practice.

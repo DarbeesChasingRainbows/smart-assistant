@@ -1,0 +1,408 @@
+// Windows Operating System Fundamentals Deck
+
+What is the primary difference between Windows and other operating systems?
+Windows is a proprietary graphical operating system developed by Microsoft, featuring a user-friendly interface, extensive software compatibility, and enterprise-focused management tools.
+
+What is the basic command to check Windows version and build information?
+"winver" which displays the Windows version, build number, and installation details, or "systeminfo | findstr /B /C:"OS Name"" for command-line version.
+
+What is the difference between Windows client and server editions?
+Client editions (Windows 10/11) focus on desktop productivity, while server editions provide enterprise services like Active Directory, file sharing, and application hosting.
+
+What is the primary purpose of the Windows Registry in the operating system?
+To store configuration settings and options for the operating system, hardware, drivers, services, and applications in a hierarchical database structure.
+
+What is the basic command to open the Registry Editor?
+"regedit" which launches the Registry Editor GUI, or "reg" for command-line registry operations.
+
+What is the difference between HKEY_LOCAL_MACHINE and HKEY_CURRENT_USER registry hives?
+HKEY_LOCAL_MACHINE stores system-wide settings affecting all users, while HKEY_CURRENT_USER contains settings specific to the currently logged-in user.
+
+What is the primary purpose of Windows Services in the operating system?
+To provide background processes that handle system functions, network services, and application daemons that run independently of user sessions.
+
+What is the basic command to view running services in Windows?
+"services.msc" which opens the Services management console, or "Get-Service" in PowerShell for command-line viewing.
+
+What is the difference between automatic and manual service startup types?
+Automatic services start at boot time, while manual services require explicit启动 or are triggered by applications.
+
+What is the primary purpose of the Windows Task Manager?
+To monitor running applications, processes, and system performance, providing tools to end tasks and manage system resources.
+
+What is the basic command to open Task Manager?
+"taskmgr" or press Ctrl+Shift+Esc, or right-click the taskbar and select Task Manager.
+
+What is the difference between Task Manager and Resource Monitor?
+Task Manager provides basic process and performance monitoring, while Resource Monitor offers detailed resource usage analysis and network activity.
+
+What is the primary purpose of Windows Event Viewer?
+To view and analyze system, application, and security event logs for troubleshooting, auditing, and system monitoring.
+
+What is the basic command to open Event Viewer?
+"eventvwr.msc" which launches the Event Viewer management console, or "Get-EventLog" in PowerShell for command-line access.
+
+What is the difference between System, Application, and Security event logs?
+System logs record operating system events, Application logs track program events, while Security logs monitor access attempts and policy changes.
+
+What is the primary purpose of Windows File System structure?
+To organize files and directories in a hierarchical structure with drive letters (C:, D:) and standardized folders for system and user data.
+
+What is the basic command to view disk drives and partitions in Windows?
+"diskmgmt.msc" which opens Disk Management, or "Get-PSDrive -PSProvider FileSystem" in PowerShell.
+
+What is the difference between NTFS and FAT32 file systems?
+NTFS provides advanced features like security, compression, and large file support, while FAT32 offers broader compatibility but limited features.
+
+What is the primary purpose of the Windows Command Prompt (cmd.exe)?
+To provide a command-line interface for executing commands, running scripts, and system administration tasks.
+
+What is the basic command to open Command Prompt as Administrator?
+Search for "cmd", right-click and select "Run as administrator", or use "runas /user:Administrator cmd" from existing command prompt.
+
+What is the difference between Command Prompt and PowerShell?
+Command Prompt uses traditional DOS-style commands, while PowerShell provides modern object-oriented scripting with extensive administrative capabilities.
+
+What is the primary purpose of Windows PowerShell in system administration?
+To automate administrative tasks, manage system configuration, and provide powerful scripting capabilities for Windows management.
+
+What is the basic command to start PowerShell?
+"powershell" for standard PowerShell, or "powershell_ise" for the Integrated Scripting Environment, or "pwsh" for PowerShell Core.
+
+What is the difference between Windows PowerShell and PowerShell Core?
+Windows PowerShell is built on .NET Framework for Windows, while PowerShell Core is cross-platform built on .NET Core.
+
+What is the primary purpose of Windows Management Instrumentation (WMI)?
+To provide a standardized interface for querying and managing Windows system information and configuration.
+
+What is the basic command to query system information with WMI?
+"Get-WmiObject -Class Win32_ComputerSystem" in PowerShell, or "wmic computersystem get name" in Command Prompt.
+
+What is the difference between WMI and CIM in Windows management?
+WMI uses DCOM for remote management, while CIM (Common Information Model) uses WS-Man for modern standards-based management.
+
+What is the primary purpose of Windows Update in system maintenance?
+To download and install security patches, feature updates, and driver updates to maintain system security and functionality.
+
+What is the basic command to check Windows Update status?
+"wuauclt /showupdates" or use Settings > Update & Security > Windows Update, or "Get-WUHistory" in PowerShell with Windows Update module.
+
+What is the difference between Windows Update and Microsoft Update?
+Windows Update provides OS and Microsoft driver updates, while Microsoft Update includes Office and other Microsoft software updates.
+
+What is the primary purpose of Windows Defender in security?
+To provide real-time protection against malware, spyware, and viruses through antivirus and antispyware capabilities.
+
+What is the basic command to run Windows Defender scan?
+"MpCmdRun.exe -Scan -ScanType 1" for quick scan, or "Start-MpScan -ScanType QuickScan" in PowerShell.
+
+What is the difference between Windows Defender and third-party antivirus?
+Windows Defender is built-in with basic protection, while third-party solutions may offer additional features and different detection algorithms.
+
+What is the primary purpose of User Account Control (UAC) in Windows?
+To prevent unauthorized changes to the operating system by prompting for administrator credentials when elevated privileges are required.
+
+What is the basic command to check UAC status?
+"reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA" or use Control Panel > User Accounts > Change User Account Control settings.
+
+What is the difference between UAC notification levels?
+Always notify requires confirmation for all changes, while never notify provides no prompts for administrative actions.
+
+What is the primary purpose of Windows Firewall in network security?
+To filter network traffic based on rules, protecting the system from unauthorized network access and controlling application network communications.
+
+What is the basic command to open Windows Firewall settings?
+"firewall.cpl" which opens Firewall settings in Control Panel, or "Get-NetFirewallRule" in PowerShell for rule management.
+
+What is the difference between Windows Defender Firewall and third-party firewalls?
+Windows Defender Firewall provides basic network filtering, while third-party firewalls may offer advanced features like application control and intrusion detection.
+
+What is the primary purpose of Windows Activation in licensing?
+To verify that Windows is genuine and properly licensed, enabling full functionality and receiving updates.
+
+What is the basic command to check Windows activation status?
+"slmgr.vbs /xpr" which shows expiration date, or "slmgr.vbs /dli" for detailed license information.
+
+What is the difference between volume licensing and retail activation?
+Volume licensing uses KMS or MAK keys for multiple computers, while retail activation uses individual product keys per installation.
+
+What is the primary purpose of System Restore in Windows?
+To create restore points that allow reverting system files, registry settings, and installed applications to a previous state.
+
+What is the basic command to create a system restore point?
+"PowerShell -Command "Checkpoint-Computer -Description 'Manual Restore Point'" or use System Protection in System Properties.
+
+What is the difference between System Restore and Windows Backup?
+System Restore reverts system changes without affecting user files, while Backup creates complete copies of files and system image.
+
+What is the primary purpose of Windows Backup and File History?
+To protect user data through automated backups of files, folders, and system images for disaster recovery.
+
+What is the basic command to configure Windows Backup?
+"sdclt.exe" which opens the Backup and Restore interface, or use Settings > Update & Security > Backup.
+
+What is the difference between File History and Windows Backup?
+File History continuously backs up user files to external storage, while Windows Backup provides scheduled backups of files and system images.
+
+What is the primary purpose of Windows Performance Monitor?
+To track system performance metrics, analyze bottlenecks, and monitor resource usage over time for optimization.
+
+What is the basic command to open Performance Monitor?
+"perfmon.msc" which launches Performance Monitor, or "Get-Counter" in PowerShell for real-time performance data.
+
+What is the difference between Performance Monitor and Resource Monitor?
+Performance Monitor tracks long-term performance trends, while Resource Monitor shows real-time resource usage by processes.
+
+What is the primary purpose of Windows System Configuration (msconfig)?
+To manage startup programs, services, boot configuration, and system troubleshooting tools.
+
+What is the basic command to open System Configuration?
+"msconfig" which launches the System Configuration utility for managing startup and boot options.
+
+What is the difference between System Configuration and Task Manager startup management?
+System Configuration provides legacy startup management, while Task Manager offers modern startup program control with impact assessment.
+
+What is the primary purpose of Windows Disk Management?
+To manage disk partitions, format drives, and configure storage for optimal system organization and performance.
+
+What is the basic command to open Disk Management?
+"diskmgmt.msc" which provides GUI for disk operations, or "diskpart" for command-line disk management.
+
+What is the difference between basic and dynamic disks in Windows?
+Basic disks use traditional partitioning with primary/extended partitions, while dynamic disks offer volumes that can span multiple disks.
+
+What is the primary purpose of Windows Device Manager?
+To manage hardware devices, drivers, and troubleshoot hardware conflicts and issues.
+
+What is the basic command to open Device Manager?
+"devmgmt.msc" which launches Device Manager for hardware management, or "Get-PnpDevice" in PowerShell.
+
+What is the difference between Device Manager and PowerShell device management?
+Device Manager provides GUI-based device management, while PowerShell offers scripting capabilities for automated device administration.
+
+What is the primary purpose of Windows Group Policy in enterprise management?
+To centrally configure and enforce settings for users and computers across Active Directory domains.
+
+What is the basic command to open Group Policy Editor?
+"gpedit.msc" for local Group Policy Editor, or "gpmc.msc" for Group Policy Management Console in domain environments.
+
+What is the difference between local and domain Group Policy?
+Local Group Policy affects only the local computer, while domain Group Policy applies to multiple computers and users through Active Directory.
+
+What is the primary purpose of Windows Active Directory in enterprise networking?
+To provide centralized authentication, authorization, and directory services for network resources and user management.
+
+What is the basic command to open Active Directory management tools?
+"dsa.msc" for Active Directory Users and Computers, or "Get-ADUser" in PowerShell with Active Directory module.
+
+What is the difference between Active Directory and local user accounts?
+Active Directory provides centralized network authentication, while local accounts exist only on individual computers.
+
+What is the primary purpose of Windows File and Printer Sharing?
+To enable network access to local files and printers for collaboration and resource sharing across networks.
+
+What is the basic command to configure file sharing?
+Right-click folder > Properties > Sharing > Advanced Sharing, or use "net share sharename=drive:path" in Command Prompt.
+
+What is the difference between SMB and NFS file sharing protocols?
+SMB is Windows-native with integrated authentication, while NFS provides cross-platform file sharing commonly used in Unix/Linux environments.
+
+What is the primary purpose of Windows Remote Desktop (RDP)?
+To allow remote access and control of Windows computers over network connections for administration and support.
+
+What is the basic command to enable Remote Desktop?
+"SystemPropertiesRemote.exe" or use System Properties > Remote tab, or "Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0" in PowerShell.
+
+What is the difference between Remote Desktop and Remote Assistance?
+Remote Desktop provides full remote control for administration, while Remote Assistance allows user-invited support sessions.
+
+What is the primary purpose of Windows PowerShell Remoting?
+To enable remote execution of PowerShell commands and scripts on multiple computers for centralized administration.
+
+What is the basic command to enable PowerShell Remoting?
+"Enable-PSRemoting -Force" in PowerShell, which configures WinRM service for remote connections.
+
+What is the difference between PowerShell Remoting and Remote Desktop?
+PowerShell Remoting executes commands without GUI, while Remote Desktop provides full graphical remote access.
+
+What is the primary purpose of Windows Task Scheduler?
+To automate the execution of programs, scripts, and system maintenance tasks at specified times or in response to events.
+
+What is the basic command to open Task Scheduler?
+"taskschd.msc" which launches Task Scheduler for creating and managing scheduled tasks.
+
+What is the difference between Task Scheduler and cron jobs in Linux?
+Task Scheduler provides GUI and extensive event-based triggers, while cron uses time-based scheduling with simpler configuration.
+
+What is the primary purpose of Windows System Information?
+To display comprehensive hardware and software configuration details for system inventory and troubleshooting.
+
+What is the basic command to view system information?
+"msinfo32.exe" which opens System Information, or "systeminfo" in Command Prompt for detailed system report.
+
+What is the difference between System Information and dxdiag?
+System Information provides comprehensive system details, while dxdiag focuses on DirectX and multimedia components.
+
+What is the primary purpose of Windows Resource Monitor?
+To provide detailed real-time monitoring of CPU, memory, disk, and network usage by individual processes and services.
+
+What is the basic command to open Resource Monitor?
+"resmon.exe" or open from Task Manager > Performance tab > Open Resource Monitor.
+
+What is the difference between Resource Monitor and Performance Monitor?
+Resource Monitor shows real-time resource usage, while Performance Monitor tracks performance trends over time with data collection.
+
+What is the primary purpose of Windows Reliability Monitor?
+To track system stability and provide a timeline of critical events, application failures, and warnings for troubleshooting.
+
+What is the basic command to open Reliability Monitor?
+"perfmon.msc /rel" which opens Reliability Monitor, or access through Action Center > Maintenance > Reliability History.
+
+What is the difference between Reliability Monitor and Event Viewer?
+Reliability Monitor provides visual timeline of system stability, while Event Viewer offers detailed technical event logs.
+
+What is the primary purpose of Windows Memory Diagnostic?
+To test computer memory (RAM) for errors that can cause system instability, crashes, and data corruption.
+
+What is the basic command to run Windows Memory Diagnostic?
+"mdsched.exe" which launches Memory Diagnostic tool with restart and test options.
+
+What is the difference between Windows Memory Diagnostic and third-party memory tools?
+Windows Memory Diagnostic provides basic RAM testing, while third-party tools may offer advanced testing and reporting features.
+
+What is the primary purpose of Windows Disk Cleanup?
+To remove unnecessary files, temporary data, and system cleanup to free disk space and improve performance.
+
+What is the basic command to run Disk Cleanup?
+"cleanmgr.exe" which launches Disk Cleanup utility with file category selection options.
+
+What is the difference between Disk Cleanup and Storage Sense?
+Disk Cleanup provides manual cleanup options, while Storage Sense offers automated cleanup based on storage thresholds.
+
+What is the primary purpose of Windows Disk Defragmenter?
+To reorganize fragmented data on hard drives to improve disk access performance and reduce wear on mechanical drives.
+
+What is the basic command to open Disk Defragmenter?
+"dfrgui.exe" which opens Optimize Drives interface, or "defrag C: /A" to analyze fragmentation.
+
+What is the difference between defragmentation and TRIM for SSD drives?
+Defragmentation reorganizes data on mechanical drives, while TRIM informs SSD controllers which data blocks can be erased.
+
+What is the primary purpose of Windows System File Checker (SFC)?
+To scan and repair corrupted Windows system files that can cause system instability and application failures.
+
+What is the basic command to run System File Checker?
+"sfc /scannow" which scans all protected system files and repairs corrupted files automatically.
+
+What is the difference between SFC and DISM for system repair?
+SFC repairs individual system files, while DISM can repair the entire Windows image and component store.
+
+What is the primary purpose of Windows Deployment Image Servicing and Management (DISM)?
+To service and repair Windows images, including installation media, online systems, and virtual hard disks.
+
+What is the basic command to check system health with DISM?
+"DISM /Online /Cleanup-Image /CheckHealth" which scans for component store corruption, or "/RestoreHealth" to repair issues.
+
+What is the difference between DISM online and offline operations?
+Online operations work on the running Windows installation, while offline operations target Windows images or mounted VHD files.
+
+What is the primary purpose of Windows Recovery Environment (WinRE)?
+To provide troubleshooting and recovery tools when Windows cannot start normally, including repair, restore, and recovery options.
+
+What is the basic command to access Windows Recovery Environment?
+Hold Shift while clicking Restart, or use "reagentc /info" to check WinRE status, or "shutdown /r /o /f /t 0" to boot into recovery.
+
+What is the difference between WinRE and Safe Mode?
+WinRE provides comprehensive recovery tools, while Safe Mode starts Windows with minimal drivers and services for troubleshooting.
+
+What is the primary purpose of Windows Safe Mode?
+To start Windows with only essential drivers and services for troubleshooting startup problems and removing problematic software.
+
+What is the basic command to boot into Safe Mode?
+Use System Configuration (msconfig) > Boot > Safe boot, or hold Shift + F8 during startup, or use "bcdedit /set {current} safeboot minimal" in Command Prompt.
+
+What is the difference between Safe Mode and Safe Mode with Networking?
+Safe Mode provides minimal functionality, while Safe Mode with Networking adds network drivers and services for internet access.
+
+What is the primary purpose of Windows System Restore Points?
+To create snapshots of system files, registry settings, and installed applications for reverting problematic changes.
+
+What is the basic command to create system restore point via command line?
+"PowerShell -Command "Checkpoint-Computer -Description 'Before Software Installation' -RestorePointType 'MODIFY_SETTINGS'""
+
+What is the difference between system restore points and file backups?
+Restore points revert system changes without affecting user files, while file backups protect personal data regardless of system state.
+
+What is the primary purpose of Windows Boot Configuration Data (BCD)?
+To store boot configuration settings for operating systems, boot loaders, and startup options in modern Windows systems.
+
+What is the basic command to manage BCD settings?
+"bcdedit.exe" which displays and modifies boot configuration data, or "EasyBCD" for GUI management.
+
+What is the difference between BCD and legacy boot.ini files?
+BCD provides modern boot configuration with multiple OS support, while boot.ini was used in older Windows versions with limited functionality.
+
+What is the primary purpose of Windows Environment Variables?
+To store system-wide and user-specific configuration values that applications and scripts can access for customization and operation.
+
+What is the basic command to view environment variables?
+"set" in Command Prompt, or "Get-ChildItem Env:" in PowerShell, or access through System Properties > Advanced > Environment Variables.
+
+What is the difference between system and user environment variables?
+System variables apply to all users on the computer, while user variables affect only the specific user account.
+
+What is the primary purpose of Windows File Extensions?
+To identify file types and associate them with appropriate applications for opening and processing.
+
+What is the basic command to show or hide file extensions?
+In File Explorer > View > Options > Change folder and search options > View tab > Hide extensions for known file types.
+
+What is the difference between file extensions and file attributes?
+Extensions identify file type and program association, while attributes (hidden, read-only, system) control file behavior and visibility.
+
+What is the primary purpose of Windows File Attributes?
+To control file behavior and properties including hidden status, read-only protection, and system file designation.
+
+What is the basic command to modify file attributes?
+"attrib +r filename" to set read-only, or "attrib -h filename" to unhide, or use "Get-ItemProperty" and "Set-ItemProperty" in PowerShell.
+
+What is the difference between file attributes and NTFS permissions?
+Attributes control basic file properties, while NTFS permissions provide granular access control for users and groups.
+
+What is the primary purpose of Windows NTFS Permissions?
+To control access to files and folders through detailed user and group rights for read, write, execute, and modify operations.
+
+What is the basic command to view NTFS permissions?
+Right-click file/folder > Properties > Security tab, or "icacls filename" in Command Prompt, or "Get-Acl" in PowerShell.
+
+What is the difference between share permissions and NTFS permissions?
+Share permissions control network access, while NTFS permissions control both local and network access with more granular control.
+
+What is the primary purpose of Windows File Ownership?
+To identify which user account controls a file and has the ability to modify permissions and take ownership of files.
+
+What is the basic command to take file ownership?
+"takeown /f filename" in Command Prompt, or use Security tab > Advanced > Owner in file properties.
+
+What is the difference between ownership and administrative access?
+Ownership provides control over specific files, while administrative access provides system-wide control over all resources.
+
+What is the primary purpose of Windows File Encryption (EFS)?
+To protect files on NTFS volumes through encryption that ties access to specific user accounts.
+
+What is the basic command to encrypt files with EFS?
+Right-click file > Properties > General > Advanced > Encrypt contents to secure data, or "cipher /e filename" in Command Prompt.
+
+What is the difference between EFS and BitLocker encryption?
+EFS encrypts individual files tied to user accounts, while BitLocker encrypts entire volumes for full-disk protection.
+
+What is the primary purpose of Windows BitLocker Drive Encryption?
+To provide full-disk encryption for protecting data on lost or stolen computers through volume-level encryption.
+
+What is the basic command to manage BitLocker?
+"manage-bde.exe" for command-line BitLocker management, or use Control Panel > BitLocker Drive Encryption.
+
+What is the difference between BitLocker and BitLocker To Go?
+BitLocker encrypts internal system drives, while BitLocker To Go encrypts removable USB drives for portable data protection.
+
+This comprehensive Windows fundamentals deck provides 150 questions covering essential Windows operating system concepts, management tools, and administration needed for effective Windows system management.

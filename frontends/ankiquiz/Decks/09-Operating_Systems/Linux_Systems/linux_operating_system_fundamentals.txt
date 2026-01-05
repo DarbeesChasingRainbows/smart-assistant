@@ -1,0 +1,480 @@
+// Linux Operating System Fundamentals Deck
+
+What is the primary difference between Linux and Unix operating systems?
+Linux is a Unix-like open-source kernel created by Linus Torvalds, while Unix refers to a family of operating systems that include both proprietary and open-source implementations.
+
+What is the basic command to check the Linux kernel version?
+"uname -r" which displays the kernel release version, or "uname -a" for complete system information including kernel version.
+
+What is the difference between the Linux kernel and a Linux distribution?
+The kernel is the core component managing hardware and system resources, while a distribution includes the kernel plus user-space tools, applications, and package management.
+
+What is the primary purpose of the init process (PID 1) in Linux?
+To initialize the system, start essential services, and manage process lifecycle, traditionally handled by sysvinit or systemd in modern systems.
+
+What is the basic command to view running processes in Linux?
+"ps aux" which displays all running processes with detailed information including user, CPU usage, memory, and command.
+
+What is the difference between PID and PPID in Linux processes?
+PID (Process ID) uniquely identifies a process, while PPID (Parent Process ID) identifies the parent process that created the current process.
+
+What is the primary purpose of the /proc filesystem in Linux?
+To provide a virtual filesystem interface to kernel data structures, allowing users to view and sometimes modify system information and process details.
+
+What is the basic command to view CPU information through /proc?
+"cat /proc/cpuinfo" which displays detailed processor information including model, speed, cache sizes, and core counts.
+
+What is the difference between /proc and /sys filesystems?
+/proc provides process and system information interfaces, while /sys provides kernel object and device management interfaces for system configuration.
+
+What is the primary purpose of the Linux shell environment?
+To provide a command-line interface for interacting with the operating system, executing commands, and automating tasks through scripting.
+
+What is the basic command to determine the current shell being used?
+"echo $SHELL" which displays the path to the current user's default shell, typically /bin/bash or /bin/zsh.
+
+What is the difference between bash and zsh shells?
+Bash is the default GNU shell with broad compatibility, while zsh offers advanced features like better tab completion, themes, and plugin support.
+
+What is the primary purpose of environment variables in Linux?
+To store configuration data and system settings that influence process behavior and provide information to applications.
+
+What is the basic command to view all environment variables?
+"env" or "printenv" which displays all environment variables currently set for the shell session.
+
+What is the difference between environment variables and shell variables?
+Environment variables are inherited by child processes, while shell variables are local to the current shell session.
+
+What is the primary purpose of the PATH environment variable?
+To specify directories where the shell should search for executable commands when a command is entered without a full path.
+
+What is the basic command to add a directory to the PATH?
+"export PATH=$PATH:/new/directory" which temporarily adds the directory to PATH for the current session.
+
+What is the difference between absolute and relative paths in Linux?
+Absolute paths start from the root directory (/) and specify the complete location, while relative paths start from the current working directory.
+
+What is the primary purpose of the Linux file system hierarchy?
+To organize files and directories in a standardized structure, ensuring consistency across different Linux distributions and applications.
+
+What is the basic command to navigate to the root directory?
+"cd /" which changes the current working directory to the root of the file system.
+
+What is the difference between /bin and /usr/bin directories?
+/bin contains essential command binaries for system boot and recovery, while /usr/bin contains most user commands and applications.
+
+What is the primary purpose of the /home directory structure?
+To provide personal storage space for user files, configurations, and settings, with each user having a separate subdirectory.
+
+What is the basic command to view your current home directory?
+"echo $HOME" or "cd ~" which displays or navigates to the current user's home directory.
+
+What is the difference between /home and /root directories?
+/home contains regular user home directories, while /root is the home directory for the root (superuser) account.
+
+What is the primary purpose of the /etc directory in Linux?
+To store system-wide configuration files and scripts, containing settings for applications, services, and system behavior.
+
+What is the basic command to list configuration files in /etc?
+"ls -la /etc/" which displays all configuration files with permissions and ownership information.
+
+What is the difference between /etc and /var directories?
+/etc contains static configuration files, while /var contains variable data files like logs, caches, and spool directories.
+
+What is the primary purpose of the /var/log directory?
+To store system and application log files, providing historical records of system events, errors, and operational information.
+
+What is the basic command to view system log files?
+"tail -f /var/log/syslog" or "journalctl -f" which displays real-time system log messages as they occur.
+
+What is the difference between syslog and journalctl for log viewing?
+syslog reads traditional log files, while journalctl interfaces with systemd's journal for structured log management.
+
+What is the primary purpose of the /tmp directory?
+To provide temporary storage space for applications and users, with contents typically cleared on system reboot.
+
+What is the basic command to create a temporary file in /tmp?
+"touch /tmp/tempfile" which creates an empty temporary file, or "mktemp" which creates a secure temporary file with a unique name.
+
+What is the difference between /tmp and /var/tmp directories?
+/tmp is cleared on reboot, while /var/tmp persists across reboots for longer-term temporary storage needs.
+
+What is the primary purpose of Linux file permissions?
+To control access to files and directories through read, write, and execute permissions for owner, group, and others.
+
+What is the basic command to view file permissions?
+"ls -la [filename]" which displays detailed permissions including owner, group, and access rights in symbolic and octal format.
+
+What is the difference between read, write, and execute permissions?
+Read permission allows viewing file contents, write permission allows modification, and execute permission allows running files as programs.
+
+What is the primary purpose of the chmod command in Linux?
+To change file and directory permissions using either symbolic notation (u+rwx) or octal notation (755).
+
+What is the basic command to make a script executable?
+"chmod +x script.sh" which adds execute permission for owner, group, and others, or "chmod 755 script.sh" for specific permissions.
+
+What is the difference between symbolic and octal permission notation?
+Symbolic notation uses letters (rwx) and operators (+-=), while octal notation uses numbers (4=r, 2=w, 1=x) for compact representation.
+
+What is the primary purpose of the chown command in Linux?
+To change file and directory ownership, modifying both the user owner and group owner of files.
+
+What is the basic command to change file ownership to a different user?
+"chown newuser filename" which changes the owner of the file to the specified user.
+
+What is the difference between chown and chgrp commands?
+chown can change both user and group ownership, while chgrp only changes group ownership.
+
+What is the primary purpose of the Linux user account system?
+To provide identity management, access control, and resource allocation through individual user accounts with specific permissions and quotas.
+
+What is the basic command to create a new user account?
+"useradd newusername" which creates a new user with default settings, or "adduser newusername" for interactive creation with home directory.
+
+What is the difference between useradd and adduser commands?
+useradd is a low-level utility for creating users with specific options, while adduser is a higher-level script with interactive prompts and defaults.
+
+What is the primary purpose of the /etc/passwd file?
+To store user account information including username, UID, GID, home directory, and shell in a colon-separated format.
+
+What is the basic command to view user account information?
+"cat /etc/passwd" or "getent passwd" which displays all user accounts with their associated information.
+
+What is the difference between /etc/passwd and /etc/shadow files?
+/etc/passwd contains basic user information readable by all users, while /etc/shadow contains encrypted passwords and is readable only by root.
+
+What is the primary purpose of the /etc/group file?
+To define user groups and group membership, allowing administrators to manage permissions and access control for multiple users collectively.
+
+What is the basic command to view group information?
+"cat /etc/group" or "getent group" which displays all groups with their members and GID information.
+
+What is the difference between primary and supplementary groups in Linux?
+Primary group is assigned to each user and owns new files by default, while supplementary groups provide additional group memberships for permission access.
+
+What is the primary purpose of the sudo command in Linux?
+To allow authorized users to execute commands with superuser (root) privileges while maintaining security through access control and logging.
+
+What is the basic command to execute a command with sudo privileges?
+"sudo [command]" which executes the specified command with root privileges after user authentication.
+
+What is the difference between sudo and su commands?
+sudo executes specific commands with elevated privileges, while su switches to another user account (typically root) entirely.
+
+What is the primary purpose of the sudoers file (/etc/sudoers)?
+To configure which users can execute which commands with sudo privileges, providing fine-grained access control and security policies.
+
+What is the basic command to edit the sudoers file safely?
+"sudo visudo" which opens the sudoers file in a text editor with syntax checking to prevent configuration errors.
+
+What is the difference between sudo visudo and direct editing of /etc/sudoers?
+visudo provides syntax validation and locking to prevent corruption, while direct editing risks syntax errors and concurrent access issues.
+
+What is the primary purpose of Linux process management?
+To control and monitor running programs, including starting, stopping, prioritizing, and managing process resources and relationships.
+
+What is the basic command to terminate a running process?
+"kill [PID]" which sends a termination signal to the specified process, or "kill -9 [PID]" for forceful termination.
+
+What is the difference between SIGTERM and SIGKILL signals?
+SIGTERM (15) requests graceful termination allowing cleanup, while SIGKILL (9) forces immediate termination without cleanup.
+
+What is the primary purpose of the ps command in Linux?
+To display information about running processes, including process status, resource usage, and process relationships.
+
+What is the basic command to view all running processes?
+"ps aux" which displays all processes from all users with detailed information, or "ps -ef" for alternative format.
+
+What is the difference between ps aux and ps -ef output formats?
+ps aux uses BSD-style format with user-oriented columns, while ps -ef uses POSIX format with process-oriented columns.
+
+What is the primary purpose of the top command in Linux?
+To display real-time dynamic view of running processes, showing CPU usage, memory usage, and process statistics that update continuously.
+
+What is the basic command to start the process monitor?
+"top" which launches the interactive process monitoring interface, or "htop" for enhanced version with better interface.
+
+What is the difference between top and htop commands?
+top is the traditional process monitor with basic interface, while htop provides enhanced features, better visualization, and mouse support.
+
+What is the primary purpose of the killall command in Linux?
+To terminate processes by name rather than PID, sending signals to all processes matching the specified name.
+
+What is the basic command to kill all processes by name?
+"killall processname" which sends SIGTERM to all processes with the specified name, or "killall -9 processname" for forceful termination.
+
+What is the difference between kill and killall commands?
+kill targets processes by PID, while killall targets processes by name, affecting all matching processes.
+
+What is the primary purpose of the nice command in Linux?
+To set or modify process scheduling priority (niceness), with values ranging from -20 (highest priority) to 19 (lowest priority).
+
+What is the basic command to run a command with modified priority?
+"nice -n 10 [command]" which runs the command with niceness value 10 (lower priority), or "nice --10 [command]" for higher priority.
+
+What is the difference between nice and renice commands?
+nice sets priority when starting a new process, while renice modifies priority of already running processes.
+
+What is the primary purpose of the jobs command in Linux?
+To display background jobs started in the current shell session, showing job numbers, status, and associated commands.
+
+What is the basic command to list background jobs?
+"jobs" which displays all background jobs with their job numbers, status (running/stopped), and command information.
+
+What is the difference between foreground and background processes in Linux?
+Foreground processes control the terminal and receive user input, while background processes run without terminal interaction.
+
+What is the primary purpose of the bg and fg commands in Linux?
+To manage background and foreground process execution, moving processes between background and foreground states.
+
+What is the basic command to move a stopped job to background?
+"bg %1" which resumes job number 1 in the background, or "fg %1" to bring it to the foreground.
+
+What is the difference between bg and fg commands?
+bg resumes suspended jobs in the background, while fg brings background jobs to the foreground for terminal interaction.
+
+What is the primary purpose of the nohup command in Linux?
+To execute commands that continue running after the user logs out, ignoring hangup signals and redirecting output to nohup.out.
+
+What is the basic command to run a command immune to hangup?
+"nohup [command] &" which runs the command in background and keeps it running after logout, with output saved to nohup.out.
+
+What is the difference between nohup and disown commands?
+nohup prevents hangup signals from terminating processes, while disown removes jobs from the shell's job table.
+
+What is the primary purpose of Linux package management?
+To automate software installation, updates, dependency resolution, and removal through standardized package formats and repositories.
+
+What is the basic command to update package lists in Debian/Ubuntu?
+"sudo apt update" which refreshes the local package index with available updates from repositories.
+
+What is the difference between apt and apt-get commands?
+apt provides a more user-friendly interface with progress bars and better dependency handling, while apt-get is the traditional lower-level tool.
+
+What is the primary purpose of the apt upgrade command?
+To install available package updates without removing or installing new packages, updating existing software to newer versions.
+
+What is the basic command to upgrade installed packages?
+"sudo apt upgrade" which installs available updates for installed packages, or "sudo apt full-upgrade" for more comprehensive updates.
+
+What is the difference between apt upgrade and apt full-upgrade?
+upgrade only updates existing packages, while full-upgrade may install or remove packages to satisfy dependencies and resolve conflicts.
+
+What is the primary purpose of the apt search command?
+To search package repositories for packages matching specified keywords, helping users find available software.
+
+What is the basic command to search for packages?
+"apt search [keyword]" which searches package names and descriptions for the specified keyword.
+
+What is the difference between apt search and apt show commands?
+search finds packages by keywords, while show displays detailed information about a specific package.
+
+What is the primary purpose of the apt install command?
+To install specified packages along with their dependencies from configured repositories.
+
+What is the basic command to install a package?
+"sudo apt install [packagename]" which downloads and installs the specified package with all required dependencies.
+
+What is the difference between apt install and apt remove commands?
+install adds packages to the system, while remove removes packages but keeps configuration files.
+
+What is the primary purpose of the apt remove command?
+To uninstall packages while preserving configuration files, allowing for potential reinstallation or data recovery.
+
+What is the basic command to remove a package?
+"sudo apt remove [packagename]" which removes the specified package but keeps configuration files.
+
+What is the difference between apt remove and apt purge commands?
+remove keeps configuration files, while purge removes both packages and their associated configuration files.
+
+What is the primary purpose of the apt autoremove command?
+To automatically remove packages that were installed as dependencies but are no longer required by any installed packages.
+
+What is the basic command to clean up unused packages?
+"sudo apt autoremove" which removes orphaned dependency packages that are no longer needed.
+
+What is the difference between autoremove and autoclean commands?
+autoremove removes unused packages, while autoclean removes cached package files from the local repository.
+
+What is the primary purpose of the dpkg command in Debian systems?
+To handle low-level package management operations including installation, removal, and querying of .deb package files.
+
+What is the basic command to install a local .deb file?
+"sudo dpkg -i package.deb" which installs the specified .deb package file manually.
+
+What is the difference between dpkg and apt commands?
+dpkg works with individual package files without dependency resolution, while apt manages repositories with automatic dependency handling.
+
+What is the primary purpose of the yum command in RHEL/CentOS systems?
+To manage packages in RPM-based distributions, providing installation, updates, and dependency resolution through repositories.
+
+What is the basic command to install a package with yum?
+"sudo yum install [packagename]" which installs the specified package with automatic dependency resolution.
+
+What is the difference between yum and dnf commands?
+dnf is the modern successor to yum with better performance, dependency resolution, and plugin support, while yum is the traditional tool.
+
+What is the primary purpose of the rpm command in Red Hat systems?
+To handle low-level package operations for .rpm files including installation, querying, and verification without repository management.
+
+What is the basic command to install an RPM file?
+"sudo rpm -i package.rpm" which installs the specified RPM package file, or "sudo rpm -U package.rpm" for upgrade.
+
+What is the difference between rpm and yum/dnf commands?
+rpm works with individual package files, while yum/dnf manages repositories with automatic dependency handling.
+
+What is the primary purpose of Linux system services?
+To provide background processes that handle system functions, network services, and application daemons that run continuously or on demand.
+
+What is the basic command to list all active services?
+"systemctl list-units --type=service --state=active" which displays all currently running services.
+
+What is the difference between systemd and SysV init systems?
+systemd provides parallel startup, dependency management, and advanced features, while SysV init uses sequential startup scripts.
+
+What is the primary purpose of the systemctl command in modern Linux?
+To control the systemd system and service manager, providing unified interface for managing services, timers, and system units.
+
+What is the basic command to start a service?
+"sudo systemctl start servicename" which starts the specified service immediately.
+
+What is the difference between systemctl start and systemctl enable commands?
+start activates the service immediately, while enable configures the service to start automatically at boot.
+
+What is the primary purpose of the systemctl status command?
+To display detailed information about a service including current state, recent logs, and dependency relationships.
+
+What is the basic command to check service status?
+"systemctl status servicename" which shows whether the service is running, enabled, and provides recent log entries.
+
+What is the difference between active and enabled service states?
+active indicates the service is currently running, while enabled indicates the service will start automatically at boot.
+
+What is the primary purpose of the systemctl stop command?
+To terminate a running service gracefully, stopping the associated processes and releasing resources.
+
+What is the basic command to stop a service?
+"sudo systemctl stop servicename" which stops the specified service immediately.
+
+What is the difference between stop and disable commands?
+stop deactivates the service immediately, while disable prevents automatic startup at boot while allowing manual start.
+
+What is the primary purpose of the systemctl restart command?
+To stop and then start a service, useful for applying configuration changes or recovering from errors.
+
+What is the basic command to restart a service?
+"sudo systemctl restart servicename" which restarts the specified service by stopping and starting it.
+
+What is the difference between restart and reload commands?
+restart fully stops and starts the service, while reload typically applies configuration changes without full restart.
+
+What is the primary purpose of the journalctl command in systemd systems?
+To query and display systemd journal logs, providing centralized log management with filtering and search capabilities.
+
+What is the basic command to view service logs?
+"journalctl -u servicename" which displays logs for the specified service, or "journalctl -f" for real-time log viewing.
+
+What is the difference between journalctl and traditional log files?
+journalctl provides structured, indexed logs with metadata, while traditional logs are plain text files in /var/log.
+
+What is the primary purpose of Linux networking configuration?
+To manage network interfaces, IP addresses, routing, and network services to enable system communication and connectivity.
+
+What is the basic command to view network interfaces?
+"ip addr show" or "ifconfig" which displays all network interfaces with their IP addresses and status information.
+
+What is the difference between ip and ifconfig commands?
+ip is the modern tool with comprehensive networking features, while ifconfig is the legacy tool being phased out.
+
+What is the primary purpose of the ip command in Linux networking?
+To manage network interfaces, routing tables, and network configuration, replacing older tools like ifconfig and route.
+
+What is the basic command to configure an IP address?
+"sudo ip addr add 192.168.1.100/24 dev eth0" which assigns the specified IP address to the network interface.
+
+What is the difference between static and dynamic IP configuration?
+Static configuration uses manually assigned addresses, while dynamic configuration uses DHCP for automatic address assignment.
+
+What is the primary purpose of the netstat command in Linux?
+To display network connections, routing tables, interface statistics, and network connections for troubleshooting and monitoring.
+
+What is the basic command to view active network connections?
+"netstat -tulnp" which shows TCP and UDP connections with process information.
+
+What is the difference between netstat and ss commands?
+netstat is the traditional network statistics tool, while ss is the modern replacement with better performance and more features.
+
+What is the primary purpose of the ss command in modern Linux?
+To display socket statistics with better performance and more detailed information than netstat, replacing the older tool.
+
+What is the basic command to view listening sockets?
+"ss -tulnp" which displays listening TCP and UDP sockets with process information.
+
+What is the difference between listening and established connections?
+Listening sockets are waiting for incoming connections, while established connections represent active communication sessions.
+
+What is the primary purpose of the ping command in network testing?
+To test network connectivity and measure round-trip time to remote hosts using ICMP echo requests.
+
+What is the basic command to test network connectivity?
+"ping hostname" or "ping IP_address" which sends ICMP echo requests to test connectivity and measure response times.
+
+What is the difference between ping and traceroute commands?
+ping tests basic connectivity and latency, while traceroute maps the network path showing all routers between source and destination.
+
+What is the primary purpose of the traceroute command?
+To trace the network path to a destination, showing each hop (router) along the route with timing information.
+
+What is the basic command to trace network route?
+"traceroute hostname" or "traceroute IP_address" which displays the network path to the specified destination.
+
+What is the difference between traceroute and tracepath commands?
+traceroute uses UDP or ICMP probes with specific TTL values, while tracepath uses a simpler approach without requiring special privileges.
+
+What is the primary purpose of DNS resolution in Linux?
+To translate human-readable domain names into IP addresses, enabling internet connectivity and resource location.
+
+What is the basic command to test DNS resolution?
+"nslookup domainname" or "host domainname" which queries DNS servers to resolve domain names to IP addresses.
+
+What is the difference between nslookup and dig commands?
+nslookup provides simple interactive DNS queries, while dig offers comprehensive DNS querying with detailed output and flexibility.
+
+What is the primary purpose of the /etc/resolv.conf file?
+To configure DNS resolver settings, specifying nameservers and search domains for domain name resolution.
+
+What is the basic command to view DNS configuration?
+"cat /etc/resolv.conf" which displays the configured DNS nameservers and search domains.
+
+What is the difference between DNS nameservers and search domains?
+Nameservers are DNS servers that resolve domain names, while search domains are automatically appended to unqualified hostnames.
+
+What is the primary purpose of the hosts file (/etc/hosts)?
+To provide local hostname resolution, allowing manual mapping of hostnames to IP addresses that override DNS queries.
+
+What is the basic command to edit the hosts file?
+"sudo nano /etc/hosts" or "sudo vi /etc/hosts" which opens the hosts file for editing with administrator privileges.
+
+What is the difference between /etc/hosts and DNS resolution?
+/etc/hosts provides static local hostname mapping checked before DNS, while DNS provides dynamic network-wide resolution.
+
+What is the primary purpose of Linux firewall configuration?
+To control network traffic based on rules, protecting systems from unauthorized access and managing network security policies.
+
+What is the basic command to view firewall rules?
+"sudo iptables -L" which displays current iptables firewall rules, or "sudo ufw status" for Ubuntu's simplified firewall.
+
+What is the difference between iptables and ufw firewalls?
+iptables provides low-level packet filtering with complex syntax, while ufw offers simplified interface for common firewall tasks.
+
+What is the primary purpose of the ufw command in Ubuntu?
+To provide a user-friendly interface for managing iptables firewall rules with simplified syntax and common configurations.
+
+What is the basic command to enable the firewall?
+"sudo ufw enable" which activates the Uncomplicated Firewall with default deny policy.
+
+What is the difference between ufw allow and ufw deny rules?
+allow rules permit specified traffic, while deny rules block specified traffic according to the firewall policy.
+
+This comprehensive Linux fundamentals deck provides 150 questions covering essential Linux operating system concepts, commands, and administration needed for system management and certification preparation.

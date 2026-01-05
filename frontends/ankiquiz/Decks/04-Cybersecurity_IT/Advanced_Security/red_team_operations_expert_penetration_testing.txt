@@ -1,0 +1,123 @@
+// Red Team Operations Expert - Advanced Penetration Testing Scenarios
+
+Scenario: A red team engagement targets a financial services company with Active Directory domain, web applications, and cloud infrastructure. The scope includes external network, web applications, and limited internal network simulation. The client wants to test detection capabilities and incident response effectiveness.
+
+Question: Which THREE initial reconnaissance techniques provide the most comprehensive attack surface mapping while minimizing detection risk? (Select ALL that apply)
+A) Passive DNS enumeration using multiple historical databases
+B) Shodan and Censys searches for exposed services and cloud assets
+C) Social media reconnaissance for employee information and technology stack
+D) Active port scanning with custom timing and decoy techniques
+E) Subdomain enumeration using both passive and active methods
+F) Google dorking for exposed documents and configuration files
+
+Answer: A, B, E
+
+Rationale:
+- A) Correct because passive DNS enumeration provides historical IP mappings, subdomain discovery, and technology identification without direct interaction
+- B) Correct because Shodan/Censys reveal exposed services, cloud configurations, and potential vulnerabilities across the attack surface
+- E) Correct because subdomain enumeration discovers additional attack vectors including development environments and third-party integrations
+- C) Incorrect while useful for social engineering, it doesn't provide technical attack surface mapping and increases personal data privacy concerns
+- D) Incorrect active scanning increases detection risk and should be reserved for later phases after passive intelligence gathering
+- F) Incorrect Google dorking is valuable but provides limited comprehensive attack surface coverage compared to specialized tools
+
+Scenario: During an internal network penetration test, you discover a Windows domain controller with Kerberos service running. Network enumeration reveals several service accounts with SPNs and weak password policies. The client wants to test lateral movement capabilities without disrupting operations.
+
+Question: Which THREE attack techniques provide the most stealthy lateral movement while maintaining operational security? (Select ALL that apply)
+A) Kerberoasting using Rubeus to extract service account tickets
+B) DCOM/WinRM lateral movement using existing administrative credentials
+C) SMB relay attacks using responder tools on the internal network
+D) Pass-the-hash using Mimikatz with captured NTLM hashes
+E) Golden ticket creation using krbtgt account compromise
+F) WMI lateral movement using PowerShell remoting
+
+Answer: A, B, F
+
+Rationale:
+- A) Correct because Kerberoasting extracts service tickets offline without triggering immediate alerts, providing credential harvesting opportunities
+- B) Correct because DCOM/WinRM uses legitimate administrative protocols with minimal logging compared to SMB exploitation
+- F) Correct because WMI PowerShell remoting leverages native Windows management tools with operational cover
+- C) Incorrect SMB relay attacks generate network noise and are easily detected by modern security monitoring
+- D) Incorrect pass-the-hash requires direct memory access which triggers endpoint detection and response alerts
+- E) Incorrect golden ticket creation requires domain controller compromise, which is high-impact and easily detected
+
+Scenario: A web application penetration test targets a custom e-commerce platform with user authentication, payment processing, and administrative interfaces. The application uses modern JavaScript frameworks, REST APIs, and third-party payment integrations.
+
+Question: Which THREE vulnerability assessment techniques provide the highest impact findings for this type of application? (Select ALL that apply)
+A) Business logic flaw testing for cart manipulation and pricing bypasses
+B) API security testing including authentication bypass and rate limiting
+C) Client-side JavaScript testing for DOM-based XSS and sensitive data exposure
+D) Traditional SQL injection testing on login and search functions
+E) Cross-site request forgery testing on administrative functions
+F) Server-side template injection testing on dynamic content generation
+
+Answer: A, B, C
+
+Rationale:
+- A) Correct because business logic flaws often bypass traditional security controls and can lead to significant financial impact
+- B) Correct because modern applications rely heavily on APIs which frequently have authentication and authorization vulnerabilities
+- C) Correct because client-side JavaScript vulnerabilities can bypass server-side controls and expose sensitive user data
+- D) Incorrect while SQL injection remains important, modern frameworks often provide built-in protection reducing prevalence
+- E) Incorrect CSRF is well-understood and most frameworks provide built-in protection, making it lower impact than other issues
+- F) Incorrect template injection is rare in production applications compared to other vulnerability types
+
+Scenario: A cloud security assessment targets an AWS environment with multiple accounts, S3 buckets, Lambda functions, and RDS databases. The engagement focuses on misconfigurations, data exposure, and privilege escalation opportunities.
+
+Question: Which THREE cloud security assessment techniques provide the most critical findings? (Select ALL that apply)
+A) S3 bucket enumeration for public access and sensitive data exposure
+B) IAM role trust relationship analysis for cross-account privilege escalation
+C) Lambda function environment variable and IAM permission enumeration
+D) Security group and NACL configuration review for network exposure
+E) CloudTrail logging analysis for detection bypass opportunities
+F) RDS database backup and snapshot security assessment
+
+Answer: A, B, C
+
+Rationale:
+- A) Correct because public S3 buckets frequently expose sensitive data and are easily discoverable through enumeration
+- B) Correct because IAM trust relationships often provide cross-account access paths that bypass traditional security controls
+- C) Correct because Lambda functions frequently contain credentials in environment variables and excessive IAM permissions
+- D) Incorrect network misconfigurations are important but typically provide lower impact than data exposure and privilege escalation
+- E) Incorrect logging gaps are important for detection but don't provide direct compromise opportunities
+- F) Incorrect database backup security is critical but often properly configured compared to other cloud services
+
+Scenario: A physical security assessment targets a corporate campus with multiple buildings, access control systems, and data centers. The engagement tests physical access controls, surveillance systems, and security awareness.
+
+Question: Which THREE physical security testing techniques provide the most realistic threat simulation? (Select ALL that apply)
+A) Tailgating attempts through secure entrances during shift changes
+B) Badge cloning and access control system testing
+C) Social engineering attempts for facility access and information gathering
+D) Wireless network access from parking areas and public spaces
+E) Dumpster diving for sensitive information and access credentials
+F) Lock picking and physical barrier testing for data center access
+
+Answer: A, C, D
+
+Rationale:
+- A) Correct because tailgading is the most common physical security breach and tests employee awareness and access control effectiveness
+- C) Correct because social engineering exploits human factors which are often the weakest link in physical security
+- D) Correct because wireless access from external areas can bypass physical controls entirely and provides network entry points
+- B) Incorrect badge cloning requires specialized equipment and may not represent common threat actor capabilities
+- E) Incorrect while dumpster diving can yield information, modern document destruction policies reduce effectiveness
+- F) Incorrect lock picking requires significant skill and may trigger immediate security response, making it less realistic
+
+Scenario: A social engineering assessment targets employee susceptibility through phishing, vishing, and physical pretexting. The engagement focuses on technical controls, user awareness, and incident response capabilities.
+
+Question: Which THREE social engineering techniques provide the most comprehensive assessment of organizational resilience? (Select ALL that apply)
+A) Spear phishing campaigns targeting specific departments and roles
+B) Vishing attacks impersonating IT support for credential harvesting
+C) Physical pretexting attempts for facility access and information gathering
+D) Bulk phishing campaigns testing email filtering effectiveness
+E) Smishing attacks targeting mobile device security awareness
+F) USB drop attacks testing removable media policies and user behavior
+
+Answer: A, B, C
+
+Rationale:
+- A) Correct because spear phishing tests targeted awareness and technical controls against sophisticated, personalized attacks
+- B) Correct because vishing tests voice-based security controls and employee verification procedures for remote access
+- C) Correct because physical pretexting tests the intersection of social engineering and physical security controls
+- D) Incorrect bulk phishing primarily tests email filtering rather than organizational awareness and response capabilities
+- E) Incorrect smishing is important but represents a smaller attack surface compared to other techniques
+- F) Incorrect USB drops test specific policies but don't provide comprehensive organizational resilience assessment
+
+This expert red team operations deck provides advanced penetration testing scenarios with realistic threat simulation, focusing on stealth, impact, and comprehensive security assessment across multiple attack vectors.

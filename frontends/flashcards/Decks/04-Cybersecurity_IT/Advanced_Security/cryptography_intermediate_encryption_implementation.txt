@@ -1,0 +1,90 @@
+// Cryptography Intermediate - Encryption Implementation & Key Management
+
+What is the primary difference between symmetric and asymmetric encryption algorithms?
+Symmetric encryption uses the same key for both encryption and decryption (faster, suitable for bulk data), while asymmetric encryption uses public/private key pairs (slower, enables secure key exchange and digital signatures).
+
+What is the most effective method to securely exchange symmetric encryption keys over insecure channels?
+Use asymmetric encryption (like RSA) to encrypt the symmetric key, or implement Diffie-Hellman key exchange for perfect forward secrecy.
+
+What is the primary purpose of a digital signature in cryptography?
+To provide authentication, integrity, and non-repudiation by allowing verification of message origin and ensuring the message hasn't been altered.
+
+What is the difference between hashing and encryption in cryptographic applications?
+Hashing is a one-way function that creates fixed-length output for data integrity verification, while encryption is a two-way function that protects confidentiality and allows decryption.
+
+What is the most critical security consideration when implementing password storage?
+Use strong, slow hashing algorithms (bcrypt, scrypt, Argon2) with unique salts per password to prevent rainbow table attacks and brute force cracking.
+
+What is the primary purpose of Public Key Infrastructure (PKI)?
+To manage digital certificates and public-key encryption, providing framework for secure communication, authentication, and trust relationships.
+
+What is the difference between block ciphers and stream ciphers?
+Block ciphers encrypt fixed-size blocks of data (AES, DES), while stream ciphers encrypt data one bit or byte at a time (RC4), making stream ciphers suitable for real-time communications.
+
+What is the most effective method to prevent man-in-the-middle attacks in encrypted communications?
+Implement proper certificate validation with certificate pinning, use trusted certificate authorities, and verify certificate chains and revocation status.
+
+What is the primary security consideration when implementing cryptographic key management?
+Generate keys with sufficient entropy, store keys securely (HSM, key vaults), implement proper rotation policies, and ensure secure backup and recovery procedures.
+
+What is the difference between confidentiality and integrity in cryptographic protection?
+Confidentiality ensures data is not disclosed to unauthorized parties, while integrity ensures data is not altered or corrupted in transit or storage.
+
+What is the most effective method to implement secure random number generation for cryptographic purposes?
+Use cryptographically secure pseudo-random number generators (CSPRNGs) with entropy from multiple sources, avoiding standard random functions for security-critical operations.
+
+What is the primary purpose of message authentication codes (MACs)?
+To provide both integrity and authentication for messages, ensuring the message is from the claimed sender and hasn't been altered during transmission.
+
+What is the difference between HMAC and digital signatures?
+HMAC uses shared secret keys for efficiency, while digital signatures use public/private key pairs for non-repudiation and asymmetric authentication.
+
+What is the most critical security consideration when implementing TLS/SSL encryption?
+Use modern protocols (TLS 1.2+), disable weak ciphers, implement perfect forward secrecy, and properly configure certificate validation.
+
+What is the primary purpose of cryptographic salt in password hashing?
+To prevent rainbow table attacks by adding unique random data to each password before hashing, ensuring identical passwords produce different hashes.
+
+What is the difference between symmetric key algorithms AES and DES?
+AES uses 128, 192, or 256-bit keys and is currently secure, while DES uses 56-bit keys and is considered insecure due to short key length.
+
+What is the most effective method to protect data at rest in databases?
+Implement column-level or database-level encryption with proper key management, access controls, and audit logging for encrypted data access.
+
+What is the primary security consideration when implementing cryptographic algorithms in applications?
+Use well-vetted, standard libraries rather than implementing custom cryptographic functions, as custom implementations are prone to vulnerabilities.
+
+What is the difference between encryption and encoding in data handling?
+Encryption protects confidentiality through mathematical algorithms, while encoding converts data format for transmission or storage without providing security.
+
+What is the most effective method to implement secure key exchange protocols?
+Use established protocols like Diffie-Hellman with proper parameter validation, or implement elliptic curve cryptography for improved efficiency and security.
+
+What is the primary purpose of perfect forward secrecy in cryptographic protocols?
+To ensure that compromise of long-term keys doesn't compromise past session keys, protecting historical communications even if current keys are exposed.
+
+What is the difference between RSA and elliptic curve cryptography (ECC)?
+RSA uses mathematical properties of large prime numbers, while ECC uses elliptic curve mathematics, providing equivalent security with smaller key sizes and better performance.
+
+What is the most critical security consideration when implementing cryptographic hash functions?
+Use collision-resistant algorithms (SHA-256+, SHA-3) and avoid deprecated functions (MD5, SHA-1) for security-critical applications.
+
+What is the primary purpose of initialization vectors (IVs) in block cipher encryption?
+To ensure that identical plaintext blocks encrypt to different ciphertext blocks, preventing pattern analysis and improving security.
+
+What is the difference between symmetric key distribution and asymmetric key distribution?
+Symmetric key distribution requires secure channels to share secret keys, while asymmetric key distribution allows public key sharing without compromising private keys.
+
+What is the most effective method to implement secure cryptographic key storage?
+Use hardware security modules (HSMs), encrypted key vaults, or secure enclaves with proper access controls and audit logging.
+
+What is the primary security consideration when implementing cryptographic protocols in IoT devices?
+Balance security requirements with resource constraints, using lightweight cryptography when necessary and ensuring proper key management for device lifecycle.
+
+What is the difference between stream cipher and block cipher modes of operation?
+Stream cipher modes (CTR, OFB) convert block ciphers into stream ciphers for real-time encryption, while block cipher modes (CBC, ECB) encrypt data in fixed-size blocks.
+
+What is the most effective method to verify cryptographic implementation security?
+Conduct thorough code review, use established cryptographic libraries, perform penetration testing, and validate against known cryptographic standards and best practices.
+
+This intermediate cryptography deck provides essential knowledge for implementing secure encryption, key management, and cryptographic protocols in real-world applications.

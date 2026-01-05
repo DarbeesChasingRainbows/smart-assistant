@@ -1,0 +1,244 @@
+# US Plant Monographs Master Index
+
+## Overview
+This comprehensive collection contains 150 questions across complete US plant monographs learning progression: Medicinal Herbs (50 questions), Edible Plants (50 questions), and Poisonous Plants (50 questions). Organized by plant categories with regional distribution, safety protocols, and practical field applications for herbalism, foraging, and natural health.
+
+## Certification Alignment
+- **American Herbalists Guild (AHG)**: Complete medicinal herbs coverage
+- **Wildcrafting/Foraging Certifications**: Edible and poisonous plant identification
+- **Natural Health Consultant**: Practical applications and safety protocols
+- **Botanical Medicine Programs**: Traditional and modern herbal applications
+- **Outdoor Education**: Field identification and safety training
+
+## Regional Distribution Guide
+
+### NORTHEAST REGION (USDA Zones 3-7)
+**Climate**: Cold winters, moderate summers, four distinct seasons
+**Key Plants**: Echinacea, Goldenrod, Jewelweed, Wild Ginger, Bloodroot
+**Focus Areas**: Forest medicinal herbs, seasonal edible plants, wetland species
+
+**Regional Highlights**:
+- **Medicinal**: Echinacea purpurea, Goldenseal (protected), Black Cohosh
+- **Edible**: Fiddlehead ferns, Wild leeks, Serviceberries, Pawpaw
+- **Poisonous**: Poison ivy (abundant), Water hemlock (wet areas), Nightshade
+
+### SOUTHEAST REGION (USDA Zones 6-10)
+**Climate**: Hot humid summers, mild winters, long growing season
+**Key Plants**: Passionflower, Black Cohosh, Blue Cohosh, Mayapple
+**Focus Areas**: Traditional Southern herbs, heat-tolerant medicinals, diverse edibles
+
+**Regional Highlights**:
+- **Medicinal**: Passionflower, Black Cohosh, Saw Palmetto, American Ginseng
+- **Edible**: Mayapple (ripe only), Muscadine grapes, Persimmons, Pecans
+- **Poisonous**: Poison oak, Pokeweed (requires cooking), Water hemlock
+
+### MIDWEST REGION (USDA Zones 4-7)
+**Climate**: Continental climate, variable temperatures, prairie and forest
+**Key Plants**: Echinacea, Yarrow, St. John's Wort, Purple Coneflower
+**Focus Areas**: Prairie medicinals, hardy perennial herbs, agricultural weeds
+
+**Regional Highlights**:
+- **Medicinal**: Echinacea species, Yarrow, St. John's Wort, Milkweed
+- **Edible**: Lamb's quarters, Purslane, Wild plums, Hickory nuts
+- **Poisonous**: Poison ivy, Poison hemlock, Jimsonweed (agricultural areas)
+
+### SOUTHWEST REGION (USDA Zones 7-11)
+**Climate**: Arid to semi-arid, hot summers, mild winters, diverse elevations
+**Key Plants**: Chaparral, Yerba Mansa, Osha, Prickly Pear cactus
+**Focus Areas**: Desert medicinals, drought-tolerant plants, traditional Native American herbs
+
+**Regional Highlights**:
+- **Medicinal**: Chaparral, Yerba Mansa, Osha root, Prickly Pear
+- **Edible**: Prickly pear pads/fruits, Mesquite pods, Pinyon nuts, Agave
+- **Poisonous**: Datura species, Poison oak (higher elevations), Water hemlock
+
+### WEST REGION (USDA Zones 5-10)
+**Climate**: Diverse from coastal to mountain, wet winters, dry summers
+**Key Plants**: Oregon Grape, St. John's Wort, Yarrow, Usnea lichen
+**Focus Areas**: Pacific Northwest medicinals, mountain herbs, coastal species
+
+**Regional Highlights**:
+- **Medicinal**: Oregon Grape, St. John's Wort, Yarrow, Usnea, Red Root
+- **Edible**: Salmonberries, Huckleberries, Camas bulbs, Wild ginger
+- **Poisonous**: Poison oak, Water hemlock, Foxglove (ornamental escape)
+
+### PACIFIC NORTHWEST (USDA Zones 7-9)
+**Climate**: Mild wet winters, dry summers, temperate rainforest
+**Key Plants**: Oregon Grape, Devil's Club, Usnea, Western Red Cedar
+**Focus Areas**: Rainforest medicinals, moss and lichen harvest, traditional Native American plants
+
+**Regional Highlights**:
+- **Medicinal**: Oregon Grape, Devil's Club, Usnea, Salal, Red Alder
+- **Edible**: Salmonberries, Huckleberries, Thimbleberries, Fiddleheads
+- **Poisonous**: Poison oak, Water hemlock, Foxglove, Death Camas
+
+## Deck Matrix
+
+### MEDICINAL HERBS CATEGORY
+| Deck File | Questions | Focus | Skills | Certification |
+|-----------|-----------|-------|--------|---------------|
+| us_plant_monographs_medicinal_herbs.txt | 50 | Native medicinal plants, traditional uses, modern applications | Plant identification, preparation methods, therapeutic applications | AHG, Herbalist programs |
+
+### EDIBLE PLANTS CATEGORY
+| Deck File | Questions | Focus | Skills | Certification |
+|-----------|-----------|-------|--------|---------------|
+| us_plant_monographs_edible_plants.txt | 50 | Wild edible plants, nutritional content, preparation methods | Positive identification, sustainable harvesting, cooking techniques | Foraging, Wildcrafting |
+
+### POISONOUS PLANTS CATEGORY
+| Deck File | Questions | Focus | Skills | Certification |
+|-----------|-----------|-------|--------|---------------|
+| us_plant_monographs_poisonous_plants.txt | 50 | Toxic plant identification, emergency response, safety protocols | Risk assessment, first aid, prevention education | Safety training, Outdoor education |
+
+## Learning Pathways
+
+### HERBALIST PATH (AHG Preparation)
+1. **Foundation**: Medicinal herbs identification and properties
+2. **Intermediate**: Preparation methods and therapeutic applications
+3. **Advanced**: Clinical applications and safety protocols
+4. **Certification**: American Herbalists Guild preparation
+
+**Study Focus**: Traditional herbalism, modern clinical applications, safety and contraindications
+
+### FORAGER/WILDCRAFTER PATH
+1. **Foundation**: Plant identification basics and safety
+2. **Intermediate**: Edible and poisonous plant differentiation
+3. **Advanced**: Sustainable harvesting and preparation
+4. **Certification**: Wildcrafting and foraging certification
+
+**Study Focus**: Positive identification, seasonal availability, sustainable practices
+
+### NATURAL HEALTH CONSULTANT PATH
+1. **Foundation**: Basic plant identification and properties
+2. **Intermediate**: Medicinal and edible plant applications
+3. **Advanced**: Safety protocols and emergency response
+4. **Professional**: Client consultation and recommendation
+
+**Study Focus**: Practical applications, safety first, evidence-based recommendations
+
+### OUTDOOR EDUCATOR PATH
+1. **Foundation**: Regional plant identification
+2. **Intermediate**: Safety education and risk assessment
+3. **Advanced**: Teaching methods and field leadership
+4. **Professional**: Program development and risk management
+
+**Study Focus**: Field identification, safety protocols, educational methodology
+
+## Safety Protocols & Emergency Response
+
+### IDENTIFICATION SAFETY
+- **Multiple Feature Verification**: Never rely on single characteristic
+- **Regional Expert Consultation**: Local botanical groups and extension services
+- **Photographic Documentation**: Take photos for expert verification
+- **Seasonal Awareness**: Plants change appearance throughout seasons
+
+### HARVESTING SAFETY
+- **Sustainable Practices**: Never harvest more than 10% of local population
+- **Protected Species Awareness**: Know endangered and protected plants
+- **Environmental Contamination**: Avoid polluted areas and pesticide exposure
+- **Legal Considerations**: Know local harvesting regulations and permits
+
+### EMERGENCY RESPONSE PROCEDURES
+- **Poison Control Contact**: Immediate expert consultation (1-800-222-1222)
+- **Sample Collection**: Preserve plant parts for identification
+- **Medical Facility Transport**: Severe reactions require immediate medical care
+- **Documentation**: Record time, amount, and symptoms for medical treatment
+
+## Cross-Reference Matrix
+
+### BOTANY INTEGRATION
+**Scientific Foundation → Practical Application**:
+- **Plant Classification**: Botany taxonomy → Field identification
+- **Plant Physiology**: Botany processes → Medicinal properties
+- **Ecology**: Botany ecosystems → Harvesting sustainability
+
+### HORTICULTURE INTEGRATION
+**Cultivation → Wild Harvesting**:
+- **Growing Conditions**: Horticulture techniques → Wild habitat understanding
+- **Plant Propagation**: Cultivation methods → Sustainable harvesting
+- **Garden Design**: Horticulture planning → Wild plant identification
+
+### FIRST AID INTEGRATION
+**Emergency Response Integration**:
+- **Poisoning Treatment**: First Aid emergency procedures → Plant poisoning response
+- **Wound Care**: First Aid basic care → Medicinal plant applications
+- **Safety Protocols**: First Aid prevention → Plant safety education
+
+## Study Recommendations
+
+### For Beginning Herbalists
+- Start with easily identifiable medicinal herbs (Echinacea, Yarrow, Chamomile)
+- Focus on 5-10 plants in your local region for mastery
+- Learn preparation methods before therapeutic applications
+- Practice safety protocols from the beginning
+
+### For Aspiring Foragers
+- Master poisonous plant identification before edible plants
+- Start with easily identifiable edibles (Dandelion, Plantain, Nettles)
+- Learn seasonal availability and harvesting timing
+- Practice sustainable harvesting from day one
+
+### For Natural Health Consultants
+- Balance medicinal and edible plant knowledge
+- Emphasize safety and contraindications
+- Learn evidence-based applications alongside traditional uses
+- Develop client consultation skills
+
+### For Outdoor Educators
+- Focus on regional plant identification
+- Master safety protocols and emergency procedures
+- Develop teaching methods for different age groups
+- Create engaging field identification activities
+
+## Quality Assurance Features
+
+- **Regional Accuracy**: Plants verified for specific US climate zones
+- **Safety Emphasis**: Poisonous plants integrated throughout learning
+- **Practical Applications**: Real-world harvesting and preparation methods
+- **Certification Alignment**: Direct mapping to professional herbalist and foraging programs
+- **Sustainability Focus**: Environmental responsibility and conservation awareness
+
+## Content Organization
+
+### Question Distribution by Category
+- **Medicinal Herbs**: 50 questions (33%) - Therapeutic applications and safety
+- **Edible Plants**: 50 questions (33%) - Identification and preparation
+- **Poisonous Plants**: 50 questions (33%) - Safety and emergency response
+
+### Question Distribution by Region
+- **Northeast**: Forest medicinal herbs, seasonal edibles, wetland safety
+- **Southeast**: Traditional Southern herbs, heat-tolerant species
+- **Midwest**: Prairie medicinals, agricultural weeds, hardy perennials
+- **Southwest**: Desert plants, drought-tolerant species, Native American herbs
+- **West**: Coastal and mountain medicinals, diverse climate adaptations
+- **Pacific Northwest**: Rainforest species, traditional Native American plants
+
+## Integration with Professional Collections
+
+### Cross-Collection Learning
+- **Botany Integration**: Scientific classification and plant biology foundation
+- **Horticulture Integration**: Cultivation knowledge and plant care understanding
+- **First Aid Integration**: Emergency response and poisoning treatment protocols
+
+### Career Preparation
+- **Herbalism**: Complete AHG preparation with traditional and modern applications
+- **Foraging**: Professional wildcrafting with sustainability and safety focus
+- **Natural Health**: Consultant preparation with evidence-based practices
+- **Outdoor Education**: Field leadership with comprehensive safety training
+
+## Next Steps
+
+1. **Create regional field guides** - Specific identification for each climate zone
+2. **Develop seasonal harvesting calendars** - Timing for optimal plant collection
+3. **Build preparation method tutorials** - Step-by-step processing techniques
+4. **Create certification practice exams** - Herbalist and foraging exam preparation
+5. **Develop sustainability guidelines** - Environmental responsibility and conservation
+
+## Field Application Focus
+
+This US Plant Monographs collection provides comprehensive preparation for practical field applications including:
+- **Wildcrafting and Foraging**: Safe, sustainable plant harvesting
+- **Herbal Medicine**: Traditional and modern therapeutic applications
+- **Natural Health Consulting**: Evidence-based plant recommendations
+- **Outdoor Education**: Safe field leadership and environmental education
+
+The collection bridges scientific botany knowledge with practical field applications, providing comprehensive preparation for professional careers in herbalism, foraging, and natural health while maintaining the highest safety standards and environmental responsibility.

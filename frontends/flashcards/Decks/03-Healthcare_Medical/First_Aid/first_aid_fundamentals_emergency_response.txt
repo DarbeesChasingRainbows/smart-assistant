@@ -1,0 +1,243 @@
+// First Aid Fundamentals & Emergency Response Deck
+
+What is the primary purpose of first aid?
+To provide immediate care to injured or ill individuals until professional medical help arrives, preserving life, preventing worsening of conditions, and promoting recovery.
+
+What is the difference between first aid and professional medical care?
+First aid provides immediate temporary care at the scene, while professional medical care provides comprehensive treatment in medical facilities.
+
+What is the primary purpose of the DRABC acronym in emergency response?
+To ensure systematic assessment: Danger, Response, Airway, Breathing, Circulation - the standard approach to emergency scene evaluation.
+
+What is the difference between primary and secondary survey in first aid?
+Primary survey quickly assesses life-threatening conditions using DRABC, while secondary survey performs detailed head-to-toe examination after immediate threats are managed.
+
+What is the primary purpose of calling emergency services in first aid situations?
+To activate professional medical response and provide critical information about location, number of patients, and nature of injuries for appropriate resource dispatch.
+
+What is the difference between calling 911 and other emergency numbers?
+911 is universal emergency number in North America, while other regions use different numbers (112 in Europe, 999 in UK) for emergency services.
+
+What is the primary purpose of scene safety assessment in first aid?
+To protect both rescuer and victim from ongoing dangers, ensuring emergency response can be provided safely without creating additional victims.
+
+What is the difference between scene safety and personal protective equipment?
+Scene safety assesses environmental hazards, while PPE provides protection from bloodborne pathogens and other contamination risks.
+
+What is the primary purpose of consent in first aid?
+To respect patient autonomy and legal requirements, obtaining permission before providing care except when patient is unconscious or in life-threatening situations.
+
+What is the difference between expressed and implied consent in first aid?
+Expressed consent is verbal or written permission, while implied consent applies to unconscious patients where it's assumed they would want help.
+
+What is the primary purpose of good samaritan laws?
+To protect rescuers from legal liability when providing reasonable assistance in good faith during emergencies, encouraging people to help others without fear of lawsuits.
+
+What is the difference between good samaritan protection and negligence?
+Good samaritan laws protect reasonable care efforts, while negligence involves care that falls below accepted standards causing harm.
+
+What is the primary purpose of infection control in first aid?
+To prevent transmission of diseases between rescuer and patient through proper hand hygiene, PPE use, and safe handling of body fluids.
+
+What is the difference between standard precautions and transmission-based precautions?
+Standard precautions apply to all patients, while transmission-based precautions are additional measures for specific known infections.
+
+What is the primary purpose of hand hygiene in first aid?
+To remove pathogens and prevent cross-contamination, the single most effective measure for infection control in emergency care.
+
+What is the difference between hand washing and hand sanitizers?
+Hand washing uses soap and water to remove all types of pathogens, while alcohol sanitizers kill most germs but don't remove dirt or all organisms.
+
+What is the primary purpose of gloves in first aid?
+To provide barrier protection against bloodborne pathogens and reduce contamination risk during patient care and wound management.
+
+What is the difference between sterile and clean gloves?
+Sterile gloves are free from all microorganisms for invasive procedures, while clean gloves reduce but don't eliminate contamination risk.
+
+What is the primary purpose of CPR (Cardiopulmonary Resuscitation)?
+To maintain blood circulation and oxygenation to vital organs when heart and breathing have stopped, buying time until professional help arrives.
+
+What is the difference between compression-only and full CPR?
+Compression-only CPR provides chest compressions only for untrained rescuers, while full CPR includes both compressions and rescue breaths.
+
+What is the primary purpose of chest compressions in CPR?
+To manually pump blood through the body by compressing the heart between sternum and spine, maintaining circulation to brain and other vital organs.
+
+What is the difference between adult and child CPR compression depth?
+Adult compressions should be 2-2.4 inches deep, while child compressions should be about 2 inches deep, using appropriate force for body size.
+
+What is the primary purpose of rescue breaths in CPR?
+To provide oxygen to the lungs when natural breathing has stopped, supplying oxygen to blood being circulated by chest compressions.
+
+What is the difference between mouth-to-mouth and barrier device rescue breaths?
+Mouth-to-mouth provides direct breaths, while barrier devices (pocket masks) protect rescuer from direct contact while delivering breaths.
+
+What is the primary purpose of AED (Automated External Defibrillator) use?
+To deliver electrical shocks to restore normal heart rhythm in sudden cardiac arrest, significantly improving survival rates when used quickly.
+
+What is the difference between AED and manual defibrillation?
+AED automatically analyzes heart rhythm and advises shocks, while manual defibrillation requires professional interpretation of ECG rhythms.
+
+What is the primary purpose of recovery position in first aid?
+To maintain open airway for unconscious breathing patients and prevent choking, while keeping the person stable until help arrives.
+
+What is the difference between recovery position and CPR?
+Recovery position is for unconscious breathing patients, while CPR is for patients without breathing or pulse requiring immediate resuscitation.
+
+What is the primary purpose of choking first aid?
+To clear airway obstruction using abdominal thrusts (Heimlich maneuver) or chest thrusts, restoring breathing ability for conscious or unconscious victims.
+
+What is the difference between mild and severe choking management?
+Mild choking encourages coughing, while severe choking requires immediate intervention with thrusts to clear airway obstruction.
+
+What is the primary purpose of bleeding control in first aid?
+To stop or slow blood loss to prevent shock and preserve life, using direct pressure, elevation, and pressure points as needed.
+
+What is the difference between arterial and venous bleeding?
+Arterial bleeding spurts bright red blood and is life-threatening, while venous bleeding flows steadily dark red blood and is typically less severe.
+
+What is the primary purpose of direct pressure for bleeding control?
+To apply pressure directly to wound site to promote clotting and reduce blood flow, the first and most effective bleeding control method.
+
+What is the difference between direct pressure and pressure points?
+Direct pressure applies force to wound site, while pressure points apply pressure to arteries above wound to reduce blood flow to area.
+
+What is the primary purpose of tourniquets in severe bleeding?
+To completely stop blood flow to limb in life-threatening extremity bleeding when direct pressure fails, preventing fatal blood loss.
+
+What is the difference between commercial and improvised tourniquets?
+Commercial tourniquets are designed for effective, safe application, while improvised tourniquets use available materials but may be less effective.
+
+What is the primary purpose of wound cleaning and dressing?
+To prevent infection and promote healing by removing contaminants and providing protective barrier over injured tissue.
+
+What is the difference between cleaning and disinfecting wounds?
+Cleaning removes dirt and debris with water or saline, while disinfecting kills microorganisms using antiseptics.
+
+What is the primary purpose of burn classification in first aid?
+To determine severity and appropriate treatment: first-degree (superficial), second-degree (partial thickness), third-degree (full thickness) burns.
+
+What is the difference between thermal and chemical burns?
+Thermal burns from heat sources require cooling, while chemical burns require neutralization and removal of causative agent before cooling.
+
+What is the primary purpose of burn first aid treatment?
+To stop burning process, cool the burn, prevent infection, and reduce pain while seeking appropriate medical care based on burn severity.
+
+What is the difference between minor and major burn management?
+Minor burns can be treated with cooling and dressings on site, while major burns require immediate emergency medical care and specialized treatment.
+
+What is the primary purpose of fracture and sprain management?
+To immobilize injured area, prevent further damage, reduce pain, and maintain proper alignment until professional medical evaluation.
+
+What is the difference between fractures and sprains?
+Fractures involve broken bones requiring immobilization, while sprains involve ligament damage requiring RICE (Rest, Ice, Compression, Elevation).
+
+What is the primary purpose of splinting in first aid?
+To immobilize injured limbs to prevent further damage, reduce pain, and maintain proper position during transport to medical care.
+
+What is the difference between rigid and soft splints?
+Rigid splints provide firm immobilization for suspected fractures, while soft splints offer flexible support for sprains and minor injuries.
+
+What is the primary purpose of RICE therapy for soft tissue injuries?
+To reduce pain and swelling through Rest, Ice, Compression, and Elevation, promoting healing and preventing further tissue damage.
+
+What is the difference between ice and heat application in injuries?
+Ice reduces swelling and pain in acute injuries (first 48 hours), while heat increases blood flow for healing in later stages or chronic conditions.
+
+What is the primary purpose of head injury assessment in first aid?
+To identify potentially serious brain injuries requiring immediate medical care, using neurological checks and monitoring for deterioration.
+
+What is the difference between concussion and more serious head injuries?
+Concussions involve temporary brain function disruption, while serious injuries may involve bleeding or swelling requiring immediate emergency care.
+
+What is the primary purpose of spinal injury precautions?
+To prevent further damage to spinal cord by immobilizing head and neck, preventing paralysis or death from improper movement.
+
+What is the difference between suspected and confirmed spinal injuries?
+Suspected injuries require full immobilization precautions, while confirmed injuries need specialized handling and emergency medical transport.
+
+What is the primary purpose of diabetic emergency management?
+To recognize and treat hypoglycemia (low blood sugar) or hyperglycemia (high blood sugar) emergencies, preventing life-threatening complications.
+
+What is the difference between hypoglycemia and hyperglycemia symptoms?
+Hypoglycemia causes shakiness, sweating, confusion with rapid onset, while hyperglycemia causes thirst, frequent urination with gradual onset.
+
+What is the primary purpose of seizure first aid?
+To protect person from injury during seizure, maintain airway, and provide appropriate post-seizure care while preventing complications.
+
+What is the difference between seizure and fainting management?
+Seizures require protecting from injury and timing the episode, while fainting requires airway protection and leg elevation after recovery.
+
+What is the primary purpose of asthma attack first aid?
+To help person use rescue inhaler properly, maintain calm breathing, and seek emergency care if symptoms don't improve or worsen.
+
+What is the difference between rescue and controller inhalers?
+Rescue inhalers provide quick relief during attacks, while controller inhalers prevent attacks when used regularly as prescribed.
+
+What is the primary purpose of allergic reaction management?
+To identify severity, administer appropriate treatment like antihistamines or epinephrine, and seek emergency care for severe reactions (anaphylaxis).
+
+What is the difference between mild and severe allergic reactions?
+Mild reactions cause localized symptoms treatable with antihistamines, while severe reactions (anaphylaxis) affect breathing and require epinephrine.
+
+What is the primary purpose of epinephrine auto-injectors in anaphylaxis?
+To rapidly reverse life-threatening airway swelling and blood pressure drop, buying critical time until emergency medical care arrives.
+
+What is the difference between epinephrine and antihistamines in allergic reactions?
+Epinephrine treats life-threatening anaphylaxis rapidly, while antihistamines treat mild to moderate allergic symptoms more slowly.
+
+What is the primary purpose of heat-related illness first aid?
+To recognize heat exhaustion vs heat stroke, provide cooling and hydration, and prevent progression to life-threatening conditions.
+
+What is the difference between heat exhaustion and heat stroke?
+Heat exhaustion causes heavy sweating and weakness treatable with cooling, while heat stroke causes hot dry skin and requires emergency cooling.
+
+What is the primary purpose of cold-related illness management?
+To recognize hypothermia vs frostbite, provide gradual warming, and prevent tissue damage and life-threatening complications.
+
+What is the difference between hypothermia and frostbite?
+Hypothermia involves whole-body temperature drop affecting vital functions, while frostbite involves localized tissue freezing in extremities.
+
+What is the primary purpose of poisoning first aid?
+To identify poison type, prevent further absorption, and provide appropriate treatment while contacting poison control for specific guidance.
+
+What is the difference between corrosive and non-corrosive poisoning?
+Corrosive poisons cause chemical burns requiring immediate dilution, while non-corrosive poisons may require induced vomiting or activated charcoal.
+
+What is the primary purpose of poison control centers?
+To provide expert guidance for poisoning emergencies, offering specific treatment recommendations based on poison type, amount, and patient condition.
+
+What is the difference between local poison control and emergency services?
+Poison control provides specific treatment guidance, while emergency services provide immediate life support and transport when needed.
+
+What is the primary purpose of psychological first aid?
+To provide emotional support and coping assistance during crises, reducing stress and promoting resilience in traumatic situations.
+
+What is the difference between psychological and physical first aid?
+Psychological first aid addresses emotional and mental health needs, while physical first aid addresses bodily injuries and medical conditions.
+
+What is the primary purpose of documentation in first aid?
+To record treatment provided, patient condition changes, and communication with emergency services for continuity of care.
+
+What is the difference between treatment notes and incident reports?
+Treatment notes document care provided, while incident reports describe the event and circumstances for legal and administrative purposes.
+
+What is the primary purpose of first aid kit maintenance?
+To ensure supplies are available, sterile, and within expiration dates for effective emergency response when needed.
+
+What is the difference between personal and workplace first aid kits?
+Personal kits contain basic supplies for individual use, while workplace kits contain comprehensive supplies for multiple people and various injuries.
+
+What is the primary purpose of first aid training and certification?
+To develop knowledge, skills, and confidence for effective emergency response, maintaining current skills through regular practice and updates.
+
+What is the difference between basic and advanced first aid certification?
+Basic certification covers common emergencies and life support, while advanced certification includes specialized skills and medical assessment techniques.
+
+What is the primary purpose of continuing education in first aid?
+To maintain current knowledge of guidelines, practice skills regularly, and learn new techniques for improved emergency response effectiveness.
+
+What is the difference between certification and recertification in first aid?
+Initial certification provides first-time training, while recertification updates skills and knowledge to maintain current competency.
+
+This comprehensive first aid fundamentals deck provides 100 questions covering essential emergency response, life-saving techniques, and basic medical care needed for effective first aid provision.

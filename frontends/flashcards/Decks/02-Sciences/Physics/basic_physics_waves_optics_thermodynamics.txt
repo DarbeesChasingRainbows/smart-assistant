@@ -1,0 +1,234 @@
+// Basic Physics Waves, Optics & Thermodynamics Deck
+
+What is the primary purpose of studying waves in physics?
+To understand how energy and information travel through space and matter, fundamental to sound, light, and many modern technologies.
+
+What is a wave in physical terms?
+A disturbance that transfers energy through a medium or space without permanently displacing the medium itself.
+
+What is the difference between mechanical and electromagnetic waves?
+Mechanical waves require a material medium (sound, water waves), while electromagnetic waves can travel through vacuum (light, radio waves).
+
+What is the primary purpose of wave characteristics in describing wave behavior?
+To quantify wave properties using amplitude, wavelength, frequency, period, and speed for mathematical analysis.
+
+What is the difference between amplitude and frequency in wave description?
+Amplitude measures wave intensity or height, while frequency measures how many waves pass per unit time.
+
+What is the primary purpose of the wave equation in physics?
+To relate wave speed, frequency, and wavelength (v = fλ), enabling predictions of wave behavior.
+
+What is the difference between transverse and longitudinal waves?
+Transverse waves have particle motion perpendicular to wave direction (light, strings), while longitudinal waves have parallel particle motion (sound).
+
+What is the primary purpose of sound waves in acoustics?
+To understand how pressure variations travel through media, enabling communication, music, and many practical applications.
+
+What is the difference between compression and rarefaction in sound waves?
+Compression regions have increased pressure and density, while rarefaction regions have decreased pressure and density.
+
+What is the primary purpose of the speed of sound in different media?
+To understand how sound travels at different speeds through solids, liquids, and gases due to particle spacing and elasticity.
+
+What is the difference between the speed of sound in air versus water?
+Sound travels faster in water than air due to closer particle spacing and greater elasticity, enabling underwater acoustics.
+
+What is the primary purpose of the Doppler effect in wave physics?
+To explain frequency changes when source and observer move relative to each other, important for radar, astronomy, and emergency vehicles.
+
+What is the difference between source moving and observer moving in the Doppler effect?
+Source moving affects actual wave spacing, while observer moving affects perceived wave frequency, both causing similar frequency shifts.
+
+What is the primary purpose of interference in wave behavior?
+To understand how waves combine constructively or destructively, creating patterns fundamental to optics, acoustics, and quantum mechanics.
+
+What is the difference between constructive and destructive interference?
+Constructive interference increases amplitude when waves align, while destructive interference decreases amplitude when waves oppose each other.
+
+What is the primary purpose of standing waves in physics?
+To understand wave patterns that appear stationary due to interference, fundamental to musical instruments and quantum systems.
+
+What is the difference between standing waves and traveling waves?
+Standing waves have fixed nodes and antinodes with no net energy transport, while traveling waves move energy through space.
+
+What is the primary purpose of resonance in wave systems?
+To understand how systems oscillate with maximum amplitude when driven at natural frequencies, crucial for music, engineering, and safety.
+
+What is the difference between resonance and forced vibration?
+Resonance occurs at natural frequencies with maximum response, while forced vibration occurs at any driving frequency with varying response.
+
+What is the primary purpose of harmonics in wave analysis?
+To understand how complex waves can be broken down into simple sinusoidal components, fundamental to music and signal processing.
+
+What is the difference between fundamental frequency and harmonics?
+Fundamental frequency is the lowest frequency, while harmonics are integer multiples that create complex waveforms.
+
+What is the primary purpose of light in electromagnetic wave theory?
+To understand how electromagnetic radiation in the visible spectrum enables vision, photosynthesis, and countless technologies.
+
+What is the difference between visible light and other electromagnetic waves?
+Visible light has wavelengths 400-700 nanometers detectable by human eyes, while other EM waves have different wavelengths and applications.
+
+What is the primary purpose of reflection in optics?
+To understand how light bounces off surfaces, enabling mirrors, vision, and many optical instruments.
+
+What is the difference between specular and diffuse reflection?
+Specular reflection produces clear images from smooth surfaces, while diffuse reflection scatters light from rough surfaces.
+
+What is the primary purpose of refraction in optical systems?
+To understand how light bends when passing between media, enabling lenses, prisms, and many optical phenomena.
+
+What is the difference between refraction and reflection?
+Refraction involves light bending while passing through media, while reflection involves light bouncing off surfaces.
+
+What is the primary purpose of Snell's Law in refraction analysis?
+To mathematically relate incident and refracted angles using refractive indices, enabling lens design and optical calculations.
+
+What is the difference between angle of incidence and angle of refraction?
+Angle of incidence measures incoming light direction relative to surface normal, while angle of refraction measures bent light direction.
+
+What is the primary purpose of total internal reflection in fiber optics?
+To understand how light can be completely reflected at boundaries, enabling fiber optic communication and many optical devices.
+
+What is the difference between regular refraction and total internal reflection?
+Regular refraction partially transmits and reflects light, while total internal reflection completely reflects light above critical angles.
+
+What is the primary purpose of lenses in optical systems?
+To focus or diverge light through refraction, enabling vision correction, cameras, microscopes, and telescopes.
+
+What is the difference between convex and concave lenses?
+Convex lenses converge light to focal points, while concave lenses diverge light, both essential for optical systems.
+
+What is the primary purpose of the lens equation in optics?
+To relate object distance, image distance, and focal length for thin lenses, enabling optical system design.
+
+What is the difference between real and virtual images?
+Real images form where light rays actually converge and can be projected, while virtual images form where light rays appear to diverge.
+
+What is the primary purpose of diffraction in wave optics?
+To understand how waves bend around obstacles and through openings, fundamental to resolution limits and wave behavior.
+
+What is the difference between diffraction and interference?
+Diffraction involves wave bending around edges, while interference involves multiple waves combining, both creating similar patterns.
+
+What is the primary purpose of diffraction gratings in spectroscopy?
+To separate light into component wavelengths using closely spaced slits, enabling spectral analysis and many applications.
+
+What is the difference between single-slit and double-slit diffraction?
+Single-slit diffraction produces broad central maxima, while double-slit creates interference patterns with multiple bright and dark fringes.
+
+What is the primary purpose of polarization in light optics?
+To understand how light waves can be oriented in specific directions, important for LCD screens, sunglasses, and 3D movies.
+
+What is the difference between polarized and unpolarized light?
+Polarized light oscillates in one plane, while unpolarized light oscillates in all perpendicular planes.
+
+What is the primary purpose of color in visible light?
+To understand how different wavelengths of light produce color perception, essential for art, design, and display technologies.
+
+What is the difference between additive and subtractive color mixing?
+Additive mixing combines light sources (RGB), while subtractive mixing combines pigments (CMY), both creating different color results.
+
+What is the primary purpose of lasers in modern optics?
+To produce coherent, monochromatic light through stimulated emission, enabling countless applications from medicine to communications.
+
+What is the difference between spontaneous and stimulated emission?
+Spontaneous emission occurs randomly, while stimulated emission produces identical photons, the principle behind laser operation.
+
+What is the primary purpose of optical instruments in extending human vision?
+To magnify, resolve, or detect objects beyond normal human capabilities, enabling scientific discovery and practical applications.
+
+What is the difference between microscopes and telescopes?
+Microscopes magnify small nearby objects, while telescopes magnify distant objects, both extending human vision ranges.
+
+What is the primary purpose of thermodynamics in physics?
+To study heat, work, and energy transformations, governing engines, refrigerators, and fundamental energy limits.
+
+What is the difference between heat and temperature in thermodynamics?
+Heat is energy transfer due to temperature differences, while temperature measures average particle kinetic energy.
+
+What is the primary purpose of the laws of thermodynamics?
+To establish fundamental principles governing energy transformations and the direction of natural processes.
+
+What is the difference between the First and Second Laws of Thermodynamics?
+First Law states energy conservation, while Second Law states entropy increase in isolated systems, limiting efficiency.
+
+What is the primary purpose of absolute temperature scales in thermodynamics?
+To provide temperature scales with true zero points where particle motion stops, essential for thermodynamic calculations.
+
+What is the difference between Celsius and Kelvin temperature scales?
+Celsius uses water's freezing/boiling points as references, while Kelvin uses absolute zero as the zero point.
+
+What is the primary purpose of thermal expansion in materials?
+To understand how materials change size with temperature, crucial for engineering, thermometers, and everyday applications.
+
+What is the difference between linear and volumetric expansion coefficients?
+Linear expansion coefficient measures length change per degree, while volumetric measures three-dimensional change per degree.
+
+What is the primary purpose of heat capacity in thermal systems?
+To measure how much heat energy is required to change temperature, essential for thermal management and engineering.
+
+What is the difference between specific heat capacity and heat capacity?
+Specific heat capacity is per unit mass, while heat capacity is total for the entire object.
+
+What is the primary purpose of heat transfer mechanisms in thermal systems?
+To understand how thermal energy moves through conduction, convection, and radiation, essential for heating, cooling, and insulation.
+
+What is the difference between conduction and convection heat transfer?
+Conduction transfers heat through direct molecular contact, while convection transfers heat through fluid motion.
+
+What is the primary purpose of thermal conductivity in materials?
+To measure how well materials conduct heat, crucial for insulation, cookware, and thermal management.
+
+What is the difference between conductors and insulators in heat transfer?
+Conductors transfer heat efficiently, while insulators resist heat flow, both essential for thermal control.
+
+What is the primary purpose of convection in fluid heat transfer?
+To describe heat transfer through fluid motion, natural or forced, essential for heating, cooling, and weather systems.
+
+What is the difference between natural and forced convection?
+Natural convection occurs due to density differences from temperature, while forced convection uses pumps or fans for fluid motion.
+
+What is the primary purpose of radiation heat transfer?
+To understand how thermal energy transfers through electromagnetic waves, essential for space thermal control and infrared heating.
+
+What is the difference between radiation and conduction/convection?
+Radiation transfers heat through electromagnetic waves without medium, while conduction/convection require material contact.
+
+What is the primary purpose of the Stefan-Boltzmann Law in thermal radiation?
+To relate radiated power to temperature, governing everything from star brightness to thermal imaging.
+
+What is the difference between blackbody radiation and real surface radiation?
+Blackbody radiation represents ideal emission, while real surfaces emit less according to emissivity factors.
+
+What is the primary purpose of phase changes in thermodynamics?
+To understand how substances change between solid, liquid, and gas states, involving latent heat and energy storage.
+
+What is the difference between latent heat and specific heat?
+Latent heat causes phase changes without temperature change, while specific heat causes temperature changes without phase change.
+
+What is the primary purpose of the ideal gas law in thermodynamics?
+To relate pressure, volume, temperature, and amount of gas, fundamental to understanding gas behavior and engines.
+
+What is the difference between ideal gases and real gases?
+Ideal gases follow gas laws exactly with no intermolecular forces, while real gases deviate under high pressure or low temperature.
+
+What is the primary purpose of heat engines in thermodynamics?
+To convert thermal energy into mechanical work, governed by efficiency limits and the Second Law of Thermodynamics.
+
+What is the difference between heat engines and refrigerators?
+Heat engines convert heat to work, while refrigerators use work to move heat from cold to hot regions.
+
+What is the primary purpose of efficiency in heat engines?
+To measure how effectively engines convert heat to useful work, limited by thermodynamic principles and practical constraints.
+
+What is the difference between theoretical and actual efficiency?
+Theoretical efficiency represents ideal limits, while actual efficiency includes real-world losses and imperfections.
+
+What is the primary purpose of entropy in thermodynamics?
+To measure disorder and the direction of natural processes, increasing in isolated systems according to the Second Law.
+
+What is the difference between entropy and energy?
+Energy is conserved in all processes, while entropy tends to increase, limiting process efficiency and direction.
+
+This comprehensive waves, optics, and thermodynamics deck provides 100 questions covering essential wave phenomena, optical principles, and thermal concepts needed for intermediate physics study.

@@ -1,0 +1,367 @@
+// Herbalism - Materia Medica Collection
+
+What is the primary purpose of studying herbal materia medica?
+To develop comprehensive knowledge of individual medicinal plants including their properties, actions, constituents, indications, contraindications, and preparation methods for clinical application.
+
+What is the difference between a herbal monograph and materia medica entry?
+A monograph provides detailed scientific information including chemistry, pharmacology, and research, while materia medica entries focus on practical clinical applications, traditional uses, and preparation methods.
+
+## IMMUNE SYSTEM HERBS
+
+### Echinacea purpurea (Purple Coneflower)
+**Primary Purpose**: Enhance immune function for preventing and treating upper respiratory infections, colds, and flu through immunomodulatory effects on white blood cell activity.
+
+**Key Actions**: Immunostimulant, anti-inflammatory, antiviral, antibacterial, lymphatic tonic
+
+**Active Constituents**: Alkylamides, caffeic acid derivatives, polysaccharides, flavonoids
+
+**Traditional Uses**: Cold and flu prevention, wound healing, infection treatment, immune support
+
+**Clinical Applications**: Upper respiratory infections, immune enhancement, inflammatory conditions, skin wound healing
+
+**Contraindications**: Autoimmune disorders, immunosuppressant medications, allergic reactions to aster family
+
+**Preparation Methods**: Tincture (1:5, 60% alcohol), decoction of root, capsule of standardized extract
+
+**Dosage Guidelines**: Tincture 2-4 mL three times daily, capsules 300-500 mg standardized extract twice daily
+
+**Safety Notes**: Generally safe for short-term use (up to 8 weeks), avoid in progressive autoimmune conditions
+
+### Astragalus membranaceus (Huang Qi)
+**Primary Purpose**: Support immune function, enhance vitality, and strengthen Wei Qi (defensive energy) for preventing infections and supporting recovery.
+
+**Key Actions**: Immunomodulator, adaptogen, anti-inflammatory, antioxidant, hepatoprotective
+
+**Active Constituents**: Polysaccharides (astragalans), flavonoids, saponins (astragalosides)
+
+**Traditional Uses**: Chronic immune deficiency, fatigue, adrenal support, post-illness recovery
+
+**Clinical Applications**: Immune enhancement, stress adaptation, cardiovascular support, liver protection
+
+**Contraindications**: Acute infections with fever, autoimmune conditions, pregnancy (high doses)
+
+**Preparation Methods**: Decoction of sliced root, tincture (1:5, 70% alcohol), powder in capsules
+
+**Dosage Guidelines**: Decoction 9-15 g daily, tincture 3-6 mL three times daily, capsules 500-1000 mg twice daily
+
+**Safety Notes**: Generally safe, avoid in acute febrile conditions, monitor blood pressure in hypertensive patients
+
+## DIGESTIVE SYSTEM HERBS
+
+### Peppermint (Mentha piperita)
+**Primary Purpose**: Relieve digestive discomfort, reduce gas and bloating, and soothe gastrointestinal irritation through carminative and antispasmodic actions.
+
+**Key Actions**: Carminative, antispasmodic, aromatic, cholagogue, analgesic
+
+**Active Constituents**: Menthol, menthone, rosmarinic acid, flavonoids
+
+**Traditional Uses**: Indigestion, gas, bloating, nausea, irritable bowel syndrome
+
+**Clinical Applications**: Functional dyspepsia, IBS, tension headaches, respiratory congestion
+
+**Contraindications**: GERD, hiatal hernia, infants under 2, gallbladder disease
+
+**Preparation Methods**: Infusion of leaves, essential oil, tincture (1:5, 45% alcohol)
+
+**Dosage Guidelines**: Infusion 1 cup after meals, essential oil 0.2-0.4 mL in capsules, tincture 2-4 mL three times daily
+
+**Safety Notes**: Avoid in GERD, use enteric-coated capsules for heartburn, caution with gallstones
+
+### Ginger (Zingiber officinale)
+**Primary Purpose**: Support digestion, reduce nausea, and provide anti-inflammatory effects through warming carminative and antiemetic properties.
+
+**Key Actions**: Carminative, antiemetic, anti-inflammatory, circulatory stimulant, diaphoretic
+
+**Active Constituents**: Gingerols, shogaols, zingiberene, volatile oils
+
+**Traditional Uses**: Nausea, motion sickness, digestive weakness, colds and flu, arthritis
+
+**Clinical Applications**: Chemotherapy-induced nausea, morning sickness, osteoarthritis, migraine prevention
+
+**Contraindications**: Gallstones, bleeding disorders, high doses in pregnancy, anticoagulant medications
+
+**Preparation Methods**: Fresh ginger decoction, dried powder, tincture (1:5, 60% alcohol)
+
+**Dosage Guidelines**: Fresh 2-4 g daily, powder 1-2 g daily, tincture 2-4 mL three times daily
+
+**Safety Notes**: Generally safe, avoid high doses with anticoagulants, caution with gallstones
+
+## NERVOUS SYSTEM HERBS
+
+### Lavender (Lavandula angustifolia)
+**Primary Purpose**: Calm nervous system, reduce anxiety, improve sleep quality, and relieve tension through nervine and mild sedative actions.
+
+**Key Actions**: Nervine, mild sedative, antidepressant, antispasmodic, carminative
+
+**Active Constituents**: Linalool, linalyl acetate, flavonoids, tannins
+
+**Traditional Uses**: Anxiety, insomnia, nervous tension, headaches, digestive upset
+
+**Clinical Applications**: Anxiety disorders, sleep disturbances, tension headaches, mild depression
+
+**Contraindications**: Sedative medications, pregnancy (high doses), surgical anesthesia (2 weeks prior)
+
+**Preparation Methods**: Infusion of flowers, essential oil, tincture (1:5, 45% alcohol)
+
+**Dosage Guidelines**: Infusion 1-2 cups daily, essential oil 80-160 mg daily, tincture 2-6 mL daily
+
+**Safety Notes**: Generally safe, avoid with sedatives, discontinue before surgery, caution in pregnancy
+
+### St. John's Wort (Hypericum perforatum)
+**Primary Purpose**: Treat mild to moderate depression, anxiety, and nerve pain through effects on neurotransmitters and nerve inflammation reduction.
+
+**Key Actions**: Antidepressant, anxiolytic, antiviral, anti-inflammatory, nerve tonic
+
+**Active Constituents**: Hypericin, hyperforin, flavonoids, essential oils
+
+**Traditional Uses**: Depression, anxiety, nerve pain, wound healing, viral infections
+
+**Clinical Applications**: Major depressive disorder, seasonal affective disorder, neuropathic pain, viral infections
+
+**Contraindications**: Antidepressant medications, photosensitivity conditions, pregnancy, oral contraceptives
+
+**Preparation Methods**: Infusion of flowering tops, oil infusion, standardized extract capsules
+
+**Dosage Guidelines**: Infusion 2-3 cups daily, standardized extract 300 mg three times daily, oil externally
+
+**Safety Notes**: Significant drug interactions, photosensitivity risk, avoid with MAO inhibitors, SSRIs
+
+## CARDIOVASCULAR HERBS
+
+### Hawthorn (Crataegus monogyna)
+**Primary Purpose**: Support cardiovascular health, strengthen heart muscle, improve circulation, and regulate blood pressure through cardiac tonic and vasodilatory actions.
+
+**Key Actions**: Cardiac tonic, vasodilator, antioxidant, mild diuretic, astringent
+
+**Active Constituents**: Flavonoids (quercetin, vitexin), oligomeric procyanidins, triterpenoids
+
+**Traditional Uses**: Heart weakness, poor circulation, high blood pressure, angina
+
+**Clinical Applications**: Congestive heart failure, hypertension, angina, atherosclerosis
+
+**Contraindications**: Heart medications (beta blockers, digoxin), hypotension, pregnancy
+
+**Preparation Methods**: Tincture of berries and flowers, decoction, standardized extract capsules
+
+**Dosage Guidelines**: Tincture 2-4 mL three times daily, standardized extract 300-600 mg twice daily
+
+**Safety Notes**: Generally safe, monitor with heart medications, avoid in severe hypotension
+
+### Garlic (Allium sativum)
+**Primary Purpose**: Support cardiovascular health, lower cholesterol, reduce blood pressure, and provide antimicrobial effects through sulfur compounds and circulatory enhancement.
+
+**Key Actions**: Antihypertensive, cholesterol-lowering, antiplatelet, antimicrobial, antioxidant
+
+**Active Constituents**: Allicin, alliin, S-allyl cysteine, flavonoids
+
+**Traditional Uses**: High blood pressure, high cholesterol, infections, immune support
+
+**Clinical Applications**: Hyperlipidemia, hypertension, atherosclerosis prevention, immune enhancement
+
+**Contraindications**: Anticoagulant medications, bleeding disorders, surgery (2 weeks prior)
+
+**Preparation Methods**: Fresh cloves, aged garlic extract, powder capsules, tincture
+
+**Dosage Guidelines**: Fresh 1-2 cloves daily, aged extract 600-1200 mg daily, powder 600-900 mg daily
+
+**Safety Notes**: Generally safe, caution with anticoagulants, stop before surgery, may cause GI irritation
+
+## RESPIRATORY HERBS
+
+### Mullein (Verbascum thapsus)
+**Primary Purpose**: Soothe respiratory irritation, reduce cough, and clear lung congestion through demulcent, expectorant, and anti-inflammatory actions.
+
+**Key Actions**: Expectorant, demulcent, anti-inflammatory, antitussive, pulmonary tonic
+
+**Active Constituents**: Mucilage, saponins, flavonoids, iridoid glycosides
+
+**Traditional Uses**: Cough, bronchitis, asthma, respiratory congestion, sore throat
+
+**Clinical Applications**: Chronic bronchitis, dry cough, respiratory irritation, mild asthma
+
+**Contraindications**: Pregnancy (traditional caution), skin contact dermatitis
+
+**Preparation Methods**: Infusion of leaves and flowers, tincture (1:5, 25% alcohol), syrup
+
+**Dosage Guidelines**: Infusion 2-3 cups daily, tincture 2-4 mL three times daily, syrup 1-2 teaspoons
+
+**Safety Notes**: Generally safe, strain fine hairs to prevent irritation, caution in pregnancy
+
+### Elecampane (Inula helenium)
+**Primary Purpose**: Treat chronic respiratory conditions, clear mucus, and strengthen lung tissue through expectorant, antibacterial, and lung tonic actions.
+
+**Key Actions**: Expectorant, antibacterial, antitussive, pulmonary tonic, diaphoretic
+
+**Active Constituents**: Inulin, alantolactone, essential oils, sesquiterpene lactones
+
+**Traditional Uses**: Chronic bronchitis, asthma, whooping cough, respiratory weakness
+
+**Clinical Applications**: Chronic respiratory infections, bronchitis with mucus, weakened lung tissue
+
+**Contraindications**: Pregnancy, allergy to aster family, high blood pressure
+
+**Preparation Methods**: Decoction of root, tincture (1:5, 60% alcohol), syrup
+
+**Dosage Guidelines**: Decoction 1 cup 2-3 times daily, tincture 2-3 mL three times daily
+
+**Safety Notes**: Generally safe, avoid in pregnancy, caution with aster family allergies
+
+## ENDOCRINE/HORMONAL HERBS
+
+### Vitex (Vitex agnus-castus)
+**Primary Purpose**: Regulate female hormones, balance menstrual cycles, and treat PMS and menopausal symptoms through pituitary gland modulation and progesterone support.
+
+**Key Actions**: Hormone regulator, progesterone precursor, prolactin inhibitor, uterine tonic
+
+**Active Constituents**: Iridoid glycosides (agnuside), flavonoids, essential oils
+
+**Traditional Uses**: Menstrual irregularities, PMS, infertility, menopause, lactation issues
+
+**Clinical Applications**: Premenstrual syndrome, menstrual irregularities, menopausal symptoms, infertility
+
+**Contraindications**: Pregnancy, hormone-sensitive cancers, antipsychotic medications, oral contraceptives
+
+**Preparation Methods**: Tincture of berries, capsules of powdered berries, standardized extract
+
+**Dosage Guidelines**: Tincture 1-2 mL morning, capsules 400-500 mg daily, standardized extract 20-40 mg daily
+
+**Safety Notes**: Generally safe, avoid in pregnancy, may interfere with contraceptives, gradual onset
+
+### Black Cohosh (Actaea racemosa)
+**Primary Purpose**: Treat menopausal symptoms, menstrual cramps, and arthritis through estrogenic effects, anti-inflammatory actions, and uterine muscle relaxation.
+
+**Key Actions**: Estrogenic, anti-inflammatory, antispasmodic, analgesic, hypotensive
+
+**Active Constituents**: Triterpene glycosides, phenolic acids, alkaloids, flavonoids
+
+**Traditional Uses**: Menopause, menstrual cramps, arthritis, nerve pain, childbirth
+
+**Clinical Applications**: Menopausal hot flashes, menstrual pain, rheumatoid arthritis, nerve pain
+
+**Contraindications**: Pregnancy, liver disease, hormone-sensitive cancers, anticoagulant medications
+
+**Preparation Methods**: Tincture of root, decoction, standardized extract capsules
+
+**Dosage Guidelines**: Tincture 2-4 mL three times daily, standardized extract 20-40 mg twice daily
+
+**Safety Notes**: Monitor liver function, avoid in pregnancy, caution with hormone-sensitive conditions
+
+## MUSCULOSKELETAL HERBS
+
+### Turmeric (Curcuma longa)
+**Primary Purpose**: Reduce inflammation, treat arthritis, support joint health, and provide antioxidant protection through curcumin compounds and anti-inflammatory actions.
+
+**Key Actions**: Anti-inflammatory, antioxidant, analgesic, hepatoprotective, circulatory stimulant
+
+**Active Constituents**: Curcuminoids (curcumin), demethoxycurcumin, volatile oils, starch
+
+**Traditional Uses**: Arthritis, inflammation, digestive disorders, skin conditions, wound healing
+
+**Clinical Applications**: Osteoarthritis, rheumatoid arthritis, inflammatory conditions, digestive support
+
+**Contraindications**: Gallstones, bleeding disorders, anticoagulant medications, surgery (2 weeks prior)
+
+**Preparation Methods**: Powder in capsules, tincture (1:5, 60% alcohol), standardized extract
+
+**Dosage Guidelines**: Powder 1-3 g daily, standardized extract 400-600 mg three times daily, tincture 2-4 mL
+
+**Safety Notes**: Generally safe, enhance absorption with black pepper, caution with gallstones, stop before surgery
+
+### Willow Bark (Salix alba)
+**Primary Purpose**: Reduce pain and inflammation, treat headaches and arthritis, and lower fever through salicin compounds and anti-inflammatory actions.
+
+**Key Actions**: Analgesic, anti-inflammatory, antipyretic, astringent, rheumatic remedy
+
+**Active Constituents**: Salicin, salicortin, flavonoids, tannins
+
+**Traditional Uses**: Headaches, arthritis, fever, pain, rheumatic conditions
+
+**Clinical Applications**: Low back pain, osteoarthritis, headaches, fever reduction
+
+**Contraindications**: Aspirin allergy, children under 16, pregnancy, anticoagulant medications
+
+**Preparation Methods**: Decoction of bark, tincture (1:5, 25% alcohol), capsules
+
+**Dosage Guidelines**: Decoction 1 cup 2-3 times daily, tincture 2-4 mL three times daily, capsules 240-480 mg
+
+**Safety Notes**: Avoid in children, aspirin allergies, pregnancy, caution with anticoagulants
+
+## SKIN/EXTERNAL HERBS
+
+### Calendula (Calendula officinalis)
+**Primary Purpose**: Promote wound healing, reduce skin inflammation, treat skin infections, and soothe irritated skin through anti-inflammatory, antimicrobial, and tissue regenerative actions.
+
+**Key Actions**: Anti-inflammatory, antimicrobial, wound healer, lymphatic, skin tonic
+
+**Active Constituents**: Triterpenoids, flavonoids, carotenoids, essential oils
+
+**Traditional Uses**: Wounds, burns, rashes, skin infections, inflammation
+
+**Clinical Applications**: Wound healing, dermatitis, minor burns, skin infections, inflammation
+
+**Contraindications**: Allergy to aster family, deep wounds requiring medical attention
+
+**Preparation Methods**: Infused oil, cream/ointment, tincture (1:5, 45% alcohol), compress
+
+**Dosage Guidelines**: External application 2-3 times daily, oil for massage, cream for localized treatment
+
+**Safety Notes**: Generally safe externally, avoid internal use during pregnancy, allergy caution
+
+### Tea Tree (Melaleuca alternifolia)
+**Primary Purpose**: Treat skin infections, reduce inflammation, and provide antimicrobial effects through terpene compounds and broad-spectrum antimicrobial actions.
+
+**Key Actions**: Antimicrobial, antifungal, antiviral, anti-inflammatory, antiseptic
+
+**Active Constituents**: Terpinen-4-ol, cineole, terpinolene, alpha-terpineol
+
+**Traditional Uses**: Skin infections, fungal conditions, acne, wounds, inflammation
+
+**Clinical Applications**: Acne, fungal infections, minor wounds, skin inflammation, dandruff
+
+**Contraindications**: Internal use, pregnancy (high doses), severe skin conditions
+
+**Preparation Methods**: Essential oil, cream/ointment, diluted oil, wash
+
+**Dosage Guidelines**: External 5-10% solution, cream 2-3 times daily, oil diluted 1:10 for sensitive skin
+
+**Safety Notes**: External use only, patch test first, avoid internal use, keep away from eyes
+
+## ADAPTOGENS
+
+### Ashwagandha (Withania somnifera)
+**Primary Purpose**: Reduce stress, enhance vitality, improve sleep, and support immune function through adaptogenic, nervine, and rejuvenative actions.
+
+**Key Actions**: Adaptogen, nervine, immunomodulator, anti-inflammatory, rejuvenative
+
+**Active Constituents**: Withanolides, alkaloids, amino acids, fatty acids
+
+**Traditional Uses**: Stress, fatigue, anxiety, immune weakness, rejuvenation
+
+**Clinical Applications**: Stress adaptation, anxiety, insomnia, immune enhancement, cognitive function
+
+**Contraindications**: Pregnancy, hyperthyroidism, sedative medications, autoimmune disorders
+
+**Preparation Methods**: Powder of root, tincture (1:5, 50% alcohol), standardized extract capsules
+
+**Dosage Guidelines**: Powder 3-6 g daily, tincture 2-4 mL twice daily, standardized extract 300-600 mg twice daily
+
+**Safety Notes**: Generally safe, avoid in pregnancy, monitor thyroid levels, caution with sedatives
+
+### Rhodiola (Rhodiola rosea)
+**Primary Purpose**: Combat fatigue, enhance mental performance, reduce stress, and support physical endurance through adaptogenic and stimulating actions.
+
+**Key Actions**: Adaptogen, antidepressant, cognitive enhancer, anti-fatigue, cardioprotective
+
+**Active Constituents**: Rosavins, salidroside, tyrosol, flavonoids
+
+**Traditional Uses**: Fatigue, depression, cognitive enhancement, physical performance, altitude sickness
+
+**Clinical Applications**: Stress fatigue, depression, cognitive function, exercise performance
+
+**Contraindications**: Bipolar disorder, anxiety disorders, stimulant medications, pregnancy
+
+**Preparation Methods**: Tincture of root, standardized extract capsules, powder
+
+**Dosage Guidelines**: Tincture 1-2 mL twice daily, standardized extract 100-300 mg twice daily, powder 200-600 mg
+
+**Safety Notes**: Generally safe, avoid in bipolar disorder, caution with stimulants, start with low dose

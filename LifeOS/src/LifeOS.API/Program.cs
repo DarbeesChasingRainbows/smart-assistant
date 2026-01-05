@@ -1,0 +1,71 @@
+using LifeOS.Application;
+using LifeOS.Infrastructure;
+using LifeOS.API.Endpoints;
+using MediatR;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddOpenApi();
+
+// Add Application services (use-cases)
+builder.Services.AddApplicationServices();
+
+// Add MediatR for domain events
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(LifeOS.Application.DependencyInjection).Assembly);
+    cfg.NotificationPublisher = new MediatR.NotificationPublishers.TaskWhenAllPublisher();
+});
+
+// Add Infrastructure services (ArangoDB, Repositories)
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+// Add CORS for Deno Fresh frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(
+                  "http://localhost:8000",
+                  "http://localhost:3000",
+                  "http://localhost:5173",
+                  "http://127.0.0.1:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Added for future auth support and preflight consistency
+    });
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseCors("AllowFrontend");
+
+// Map API endpoints (Primary Adapters)
+app.MapVehicleEndpoints();
+app.MapVehicleMaintenanceEndpoints();
+app.MapComponentEndpoints();
+app.MapInventoryEndpoints();
+app.MapPeopleEndpoints();
+app.MapGardenEndpoints();
+app.MapFinanceEndpoints();
+app.MapHomeEndpoints();
+app.MapVehicleEventsExample();
+app.MapEventsEndpoints();
+
+// Health check endpoint
+app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }))
+    .WithName("HealthCheck")
+    .WithTags("System");
+
+app.Run();

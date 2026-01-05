@@ -1,0 +1,213 @@
+// Biblical Hebrew Fundamentals & Basic Vocabulary Deck
+
+What is the primary purpose of studying Biblical Hebrew today?
+To read the Old Testament/Hebrew Bible in its original language, understanding the precise meaning, poetic beauty, and theological depth of the Hebrew Scriptures.
+
+What is the basic Hebrew alphabet and pronunciation system?
+22 consonants: א (aleph), ב (bet), ג (gimel), ד (dalet), ה (he), ו (vav), ז (zayin), ח (chet), ט (tet), י (yod), כ (kaf), ל (lamed), מ (mem), נ (nun), ס (samekh), ע (ayin), פ (pe), צ (tsadi), ק (qof), ר (resh), ש (sin/shin), ת (tav), with vowel points for pronunciation.
+
+What is the difference between consonantal text and pointed text in Biblical Hebrew?
+Consonantal text (unpointed) contains only consonants as in ancient manuscripts, while pointed text includes vowel points and accent marks added by Masoretes for pronunciation.
+
+What is the primary purpose of Hebrew vowel points (niqqud) in Biblical study?
+To indicate vowel sounds and pronunciation, preserving the traditional reading of the Hebrew text after consonantal writing became standard.
+
+What are the basic Hebrew vowel categories and their functions?
+Long vowels (qamets, patah, tsere), short vowels (sheva, hireq, seghol), reduced vowels (hateph qamets, hateph patah, hateph seghol), and shewa (silent or vocal).
+
+What is the primary purpose of Hebrew accents (ta'amim) in Biblical study?
+To indicate cantillation for liturgical reading and show syntactical relationships between words and phrases in the text.
+
+What is the difference between disjunctive and conjunctive accents in Hebrew?
+Disjunctive accents mark major syntactical divisions (atnah, sof pasuq), while conjunctive accents connect words within phrases (merkha, tiphcha).
+
+What is the primary purpose of Hebrew syllables in pronunciation and grammar?
+To organize consonants and vowels into pronounceable units, determining stress patterns and affecting grammatical forms.
+
+What is the difference between open and closed syllables in Hebrew?
+Open syllables end with a vowel (בָּנָי = banay), while closed syllables end with a consonant (בֵּן = ben), affecting vowel length and stress.
+
+What is the primary purpose of Hebrew stress patterns in the language?
+To indicate which syllable receives emphasis, typically on the last syllable (milra) or penultimate syllable (mil'el), affecting meaning and grammar.
+
+What is the difference between milra and mil'el stress in Hebrew words?
+Milra stress emphasizes the final syllable (most common), while mil'el stress emphasizes the penultimate syllable, often in segolate nouns and certain forms.
+
+What is the primary purpose of Hebrew noun states in grammar?
+To show relationships between nouns, with absolute state standing alone and construct state showing possession or connection to following noun.
+
+What is the difference between absolute and construct state in Hebrew nouns?
+Absolute state stands independently (מֶלֶךְ = king), while construct state connects to following noun (מֶלֶךְ יִשְׂרָאֵל = king of Israel).
+
+What is the basic pattern of Hebrew singular masculine nouns?
+Typically consist of root consonants with vowel patterns, often ending in consonants (אִישׁ = man, סֵפֶר = book, יוֹם = day).
+
+What is the difference between masculine and feminine singular nouns in Hebrew?
+Masculine nouns typically have no special ending (אִישׁ), while feminine nouns often end in הָ- (אִשָּׁה) or ת- (יָלְדָה).
+
+What is the primary purpose of Hebrew plural formations in grammar?
+To indicate number (more than one) through specific patterns, with masculine plural typically ending in ים- and feminine plural ending in וֹת-.
+
+What is the difference between masculine and feminine plural patterns in Hebrew?
+Masculine plural ends in ים- (אִישִׁים = men), while feminine plural ends in וֹת- (אִשָּׁוֹת = women), with some variations.
+
+What is the primary purpose of Hebrew dual formations in grammar?
+To indicate pairs of things (body parts, natural pairs) using the יַם- ending (יָדַיִם = hands, עֵינַיִם = eyes).
+
+What is the difference between dual and plural forms in Hebrew?
+Dual specifically indicates pairs (eyes, hands, ears), while plural indicates any number more than one, with dual being a special subset of plural.
+
+What is the primary purpose of Hebrew definite articles in syntax?
+To specify definiteness, prefixed as הַ- to nouns and changing vowel patterns (הַסֵּפֶר = the book, הָאִישׁ = the man).
+
+What is the difference between Hebrew and English definite articles?
+Hebrew prefixes הַ- to the beginning of nouns with vowel changes, while English uses separate words before nouns.
+
+What is the basic Hebrew vocabulary for common objects and concepts?
+סֵפֶר (book), שֻׁלְחָן (table), כִּסֵּא (chair), בַּיִת (house), דֶּלֶת (door), חַלֹּנִית (window), אֹהֶל (tent), מִטָּה (bed).
+
+What is the primary purpose of Hebrew prepositions in grammar?
+To show relationships between words, often as separate words (אֶל, עִם) or prefixed as inseparable prepositions (בְּ-, כְּ-, לְּ-).
+
+What is the difference between separate and inseparable prepositions in Hebrew?
+Separate prepositions stand as individual words (אֶל = to), while inseparable prepositions are prefixed to nouns (בְּבַּיִת = in the house).
+
+What is the basic Hebrew vocabulary for family relationships?
+אָב (father), אֵם (mother), בֵּן (son), בַּת (daughter), אָח (brother), אָחוֹת (sister), אִישׁ (man/husband), אִשָּׁה (woman/wife).
+
+What is the primary purpose of Hebrew personal pronouns in grammar?
+To indicate person and number (I, you, he, she, we, you, they), with separate forms for independent and suffix pronouns.
+
+What is the difference between independent and suffix pronouns in Hebrew?
+Independent pronouns stand alone (אֲנִי = I), while suffix pronouns attach to nouns, verbs, or prepositions (סִפְרִי = my book).
+
+What is the basic Hebrew vocabulary for numbers and counting?
+אֶחָד (one), שְׁנַיִם (two), שְׁלוֹשָׁה (three), אַרְבַּעָה (four), חֲמִשָּׁה (five), עֶשֶׂר (ten), מֵאָה (hundred), אֶלֶף (thousand).
+
+What is the primary purpose of Hebrew verb roots (shorashim) in the language?
+To provide the basic three-consonant core meaning that appears throughout all verb forms and related nouns.
+
+What is the difference between strong and weak verbs in Hebrew?
+Strong verbs maintain all three root consonants throughout all forms (כָּתַב), while weak verbs lose or change one or more consonants in certain forms (אָמַר).
+
+What is the basic Hebrew vocabulary for common actions?
+הָלַךְ (he went), בָּא (he came), אָמַר (he said), שָׁמַע (he heard), רָאָה (he saw), אָכַל (he ate), שָׁתָה (he drank), יָשַׁב (he sat).
+
+What is the primary purpose of Hebrew verb stems (binyanim) in grammar?
+To create different meanings and grammatical relationships from the same root through systematic patterns.
+
+What is the basic pattern of the Qal stem in Hebrew verbs?
+The simple, active stem representing basic action (כָּתַב = he wrote), serving as the foundation for other stems.
+
+What is the difference between Qal and Niphal stems in Hebrew?
+Qal is simple active (he wrote), while Niphal is simple passive/reflexive (he was written/he wrote himself).
+
+What is the primary purpose of Hebrew perfect tense in verbs?
+To indicate completed actions, typically translated as past tense in English, with 3ms ending -ָתִי (כָּתַבְתִּי = I wrote).
+
+What is the difference between perfect and imperfect tenses in Hebrew?
+Perfect tense shows completed action (כָּתַב = he wrote), while imperfect shows incomplete or future action (יִכְתֹּב = he will write/he writes).
+
+What is the basic Hebrew vocabulary for religious and spiritual concepts?
+אֱלֹהִים (God), יְהוָה (YHWH/LORD), אֲדֹנָי (Lord), רוּחַ (spirit), נֶפֶשׁ (soul/life), חֵן (grace), חֶסֶד (lovingkindness), אֱמֶת (truth), שָׁלוֹם (peace).
+
+What is the primary purpose of Hebrew imperfect tense in verbs?
+To indicate incomplete, ongoing, or future actions, with 3ms ending (יִכְתֹּב = he will write/he writes).
+
+What is the difference between imperfect consecutive and imperfect simple in Hebrew?
+Imperfect consecutive with vav conversive converts to past tense (וַיִּכְתֹּב = and he wrote), while imperfect simple maintains future/incomplete meaning.
+
+What is the basic Hebrew vocabulary for places and locations?
+שָׁמַיִם (heaven), אָרֶץ (earth), יְרוּשָׁלַ‍ִם (Jerusalem), בֵּית־לֶחֶם (Bethlehem), מִצְרַיִם (Egypt), בָּבֶל (Babylon), הַר (mountain), נָהָר (river).
+
+What is the primary purpose of Hebrew imperative mood in verbs?
+To express commands, with 2ms form typically identical to imperfect without prefix (כְּתֹב = write!).
+
+What is the difference between masculine and feminine imperative forms in Hebrew?
+Masculine imperative uses base form (כְּתֹב = write!), while feminine adds הִי- ending (כִּתְבִי = write!).
+
+What is the basic Hebrew vocabulary for time expressions?
+הַיּוֹם (today), מָחָר (tomorrow), אֶתְמוֹל (yesterday), עַתָּה (now), אָז (then), בֹּקֶר (morning), עֶרֶב (evening), לַיְלָה (night).
+
+What is the primary purpose of Hebrew infinitive constructs in grammar?
+To function as verbal nouns, often expressing purpose or result, typically with prefix לְ־ (לִכְתֹּב = to write).
+
+What is the difference between infinitive construct and infinitive absolute in Hebrew?
+Infinitive construct functions as verbal noun with prefixes (לִכְתֹּב = to write), while infinitive absolute emphasizes the action itself (כָּתוֹב כָּתוֹב = surely writing).
+
+What is the basic Hebrew vocabulary for animals and creatures?
+שׁוֹר (ox), חֲמוֹר (donkey), שֶׂה (sheep), עֵז (goat), כֶּלֶב (dog), אַרְיֵה (lion), דָּג (fish), עוֹף (bird), תַּנִּינָא (dragon).
+
+What is the primary purpose of Hebrew participles in grammar?
+To function as verbal adjectives, describing ongoing action or state (כֹּתֵב = writing), with both active and passive forms.
+
+What is the difference between active and passive participles in Hebrew?
+Active participles describe ongoing action (כֹּתֵב = writing), while passive participles describe being acted upon (כָּתוּב = having been written).
+
+What is the basic Hebrew vocabulary for food and drink?
+לֶחֶם (bread), יַיִן (wine), מַיִם (water), בָּשָׂר (meat), דָּגָה (fish), חָלָב (milk), דְּבַשׁ (honey), שֶׁמֶן (oil), מֶלַח (salt).
+
+What is the primary purpose of Hebrew demonstrative pronouns?
+To point out specific people or things (זֶה = this, הַהוּא = that), with gender and number distinctions.
+
+What is the difference between זֶה and זֹאת in Hebrew demonstratives?
+זֶה is masculine singular (this), while זֹאת is feminine singular (this), with corresponding plural forms (אֵלֶּה = these).
+
+What is the basic Hebrew vocabulary for colors and qualities?
+לָבָן (white), שָׁחֹר (black), אָדֹם (red), יָרֹק (green), גָּדוֹל (big), קָטָן (small), טוֹב (good), רַע (bad), יָפֶה (beautiful).
+
+What is the primary purpose of Hebrew interrogative pronouns and adverbs?
+To form questions about identity (מִי = who), quantity (כַּמָּה = how much), time (מָתַי = when), place (אֵיפֹה = where).
+
+What is the difference between מִי and מַה in Hebrew questions?
+מִי asks about people (who?), while מַה asks about things (what?), both with various forms for different contexts.
+
+What is the basic Hebrew vocabulary for natural world?
+שֶׁמֶשׁ (sun), יָרֵחַ (moon), כּוֹכָב (star), אוֹר (light), חֹשֶׁךְ (darkness), אֵשׁ (fire), מַיִם (water), רוּחַ (wind), אֲדָמָה (ground).
+
+What is the primary purpose of Hebrew negative particles in grammar?
+To negate statements, commands, and questions, primarily using לֹא for indicative statements and אַל for imperative commands.
+
+What is the difference between לֹא and אַל in Hebrew negation?
+לֹא negates indicative statements and questions (לֹא הָלַךְ = he did not go), while אַל negates imperative commands (אַל תֵּלֵךְ = do not go).
+
+What is the basic Hebrew vocabulary for body parts?
+רֹאשׁ (head), עַיִן (eye), אֹזֶן (ear), פֶּה (mouth), יָד (hand), רֶגֶל (foot), לֵבָב (heart), נֶפֶשׁ (soul/life), גּוּף (body).
+
+What is the primary purpose of Hebrew conjunctions in grammar?
+To connect words, phrases, and clauses, showing relationships like addition (וְ = and), contrast (אֶלָּא = but), condition (אִם = if).
+
+What is the difference between וְ as connective and וְ as consecutive in Hebrew?
+Connective וְ joins elements (אִישׁ וְאִשָּׁה = man and woman), while consecutive וְ converts imperfect to past tense (וַיֹּאמֶר = and he said).
+
+What is the basic Hebrew vocabulary for clothing and personal items?
+בֶּגֶד (garment), מַחֲזַיִים (sandals), אֵזוֹר (belt), כְּתֹנֶת (tunic), מְעִיל (cloak), צִיצִת (tassel), נֵזֶם (ring), נֵר (lamp).
+
+What is the primary purpose of Hebrew relative clauses in complex sentences?
+To modify nouns with additional information, typically introduced by אֲשֶׁר (who/which/that) or asher.
+
+What is the difference between אֲשֶׁר and שֶׁ in Hebrew relative clauses?
+אֲשֶׁר is the standard relative pronoun (the man who came), while שֶׁ is a shorter form used in later Hebrew and poetry.
+
+What is the basic Hebrew vocabulary for emotions and states?
+שִׂמְחָה (joy), עֶצֶב (sorrow), יִרְאָה (fear), אַהֲבָה (love), שָׁלוֹם (peace), כָּעַס (anger), חֶסֶד (kindness), אֱמוּנָה (faith).
+
+What is the primary purpose of Hebrew adjectives in grammar?
+To describe nouns, agreeing in gender, number, and definiteness, typically following the noun they modify.
+
+What is the difference between attributive and predicate adjectives in Hebrew?
+Attributive adjectives follow nouns (אִישׁ טוֹב = good man), while predicate adjectives follow copula implied (הָאִישׁ טוֹב = the man is good).
+
+What is the basic Hebrew vocabulary for social relationships and status?
+רֵעַ (friend), אוֹיֵב (enemy), עֶבֶד (servant), אָדוֹן (lord/master), מֶלֶךְ (king), כֹּהֵן (priest), נָבִיא (prophet), זָקֵן (elder), יֶלֶד (child).
+
+What is the primary purpose of Hebrew numerals beyond basic counting?
+To express ordinal numbers (first, second), fractions, and large numbers using specific constructions and patterns.
+
+What is the difference between cardinal and ordinal numbers in Hebrew?
+Cardinal numbers indicate quantity (אֶחָד = one), while ordinal numbers indicate position (רִאשׁוֹן = first).
+
+What is the basic Hebrew vocabulary for legal and administrative terms?
+תּוֹרָה (law), מִשְׁפָּט (judgment), חֹק (statute), מִצְוָה (commandment), עֵד (witness), בְּרִית (covenant), סֵפֶר (document/book), חֹתָם (seal).
+
+This comprehensive Biblical Hebrew fundamentals deck provides 100 questions covering essential alphabet, grammar, vocabulary, and foundational concepts needed for beginning Hebrew study and Old Testament reading.

@@ -1,0 +1,216 @@
+// Koine Greek Grammar & Syntax Deck
+
+What is the primary purpose of Greek noun declensions in Koine?
+To indicate the grammatical function of nouns through systematic case endings, allowing flexible word order while maintaining clarity.
+
+What are the three Greek noun declensions and their basic characteristics?
+First declension (alpha-declension, primarily feminine), second declension (omicron-declension, masculine/neuter), third declension (consonant-declension, all genders).
+
+What is the difference between masculine and feminine patterns in the first declension?
+Masculine first declension nouns end in -ης or -ᾱς with distinct genitive singular (-ου), while feminine nouns end in -ᾱ or -η with genitive -ης.
+
+What is the primary purpose of Greek case endings beyond basic grammatical functions?
+To express subtle relationships like time, place, manner, instrument, and association that would require prepositions in English.
+
+What is the difference between genitive of possession and genitive of relationship in Greek?
+Genitive of possession shows ownership (ἀνθρώπου = of a man), while genitive of relationship shows kinship or association (Παύλου = of Paul).
+
+What is the primary purpose of Greek definite articles in syntax?
+To specify definiteness and serve as grammatical markers indicating case, gender, and number, often appearing where English would omit articles.
+
+What is the difference between article use with substantives and adjectives in Greek?
+Articles with substantives indicate definiteness (ὁ λόγος = the word), while with adjectives they can substantivize (ὁ ἀγαθός = the good one).
+
+What is the primary purpose of Greek adjective agreement in syntax?
+To create grammatical harmony between descriptive elements and the words they modify, showing clear relationships in complex sentences.
+
+What is the difference between attributive and predicate adjective positions in Greek?
+Attributive adjectives typically follow the article-noun pattern (ὁ ἀγαθὸς ἄνθρωπος), while predicate adjectives follow the noun without article (ὁ ἄνθρωπος ἀγαθός).
+
+What is the primary purpose of Greek verb conjugations in expressing action?
+To indicate person, number, tense, voice, and mood systematically, allowing precise expression of who does what, when, and how.
+
+What is the difference between omega (-ω) and mu (-μι) verb conjugations in Greek?
+Omega verbs follow regular patterns with predictable endings, while mu verbs often have irregular forms and reduplication in certain tenses.
+
+What is the primary purpose of Greek verb tenses beyond simple time indication?
+To express aspect (ongoing vs. completed action) and temporal relationships, with each tense having specific semantic ranges.
+
+What is the difference between aorist and perfect tenses in Greek aspect?
+Aorist tense views action as a simple completed event (ἔλυσα = I loosed), while perfect tense emphasizes present result of past action (λέλυκα = I have loosed).
+
+What is the primary purpose of Greek verb voices in expressing agency?
+To show the relationship between the subject and action, with active indicating direct agency and middle/passive showing indirect agency or reception.
+
+What is the difference between middle and passive voices in Greek?
+Middle voice often indicates action for oneself or with personal involvement (λύομαι = I loose for myself), while passive indicates reception of action (λύομαι = I am loosed).
+
+What is the primary purpose of Greek verb moods in expressing attitude?
+To show the speaker's perspective on the action's reality, potentiality, or desirability through different grammatical moods.
+
+What is the difference between indicative and subjunctive moods in Greek?
+Indicative mood states facts or asks questions about reality (λέγει = he says), while subjunctive expresses potential, purpose, or exhortation (λέγῃ = he might say).
+
+What is the primary purpose of Greek participles in complex syntax?
+To create adjectival verbal phrases that can modify nouns or function as subordinate clauses, adding descriptive detail to main statements.
+
+What is the difference between adjectival and circumstantial participles in Greek?
+Adjectival participles modify nouns directly like adjectives (ὁ ἄνθρωπος λύων = the loosing man), while circumstantial participles express attendant circumstances (λύων ἀπῆλθεν = having loosed, he departed).
+
+What is the primary purpose of Greek infinitives in clause structure?
+To function as verbal nouns that can serve as subjects, objects, or complements, often expressing purpose, result, or command content.
+
+What is the difference between complementary and epexegetical infinitives in Greek?
+Complementary infinitives complete the meaning of main verbs (θέλω λύειν = I want to loose), while epexegetical infinitives explain preceding nouns (ὁ καιρὸς τοῦ λύειν = the time of loosing).
+
+What is the primary purpose of Greek prepositions in spatial and temporal relationships?
+To express precise relationships of location, direction, time, and manner that would require complex constructions in English.
+
+What is the difference between prepositions governing accusative versus genitive cases?
+Accusative prepositions often indicate motion toward or extent (εἰς, ἕως), while genitive prepositions typically show separation or origin (ἐκ, ἀπό).
+
+What is the primary purpose of Greek conjunctions in clause connection?
+To show logical relationships between clauses and sentences, indicating addition, contrast, condition, purpose, and other connections.
+
+What is the difference between coordinating and subordinating conjunctions in Greek?
+Coordinating conjunctions connect equal elements (καί, δέ), while subordinating conjunctions introduce dependent clauses (ὅτι, ἵνα, ἐάν).
+
+What is the primary purpose of Greek conditional sentences in expressing hypothetical situations?
+To present if-then scenarios with different degrees of reality or possibility, using various tense and mood combinations.
+
+What is the difference between first-class and second-class conditions in Greek?
+First-class conditions assume reality (εἰ + indicative = if, and it's true), while second-class conditions present contrary-to-fact situations (εἰ + optative = if, but it's not true).
+
+What is the primary purpose of Greek temporal clauses in expressing time relationships?
+To indicate when actions occur relative to main clause actions, using specific temporal conjunctions and appropriate tense combinations.
+
+What is the difference between ὅτε with indicative versus subjunctive in temporal clauses?
+Ὅτε with indicative describes specific past events (ὅτε ἦλθεν = when he came), while ὅτε with subjunctive can express general or iterative time (ὅτε ἔρχηται = whenever he comes).
+
+What is the primary purpose of Greek purpose clauses in expressing intention?
+To show the goal or purpose of main clause actions, typically using ἵνα or ὅπως with subjunctive mood.
+
+What is the difference between ἵνα and ὅπως in purpose clauses?
+Ἵνα is the most common purpose clause marker (ἵνα μαθῇ = so that he might learn), while ὅπως can serve similar purpose but often with slightly different nuance.
+
+What is the primary purpose of Greek result clauses in expressing consequences?
+To indicate the result or consequence of main clause actions, using ὥστε with either indicative or infinitive constructions.
+
+What is the difference between actual and natural result clauses in Greek?
+Actual result clauses use ὥστε + indicative for specific outcomes (ὥστε ἔμαθεν = so that he learned), while natural result clauses use ὥστε + infinitive for expected results (ὥστε μαθεῖν = so as to learn).
+
+What is the primary purpose of Greek causal clauses in expressing reasons?
+To provide reasons or causes for main clause actions, using conjunctions like ὅτι, διότι, ἐπεί, or prepositional phrases.
+
+What is the difference between causal clauses with ὅτι versus ἕνεκα in Greek?
+Ὅτι introduces causal clauses with verbs (ὅτι ἀγαπᾷ = because he loves), while ἕνεκα introduces causal phrases with nouns (διὰ τοῦτο ἕνεκα = because of this).
+
+What is the primary purpose of Greek concessive clauses in expressing contrast?
+To acknowledge something contrary to the main point while maintaining the main assertion, using conjunctions like καίπερ, εἰ καί, μέντοι.
+
+What is the difference between concessive clauses with καίπερ and εἰ καί in Greek?
+Καίπερ introduces concessive clauses with participles (καίπερ ἀγαπῶν = although loving), while εἰ καί introduces concessive clauses with verbs (εἰ καί ἀγαπᾷ = even though he loves).
+
+What is the primary purpose of Greek indirect discourse in reporting speech and thought?
+To represent direct speech or thought within reported narrative, using accusative subject and infinitive verb construction.
+
+What is the difference between indirect statements and indirect questions in Greek?
+Indirect statements use accusative + infinitive (λέγει αὐτὸν ἐλθεῖν = he says that he came), while indirect questions use interrogative words + subjunctive (ἐρωτᾷ εἰ ἔλθῃ = he asks if he came).
+
+What is the primary purpose of Greek genitive absolute constructions?
+To provide background information or circumstances independently from main clause grammar, similar to Latin ablative absolute.
+
+What is the difference between genitive absolute and circumstantial participle in Greek?
+Genitive absolute is grammatically independent (τοῦ ἀνθρώπου λύοντος, ἀπῆλθεν = the man having loosed, he departed), while circumstantial participles modify main clause subjects.
+
+What is the primary purpose of Greek periphrastic constructions in expressing verbal ideas?
+To combine auxiliary verbs with participles or infinitives to express specific tense, voice, or mood combinations more precisely.
+
+What is the difference between periphrastic constructions with εἰμί versus ἔχω in Greek?
+Periphrastic with εἰμί + participle expresses progressive aspect (ἔστιν λύων = he is loosing), while periphrastic with ἔχω + infinitive expresses obligation or necessity (ἔχει λύειν = he must loose).
+
+What is the primary purpose of Greek comparative and superlative constructions?
+To express degrees of comparison between entities or qualities, using specific adjective forms and comparative particles.
+
+What is the difference between synthetic and analytic comparison in Greek?
+Synthetic comparison uses adjective endings (-τερος, -τατος), while analytic comparison uses adverbs (μᾶλλον, μάλιστα) with positive degree adjectives.
+
+What is the primary purpose of Greek correlative constructions in expressing parallel ideas?
+To create balanced parallel structures using paired words or phrases (μὲν...δέ, οὐ μόνον...ἀλλά καί) for rhetorical effect.
+
+What is the difference between μὲν...δέ and οὐ μόνον...ἀλλά καί constructions in Greek?
+Μὲν...δέ creates simple contrast (μὲν...δέ = on one hand...on the other), while οὐ μόνον...ἀλλά καί creates addition/emphasis (not only...but also).
+
+What is the primary purpose of Greek interrogative constructions in asking questions?
+To form various types of questions using specific particles, word order, and verb moods for yes/no questions and information questions.
+
+What is the difference between interrogative particles οὐ and μή in Greek questions?
+Οὐ introduces questions expecting positive answer (οὐ ἔρχεται; = isn't he coming?), while μή introduces questions expecting negative answer or uncertainty (μή ἔρχεται; = is he perhaps not coming?).
+
+What is the primary purpose of Greek negative constructions in expressing negation?
+To negate statements, commands, questions, and conditional clauses using different negative particles for different grammatical contexts.
+
+What is the difference between οὐ and μή in Greek negation?
+Οὐ negates indicative mood statements and factual questions (οὐ ἔρχεται = he is not coming), while μή negates other moods, commands, and indefinite questions (μὴ ἔρχῃ = let him not come).
+
+What is the primary purpose of Greek emphatic constructions in adding emphasis?
+To highlight particular elements through word order, particles, or specific grammatical constructions for rhetorical effect.
+
+What is the difference between emphasis through word order versus particles in Greek?
+Word order emphasis places elements at sentence beginning or end (ἐγώ λέγω = I myself say), while particle emphasis uses words like ἦ, γε, δή.
+
+What is the primary purpose of Greek idiomatic expressions in conveying meaning?
+To express ideas through fixed phrases whose meaning cannot be understood from individual words, requiring cultural and linguistic knowledge.
+
+What is the difference between literal and idiomatic meanings in Greek expressions?
+Literal meanings follow individual word definitions (εἰς τὸν οὐρανόν = into heaven), while idiomatic expressions have contextual meanings (ἐν τῷ κόσμῳ = in the world, not literally in the cosmos).
+
+What is the primary purpose of Greek ellipsis in efficient communication?
+To omit words that can be understood from context, creating more concise and natural expression while maintaining clarity.
+
+What is the difference between simple ellipsis and zeugma in Greek?
+Simple ellipsis omits repeated words (ἔρχομαι καὶ [ἔρχομαι] μαθητεύω = I come and learn), while zeugma uses one word to govern multiple elements with different relationships.
+
+What is the primary purpose of Greek apposition in noun modification?
+To provide additional information or identification for nouns by placing explanatory elements in the same case without conjunctions.
+
+What is the difference between simple apposition and explanatory apposition in Greek?
+Simple apposition provides equivalent identification (Παῦλος, ὁ ἀπόστολος = Paul, the apostle), while explanatory apposition adds descriptive information (Ἰησοῦς, ὁ υἱὸς τοῦ θεοῦ = Jesus, the son of God).
+
+What is the primary purpose of Greek parenthetical expressions in adding information?
+To insert additional thoughts or explanations within sentences without disrupting main clause grammar, often using commas or dashes.
+
+What is the difference between parenthetical clauses and phrases in Greek?
+Parenthetical clauses contain verbs (λέγω γάρ, = for I say), while parenthetical phrases contain only nouns or adjectives (ἔλεγον γάρ, = for they said).
+
+What is the primary purpose of Greek exclamation in expressing emotion?
+To convey strong emotion or emphasis through specific interjections, word order, or grammatical constructions.
+
+What is the difference between interjections and exclamatory word order in Greek?
+Interjections are standalone emotional words (ὦ = oh! ἰδού = behold!), while exclamatory word order rearranges normal sentence patterns for emphasis (ἀγαθὸς ὁ ἄνθρωπος! = good is the man!).
+
+What is the primary purpose of Greek quotation in reporting speech?
+To indicate direct speech within narrative using specific introductory verbs and quotation markers, though ancient Greek used other methods than modern quotation marks.
+
+What is the difference between direct and indirect quotation in Greek?
+Direct quotation reports exact words (λέγει "ἔρχομαι" = he says "I am coming"), while indirect quotation reports content using accusative + infinitive (λέγει ἐρχέσθαι = he says that he is coming).
+
+What is the primary purpose of Greek numerical expressions in counting and quantifying?
+To express exact quantities, ordinal numbers, and distributive numbers using specific forms and constructions for different contexts.
+
+What is the difference between cardinal and ordinal numbers in Greek?
+Cardinal numbers indicate quantity (εἷς, δύο, τρεῖς = one, two, three), while ordinal numbers indicate position (πρῶτος, δεύτερος, τρίτος = first, second, third).
+
+What is the primary purpose of Greek measurement expressions in describing quantity?
+To express precise measurements of distance, weight, time, and other quantities using specific vocabulary and grammatical constructions.
+
+What is the difference between Greek and English measurement expressions?
+Greek often uses genitive case for measurements (στάδιος ἑκατόν = stadium of hundred = hundred stadia), while English uses adjectives or compound forms.
+
+What is the primary purpose of Greek temporal expressions beyond basic time words?
+To express complex temporal relationships using specific constructions for duration, sequence, and frequency of events.
+
+What is the difference between temporal expressions with genitive versus accusative in Greek?
+Genitive temporal expressions indicate point in time (τῇ ἡμέρᾳ = on the day), while accusative indicates duration or extent of time (τρεῖς ἡμέρας = for three days).
+
+This comprehensive Koine Greek grammar deck provides 100 questions covering essential grammatical structures, syntax patterns, and advanced concepts needed for intermediate Greek study and New Testament text analysis.

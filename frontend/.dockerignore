@@ -1,0 +1,9 @@
+node_modules/
+_fresh/
+.git/
+.gitignore
+README.md
+*.md
+.vscode/
+
+deno.lock

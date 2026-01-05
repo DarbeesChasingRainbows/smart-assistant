@@ -1,0 +1,219 @@
+// Botany Plant Ecology & Environmental Botany Deck
+
+What is the primary purpose of plant ecology in botanical sciences?
+To understand plant interactions with environment and other organisms, forming foundation for conservation, ecosystem management, and environmental prediction.
+
+What is the difference between autecology and synecology in plant studies?
+Autecology examines individual species relationships with environment, while synecology studies plant communities and their interactions.
+
+What is the primary purpose of plant communities and vegetation analysis?
+To understand species composition, structure, and dynamics of plant assemblages, revealing patterns of diversity and ecosystem function.
+
+What is the difference between plant communities and ecosystems in ecology?
+Plant communities focus on plant species interactions, while ecosystems include all organisms plus environmental factors and energy flow.
+
+What is the primary purpose of plant population ecology and dynamics?
+To study population size, distribution, and changes over time, understanding factors that regulate plant population growth and decline.
+
+What is the difference between population density and population size in plant ecology?
+Population size is total number of individuals, while density is number per unit area, affecting competition and resource use.
+
+What is the primary purpose of plant competition and facilitation interactions?
+To understand how plants affect each other's growth and survival through resource competition and beneficial interactions.
+
+What is the difference between interspecific and intraspecific competition in plants?
+Interspecific competition occurs between different species, while intraspecific competition occurs within the same species.
+
+What is the primary purpose of plant-herbivore interactions and defenses?
+To understand how plants defend against consumption and how herbivores overcome defenses, coevolving complex ecological relationships.
+
+What is the difference between constitutive and induced plant defenses against herbivory?
+Constitutive defenses are always present, while induced defenses are activated only after herbivore attack.
+
+What is the primary purpose of plant-pollinator relationships and coevolution?
+To understand mutualistic relationships where plants provide rewards and pollinators provide pollen transfer, driving reproductive success and diversity.
+
+What is the difference between specialist and generalist pollinators in plant ecology?
+Specialist pollinators visit few plant species with high efficiency, while generalists visit many species with lower efficiency per visit.
+
+What is the primary purpose of plant seed dispersal mechanisms and strategies?
+To ensure offspring colonization of new areas, reduce competition with parents, and maintain genetic flow across populations.
+
+What is the difference between abiotic and biotic seed dispersal mechanisms?
+Abiotic dispersal uses wind, water, or ballistic mechanisms, while biotic dispersal uses animals for transport.
+
+What is the primary purpose of plant succession and community development?
+To understand how plant communities change over time following disturbances, progressing toward stable climax communities.
+
+What is the difference between primary and secondary succession in plant ecology?
+Primary succession occurs on previously barren substrates, while secondary succession follows disturbance in existing communities.
+
+What is the primary purpose of plant disturbance ecology and resilience?
+To understand how plants respond to and recover from disturbances like fire, floods, and human activities, maintaining ecosystem function.
+
+What is the difference between disturbance intensity and frequency in plant communities?
+Intensity refers to severity of disturbance, while frequency refers to how often disturbances occur, both affecting community composition.
+
+What is the primary purpose of invasive plant species ecology and management?
+To understand how non-native plants spread and impact native ecosystems, developing strategies for prevention and control.
+
+What is the difference between invasive and native plant species characteristics?
+Invasive species typically grow rapidly, reproduce abundantly, and lack natural enemies, while native species evolved in local ecosystems.
+
+What is the primary purpose of plant biodiversity and ecosystem function?
+To understand how species diversity affects ecosystem processes like productivity, stability, and resilience to environmental changes.
+
+What is the difference between species richness and species evenness in biodiversity measurements?
+Richness counts number of species, while evenness measures relative abundance distribution among species.
+
+What is the primary purpose of plant functional traits and ecological strategies?
+To understand how plant characteristics affect survival, growth, and reproduction in different environments, explaining species distributions.
+
+What is the difference between functional traits and morphological traits in plant ecology?
+Functional traits affect ecological performance and fitness, while morphological traits describe physical form without direct ecological implications.
+
+What is the primary purpose of plant life history strategies and evolution?
+To understand how plants allocate resources to growth, reproduction, and survival, evolving strategies for different environments.
+
+What is the difference between r-selected and K-selected plant species?
+r-selected species produce many offspring with little care, while K-selected species produce few offspring with extensive parental investment.
+
+What is the primary purpose of plant phenology and climate change responses?
+To understand how timing of life events responds to climate variations, predicting impacts of environmental change on plant populations.
+
+What is the difference between phenotypic plasticity and genetic adaptation in plant climate responses?
+Plasticity allows individual plants to adjust to conditions, while adaptation involves genetic changes across generations.
+
+What is the primary purpose of plant water relations in environmental contexts?
+To understand how plants obtain, transport, and conserve water in different environments, determining species distributions and ecosystem function.
+
+What is the difference between xerophytes and hydrophytes in water relation adaptations?
+Xerophytes adapt to dry conditions with water conservation, while hydrophytes adapt to aquatic environments with specialized structures.
+
+What is the primary purpose of plant nutrient cycling in ecosystems?
+To understand how plants acquire, use, and return nutrients to environment, maintaining ecosystem productivity and biogeochemical cycles.
+
+What is the difference between nutrient uptake and nutrient return in plant nutrient cycling?
+Uptake acquires nutrients from soil, while return occurs through litterfall, root exudation, and plant decomposition.
+
+What is the primary purpose of plant-soil interactions and rhizosphere ecology?
+To understand how plants modify soil environment and interact with soil microorganisms, affecting nutrient availability and plant health.
+
+What is the difference between rhizosphere and bulk soil in plant ecology?
+Rhizosphere soil is influenced by plant roots and microorganisms, while bulk soil has less biological activity and different properties.
+
+What is the primary purpose of mycorrhizal associations and plant nutrition?
+To understand symbiotic relationships between fungi and plant roots, enhancing nutrient uptake and plant performance in nutrient-poor soils.
+
+What is the difference between ectomycorrhizae and endomycorrhizae in plant-fungal symbiosis?
+Ectomycorrhizae form sheaths around root tips, while endomycorrhizae penetrate root cells, both enhancing nutrient uptake.
+
+What is the primary purpose of nitrogen-fixing plant symbioses and ecosystem fertility?
+To understand how plants partner with bacteria to convert atmospheric nitrogen into usable forms, enriching soil fertility.
+
+What is the difference between rhizobial and actinorhizal nitrogen-fixing symbioses?
+Rhizobial symbioses occur in legume root nodules, while actinorhizal symbioses occur in non-legume woody plants.
+
+What is the primary purpose of plant allelopathy and chemical interactions?
+To understand how plants release chemicals affecting other organisms, influencing competition, succession, and community composition.
+
+What is the difference between allelopathy and competition in plant interactions?
+Allelopathy uses chemical compounds to affect neighbors, while competition involves resource depletion without chemical warfare.
+
+What is the primary purpose of plant stress physiology in ecological contexts?
+To understand how plants cope with environmental stresses like drought, heat, and salinity, determining species survival and distribution.
+
+What is the difference between stress avoidance and stress tolerance in ecological plant physiology?
+Avoidance prevents stress through behavioral or structural adaptations, while tolerance endures stress through physiological mechanisms.
+
+What is the primary purpose of plant adaptations to extreme environments?
+To understand how plants survive in deserts, alpine regions, and other extreme habitats through specialized morphological and physiological traits.
+
+What is the difference between morphological and physiological adaptations in extreme environments?
+Morphological adaptations involve physical structures, while physiological adaptations involve internal processes and biochemical mechanisms.
+
+What is the primary purpose of urban plant ecology and green infrastructure?
+To understand how plants function in cities, providing ecosystem services, improving air quality, and enhancing human well-being.
+
+What is the difference between urban and rural plant ecology?
+Urban ecology deals with fragmented habitats and human impacts, while rural ecology involves more natural landscapes and agricultural systems.
+
+What is the primary purpose of restoration ecology and plant community recovery?
+To understand how to restore damaged ecosystems, reestablish native plant communities, and recover ecosystem functions and services.
+
+What is the difference between passive and active restoration in plant ecology?
+Passive restoration allows natural recovery, while active restoration involves human intervention like planting and soil amendment.
+
+What is the primary purpose of conservation biology and plant species protection?
+To prevent species extinction, maintain genetic diversity, and preserve ecosystem functions essential for human welfare.
+
+What is the difference between ex situ and in situ plant conservation strategies?
+Ex situ conservation protects species outside natural habitats, while in situ conservation protects species in their native environments.
+
+What is the primary purpose of climate change impacts on plant distributions?
+To understand how shifting temperature and precipitation patterns affect plant species ranges, community composition, and ecosystem function.
+
+What is the difference between range shifts and phenological changes in plant climate responses?
+Range shifts involve geographic movement of species, while phenological changes involve timing alterations of life events.
+
+What is the primary purpose of plant-microbe interactions beyond rhizosphere?
+To understand endophytic relationships, pathogen interactions, and beneficial associations affecting plant health and ecosystem function.
+
+What is the difference between pathogenic and beneficial plant-microbe interactions?
+Pathogenic interactions cause disease and harm plants, while beneficial interactions enhance plant growth and stress resistance.
+
+What is the primary purpose of plant-animal mutualisms beyond pollination?
+To understand seed dispersal, protection mutualisms, and nutritional relationships that shape plant communities and ecosystem dynamics.
+
+What is the difference between mutualistic and exploitative plant-animal interactions?
+Mutualisms benefit both partners, while exploitative interactions benefit one party at the other's expense.
+
+What is the primary purpose of landscape ecology and plant spatial patterns?
+To understand how spatial arrangement influences plant communities, species interactions, and ecosystem processes across scales.
+
+What is the difference between patch dynamics and landscape connectivity in plant ecology?
+Patch dynamics examines local community changes, while connectivity studies how patches are linked for species movement.
+
+What is the primary purpose of fire ecology and plant adaptations to burning?
+To understand how plants respond to fire, adapt to burning regimes, and how fire shapes plant communities and ecosystems.
+
+What is the difference between fire-adapted and fire-sensitive plant species?
+Fire-adapted species survive and benefit from burning, while fire-sensitive species are damaged or killed by fire.
+
+What is the primary purpose of wetland plant ecology and hydrological adaptations?
+To understand how plants adapt to saturated soils, low oxygen conditions, and fluctuating water levels in wetland ecosystems.
+
+What is the difference between emergent and submerged wetland plant adaptations?
+Emergent plants adapt to waterlogged soils but aerial growth, while submerged plants adapt to complete aquatic environments.
+
+What is the primary purpose of alpine plant ecology and high-altitude adaptations?
+To understand how plants survive extreme cold, UV radiation, and short growing seasons in mountain environments.
+
+What is the difference between alpine and arctic plant adaptations?
+Alpine plants adapt to mountain conditions with intense UV, while arctic plants adapt to extreme cold and permafrost.
+
+What is the primary purpose of desert plant ecology and water conservation strategies?
+To understand how plants survive extreme water limitation through morphological, physiological, and behavioral adaptations.
+
+What is the difference between succulent and drought-deciduous desert plant strategies?
+Succulents store water in tissues, while drought-deciduous plants avoid drought by dropping leaves during dry periods.
+
+What is the primary purpose of tropical rainforest plant ecology and light competition?
+To understand how plants compete for light in dense canopies, leading to specialized growth forms and diverse strategies.
+
+What is the difference between shade-tolerant and light-demanding tropical plants?
+Shade-tolerant plants grow under low light conditions, while light-demanding plants require high light for growth and reproduction.
+
+What is the primary purpose of grassland plant ecology and disturbance regimes?
+To understand how grasses and forbs adapt to grazing, fire, and climate variability in grassland ecosystems.
+
+What is the difference between C3 and C4 grass adaptations in grassland ecology?
+C3 grasses are more efficient in cool, moist conditions, while C4 grasses are more efficient in hot, dry environments.
+
+What is the primary purpose of island biogeography and plant colonization?
+To understand how plants colonize islands, evolve in isolation, and how island size and distance affect species diversity.
+
+What is the difference between island and mainland plant diversity patterns?
+Islands typically have fewer species but higher endemism, while mainland areas have higher species richness but lower endemism rates.
+
+This comprehensive plant ecology and environmental botany deck provides 100 questions covering essential ecological interactions, environmental adaptations, and ecosystem processes needed for understanding plant relationships with environment and other organisms.

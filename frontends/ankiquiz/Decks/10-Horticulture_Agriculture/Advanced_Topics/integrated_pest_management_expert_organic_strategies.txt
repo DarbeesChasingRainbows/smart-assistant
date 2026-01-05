@@ -1,0 +1,114 @@
+// Integrated Pest Management Expert - Organic Strategies & Ecological Balance
+
+Scenario: An organic vegetable farm in Zone 7a is experiencing severe aphid infestations on kale and broccoli, with honeydew leading to sooty mold growth. The farm has beneficial insects present but populations are insufficient. Weather has been mild (65-75°F) with low rainfall, and neighboring farms use conventional pesticides.
+
+Question: Which THREE interventions provide the most effective immediate and long-term aphid management? (Select ALL that apply)
+A) Release lady beetles and lacewings at recommended rates
+B) Apply insecticidal soap spray to affected areas
+C) Plant trap crops (nasturtiums) around field borders
+D) Install reflective mulch to repel aphids
+E) Apply neem oil as systemic insecticide
+F) Introduce banker plants with alternative aphid species
+
+Answer: A, C, F
+
+Rationale:
+- A) Correct because releasing beneficial predators provides immediate control while establishing long-term biological control
+- C) Correct because trap crops lure aphids away from cash crops, concentrating them for easier management
+- F) Correct because banker plants (like barley with bird cherry-oat aphid) sustain beneficial insect populations when crop aphids are scarce
+- B) Incorrect because insecticidal soap provides only temporary control and can harm beneficial insects if not applied carefully
+- D) Incorrect because reflective mulch is expensive and effectiveness diminishes as plants grow and cover the mulch
+- E) Incorrect because neem oil is not truly systemic and repeated applications can harm beneficial insects
+
+Scenario: A greenhouse tomato operation in Zone 6b is struggling with spider mite infestations, particularly two-spotted spider mites. The greenhouse has temperature 75-85°F, low humidity (30-40%), and plants are showing stippling and webbing on lower leaves. Previous chemical applications have led to resistance.
+
+Question: Rank these management approaches from MOST to LEAST effective for spider mite control in greenhouse conditions:
+1) Release predatory mites (Phytoseiulus persimilis) at 1:5 predator:prey ratio
+2) Increase humidity to 60-70% through misting systems
+3) Apply horticultural oil with thorough coverage
+4) Remove and destroy heavily infested plant material
+
+Answer: 1) Release predatory mites (Phytoseiulus persimilis) at 1:5 predator:prey ratio, 2) Increase humidity to 60-70% through misting systems, 3) Apply horticultural oil with thorough coverage, 4) Remove and destroy heavily infested plant material
+
+Rationale:
+1) Predatory mites are highly effective, reproduce faster than spider mites, and provide sustainable control in greenhouse environments
+2) Increased humidity creates conditions unfavorable for spider mites while benefiting predatory mites
+3) Horticultural oil provides contact control but can affect beneficials and requires repeat applications
+4) Plant removal prevents spread but is labor-intensive and reduces yield
+
+Scenario: A community garden in Zone 8a is experiencing Mexican bean beetle damage on pole beans, with adults feeding on leaves and larvae skeletonizing foliage. The garden has diverse plantings but bean beetles are causing significant defoliation. Gardeners prefer non-chemical methods.
+
+Question: Which TWO cultural and biological control methods provide the most sustainable management? (Select TWO)
+A) Hand-pick adults and eggs regularly
+B) Plant early-maturing bean varieties
+C) Install row covers during peak beetle activity
+D) Introduce parasitic wasps (Pediobius foveolatus)
+E) Practice intercropping with repellent plants
+F) Use trap crops with delayed planting
+
+Answer: B, D
+
+Rationale:
+- B) Correct because early-maturing varieties complete production before peak beetle populations, avoiding significant damage
+- D) Correct because Pediobius foveolatus specifically parasitizes Mexican bean beetle larvae and provides effective biological control
+- Hand-picking (A) is labor-intensive for community garden settings
+- Row covers (C) can be effective but limit pollination and are impractical for pole beans
+- Intercropping (E) has limited effectiveness against this specific pest
+- Trap crops (F) may actually concentrate pests near the main crop
+
+Scenario: An organic orchard in Zone 5b has codling moth damage in apples with wormy fruit and stings on fruit surface. The orchard uses pheromone traps but still experiences 15% fruit damage. The orchard has diverse plantings and maintains good sanitation but needs additional control measures.
+
+Question: Which integrated approach provides the most effective codling moth management while maintaining organic certification?
+A) Increase pheromone trap density to 5 traps per acre
+B) Apply granulosis virus (CpGV) during egg hatch periods
+C) Install trunk banding for larval trapping
+D) Use kaolin clay particle film as repellent
+E) Implement sanitation with prompt fruit drop removal
+F) Release Trichogramma wasps for egg parasitism
+
+Answer: B) Apply granulosis virus (CpGV) during egg hatch periods
+
+Rationale:
+- Granulosis virus is highly specific to codling moth, organic-approved, and provides excellent control when timed correctly
+- The virus infects larvae after egg hatch, preventing fruit damage before it occurs
+- While other methods (traps, banding, sanitation) are valuable components, CpGV provides the most effective direct control
+- Kaolin clay (D) is helpful but less effective than viral control
+- Trichogramma releases (F) can be effective but timing and establishment are challenging
+
+Scenario: A landscape installation in Zone 6b is experiencing scale insect infestations on euonymus and holly, with honeydew, sooty mold, and branch dieback. The property has mature trees and shrubs with limited access for spraying, and the client prefers minimal chemical intervention.
+
+Question: Which THREE management strategies provide the most effective scale control with minimal environmental impact? (Select ALL that apply)
+A) Apply horticultural oil during dormant season
+B) Release predatory insects (lady beetles, lacewings)
+C) Use systemic insecticides for season-long control
+D) Prune out heavily infested branches
+E) Apply ant control to reduce farming of scale insects
+F) Improve plant health through proper fertilization
+
+Answer: A, D, E
+
+Rationale:
+- A) Correct because dormant oil suffocates overwintering scale eggs and adults before active growth begins
+- D) Correct because removing heavily infested branches reduces overall population and improves spray coverage
+- E) Correct because ants protect scale insects from predators and move them to new locations; ant control disrupts this relationship
+- B) Incorrect because beneficial insects have limited effectiveness against armored scales due to protective covering
+- C) Incorrect because systemic insecticides contradict the client's preference for minimal chemical intervention
+- F) Incorrect because fertilization can actually worsen scale problems by promoting succulent growth
+
+Scenario: A vegetable farm in Zone 7a is struggling with cucumber beetles and bacterial wilt transmission in cucurbits. The beetles appear early in the season and continue throughout the growing period, causing both direct feeding damage and disease transmission.
+
+Question: Which management sequence provides the most comprehensive protection against both beetles and bacterial wilt?
+A) Apply row covers at planting, remove during flowering, use trap crops
+B) Use kaolin clay from planting, apply beneficial nematodes to soil
+C) Plant resistant varieties, use beneficial insects, practice crop rotation
+D) Apply pyrethroids at beetle emergence, use reflective mulch, remove diseased plants
+
+Answer: A) Apply row covers at planting, remove during flowering, use trap crops
+
+Rationale:
+- Row covers provide physical protection during critical early growth when beetles first appear and plants are most vulnerable
+- Removing covers during flowering allows pollination while plants are more mature and less susceptible to wilt transmission
+- Trap crops (blue Hubbard squash) lure beetles away from main crops, concentrating them for easier management
+- This sequence addresses both vector control and disease transmission while maintaining organic certification
+
+This expert-level IPM deck emphasizes ecological decision-making, integrated strategies, and sustainable pest management appropriate for professional certification and advanced practice.

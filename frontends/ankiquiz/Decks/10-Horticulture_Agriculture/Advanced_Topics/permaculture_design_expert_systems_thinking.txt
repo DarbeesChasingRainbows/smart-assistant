@@ -1,0 +1,114 @@
+// Permaculture Design Expert - Systems Thinking & Complex Design
+
+Scenario: A 10-acre property in Zone 5b features a south-facing slope with clay-loam soil, a seasonal creek running east-west, and existing deciduous forest on the north boundary. The owners want to create a regenerative homestead with market garden, livestock, and food forest while maximizing water conservation.
+
+Question: Which THREE elements provide the highest return on investment for the first year of implementation? (Select ALL that apply)
+A) Install swales and contour planting on the south slope
+B) Establish keyline plowing along the primary contours
+C) Create a chinampa-style system along the seasonal creek
+D) Build a greenhouse for year-round production
+E) Develop intensive zone 1 garden beds with sheet mulching
+F) Implement holistic planned grazing with temporary fencing
+
+Answer: A, E, F
+
+Rationale:
+- A) Correct because swales immediately capture and store rainwater, reducing erosion and establishing the foundation for all subsequent plantings
+- E) Correct because zone 1 intensive gardens provide immediate food production and income while building soil through sheet mulching
+- F) Correct because holistic grazing improves pasture health, builds soil organic matter rapidly, and requires minimal infrastructure investment
+- B) Incorrect because keyline plowing requires expensive equipment and provides benefits similar to swales at higher cost
+- C) Incorrect because chinampas are labor-intensive and better suited for tropical climates or permanent water bodies
+- D) Incorrect because high capital cost doesn't justify first-year implementation when outdoor production is possible
+
+Scenario: A permaculture designer is working with a community garden in Zone 8a that experiences extreme heat (100°F+ summers) and limited water access. The site is 1 acre of degraded urban soil with full sun exposure and no existing infrastructure.
+
+Question: Rank these strategies from MOST to LEAST effective for climate resilience:
+1) Install shade structures with productive vines
+2) Create deep mulch systems with woody biomass
+3) Design sunken beds and wicking gardens
+4) Plant drought-adapted perennial polycultures
+
+Answer: 1) Install shade structures with productive vines, 2) Create deep mulch systems with woody biomass, 3) Design sunken beds and wicking gardens, 4) Plant drought-adapted perennial polycultures
+
+Rationale:
+1) Shade structures provide immediate temperature reduction (10-15°F) while producing food (grapes, kiwi, passionfruit) - critical for extreme heat
+2) Deep mulch (12-18 inches) reduces soil temperature, retains moisture, and builds soil structure - essential for water conservation
+3) Sunken beds and wicking gardens are effective but require significant earthmoving and infrastructure investment
+4) Perennial polycultures are excellent long-term but take 2-3 years to establish and provide immediate climate benefits
+
+Scenario: A rural property in Zone 6b has multiple challenges: poor drainage in low areas, rapid erosion on slopes, and depleted soils from conventional agriculture. The owner has limited budget but access to a small tractor and basic equipment.
+
+Question: Which TWO interventions provide the most comprehensive solutions addressing all three problems simultaneously? (Select TWO)
+A) Install drainage tiles in low areas
+B) Create contour berms with woody debris
+C) Establish cover crop rotations across entire property
+D) Build check dams and retention ponds
+E) Apply compost and biochar to depleted areas
+F) Design alley cropping with nitrogen-fixing trees
+
+Answer: B, C
+
+Rationale:
+- B) Correct because contour berms with woody debris (hugelkultur-style) slow water on slopes, prevent erosion, improve drainage in low areas, and build long-term soil fertility
+- C) Correct because cover crops address soil depletion, prevent erosion on slopes, improve water infiltration, and require minimal investment
+- A) Incorrect because drainage tiles only address low areas and don't help slopes or soil building
+- D) Incorrect because check dams are expensive and don't address soil depletion
+- E) Incorrect because compost/biochar are expensive for large areas and don't address erosion
+- F) Incorrect because alley cropping is excellent but requires significant time and investment for establishment
+
+Scenario: A suburban lot (0.25 acre) in Zone 7a needs to produce maximum food while maintaining neighborhood aesthetics. The site has good sun, average soil, and concerned neighbors about "messy" gardens.
+
+Question: Which design approach balances productivity with social acceptance while following permaculture principles?
+A) Formal layout with edible landscaping and hidden food production
+B) Forest garden style with natural appearance and maximum diversity
+C) Traditional row gardens with intensive management
+D) Integrated design with aesthetic elements and productive zones
+
+Answer: D) Integrated design with aesthetic elements and productive zones
+
+Rationale:
+- Integrated design uses permaculture zoning while maintaining visual appeal through thoughtful plant selection, pathways, and structures
+- Provides high productivity through zone 1-2 intensive areas while using zone 3 for less visible perennial systems
+- Incorporates aesthetic elements like arbors, decorative edibles, and well-maintained pathways for neighbor acceptance
+- A) Incorrect because formal layout often sacrifices ecological relationships and diversity
+- B) Incorrect because natural appearance may violate neighborhood norms despite ecological benefits
+- C) Incorrect because traditional rows don't maximize vertical space or perennial relationships
+
+Scenario: A coastal property in Zone 9a experiences salt spray, high winds, and sandy soil. The owner wants to create a resilient food system that can withstand hurricane conditions while providing year-round harvest.
+
+Question: Which THREE strategies provide the most comprehensive resilience to coastal challenges? (Select ALL that apply)
+A) Install windbreaks of salt-tolerant trees and shrubs
+B) Build raised beds with imported topsoil and compost
+C) Create swales and contour earthworks for water management
+D) Establish salt-tolerant perennial polycultures
+E) Design protected microclimates with structures
+F) Implement intensive annual vegetable production
+
+Answer: A, D, E
+
+Rationale:
+- A) Correct because multi-layered windbreaks reduce wind damage, salt spray, and create protected microclimates for other crops
+- D) Correct because salt-tolerant perennials (sea kale, beach plum, saltbush) provide reliable production with minimal maintenance
+- E) Correct because protected structures (greenhouses, shade houses) enable production during extreme weather events
+- B) Incorrect because raised beds are vulnerable to flooding and don't address wind or salt issues
+- C) Incorrect because sandy soils drain too quickly for swales to be effective; contour planting is better
+- F) Incorrect because annuals are most vulnerable to extreme weather and require constant replacement
+
+Scenario: A community food forest project in Zone 5b has limited funding but access to municipal green waste and volunteer labor. The site is 2 acres of lawn with compacted soil and full sun exposure.
+
+Question: Which approach maximizes ecosystem services while minimizing costs?
+A) Purchase and install mature fruit trees
+B) Sheet mulch entire area with municipal green waste
+C) Plant fast-growing nitrogen fixers as nursery crops
+D) Create guild-based planting with volunteer propagation
+E) Install irrigation system before planting
+
+Answer: D) Create guild-based planting with volunteer propagation
+
+Rationale:
+- Guild-based planting creates self-maintaining plant communities that reduce long-term maintenance
+- Volunteer propagation eliminates plant costs while building community ownership
+- Sheet mulch (B) is good but labor-intensive; nitrogen fixers (C) are important but insufficient alone
+- Mature trees (A) are expensive and irrigation (E) can be phased in as needed
+
+This expert-level permaculture design deck emphasizes systems thinking, multiple constraint analysis, and integrated solutions appropriate for professional design certification and advanced practice.

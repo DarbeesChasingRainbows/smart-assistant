@@ -1,0 +1,363 @@
+// Linux Networking & Security Deck
+
+What is the primary purpose of network interface configuration in Linux?
+To manage network adapters, assign IP addresses, and control network connectivity for system communication and internet access.
+
+What is the basic command to view network interface configuration?
+"ip addr show" or "ifconfig" which displays all network interfaces with their IP addresses, MAC addresses, and status.
+
+What is the difference between ip and ifconfig commands?
+ip is the modern tool from iproute2 package with comprehensive features, while ifconfig is the legacy tool being deprecated.
+
+What is the primary purpose of the ip command in Linux networking?
+To manage network interfaces, routing tables, addresses, and network policy routing with advanced features.
+
+What is the basic command to configure an IP address on an interface?
+"sudo ip addr add 192.168.1.100/24 dev eth0" which assigns the IP address to the specified network interface.
+
+What is the difference between temporary and permanent IP configuration?
+Temporary configuration lasts until reboot, while permanent configuration persists through system restarts via configuration files.
+
+What is the primary purpose of network interface activation and deactivation?
+To control when network interfaces are available for traffic, enabling maintenance and troubleshooting without rebooting.
+
+What is the basic command to activate a network interface?
+"sudo ip link set eth0 up" which brings the specified interface up, or "sudo ip link set eth0 down" to deactivate.
+
+What is the difference between link up/down and address configuration?
+Link status controls interface availability, while address configuration provides IP addressing for network communication.
+
+What is the primary purpose of DHCP client configuration in Linux?
+To automatically obtain IP addresses, subnet masks, gateways, and DNS servers from DHCP servers on the network.
+
+What is the basic command to request DHCP configuration?
+"sudo dhclient eth0" which requests DHCP configuration for the specified interface, or "systemctl start dhclient" for service-based.
+
+What is the difference between dhclient and dhcpcd DHCP clients?
+dhclient is the ISC DHCP client with extensive features, while dhcpcd is a lightweight alternative focused on basic functionality.
+
+What is the primary purpose of static IP configuration in Linux?
+To assign fixed IP addresses for servers, network infrastructure, and systems requiring consistent network identification.
+
+What is the basic command to configure static IP permanently?
+Edit /etc/network/interfaces (Debian) or /etc/sysconfig/network-scripts/ifcfg-eth0 (RHEL) with static IP configuration.
+
+What is the difference between static and dynamic IP addressing?
+Static addresses are manually configured and persistent, while dynamic addresses are assigned automatically by DHCP.
+
+What is the primary purpose of network routing in Linux?
+To control how network packets are forwarded between interfaces and networks, enabling communication across multiple network segments.
+
+What is the basic command to view routing table?
+"ip route show" or "route -n" which displays the current routing table with destinations, gateways, and interfaces.
+
+What is the difference between routing tables and routing rules?
+Tables contain routes for packet forwarding, while rules select which tables to use based on packet characteristics.
+
+What is the primary purpose of default gateway configuration?
+To specify the route for network traffic destined for networks not explicitly defined in the routing table.
+
+What is the basic command to add a default route?
+"sudo ip route add default via 192.168.1.1" which adds a default gateway for unspecified destinations.
+
+What is the difference between default routes and specific routes?
+Default routes handle unknown destinations, while specific routes handle traffic for particular networks or hosts.
+
+What is the primary purpose of network interface bonding in Linux?
+To combine multiple network interfaces into a single logical interface for increased bandwidth and redundancy.
+
+What is the basic command to configure network bonding?
+Create bond interface in /etc/network/interfaces with "bond-slaves eth0 eth1" and appropriate bonding options.
+
+What is the difference between active-backup and load-balancing bonding modes?
+Active-backup uses one interface at a time for redundancy, while load-balancing distributes traffic across interfaces.
+
+What is the primary purpose of VLAN configuration in Linux?
+To create virtual LANs for network segmentation, security, and traffic organization on physical network interfaces.
+
+What is the basic command to create a VLAN interface?
+"sudo ip link add link eth0 name eth0.100 type vlan id 100" which creates VLAN interface with ID 100.
+
+What is the difference between VLAN tagging and trunk ports?
+VLAN tagging adds VLAN identifiers to frames, while trunk ports carry multiple VLAN traffic between switches.
+
+What is the primary purpose of network bridge configuration in Linux?
+To connect multiple network segments at Layer 2, enabling transparent bridging and virtual machine networking.
+
+What is the basic command to create a network bridge?
+"sudo ip link add name br0 type bridge" which creates a bridge interface, then add interfaces with "ip link set eth0 master br0".
+
+What is the difference between bridging and routing?
+Bridging operates at Layer 2 forwarding based on MAC addresses, while routing operates at Layer 3 using IP addresses.
+
+What is the primary purpose of DNS client configuration in Linux?
+To enable domain name resolution for converting human-readable hostnames to IP addresses for network communication.
+
+What is the basic command to test DNS resolution?
+"nslookup hostname" or "dig hostname" which queries DNS servers to resolve hostnames to IP addresses.
+
+What is the difference between DNS resolution and /etc/hosts lookup?
+DNS resolution queries network DNS servers, while /etc/hosts provides local static hostname mappings checked first.
+
+What is the primary purpose of the /etc/resolv.conf file?
+To configure DNS resolver settings including nameservers, search domains, and resolution options.
+
+What is the basic command to configure DNS servers?
+"echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf" which adds Google DNS as nameserver.
+
+What is the difference between nameservers and search domains in resolv.conf?
+Nameservers are DNS servers to query, while search domains are automatically appended to unqualified hostnames.
+
+What is the primary purpose of network debugging tools in Linux?
+To diagnose network connectivity issues, measure performance, and analyze network traffic for troubleshooting.
+
+What is the basic command to test network connectivity?
+"ping hostname" which sends ICMP echo requests to test connectivity and measure round-trip times.
+
+What is the difference between ping and traceroute network testing?
+ping tests basic connectivity and latency to a single host, while traceroute maps the network path showing all intermediate hops.
+
+What is the primary purpose of the netstat command in Linux?
+To display network connections, routing tables, interface statistics, and network protocol information.
+
+What is the basic command to view active network connections?
+"netstat -tulnp" which shows TCP and UDP connections with process information and port numbers.
+
+What is the difference between netstat and ss commands?
+netstat is the traditional network statistics tool, while ss is the modern replacement with better performance and more features.
+
+What is the primary purpose of the ss command in modern Linux?
+To display socket statistics with detailed information about TCP, UDP, and UNIX domain sockets.
+
+What is the basic command to view listening sockets?
+"ss -tulnp" which displays listening TCP and UDP sockets with process information.
+
+What is the difference between LISTEN and ESTABLISHED socket states?
+LISTEN sockets are waiting for incoming connections, while ESTABLISHED sockets represent active connections.
+
+What is the primary purpose of network packet capture in Linux?
+To capture and analyze network traffic for debugging, security monitoring, and performance analysis.
+
+What is the basic command to capture network packets?
+"sudo tcpdump -i eth0" which captures packets on the specified interface, or "tcpdump host 192.168.1.1" for specific host.
+
+What is the difference between tcpdump and Wireshark packet analysis?
+tcpdump provides command-line packet capture, while Wireshark offers graphical analysis with advanced decoding.
+
+What is the primary purpose of network performance monitoring?
+To measure bandwidth usage, latency, and connection quality to optimize network performance and identify bottlenecks.
+
+What is the basic command to monitor network bandwidth?
+"iftop -i eth0" which displays real-time network bandwidth usage by connection, or "nethogs" for per-process usage.
+
+What is the difference between iftop and nethogs monitoring?
+iftop shows bandwidth by network connection, while nethogs displays bandwidth usage by individual processes.
+
+What is the primary purpose of firewall configuration in Linux?
+To control network traffic based on rules, protecting systems from unauthorized access and managing network security policies.
+
+What is the basic command to view iptables firewall rules?
+"sudo iptables -L -v -n" which displays all firewall rules with verbose output and numeric addresses.
+
+What is the difference between iptables and nftables firewalls?
+iptables uses legacy rule matching with separate tables, while nftables provides unified framework with better performance.
+
+What is the primary purpose of iptables chains in Linux?
+To organize firewall rules into processing groups (INPUT, FORWARD, OUTPUT) that determine when rules are evaluated.
+
+What is the basic command to add an iptables rule?
+"sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT" which adds a rule to accept SSH traffic in the INPUT chain.
+
+What is the difference between ACCEPT, DROP, and REJECT targets?
+ACCEPT allows packets through, DROP silently discards them, while REJECT discards and sends an error response.
+
+What is the primary purpose of iptables rule matching?
+To evaluate network packets against criteria like source/destination IP, ports, protocols, and connection states.
+
+What is the basic command to block traffic with iptables?
+"sudo iptables -A INPUT -s 192.168.1.100 -j DROP" which blocks all traffic from the specified source IP.
+
+What is the difference between source and destination matching in iptables?
+Source matching filters based on packet origin, while destination matching filters based on packet destination.
+
+What is the primary purpose of connection tracking in iptables?
+To maintain state information about network connections for stateful firewalling and advanced rule matching.
+
+What is the basic command to enable connection tracking?
+"sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT" which allows established connections.
+
+What is the difference between stateful and stateless firewalls?
+Stateful firewalls track connection state and context, while stateless firewalls evaluate each packet independently.
+
+What is the primary purpose of NAT (Network Address Translation) in Linux?
+To modify network packet source or destination addresses, enabling internet sharing and network address conservation.
+
+What is the basic command to configure NAT with iptables?
+"sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE" which enables NAT masquerading for internet sharing.
+
+What is the difference between MASQUERADE and SNAT in NAT?
+MASQUERADE automatically uses interface IP, while SNAT uses specified static IP address for translation.
+
+What is the primary purpose of port forwarding in Linux?
+To redirect network traffic from one port to another, enabling service access through different ports or hosts.
+
+What is the basic command to configure port forwarding?
+"sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80" which forwards port 8080 to 80.
+
+What is the difference between DNAT and REDIRECT in port forwarding?
+DNAT changes destination IP and port, while REDIRECT changes only destination port to localhost.
+
+What is the primary purpose of the ufw firewall in Ubuntu?
+To provide a user-friendly interface for managing iptables firewall rules with simplified syntax and common configurations.
+
+What is the basic command to enable ufw firewall?
+"sudo ufw enable" which activates the Uncomplicated Firewall with default deny policy.
+
+What is the difference between ufw allow and ufw deny rules?
+allow rules permit specified traffic patterns, while deny rules block specified traffic according to firewall policy.
+
+What is the primary purpose of firewall logging in Linux?
+To record blocked and allowed traffic for security monitoring, troubleshooting, and audit trail creation.
+
+What is the basic command to enable firewall logging?
+"sudo iptables -A INPUT -j LOG --log-prefix 'FIREWALL: '" which logs all INPUT chain traffic with custom prefix.
+
+What is the difference between logging and dropping packets?
+Logging records packet information for analysis, while dropping silently discards packets without recording.
+
+What is the primary purpose of SELinux in Linux security?
+To provide mandatory access control (MAC) that enforces security policies independent of traditional Unix permissions.
+
+What is the basic command to check SELinux status?
+"sestatus" which displays SELinux status, mode, and policy information, or "getenforce" for current mode.
+
+What is the difference between SELinux enforcing and permissive modes?
+Enforcing mode actively blocks policy violations, while permissive mode logs violations but doesn't block access.
+
+What is the primary purpose of SELinux contexts in Linux?
+To label files, processes, and network ports with security contexts that determine access rights through security policies.
+
+What is the basic command to view SELinux context?
+"ls -Z filename" which displays SELinux context along with file permissions and ownership.
+
+What is the difference between file and process SELinux contexts?
+File contexts label filesystem objects, while process contexts label running programs for access control decisions.
+
+What is the primary purpose of SELinux policy management?
+To define rules that control how processes with different contexts can access files, ports, and other system resources.
+
+What is the basic command to manage SELinux booleans?
+"getsebool -a" which displays all SELinux booleans, or "setsebool -P httpd_can_network_connect 1" to enable boolean.
+
+What is the difference between SELinux booleans and context changes?
+Booleans toggle policy behaviors globally, while context changes affect individual objects.
+
+What is the primary purpose of AppArmor in Linux security?
+To provide mandatory access control through profile-based confinement that restricts what applications can do.
+
+What is the basic command to check AppArmor status?
+"sudo apparmor_status" which displays loaded profiles and their enforcement status.
+
+What is the difference between AppArmor enforce and complain modes?
+Enforce mode actively restricts application behavior, while complain mode logs violations without blocking.
+
+What is the primary purpose of AppArmor profiles?
+To define security policies that specify which files, capabilities, and network access applications may use.
+
+What is the basic command to manage AppArmor profiles?
+"sudo aa-complain /path/to/profile" which switches profile to complain mode, or "aa-enforce" for enforce mode.
+
+What is the difference between AppArmor and SELinux security models?
+AppArmor uses path-based profiles focused on applications, while SELinux uses label-based policies for comprehensive system control.
+
+What is the primary purpose of SSH security configuration in Linux?
+To secure remote access through encryption, authentication controls, and connection security policies.
+
+What is the basic command to configure SSH security?
+Edit /etc/ssh/sshd_config to set "PermitRootLogin no", "PasswordAuthentication no", and "PubkeyAuthentication yes".
+
+What is the difference between password and key-based SSH authentication?
+Password authentication uses user passwords, while key-based authentication uses cryptographic key pairs for better security.
+
+What is the primary purpose of SSH key management in Linux?
+To provide secure authentication without passwords using public/private key pairs for automated and secure access.
+
+What is the basic command to generate SSH keys?
+"ssh-keygen -t rsa -b 4096" which generates RSA key pair, or "ssh-keygen -t ed25519" for modern elliptic curve keys.
+
+What is the difference between RSA and Ed25519 SSH keys?
+RSA keys are traditional with larger sizes, while Ed25519 keys are modern, smaller, and provide better security.
+
+What is the primary purpose of fail2ban in Linux security?
+To protect against brute force attacks by automatically blocking IP addresses after multiple failed authentication attempts.
+
+What is the basic command to configure fail2ban?
+Edit /etc/fail2ban/jail.local to set "enabled = true", "maxretry = 3", and "bantime = 3600" for SSH protection.
+
+What is the difference between fail2ban and iptables blocking?
+fail2ban automatically blocks based on log analysis, while iptables requires manual rule configuration.
+
+What is the primary purpose of intrusion detection systems in Linux?
+To monitor system activities and detect suspicious behavior or security breaches through log analysis and file integrity checking.
+
+What is the basic command to configure AIDE intrusion detection?
+"sudo aide --init" which initializes the AIDE database, then "sudo aide --check" to run integrity checks.
+
+What is the difference between host-based and network-based intrusion detection?
+Host-based monitors individual system activities, while network-based monitors traffic across the network.
+
+What is the primary purpose of system hardening in Linux?
+To reduce attack surface and improve security through configuration changes, service removal, and security policy implementation.
+
+What is the basic command to harden SSH configuration?
+Set "Protocol 2", "PermitRootLogin no", "PasswordAuthentication no" in /etc/ssh/sshd_config for secure SSH access.
+
+What is the difference between system hardening and application hardening?
+System hardening secures the operating system foundation, while application hardening secures specific software services.
+
+What is the primary purpose of security auditing in Linux?
+To assess system security posture, identify vulnerabilities, and verify compliance with security policies and standards.
+
+What is the basic command to perform security audit?
+"sudo auditctl -w /etc/passwd -p wa -k passwd_changes" which audits changes to the password file.
+
+What is the difference between security auditing and vulnerability scanning?
+Auditing monitors system activities and changes, while scanning searches for known vulnerabilities and misconfigurations.
+
+What is the primary purpose of log management in Linux security?
+To collect, analyze, and retain system logs for security monitoring, incident response, and compliance requirements.
+
+What is the basic command to configure log rotation?
+Edit /etc/logrotate.conf to set rotation frequency, retention periods, and compression options for log files.
+
+What is the difference between log rotation and log aggregation?
+Rotation manages individual system logs locally, while aggregation collects logs from multiple systems centrally.
+
+What is the primary purpose of network security monitoring in Linux?
+To detect and analyze network-based attacks, unauthorized access attempts, and anomalous traffic patterns.
+
+What is the basic command to monitor network security?
+"sudo tcpdump -i eth0 port 22" which captures SSH traffic for security analysis, or "sudo fail2ban-client status" for ban monitoring.
+
+What is the difference between intrusion detection and prevention systems?
+Detection systems monitor and alert on security events, while prevention systems actively block malicious activities.
+
+What is the primary purpose of certificate management in Linux?
+To manage SSL/TLS certificates for secure communications, authentication, and encrypted network services.
+
+What is the basic command to generate SSL certificates?
+"openssl req -new -x509 -days 365 -nodes -out cert.pem -keyout key.pem" which generates self-signed certificate.
+
+What is the difference between self-signed and CA-signed certificates?
+Self-signed certificates are generated locally, while CA-signed certificates are validated by trusted certificate authorities.
+
+What is the primary purpose of kernel security modules in Linux?
+To provide additional security features like access control, sandboxing, and exploit protection at the kernel level.
+
+What is the basic command to enable kernel security features?
+Set "kernel.randomize_va_space = 2" in /etc/sysctl.conf for address space layout randomization (ASLR).
+
+What is the difference between kernel security and userspace security?
+Kernel security operates at the system level with low-level protections, while userspace security focuses on applications and user access.
+
+This comprehensive Linux networking and security deck provides 150 questions covering essential network configuration, security hardening, and protection mechanisms needed for secure Linux system administration.

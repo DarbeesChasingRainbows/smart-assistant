@@ -1,0 +1,81 @@
+// Network Security Intermediate - Protocols & Defense Mechanisms
+
+What is the primary difference between TCP and UDP from a security perspective?
+TCP provides reliable, connection-oriented communication with built-in error checking and flow control, while UDP offers faster, connectionless communication without reliability guarantees, making UDP more vulnerable to certain attacks but harder to intercept.
+
+What is the most effective way to prevent ARP spoofing attacks on a local network?
+Implement Dynamic ARP Inspection (DAI) combined with DHCP snooping and port security on switches to validate ARP packets and bind IP addresses to MAC addresses.
+
+What is the primary purpose of a firewall in network security architecture?
+To monitor and control incoming and outgoing network traffic based on predetermined security rules, acting as a barrier between trusted internal networks and untrusted external networks.
+
+What is the difference between stateful and stateless firewalls?
+Stateful firewalls maintain context about active connections and make decisions based on connection state, while stateless firewalls filter packets based solely on individual packet headers without connection awareness.
+
+What is the most critical security consideration when implementing VPNs?
+Using strong encryption protocols (AES-256) with proper certificate management and multi-factor authentication to prevent man-in-the-middle attacks and unauthorized access.
+
+What is the primary function of an Intrusion Detection System (IDS)?
+To monitor network traffic for suspicious activity or policy violations and generate alerts when potential threats are detected.
+
+What is the difference between signature-based and anomaly-based IDS?
+Signature-based IDS detects known threats using predefined patterns, while anomaly-based IDS identifies unusual behavior that deviates from established normal baselines.
+
+What is the most effective method to prevent unauthorized wireless network access?
+Implement WPA3 encryption with strong passwords, disable WPS, use MAC address filtering, and regularly monitor for rogue access points.
+
+What is the primary purpose of network segmentation in security?
+To divide a network into smaller, isolated segments to contain breaches, limit lateral movement, and apply appropriate security controls to different areas.
+
+What is the most critical component of a secure network design?
+Defense in depth - implementing multiple layers of security controls so that if one layer fails, others continue to provide protection.
+
+What is the difference between a proxy server and a reverse proxy?
+A proxy server forwards client requests to the internet, while a reverse proxy forwards internet requests to internal servers, hiding server identities and providing load balancing.
+
+What is the most effective way to prevent DNS amplification attacks?
+Implement DNS response rate limiting, use recursion restrictions, and configure DNS servers to reject queries from unauthorized sources.
+
+What is the primary security benefit of using VLANs?
+VLANs logically separate network traffic at Layer 2, preventing broadcast storms and containing potential security breaches within specific network segments.
+
+What is the most critical consideration when configuring network access control (NAC)?
+Implementing proper authentication and authorization before granting network access, combined with continuous monitoring and automated remediation for policy violations.
+
+What is the difference between symmetric and asymmetric encryption in network communications?
+Symmetric encryption uses the same key for both encryption and decryption (faster but requires secure key exchange), while asymmetric encryption uses public/private key pairs (slower but enables secure key exchange).
+
+What is the most effective method to prevent man-in-the-middle attacks on wireless networks?
+Implement certificate-based authentication, use encrypted protocols (HTTPS, SSH), and validate server certificates to prevent session hijacking.
+
+What is the primary purpose of a Demilitarized Zone (DMZ) in network architecture?
+To create a buffer zone between the internal trusted network and external untrusted networks, typically housing public-facing services like web servers.
+
+What is the most critical security consideration for IoT device deployment?
+Implementing network isolation, strong authentication, regular firmware updates, and monitoring for anomalous behavior to prevent device compromise.
+
+What is the difference between network-based and host-based intrusion detection?
+Network-based IDS monitors network traffic for threats, while host-based IDS monitors individual systems for suspicious activities and internal compromises.
+
+What is the most effective way to prevent lateral movement in enterprise networks?
+Implement micro-segmentation, zero-trust architecture, and continuous monitoring of authentication patterns to detect and block unauthorized movement.
+
+What is the primary security benefit of using Software-Defined Networking (SDN)?
+Centralized control and visibility of network traffic, enabling rapid security policy deployment and automated threat response across the entire network.
+
+What is the most critical consideration when implementing network logging and monitoring?
+Capturing sufficient detail for forensic analysis while managing storage requirements and ensuring log integrity through proper protection and correlation.
+
+What is the difference between blacklisting and whitelisting in network security?
+Blacklisting blocks known threats while allowing everything else, while whitelisting allows only known good entities and blocks everything else by default.
+
+What is the most effective method to prevent Distributed Denial of Service (DDoS) attacks?
+Implementing rate limiting, traffic scrubbing services, CDN distribution, and having excess capacity to absorb attack traffic.
+
+What is the primary security consideration for cloud network security?
+Understanding shared responsibility model, implementing proper network segmentation, and using cloud-native security controls for traffic monitoring and threat detection.
+
+What is the most critical component of network security incident response?
+Having predefined playbooks for common attack types, with clear escalation procedures and automated containment capabilities to minimize damage.
+
+This intermediate network security deck provides essential knowledge for understanding network protocols, defense mechanisms, and practical security implementation strategies.

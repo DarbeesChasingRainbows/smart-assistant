@@ -1,0 +1,243 @@
+// First Aid Medical Emergencies & Trauma Management Deck
+
+What is the primary purpose of triage in multiple casualty incidents?
+To prioritize patients based on injury severity and treatment urgency, ensuring limited resources help those most likely to survive.
+
+What is the difference between immediate and delayed triage categories?
+Immediate (red) patients need life-saving treatment now, while delayed (yellow) patients have serious injuries but can wait for treatment.
+
+What is the primary purpose of shock recognition and management?
+To identify inadequate tissue perfusion and provide rapid intervention to prevent organ failure and death through positioning, oxygen, and fluid management.
+
+What is the difference between hypovolemic and cardiogenic shock?
+Hypovolemic shock results from fluid loss requiring fluid replacement, while cardiogenic shock results from heart pump failure requiring cardiac support.
+
+What is the primary purpose of airway management in trauma patients?
+To ensure patent airway for adequate oxygenation, using positioning, suction, and advanced airway techniques to prevent respiratory failure.
+
+What is the difference between basic and advanced airway management?
+Basic airway uses head-tilt chin-lift and OPA/NPA, while advanced airway includes endotracheal intubation and surgical airways for professional providers.
+
+What is the primary purpose of cervical spine immobilization in trauma?
+To prevent spinal cord damage from unstable neck injuries, using manual stabilization and cervical collars until spinal injury is ruled out.
+
+What is the difference between manual and mechanical cervical immobilization?
+Manual immobilization uses hands to hold head position temporarily, while mechanical uses collars and blocks for prolonged immobilization.
+
+What is the primary purpose of chest trauma assessment in first aid?
+To identify life-threatening conditions like tension pneumothorax, hemothorax, and cardiac tamponade requiring immediate decompression or treatment.
+
+What is the difference between open and closed chest injuries?
+Open chest injuries have chest wall wounds requiring sealing, while closed injuries have internal damage potentially needing decompression.
+
+What is the primary purpose of abdominal trauma management?
+To recognize internal bleeding and organ injury, providing rapid transport and avoiding oral intake to prevent complications during surgery.
+
+What is the difference between blunt and penetrating abdominal trauma?
+Blunt trauma causes internal injury from force without skin break, while penetrating trauma has object entry causing direct organ damage.
+
+What is the primary purpose of pelvic fracture recognition in trauma?
+To identify potentially life-threatening internal bleeding requiring stabilization and rapid transport, as pelvic fractures can cause massive blood loss.
+
+What is the difference between stable and unstable pelvic fractures?
+Stable fractures have minimal bleeding risk, while unstable fractures can disrupt blood vessels causing life-threatening hemorrhage.
+
+What is the primary purpose of extremity trauma assessment in first aid?
+To identify fractures, dislocations, and vascular injuries requiring immobilization and potential urgent intervention to prevent limb loss.
+
+What is the difference between open and closed fractures?
+Open fractures have skin break with infection risk requiring urgent care, while closed fractures have intact skin with lower immediate risk.
+
+What is the primary purpose of neurovascular assessment in limb injuries?
+To check circulation, sensation, and movement before and after splinting to detect compartment syndrome or vascular compromise requiring urgent care.
+
+What is the difference between compartment syndrome and normal swelling?
+Compartment syndrome causes severe pain, numbness, and pulse changes requiring emergency surgery, while normal swelling causes mild discomfort.
+
+What is the primary purpose of burn severity assessment in trauma?
+To determine depth, size, and location to establish treatment priority and need for specialized burn center care versus local treatment.
+
+What is the difference between partial and full thickness burns?
+Partial thickness burns affect skin layers with pain and blistering, while full thickness burns destroy all skin layers with painless white appearance.
+
+What is the primary purpose of inhalation injury recognition in burn patients?
+To identify airway damage from smoke/heat requiring intubation and specialized care, as airway swelling can progress rapidly to obstruction.
+
+What is the difference between upper and lower airway burns?
+Upper airway burns cause facial burns and hoarseness requiring observation, while lower airway burns cause respiratory distress requiring intubation.
+
+What is the primary purpose of electrical injury assessment in first aid?
+To identify entry/exit wounds, cardiac arrhythmias, and internal tissue damage requiring cardiac monitoring and specialized medical evaluation.
+
+What is the difference between high and low voltage electrical injuries?
+High voltage causes extensive internal damage and cardiac effects, while low voltage typically causes local burn injuries at contact points.
+
+What is the primary purpose of chemical burn management in first aid?
+To remove chemical agent, neutralize if appropriate, and prevent continued tissue damage while identifying specific chemical for proper treatment.
+
+What is the difference between acid and alkali chemical burns?
+Acids cause coagulation necrosis limiting penetration, while alkalis cause liquefaction necrosis allowing deeper tissue penetration.
+
+What is the primary purpose of radiation exposure management in first aid?
+To limit continued exposure, decontaminate patients, and prevent secondary contamination while assessing dose for medical treatment priorities.
+
+What is the difference between external and internal radiation contamination?
+External contamination has radioactive material on body surface requiring decontamination, while internal contamination requires medical decorporation treatment.
+
+What is the primary purpose of crush syndrome recognition in trauma?
+To identify muscle breakdown products causing kidney failure and cardiac arrhythmias requiring IV fluids and monitoring before extrication.
+
+What is the difference between crush injury and compartment syndrome?
+Crush injury involves prolonged compression affecting entire limb, while compartment syndrome involves swelling within muscle compartments.
+
+What is the primary purpose of drowning rescue and resuscitation?
+To provide rapid rescue, start CPR if needed, and prevent secondary drowning complications through oxygen therapy and medical observation.
+
+What is the difference between wet and dry drowning?
+Wet drowning involves water in lungs requiring respiratory support, while dry drowning involves laryngospasm without water aspiration.
+
+What is the primary purpose of near-drowning management?
+To provide oxygen therapy, monitor for respiratory deterioration, and prevent secondary complications like pneumonia and ARDS.
+
+What is the difference between saltwater and freshwater drowning effects?
+Saltwater causes pulmonary edema through fluid shift, while freshwater causes surfactant destruction leading to alveolar collapse.
+
+What is the primary purpose of altitude sickness recognition and management?
+To identify symptoms of acute mountain sickness and prevent progression to life-threatening high altitude cerebral or pulmonary edema.
+
+What is the difference between acute mountain sickness and high altitude cerebral edema?
+Acute mountain sickness causes headache and nausea treatable with descent, while HACE causes confusion and ataxia requiring immediate descent.
+
+What is the primary purpose of decompression sickness management in diving emergencies?
+To provide emergency oxygen and rapid hyperbaric chamber treatment for bubble formation in tissues and bloodstream.
+
+What is the difference between Type I and Type II decompression sickness?
+Type I causes joint pain and skin manifestations, while Type II causes neurological symptoms requiring urgent treatment.
+
+What is the primary purpose of barotrauma management in diving emergencies?
+To treat pressure-related injuries to lungs, ears, and sinuses, preventing complications like pneumothorax and hearing loss.
+
+What is the difference between pulmonary and sinus barotrauma?
+Pulmonary barotrauma can cause lung collapse and air embolism, while sinus barotrauma causes facial pain and sinus bleeding.
+
+What is the primary purpose of environmental hyperthermia management?
+To rapidly cool body while monitoring for complications like heat stroke causing organ damage and potential death.
+
+What is the difference between heat exhaustion and heat stroke treatment?
+Heat exhaustion requires rehydration and rest, while heat stroke requires rapid cooling and emergency medical care for potential organ failure.
+
+What is the primary purpose of environmental hypothermia management?
+To prevent further heat loss, provide gradual rewarming, and monitor for cardiac arrhythmias during rewarming process.
+
+What is the difference between mild and severe hypothermia treatment?
+Mild hypothermia uses passive warming with blankets, while severe hypothermia requires active internal warming and cardiac monitoring.
+
+What is the primary purpose of frostbite management in cold injuries?
+To prevent further tissue freezing, provide controlled rewarming, and protect injured tissue from mechanical damage and infection.
+
+What is the difference between superficial and deep frostbite?
+Superficial frostbite affects skin layers with full recovery, while deep frostbite affects deeper tissues potentially requiring amputation.
+
+What is the primary purpose of lightning strike injury management?
+To assess for cardiac arrest, neurological injury, and burns while providing immediate resuscitation and rapid transport to specialized care.
+
+What is the difference between direct and indirect lightning injuries?
+Direct strikes cause severe burns and cardiac effects, while indirect effects cause neurological and blast injuries from current spread.
+
+What is the primary purpose of snakebite identification and management?
+To identify venomous vs non-venomous bites, provide appropriate first aid, and rapidly transport for antivenom administration if needed.
+
+What is the difference between neurotoxic and hemotoxic snake venom?
+Neurotoxic venom causes paralysis and respiratory failure, while hemotoxic venom causes bleeding and tissue destruction.
+
+What is the primary purpose of insect sting allergy management?
+To recognize anaphylaxis, administer epinephrine immediately, and provide airway support while seeking emergency medical care.
+
+What is the difference between local allergic reactions and anaphylaxis?
+Local reactions cause swelling and pain at sting site, while anaphylaxis causes systemic effects requiring epinephrine.
+
+What is the primary purpose of marine life injury management?
+To identify specific injuries (jellyfish, stingrays, stonefish) and provide appropriate first aid including venom neutralization and pain control.
+
+What is the difference between jellyfish and stingray injuries?
+Jellyfish stings require vinegar neutralization, while stingray injuries require hot water immersion for pain relief.
+
+What is the primary purpose of diabetic emergency recognition in first aid?
+To differentiate hypoglycemia from hyperglycemia and provide appropriate treatment with sugar or insulin while preventing complications.
+
+What is the difference between diabetic ketoacidosis and hyperosmolar hyperglycemic state?
+DKA occurs in type 1 diabetes with ketones, while HHS occurs in type 2 diabetes with extreme hyperglycemia without ketones.
+
+What is the primary purpose of seizure emergency management?
+To protect from injury, maintain airway, time the seizure, and provide post-seizure care while identifying seizure type for treatment.
+
+What is the difference between generalized and focal seizures?
+Generalized seizures affect both brain hemispheres with loss of consciousness, while focal seizures affect one area with varied symptoms.
+
+What is the primary purpose of stroke recognition and management?
+To identify stroke symptoms using FAST (Face, Arms, Speech, Time) and provide rapid transport for time-sensitive treatment.
+
+What is the difference between ischemic and hemorrhagic stroke?
+Ischemic stroke involves blood clots treatable with clot-busting drugs, while hemorrhagic stroke involves bleeding requiring different treatment.
+
+What is the primary purpose of heart attack recognition in first aid?
+To identify chest pain symptoms, call emergency services immediately, and provide aspirin and comfort while preventing complications.
+
+What is the difference between angina and heart attack symptoms?
+Angina causes brief chest pain relieved by rest, while heart attack causes persistent pain with other symptoms requiring emergency care.
+
+What is the primary purpose of asthma emergency management?
+To assist with rescue inhaler use, provide calm environment, and recognize severe attacks requiring emergency medical intervention.
+
+What is the difference between mild and severe asthma attacks?
+Mild attacks improve with rescue inhaler, while severe attacks cause severe distress and require emergency medical treatment.
+
+What is the primary purpose of COPD emergency management?
+To provide oxygen, assist with breathing medications, and recognize exacerbations requiring antibiotics or hospitalization.
+
+What is the difference between asthma and COPD emergencies?
+Asthma attacks typically reverse completely, while COPD exacerbations may have incomplete recovery and require different management.
+
+What is the primary purpose of anaphylaxis recognition and treatment?
+To identify severe allergic reaction affecting airway and breathing, administer epinephrine immediately, and provide airway support.
+
+What is the difference between mild allergic reaction and anaphylaxis?
+Mild reactions cause localized symptoms, while anaphylaxis causes systemic effects requiring epinephrine and emergency care.
+
+What is the primary purpose of psychiatric emergency management in first aid?
+To ensure safety of patient and others, provide de-escalation techniques, and arrange appropriate mental health evaluation.
+
+What is the difference between anxiety attack and psychotic emergency?
+Anxiety attacks require calm reassurance, while psychotic emergencies may require medication and psychiatric evaluation.
+
+What is the primary purpose of substance overdose recognition and management?
+To identify substance type, provide airway protection, and administer specific antidotes when available while preventing complications.
+
+What is the difference between opioid and stimulant overdose?
+Opioid overdose causes respiratory depression treatable with naloxone, while stimulant overdose causes agitation and cardiac effects.
+
+What is the primary purpose of pediatric emergency assessment differences?
+To recognize that children present differently than adults, have unique injury patterns, and require age-appropriate treatment approaches.
+
+What is the difference between adult and pediatric airway anatomy?
+Children have larger tongues and narrower airways making obstruction more likely, requiring different positioning and airway techniques.
+
+What is the primary purpose of geriatric emergency considerations?
+To recognize atypical presentations, multiple medications, and comorbidities affecting emergency assessment and treatment in elderly patients.
+
+What is the difference between elderly and adult emergency presentations?
+Elderly patients often have subtle symptoms and multiple chronic conditions requiring different assessment priorities.
+
+What is the primary purpose of pregnancy-related emergency management?
+To protect both mother and fetus, recognize pregnancy-specific conditions, and provide appropriate positioning and care.
+
+What is the difference between normal and emergency pregnancy symptoms?
+Normal pregnancy has common discomforts, while emergencies involve severe pain, bleeding, or blood pressure changes requiring urgent care.
+
+What is the primary purpose of disaster medicine principles in first aid?
+To apply triage, resource allocation, and mass casualty management when normal medical systems are overwhelmed.
+
+What is the difference between routine and disaster first aid?
+Routine first aid focuses on individual patients, while disaster first aid prioritizes population survival with limited resources.
+
+This comprehensive medical emergencies and trauma deck provides 100 questions covering life-threatening conditions, specialized injuries, and critical care situations needed for advanced first aid and emergency response.

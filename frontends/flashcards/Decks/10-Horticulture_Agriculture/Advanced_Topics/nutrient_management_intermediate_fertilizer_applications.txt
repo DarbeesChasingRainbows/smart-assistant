@@ -1,0 +1,96 @@
+// Nutrient Management Intermediate - Fertilizer Applications & Plant Nutrition
+
+What is the primary difference between macro-nutrients and micro-nutrients?
+Macro-nutrients (N, P, K) are needed in large quantities for plant growth, while micro-nutrients (Fe, Mn, Zn, etc.) are required in small amounts for specific functions.
+
+What is the most important factor in fertilizer selection?
+Plant needs and soil test results - matching fertilizer analysis to specific nutrient requirements prevents waste and deficiency.
+
+What is the difference between complete and incomplete fertilizers?
+Complete fertilizers contain all three primary nutrients (N, P, K), while incomplete fertilizers lack one or more of these essential nutrients.
+
+What is the primary purpose of nitrogen in plant growth?
+Promotes leafy green growth and vegetative development - essential for chlorophyll production and protein synthesis.
+
+What is the most common sign of nitrogen deficiency in plants?
+Yellowing of older leaves (chlorosis) starting from bottom of plant, with stunted growth and weak stems.
+
+What is the difference between quick-release and slow-release fertilizers?
+Quick-release provides immediately available nutrients, while slow-release gradually breaks down providing longer feeding with less leaching.
+
+What is the primary purpose of phosphorus in plant development?
+Essential for root development, flower and fruit production, and energy transfer within plant cells.
+
+What is the most effective way to apply phosphorus fertilizers?
+Band placement near root zone or incorporate into soil before planting, as phosphorus moves very little in soil.
+
+What is the difference between organic and synthetic fertilizers?
+Organic fertilizers derive from natural sources and release nutrients slowly, while synthetic fertilizers are manufactured and provide immediately available nutrients.
+
+What is the primary purpose of potassium in plant health?
+Regulates water movement, disease resistance, and enzyme activation - essential for overall plant vigor and stress tolerance.
+
+What is the most common cause of fertilizer burn in garden plants?
+Over-application of soluble fertilizers or applying to dry plants, causing salt damage to root systems.
+
+What is the difference between granular and liquid fertilizers?
+Granular fertilizers provide slow-release nutrition and are easier to apply evenly, while liquid fertilizers provide quick uptake but require frequent application.
+
+What is the primary purpose of secondary nutrients (calcium, magnesium, sulfur)?
+Essential for plant structure, photosynthesis, and protein development - often needed in specific soil conditions.
+
+What is the most effective way to prevent nutrient leaching in sandy soils?
+Use slow-release fertilizers, apply smaller frequent applications, and maintain adequate organic matter to improve nutrient holding capacity.
+
+What is the difference between soil pH and nutrient availability?
+Soil pH affects which nutrients are available to plants - most nutrients are available in slightly acidic soil (pH 6.0-7.0).
+
+What is the primary purpose of micronutrients in plant nutrition?
+Required in small amounts for specific enzyme functions, photosynthesis, and disease resistance - deficiencies cause specific symptoms.
+
+What is the most common micronutrient deficiency in alkaline soils?
+Iron deficiency causing interveinal chlorosis (yellowing between veins) on new growth, as high pH locks iron in unavailable forms.
+
+What is the difference between foliar feeding and soil application?
+Foliar feeding provides quick nutrient uptake through leaves for immediate needs, while soil application provides long-term nutrition through root system.
+
+What is the primary purpose of fertilizer timing in vegetable gardens?
+Apply nutrients when plants can use them most effectively - nitrogen during vegetative growth, phosphorus during flowering/fruiting.
+
+What is the most effective way to fertilize container plants?
+Use diluted liquid fertilizers applied frequently during growing season, as containers leach nutrients quickly with regular watering.
+
+What is the difference between organic matter and fertilizer?
+Organic matter improves soil structure and provides slow-release nutrients, while fertilizers provide concentrated nutrients for immediate plant use.
+
+What is the primary purpose of compost tea in plant nutrition?
+Provides soluble nutrients and beneficial microorganisms that improve soil biology and plant health.
+
+What is the most common mistake in home fertilizer applications?
+Applying too much nitrogen leading to excessive vegetative growth at expense of flowers and fruits.
+
+What is the difference between complete and balanced fertilizers?
+Complete fertilizers contain N, P, K, while balanced fertilizers have equal or near-equal proportions of these nutrients.
+
+What is the primary purpose of calcium in fruit production?
+Prevents blossom end rot and improves fruit quality by strengthening cell walls and regulating nutrient movement.
+
+What is the most effective way to correct magnesium deficiency?
+Apply Epsom salts (magnesium sulfate) as soil drench or foliar spray, especially for tomatoes and roses.
+
+What is the difference between synthetic chelated and natural micronutrients?
+Chelated micronutrients are protected from soil reactions making them more available, while natural forms may become locked in unavailable forms.
+
+What is the primary purpose of sulfur in plant nutrition?
+Essential for protein synthesis and disease resistance - often deficient in sandy soils with low organic matter.
+
+What is the most effective way to fertilize established trees and shrubs?
+Apply fertilizer to drip line area where feeder roots are concentrated, not near trunk where large roots provide structural support.
+
+What is the difference between pre-plant and top-dressing fertilizer applications?
+Pre-plant fertilizers are incorporated into soil before planting, while top-dressing is applied to soil surface around growing plants.
+
+What is the primary purpose of nutrient management planning?
+Prevents over-application, reduces environmental impact, and ensures plants receive appropriate nutrition for optimal growth.
+
+This intermediate nutrient management deck provides practical knowledge for proper fertilizer selection and application in home and landscape settings.

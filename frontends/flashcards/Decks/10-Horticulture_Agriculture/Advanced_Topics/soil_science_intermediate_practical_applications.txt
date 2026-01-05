@@ -1,0 +1,93 @@
+// Soil Science Intermediate - Practical Applications & Problem Solving
+
+What is the primary difference between soil texture and soil structure?
+Soil texture refers to the relative proportions of sand, silt, and clay particles, while soil structure describes how these particles are arranged into aggregates.
+
+What is the most accurate method to determine soil texture in the field?
+The ribbon test - squeeze moist soil between thumb and forefinger to form a ribbon; longer ribbons indicate higher clay content.
+
+What is the primary purpose of a soil pH test before planting?
+To determine nutrient availability and potential need for amendments, as pH affects which nutrients plants can absorb.
+
+What is the difference between macro-nutrients and micro-nutrients in soil fertility?
+Macro-nutrients (N, P, K, Ca, Mg, S) are needed in larger quantities, while micro-nutrients (Fe, Mn, B, Mo, Cu, Zn, Cl, Ni) are required in smaller amounts.
+
+What is the primary benefit of adding compost to garden soil?
+Improves soil structure, increases organic matter, enhances water retention, and provides slow-release nutrients.
+
+What is the difference between organic and inorganic fertilizers?
+Organic fertilizers derive from living organisms and release nutrients slowly, while inorganic fertilizers are manufactured and provide immediately available nutrients.
+
+What is the primary cause of soil compaction in residential gardens?
+Repeated foot traffic, heavy equipment use, and working soil when wet compresses soil particles and reduces pore space.
+
+What is the most effective way to improve drainage in heavy clay soil?
+Add organic matter (compost, aged bark) and create raised beds or install drainage systems to improve water movement.
+
+What is the difference between soil acidification and alkalization?
+Acidification lowers pH (more acidic) often from excessive nitrogen use, while alkalization raises pH (more alkaline) typically from lime or hard water.
+
+What is the primary purpose of a soil test for home gardeners?
+To determine current nutrient levels, pH, and organic matter content to guide appropriate amendment applications.
+
+What is the difference between soluble and slow-release fertilizers?
+Soluble fertilizers provide immediately available nutrients that can leach quickly, while slow-release fertilizers break down gradually providing longer feeding.
+
+What is the primary benefit of cover crops for soil health?
+Prevent erosion, add organic matter, fix nitrogen (legumes), and improve soil structure through root growth.
+
+What is the difference between mulch and compost?
+Mulch is applied to soil surface for weed control and moisture retention, while compost is mixed into soil to improve structure and fertility.
+
+What is the primary cause of nutrient leaching in sandy soils?
+Large particle size and low water-holding capacity allow nutrients to wash through soil profile before plants can absorb them.
+
+What is the most effective way to increase soil organic matter in established gardens?
+Apply compost as top dressing, use mulch that decomposes, and plant cover crops or green manures.
+
+What is the difference between cation exchange capacity (CEC) and base saturation?
+CEC measures soil's ability to hold nutrients, while base saturation indicates what percentage of those exchange sites are occupied by basic cations.
+
+What is the primary purpose of soil amendments in container gardening?
+To provide proper drainage, adequate water retention, and balanced nutrition in the limited root environment.
+
+What is the difference between complete and incomplete fertilizers?
+Complete fertilizers contain all three primary nutrients (N, P, K), while incomplete fertilizers lack one or more of these nutrients.
+
+What is the primary benefit of mycorrhizal fungi in soil?
+Extend root surface area, improve nutrient and water uptake, and enhance plant resistance to soil-borne diseases.
+
+What is the most effective way to correct iron deficiency in alkaline soils?
+Apply chelated iron or lower soil pH with elemental sulfur, as high pH locks iron in unavailable forms.
+
+What is the difference between soil salinity and sodicity?
+Salinity refers to total soluble salts, while sodicity specifically indicates high sodium levels that can damage soil structure.
+
+What is the primary purpose of soil testing before lawn fertilization?
+To prevent over-application that can pollute waterways and ensure nutrients are actually needed for optimal growth.
+
+What is the difference between granular and liquid fertilizers?
+Granular fertilizers provide slow-release nutrition and are easier to apply evenly, while liquid fertilizers provide quick uptake but require more frequent application.
+
+What is the primary cause of pH drift in container soils?
+Fertilizer type and irrigation water quality gradually change pH over time through chemical reactions and salt accumulation.
+
+What is the most effective way to improve water retention in sandy soils?
+Add organic matter (compost, peat moss) and use mulch to reduce evaporation and increase water-holding capacity.
+
+What is the difference between synthetic and natural soil amendments?
+Synthetic amendments are manufactured chemicals, while natural amendments derive from plant, animal, or mineral sources.
+
+What is the primary benefit of soil solarization?
+Kills soil-borne pathogens, weed seeds, and nematodes using solar heat trapped under clear plastic.
+
+What is the difference between macro-pores and micro-pores in soil?
+Macro-pores allow air movement and rapid drainage, while micro-pores hold water available to plant roots.
+
+What is the most effective way to prevent soil erosion on slopes?
+Plant groundcover, install terraces or swales, and apply mulch to protect soil surface from water impact.
+
+What is the primary purpose of soil pH adjustment for different plant groups?
+Optimize nutrient availability and create growing conditions suitable for specific plant requirements (acid-loving vs. alkaline-preferring).
+
+This intermediate soil science deck provides practical knowledge for effective soil management and problem-solving in garden and landscape settings.

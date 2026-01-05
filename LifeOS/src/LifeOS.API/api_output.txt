@@ -1,0 +1,11 @@
+Using launch settings from D:\repos\smart-assistant\LifeOS\src\LifeOS.API\Properties\launchSettings.json...
+Building...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5120
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\repos\smart-assistant\LifeOS\src\LifeOS.API
+info: Microsoft.Hosting.Lifetime[0]

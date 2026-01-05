@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+
+# IDE
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (should be handled by Deno)
+node_modules
+
+# Build artifacts
+dist
+_fresh
+
+# Test files
+tests/
+playwright.config.ts
+playwright-report/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp

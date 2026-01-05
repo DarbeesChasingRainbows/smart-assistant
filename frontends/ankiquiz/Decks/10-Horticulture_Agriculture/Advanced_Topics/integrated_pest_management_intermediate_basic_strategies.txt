@@ -1,0 +1,93 @@
+// Integrated Pest Management Intermediate - Basic Strategies & Common Pests
+
+What is the primary difference between pests and beneficial insects?
+Pests cause damage to plants, while beneficial insects help control pests or provide pollination services.
+
+What is the most important first step in any pest management program?
+Correct identification of the pest species, as different pests require different management approaches.
+
+What is the difference between cultural and mechanical pest control?
+Cultural controls modify growing conditions to prevent problems, while mechanical controls physically remove or block pests.
+
+What is the primary purpose of integrated pest management (IPM)?
+To use multiple control methods in an environmentally and economically sound way, minimizing pesticide use while managing pests effectively.
+
+What is the most common garden pest that causes holes in leaves?
+Chewing insects like caterpillars, beetles, or grasshoppers - identification determines specific control method.
+
+What is the difference between complete and incomplete metamorphosis?
+Complete metamorphosis has four stages (egg, larva, pupa, adult), while incomplete has three stages (egg, nymph, adult).
+
+What is the primary benefit of companion planting for pest management?
+Some plants repel pests, attract beneficial insects, or confuse pest insects through scent or visual disruption.
+
+What is the most effective way to prevent aphid infestations?
+Monitor plants regularly, encourage beneficial insects, and use strong water sprays to remove early infestations.
+
+What is the difference between systemic and contact pesticides?
+Systemic pesticides are absorbed into plant tissue, while contact pesticides must directly touch the pest to be effective.
+
+What is the primary cause of increased pest problems in stressed plants?
+Stressed plants produce fewer defensive compounds and emit stress signals that attract pest insects.
+
+What is the most common beneficial insect for garden pest control?
+Lady beetles (ladybugs) that consume aphids, mealybugs, and other soft-bodied insects throughout their life cycle.
+
+What is the difference between selective and broad-spectrum pesticides?
+Selective pesticides target specific pest types while sparing beneficials, while broad-spectrum pesticides kill most insects they contact.
+
+What is the primary purpose of crop rotation in pest management?
+Breaks pest life cycles by removing host plants, reducing soil-borne pest populations, and improves soil health.
+
+What is the most effective way to control slugs and snails organically?
+Hand picking, beer traps, copper barriers, and encouraging natural predators like birds and ground beetles.
+
+What is the difference between monitoring and scouting in IPM?
+Monitoring uses traps and regular checks to track pest populations, while scouting involves actively searching for pests in specific areas.
+
+What is the primary benefit of using row covers in vegetable gardens?
+Physical barrier prevents insect pests from reaching plants while allowing light and water to penetrate.
+
+What is the most common sign of spider mite infestation?
+Fine webbing on plants and tiny moving dots on leaf undersides, often with yellow stippling on upper leaf surfaces.
+
+What is the difference between predatory and parasitic beneficial insects?
+Predators directly consume prey, while parasites lay eggs in or on pests, with larvae killing the host as they develop.
+
+What is the primary purpose of beneficial insect release programs?
+Supplement natural populations and provide immediate biological control when pest pressure exceeds natural predator capacity.
+
+What is the most effective way to prevent indoor plant pests?
+Quarantine new plants, inspect regularly, maintain proper humidity, and avoid overfertilizing which promotes soft growth.
+
+What is the difference between life cycle timing and degree days in pest management?
+Life cycle timing uses calendar dates, while degree days measure heat accumulation to predict pest development more accurately.
+
+What is the primary cause of pesticide resistance in pest populations?
+Repeated use of same pesticide mode of action allows resistant individuals to survive and reproduce.
+
+What is the most common method for monitoring flying insect pests?
+Yellow sticky traps for flying insects, pheromone traps for specific species, and light traps for night-flying insects.
+
+What is the difference between economic threshold and action level in IPM?
+Economic threshold is pest level where control becomes economically justified, while action level is when control measures should be implemented.
+
+What is the primary benefit of maintaining plant diversity in gardens?
+Provides habitat for beneficial insects, reduces pest outbreaks through natural balance, and creates more resilient ecosystem.
+
+What is the most effective way to control squash bugs organically?
+Hand picking, removing eggs masses, using row covers early, and planting resistant varieties.
+
+What is the difference between contact stomach poisons and growth regulators?
+Contact stomach poisons must be eaten to work, while insect growth regulators disrupt development and prevent maturation.
+
+What is the primary purpose of sanitation in garden pest management?
+Remove pest habitat, eliminate overwintering sites, and reduce disease spread by cleaning up plant debris and weeds.
+
+What is the most common indoor plant pest?
+Spider mites, aphids, mealybugs, and fungus gnats - each requires specific identification and control methods.
+
+What is the difference between repellent and antifeedant pest control products?
+Repellents drive pests away from plants, while antifeedants make plants unpalatable after pests begin feeding.
+
+This intermediate IPM deck provides practical knowledge for identifying and managing common garden pests using integrated, environmentally responsible approaches.

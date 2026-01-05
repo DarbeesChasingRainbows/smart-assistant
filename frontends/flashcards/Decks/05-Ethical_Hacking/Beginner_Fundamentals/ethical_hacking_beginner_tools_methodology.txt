@@ -1,0 +1,354 @@
+// Beginner Tools & Methodology Deck
+
+What is the primary purpose of the Metasploit Framework in ethical hacking?
+To provide a comprehensive platform for developing, testing, and executing exploit code against remote target machines in a controlled environment.
+
+What is the basic command to start the Metasploit Framework console?
+"msfconsole" which launches the interactive command-line interface for framework operations and module management.
+
+What is the difference between exploits, payloads, and auxiliary modules in Metasploit?
+Exploits take advantage of vulnerabilities, payloads execute after exploitation, and auxiliary modules perform additional tasks like scanning.
+
+What is the primary purpose of the "search" command in Metasploit?
+To find available modules matching specific criteria such as vulnerabilities, platforms, or module types.
+
+What is the basic command to search for SMB exploits in Metasploit?
+"search type:exploit platform:windows smb" which searches for SMB exploits targeting Windows platforms.
+
+What is the difference between module categories in Metasploit (exploit, payload, auxiliary, post, encoder)?
+Each category serves different purposes: exploits for access, payloads for actions, auxiliary for scanning, post for post-exploitation, encoders for obfuscation.
+
+What is the primary purpose of the "use" command in Metasploit?
+To select a specific module for configuration and execution, such as an exploit or auxiliary module.
+
+What is the basic command to use a specific module in Metasploit?
+"use [module_name]" which selects the specified module for configuration and execution.
+
+What is the difference between global and module-specific options in Metasploit?
+Global options affect the entire framework, while module-specific options apply only to the currently selected module.
+
+What is the primary purpose of the "show options" command in Metasploit?
+To display all configurable parameters for the currently selected module, including required and optional settings.
+
+What is the basic command to set a target host in Metasploit?
+"set RHOSTS [target_ip]" which configures the remote host address for the selected exploit module.
+
+What is the difference between RHOSTS and LHOST in Metasploit?
+RHOSTS specifies the target host to attack, while LHOST specifies the local host for reverse connections.
+
+What is the primary purpose of the "setg" command in Metasploit?
+To set global variables that apply to all modules, saving time when configuring multiple modules with common settings.
+
+What is the basic command to set a global payload in Metasploit?
+"setg PAYLOAD windows/meterpreter/reverse_tcp" which sets the default payload for all exploit modules.
+
+What is the difference between "set" and "setg" commands in Metasploit?
+"set" configures options for the current module only, while "setg" sets global options for all modules.
+
+What is the primary purpose of the "check" command in Metasploit modules?
+To test if the target is vulnerable to the selected exploit without actually exploiting it, providing safe vulnerability verification.
+
+What is the basic command to check target vulnerability in Metasploit?
+"check" which tests the target for vulnerability to the currently selected exploit module.
+
+What is the difference between check and exploit commands in Metasploit?
+Check verifies vulnerability without exploitation, while exploit actually attempts to gain access to the target.
+
+What is the primary purpose of the "exploit" command in Metasploit?
+To execute the currently selected exploit module against the configured target to gain access or achieve the module's purpose.
+
+What is the basic command to run an exploit in Metasploit?
+"exploit" or "run" which launches the currently selected exploit module against the target.
+
+What is the difference between foreground and background exploitation in Metasploit?
+Foreground runs in the current console session, while background runs as a job allowing continued use of the console.
+
+What is the primary purpose of the "sessions" command in Metasploit?
+To list, interact with, and manage established connections (shells) from successful exploits.
+
+What is the basic command to list all active sessions in Metasploit?
+"sessions" which displays all established connections from successful exploits with session IDs.
+
+What is the difference between sessions and jobs in Metasploit?
+Sessions are established connections to compromised systems, while jobs are background processes running exploits or modules.
+
+What is the primary purpose of the "back" command in Metasploit?
+To return to the previous context or main prompt when navigating through module configurations or sessions.
+
+What is the basic command to interact with a specific session in Metasploit?
+"sessions -i [session_id]" which connects to and allows interaction with a specific compromised system session.
+
+What is the difference between bind and reverse payloads in Metasploit?
+Bind payloads open a listener on the target, while reverse payloads connect back to the attacker's machine.
+
+What is the primary purpose of the "payload" command in Metasploit?
+To select and configure the payload that will execute after successful exploitation of the target system.
+
+What is the basic command to set a reverse TCP payload in Metasploit?
+"set PAYLOAD windows/meterpreter/reverse_tcp" which configures a reverse TCP Meterpreter payload.
+
+What is the difference between staged and stageless payloads in Metasploit?
+Staged payloads are delivered in multiple stages for smaller initial size, while stageless payloads are delivered all at once.
+
+What is the primary purpose of Meterpreter in Metasploit?
+To provide an advanced post-exploitation payload with extensive capabilities for system control and information gathering.
+
+What is the basic command to upgrade a shell to Meterpreter in Metasploit?
+"sessions -u [session_id]" which upgrades a basic shell to a Meterpreter session for enhanced capabilities.
+
+What is the difference between Meterpreter and basic shell payloads?
+Meterpreter provides advanced post-exploitation features, while basic shells offer limited command-line access.
+
+What is the primary purpose of post-exploitation modules in Metasploit?
+To perform additional actions after gaining initial access, such as privilege escalation, persistence, or information gathering.
+
+What is the basic command to run a post-exploitation module in Metasploit?
+"run [module_name]" or "post/[module_name]" which executes post-exploitation functionality on the target.
+
+What is the difference between auxiliary and post-exploitation modules in Metasploit?
+Auxiliary modules don't require exploitation, while post-exploitation modules run after successful system compromise.
+
+What is the primary purpose of the "msfvenom" tool in Metasploit?
+To generate custom payloads in various formats for different platforms and exploitation scenarios.
+
+What is the basic command to generate a Windows executable payload with msfvenom?
+"msfvenom -p windows/meterpreter/reverse_tcp LHOST=[ip] LPORT=[port] -f exe > payload.exe"
+
+What is the difference between msfvenom and msfconsole in Metasploit?
+msfvenom generates standalone payloads, while msfconsole provides the interactive framework for exploitation.
+
+What is the primary purpose of the "msfdb" tool in Metasploit?
+To manage the Metasploit database for storing scan results, credentials, and exploitation data.
+
+What is the basic command to initialize the Metasploit database?
+"msfdb init" which creates and initializes the PostgreSQL database for Metasploit data storage.
+
+What is the difference between using Metasploit with and without a database?
+With a database, scan results and credentials are stored and searchable, while without a database, data is not persistent between sessions.
+
+What is the primary purpose of Nmap in network reconnaissance?
+To perform network discovery and security auditing through host discovery, port scanning, and service detection.
+
+What is the basic command to perform a basic Nmap scan?
+"nmap [target_ip]" which performs a TCP scan of the top 1000 most common ports on the specified target.
+
+What is the difference between TCP and UDP scanning with Nmap?
+TCP scanning establishes connections to test ports, while UDP scanning sends UDP packets and analyzes responses.
+
+What is the primary purpose of the "-sS" flag in Nmap?
+To perform a SYN scan (half-open scan) which is stealthier than a full TCP connect scan.
+
+What is the basic command to perform service version detection with Nmap?
+"nmap -sV [target_ip]" which attempts to determine the version of services running on open ports.
+
+What is the difference between port scanning and service enumeration in Nmap?
+Port scanning identifies open ports, while service enumeration identifies the specific software running on those ports.
+
+What is the primary purpose of the "-O" flag in Nmap?
+To perform operating system detection using TCP/IP stack fingerprinting techniques.
+
+What is the basic command to perform OS detection with Nmap?
+"nmap -O [target_ip]" which attempts to identify the target operating system through fingerprinting.
+
+What is the difference between aggressive and normal Nmap scans?
+Aggressive scans use additional techniques for more information but are more detectable, while normal scans are quieter but less detailed.
+
+What is the primary purpose of Nmap Scripting Engine (NSE)?
+To extend Nmap's capabilities with custom scripts for vulnerability detection, backdoor detection, and advanced reconnaissance.
+
+What is the basic command to run default Nmap scripts?
+"nmap -sC [target_ip]" which runs the default set of safe scripts to gather additional information.
+
+What is the difference between safe and intrusive Nmap scripts?
+Safe scripts won't crash services, while intrusive scripts might affect target systems or be more easily detected.
+
+What is the primary purpose of the "burp suite" tool in web security testing?
+To intercept, analyze, and modify web traffic between browser and web applications for comprehensive security testing.
+
+What is the basic process to set up Burp Suite for testing?
+Configure browser proxy to localhost:8080, enable intercept in Burp, and browse the application to capture traffic.
+
+What is the difference between Burp Suite Community and Professional editions?
+Community edition provides basic functionality for free, while Professional edition offers advanced features like automated scanning.
+
+What is the primary purpose of the Burp Suite "Repeater" tool?
+To manually modify and resend HTTP requests multiple times for testing different payloads and parameters.
+
+What is the basic process to use Burp Repeater?
+Send a request to Repeater, modify the request as needed, and send it to observe the response for vulnerability testing.
+
+What is the difference between Repeater and Intruder in Burp Suite?
+Repeater allows manual testing of individual requests, while Intruder automates attacks with multiple payloads.
+
+What is the primary purpose of the Burp Suite "Intruder" tool?
+To automate attacks against web applications using multiple payloads and attack positions.
+
+What is the basic process to configure Burp Intruder?
+Mark payload positions, select attack type, load payload list, and start the attack to test multiple variations.
+
+What is the difference between sniper, battering ram, and pitchfork attacks in Burp Intruder?
+Sniper uses one payload set across all positions, battering ram uses the same payload in all positions, pitchfork uses multiple payload sets simultaneously.
+
+What is the primary purpose of the "sqlmap" tool in SQL injection testing?
+To automate the detection and exploitation of SQL injection vulnerabilities including database fingerprinting and data extraction.
+
+What is the basic command to test a URL for SQL injection with sqlmap?
+"sqlmap -u [target_url] --dbs" which tests the URL for SQL injection and enumerates available databases.
+
+What is the difference between error-based and blind SQL injection techniques?
+Error-based injection uses database error messages to extract information, while blind injection requires inference techniques.
+
+What is the primary purpose of the "--dbs" flag in sqlmap?
+To enumerate all databases available on the target database server for further exploitation.
+
+What is the basic command to extract tables from a specific database with sqlmap?
+"sqlmap -u [target_url] -D [database_name] --tables" which extracts all tables from the specified database.
+
+What is the difference between database enumeration and data extraction in sqlmap?
+Enumeration discovers database structure, while data extraction retrieves the actual data from tables and columns.
+
+What is the primary purpose of the "nikto" web vulnerability scanner?
+To scan web servers for known vulnerabilities, dangerous files, outdated server versions, and configuration issues.
+
+What is the basic command to scan a web server with Nikto?
+"nikto -h [target_url]" which performs a comprehensive vulnerability scan of the specified web server.
+
+What is the difference between Nikto and manual web security testing?
+Nikto automates vulnerability detection using known signatures, while manual testing discovers unique vulnerabilities.
+
+What is the primary purpose of the "OWASP ZAP" tool in web security?
+To provide comprehensive web application security testing including automated scanning, manual testing, and fuzzing capabilities.
+
+What is the basic command to start OWASP ZAP from command line?
+"zap.sh" or "zap.bat" which launches the ZAP desktop application for web security testing.
+
+What is the difference between passive and active scanning in OWASP ZAP?
+Passive scanning analyzes traffic without sending additional requests, while active scanning sends attack payloads to identify vulnerabilities.
+
+What is the primary purpose of the "spider" functionality in OWASP ZAP?
+To automatically crawl web applications and discover all pages, forms, and functionality for security testing.
+
+What is the basic process to use ZAP spider for application discovery?
+Configure target URL, start spider, wait for completion, and analyze discovered pages and forms for testing.
+
+What is the difference between spidering and manual application mapping?
+Spidering automatically discovers application structure, while manual mapping relies on human exploration and testing.
+
+What is the primary purpose of the "dirb" tool in web content discovery?
+To perform directory and file brute forcing using wordlists to discover hidden web content.
+
+What is the basic command to run dirb against a target?
+"dirb [target_url]" which starts directory enumeration using default wordlists against the specified target.
+
+What is the difference between dirb and gobuster in directory enumeration?
+dirb is an older tool with basic functionality, while gobuster is faster with additional features like vhost enumeration.
+
+What is the primary purpose of the "gobuster" tool in modern web testing?
+To perform fast directory, file, and vhost enumeration using concurrent requests and advanced features.
+
+What is the basic command to perform directory enumeration with gobuster?
+"gobuster dir -u [target_url] -w [wordlist]" which enumerates directories using the specified wordlist.
+
+What is the difference between directory enumeration and vhost enumeration with gobuster?
+Directory enumeration discovers folders and files, while vhost enumeration discovers virtual hosts on the same IP.
+
+What is the primary purpose of the "hydra" tool in password cracking?
+To perform online password attacks against various protocols including SSH, FTP, HTTP, and SMB.
+
+What is the basic command to brute force SSH with Hydra?
+"hydra -l [username] -P [password_list] ssh://[target_ip]" which attempts SSH login using a password list.
+
+What is the difference between online and offline password cracking?
+Online cracking attacks live services with rate limiting, while offline cracking works on captured hash files without constraints.
+
+What is the primary purpose of the "john" tool in offline password cracking?
+To crack password hashes using dictionary attacks, rule-based attacks, and brute force methods.
+
+What is the basic command to crack password hashes with John the Ripper?
+"john --wordlist=[wordlist] [hash_file]" which attempts to crack hashes using a dictionary attack.
+
+What is the difference between dictionary attacks and rule-based attacks in John?
+Dictionary attacks use wordlists directly, while rule-based attacks apply transformations to dictionary words.
+
+What is the primary purpose of the "hashcat" tool in GPU-accelerated password cracking?
+To perform high-speed password cracking using GPU acceleration with support for various hash types and attack methods.
+
+What is the basic command to perform a dictionary attack with Hashcat?
+"hashcat -m [hash_type] -a 0 [hash_file] [wordlist]" which performs dictionary attacks against specified hash types.
+
+What is the difference between CPU and GPU cracking with Hashcat?
+GPU cracking provides massive parallel processing for speed, while CPU cracking uses general-purpose processors.
+
+What is the primary purpose of the "cewl" tool in custom wordlist generation?
+To generate custom wordlists from target websites by extracting unique words for more targeted password attacks.
+
+What is the basic command to generate a wordlist with Cewl?
+"cewl -d [depth] -m [min_length] -w [output_file] [target_url]" which extracts words and creates a wordlist.
+
+What is the difference between generic wordlists and targeted wordlists?
+Generic wordlists contain common passwords, while targeted wordlists use terms specific to the target for higher success rates.
+
+What is the primary purpose of the "crunch" tool in custom wordlist generation?
+To generate wordlists based on specific character sets and patterns for comprehensive password testing.
+
+What is the basic command to generate a numeric wordlist with Crunch?
+"crunch [min_length] [max_length] 0123456789 -o [output_file]" which generates all numeric combinations.
+
+What is the difference between pattern-based and character-set-based wordlist generation?
+Pattern-based generation follows specific formats, while character-set-based generation uses all combinations of specified characters.
+
+What is the primary purpose of the "wireshark" tool in network analysis?
+To capture and analyze network traffic for troubleshooting, security analysis, and protocol understanding.
+
+What is the basic process to capture traffic with Wireshark?
+Select network interface, start capture, filter traffic of interest, and analyze packets for security issues.
+
+What is the difference between Wireshark and tcpdump in network analysis?
+Wireshark provides graphical interface with advanced analysis, while tcpdump offers command-line packet capture.
+
+What is the primary purpose of the "tcpdump" tool in command-line network analysis?
+To capture and display network packets from the command line for security analysis and troubleshooting.
+
+What is the basic command to capture HTTP traffic with tcpdump?
+"tcpdump -i [interface] port 80" which captures all traffic on port 80 for HTTP analysis.
+
+What is the difference between packet capture and protocol analysis in network security?
+Packet capture records network traffic, while protocol analysis interprets the meaning and security implications of that traffic.
+
+What is the primary purpose of the "netcat" tool in network testing?
+To perform network connections, port scanning, and file transfer for basic network security testing.
+
+What is the basic command to test port connectivity with netcat?
+"nc -nv [target_ip] [port]" which tests connectivity to the specified port and displays service banners.
+
+What is the difference between netcat and telnet in network testing?
+netcat provides more flexible networking capabilities, while telnet is specifically for terminal connections.
+
+What is the primary purpose of the "socat" tool in advanced network testing?
+To provide advanced network connections with protocol translation, data manipulation, and complex networking scenarios.
+
+What is the basic command to create a simple server with socat?
+"socat TCP-LISTEN:8080,fork EXEC:/bin/cat" which creates a TCP server that executes commands.
+
+What is the difference between socat and netcat in network capabilities?
+socat provides advanced features like protocol translation and data manipulation, while netcat offers basic networking.
+
+What is the primary purpose of the "python" programming language in ethical hacking?
+To create custom security tools, automate tasks, and develop exploits with extensive library support.
+
+What is the basic Python syntax for HTTP requests?
+"import requests; response = requests.get('[url]')" which performs a basic HTTP GET request in Python.
+
+What is the difference between Python and Bash in security scripting?
+Python provides better structure and libraries, while Bash offers quick system command execution and pipeline processing.
+
+What is the primary purpose of the "bash" scripting in ethical hacking?
+To automate command-line tasks, combine multiple tools, and create custom security workflows.
+
+What is the basic bash loop for host scanning?
+"for ip in 192.168.1.{1..254}; do ping -c 1 $ip; done" which pings all hosts in a /24 network.
+
+What is the difference between scripting languages and compiled languages in security tools?
+Scripting languages offer rapid development and flexibility, while compiled languages provide better performance and obfuscation.
+
+This beginner tools and methodology deck provides 100 questions covering essential ethical hacking tools, commands, and methodologies needed for effective security testing.

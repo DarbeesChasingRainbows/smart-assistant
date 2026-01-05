@@ -1,0 +1,240 @@
+// Biblical Hebrew Grammar & Syntax Deck
+
+What is the primary purpose of Hebrew verb stems (binyanim) in expressing meaning?
+To create different semantic and grammatical relationships from the same three-consonant root through systematic patterns.
+
+What are the seven major Hebrew verb stems and their basic functions?
+Qal (simple active), Niphal (simple passive/reflexive), Piel (intensive active), Pual (intensive passive), Hiphil (causative active), Hophal (causative passive), Hithpael (reflexive/reciprocal).
+
+What is the difference between Qal and Piel stems in Hebrew?
+Qal expresses simple action (כָּתַב = he wrote), while Piel expresses intensive or factitive action (כִּתֵּב = he inscribed/he caused to write).
+
+What is the primary purpose of the Niphal stem in Hebrew grammar?
+To express passive voice or reflexive action, often with the basic meaning of the Qal stem in passive form.
+
+What is the difference between Niphal passive and reflexive meanings in Hebrew?
+Passive Niphal shows action done to subject (נִכְתַּב = he was written), while reflexive shows action done to oneself (הִתְגַּלַּח = he shaved himself).
+
+What is the primary purpose of the Piel stem in Hebrew verbs?
+To express intensive, factitive, or denominative action, often with vowel pattern changes and dagesh in the middle root consonant.
+
+What is the difference between intensive and factitive meanings in Piel stem?
+Intensive Piel emphasizes the action (דִּבֶּר = he spoke intensely), while factitive Piel causes something to become (טִהַר = he made clean).
+
+What is the primary purpose of the Pual stem in Hebrew grammar?
+To express the passive counterpart of the Piel stem, showing intensive or factitive action done to the subject.
+
+What is the difference between Pual and Piel stems in meaning and form?
+Pual is passive intensive (כֻּתַּב = it was inscribed), while Piel is active intensive (כִּתֵּב = he inscribed), with different vowel patterns.
+
+What is the primary purpose of the Hiphil stem in Hebrew verbs?
+To express causative action, causing someone to do the basic action of the root, with characteristic הִ prefix.
+
+What is the difference between Hiphil causative and declarative meanings?
+Causative Hiphil causes action (הִקְטִיל = he caused to kill), while declarative Hiphil declares or states (הִשְׁבִּיעַ = he made rest).
+
+What is the primary purpose of the Hophal stem in Hebrew grammar?
+To express the passive counterpart of the Hiphil stem, showing causative action done to the subject.
+
+What is the difference between Hophal and Hiphil stems in form and meaning?
+Hophal is passive causative (הֻקְטַל = he was caused to be killed), while Hiphil is active causative (הִקְטִיל = he caused to kill).
+
+What is the primary purpose of the Hithpael stem in Hebrew verbs?
+To express reflexive or reciprocal action, with הִתְ prefix and characteristic vowel patterns.
+
+What is the difference between reflexive and reciprocal meanings in Hithpael?
+Reflexive Hithpael shows action done to oneself (הִתְפַּלֵּל = he prayed for himself), while reciprocal shows mutual action (הִתְלַחֲמוּ = they fought each other).
+
+What is the primary purpose of Hebrew weak verb classifications in grammar?
+To categorize verbs with guttural consonants, weak consonants, or other irregularities that affect vowel patterns and forms.
+
+What is the difference between guttural weak verbs and other weak verb types?
+Guttural weak verbs have א, ה, ח, ע as root consonants affecting vowel patterns, while other weak verbs have י, ו, נ, ל that affect forms differently.
+
+What is the primary purpose of Hebrew perfect tense conjugations in expressing time?
+To indicate completed actions, typically translated as past tense, with distinct endings for each person and gender.
+
+What is the difference between 3ms and 3fs perfect endings in Hebrew?
+3ms perfect typically ends with no suffix (כָּתַב = he wrote), while 3fs adds הָ- ending (כָּתְבָה = she wrote).
+
+What is the primary purpose of Hebrew imperfect tense conjugations in expressing action?
+To indicate incomplete, ongoing, or future actions, with prefixes and characteristic vowel patterns.
+
+What is the difference between imperfect consecutive and imperfect simple forms?
+Imperfect consecutive with vav conversive converts to past tense (וַיִּכְתֹּב = and he wrote), while imperfect simple maintains future meaning (יִכְתֹּב = he will write).
+
+What is the primary purpose of Hebrew vav conversive in narrative sequences?
+To convert imperfect tense to past tense for narrative progression, creating the consecutive past tense.
+
+What is the difference between vav conversive with imperfect and perfect?
+Vav + imperfect creates past consecutive (וַיִּכְתֹּב = and he wrote), while vav + perfect creates future or conditional meaning.
+
+What is the primary purpose of Hebrew imperative mood in giving commands?
+To express direct commands, typically derived from imperfect forms without prefixes, with gender and number distinctions.
+
+What is the difference between masculine and feminine imperative forms in Hebrew?
+Masculine singular imperative uses base form (כְּתֹב = write!), while feminine singular adds הִי- (כִּתְבִי = write!).
+
+What is the primary purpose of Hebrew infinitive constructs in verbal syntax?
+To function as verbal nouns expressing purpose, result, or complementary action, often with prefixes.
+
+What is the difference between infinitive construct with לְ and without prefix?
+לְ + infinitive expresses purpose (לִכְתֹּב = to write), while infinitive without prefix can express result or complementary action.
+
+What is the primary purpose of Hebrew infinitive absolute in emphasizing action?
+To emphasize the verbal action, often used for emphasis or in temporal expressions, typically with doubled final consonant.
+
+What is the difference between infinitive absolute and infinitive construct in usage?
+Infinitive absolute emphasizes action (כָּתוֹב כָּתוֹב = surely writing), while infinitive construct functions as verbal noun (לִכְתֹּב = to write).
+
+What is the primary purpose of Hebrew participles in adjectival verbal function?
+To function as verbal adjectives describing ongoing action or state, with both active and passive forms.
+
+What is the difference between active Qal participle and passive Niphal participle?
+Active Qal participle describes ongoing action (כֹּתֵב = writing), while passive Niphal participle describes being acted upon (נִכְתָּב = being written).
+
+What is the primary purpose of Hebrew construct chains in expressing relationships?
+To show possession, relationship, or connection between nouns, with the first noun in construct state modifying the second.
+
+What is the difference between simple construct and extended construct chains?
+Simple construct has two nouns (סֵפֶר דָּוִד = book of David), while extended construct has multiple nouns in sequence.
+
+What is the primary purpose of Hebrew absolute state in noun function?
+To indicate the independent form of nouns when not in construct relationship, often with different vowel patterns.
+
+What is the difference between absolute and construct state vowel patterns?
+Construct state often has reduced vowels (סֶפֶר → סֶפֶר), while absolute state maintains full vowel patterns.
+
+What is the primary purpose of Hebrew pronominal suffixes in grammar?
+To indicate possession on nouns, objects on prepositions, and subjects/objects on verbs, replacing independent pronouns.
+
+What is the difference between 1cs, 2ms, and 3ms pronominal suffixes?
+1cs is יִי- (my), 2ms is ךָ- (your), 3ms is וֹ- (his), with variations for different gender and number combinations.
+
+What is the primary purpose of Hebrew directional ה (he) locale in nouns?
+To indicate motion toward or direction, often added to place names and nouns of location.
+
+What is the difference between regular ה and directional ה in Hebrew?
+Regular ה is part of the root or indicates definiteness, while directional ה indicates motion toward (אָרְצָה = to the land).
+
+What is the primary purpose of Hebrew paragogic nun in verb forms?
+To add emphasis or completeness to certain verb forms, particularly imperfects and imperatives, appearing as final ן.
+
+What is the difference between forms with and without paragogic nun?
+Forms with paragogic nun (יִקְטֹלוּן) often have emphatic or archaic flavor, while forms without (יִקְטֹלוּ) are standard.
+
+What is the primary purpose of Hebrew accusative of specification in syntax?
+To specify the material or content of something, often using the marker אֶת.
+
+What is the difference between accusative of direct object and specification?
+Direct object marks the receiver of action (רָאִיתִי אֶת הָאִישׁ = I saw the man), while specification indicates material (עָשִׂיתִי אֶת הַבַּיִת = I made the house of wood).
+
+What is the primary purpose of Hebrew temporal clauses in expressing time?
+To indicate when actions occur relative to main clause actions, using specific constructions and particles.
+
+What is the difference between temporal clauses with אֲשֶׁר and בְּ?
+אֲשֶׁר clauses often express specific time points (בְּיוֹם אֲשֶׁר = in the day that), while בְּ expressions indicate general time (בְּיוֹם = in the day).
+
+What is the primary purpose of Hebrew causal clauses in expressing reason?
+To provide reasons or causes for main clause actions, using particles like כִּי, יַעַן, or construct phrases.
+
+What is the difference between causal clauses with כִּי and יַעַן?
+כִּי is the common causal conjunction (because), while יַעַן is more formal and often introduces more formal causal statements.
+
+What is the primary purpose of Hebrew conditional clauses in expressing conditions?
+To present if-then scenarios using different constructions for various types of conditions and their likelihood.
+
+What is the difference between conditional clauses with אִם and כִּי?
+אִם introduces standard conditions (if), while כִּי can introduce conditions in certain contexts, often with oath or emphasis.
+
+What is the primary purpose of Hebrew purpose clauses in expressing intention?
+To show the purpose or goal of main clause actions, typically using לְמַעַן or infinitive construct.
+
+What is the difference between purpose clauses with לְמַעַן and לְ?
+לְמַעַן introduces explicit purpose (in order that), while לְ + infinitive can express purpose more concisely.
+
+What is the primary purpose of Hebrew result clauses in expressing consequences?
+To indicate the result or consequence of main clause actions, using specific constructions and particles.
+
+What is the difference between result clauses with עַד and אֲשֶׁר?
+עַד clauses often express extent or result (until), while אֲשֶׁר clauses can express result in certain contexts.
+
+What is the primary purpose of Hebrew comparative constructions in expressing comparison?
+To compare qualities, quantities, or actions between different entities using specific patterns and particles.
+
+What is the difference between comparisons with מִן and כְּ?
+מִן expresses comparison of superiority (greater than), while כְּ expresses similarity (like).
+
+What is the primary purpose of Hebrew superlative constructions in expressing extremes?
+To express the highest degree of quality or quantity, often using comparative particles with specific constructions.
+
+What is the difference between superlative and comparative forms in Hebrew?
+Superlative expresses greatest degree (greatest of all), while comparative expresses greater degree (greater than another).
+
+What is the primary purpose of Hebrew coordinate clauses in complex sentences?
+To connect equal clauses using conjunctions like וְ, אֶלָּא, or asyndeton (no conjunction).
+
+What is the difference between coordinate clauses with וְ and asyndeton?
+וְ explicitly connects clauses (and), while asyndeton connects clauses implicitly without conjunction, often for rhetorical effect.
+
+What is the primary purpose of Hebrew subordinate clauses in complex syntax?
+To create dependent relationships to main clauses, using relative clauses, temporal clauses, and other subordinate constructions.
+
+What is the difference between relative clauses and other subordinate clauses?
+Relative clauses modify nouns with אֲשֶׁר, while other subordinate clauses express time, cause, condition, or purpose.
+
+What is the primary purpose of Hebrew apposition in noun modification?
+To provide additional identification or explanation for nouns without conjunctions, often in the same case.
+
+What is the difference between apposition and construct chain in Hebrew?
+Apposition provides equivalent identification (דָּוִד, הַמֶּלֶךְ = David, the king), while construct shows relationship (מֶלֶךְ יִשְׂרָאֵל = king of Israel).
+
+What is the primary purpose of Hebrew parenthetical expressions in adding information?
+To insert additional thoughts or explanations within sentences without disrupting main clause grammar.
+
+What is the difference between parenthetical clauses and phrases in Hebrew?
+Parenthetical clauses contain finite verbs, while parenthetical phrases contain only nouns, adjectives, or participles.
+
+What is the primary purpose of Hebrew direct address in communication?
+To directly address individuals or groups, often using vocative particles or specific noun forms.
+
+What is the difference between direct address with and without particles in Hebrew?
+Direct address can use particles like הוֹי for emphasis, or simply use the noun form without special markers.
+
+What is the primary purpose of Hebrew exclamations in expressing emotion?
+To convey strong emotion or emphasis through specific interjections, word order, or grammatical constructions.
+
+What is the difference between interjections and exclamatory word order in Hebrew?
+Interjections are standalone emotional words, while exclamatory word order rearranges normal patterns for emphasis.
+
+What is the primary purpose of Hebrew rhetorical questions in argumentation?
+To make statements more forcefully by framing them as questions expecting obvious answers.
+
+What is the difference between genuine and rhetorical questions in Hebrew?
+Genuine questions seek information, while rhetorical questions make assertions through question form (הֲיֵשׁ אֱלֹהִים? = Is there God? = There is no God).
+
+What is the primary purpose of Hebrew chiasmus in literary structure?
+To create inverted parallel structure (A-B-B'-A') for emphasis, balance, and mnemonic effect.
+
+What is the difference between chiasmus and parallelism in Hebrew poetry?
+Chiasmus creates inverted structure, while parallelism creates similar structures (A-B, A'-B').
+
+What is the primary purpose of Hebrew parallelism in poetic composition?
+To create balanced, corresponding lines or clauses with similar grammatical structure and related meaning.
+
+What is the difference between synonymous and antithetic parallelism in Hebrew?
+Synonymous parallelism expresses similar ideas in parallel lines, while antithetic parallelism contrasts opposite ideas.
+
+What is the primary purpose of Hebrew ellipsis in efficient communication?
+To omit words that can be understood from context, creating more concise and natural expression.
+
+What is the difference between simple ellipsis and zeugma in Hebrew?
+Simple ellipsis omits repeated words, while zeugma uses one word to govern multiple elements with different relationships.
+
+What is the primary purpose of Hebrew repetition in emphasis and rhetoric?
+To emphasize ideas through repeated words, phrases, or structures for rhetorical effect and memory aid.
+
+What is the difference between simple repetition and progressive repetition in Hebrew?
+Simple repetition repeats identical elements, while progressive repetition varies the repeated elements while maintaining the core idea.
+
+This comprehensive Biblical Hebrew grammar deck provides 100 questions covering essential grammatical structures, verb stems, syntax patterns, and advanced concepts needed for intermediate Hebrew study and Old Testament text analysis.

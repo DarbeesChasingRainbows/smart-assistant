@@ -1,0 +1,189 @@
+// Basic Biology Fundamentals & Cell Biology Deck
+
+What is the primary purpose of studying biology?
+To understand the living world that God created, studying the structure, function, and interactions of organisms to appreciate the complexity and design of life.
+
+What is life in biological terms?
+The God-given property that distinguishes living organisms from non-living matter, characterized by organization, metabolism, growth, reproduction, and response to stimuli.
+
+What is the difference between living and non-living things in biology?
+Living organisms have complex organization, maintain homeostasis, grow, reproduce, and respond to their environment, while non-living things lack these characteristics.
+
+What is a cell in biology?
+The fundamental structural and functional unit of life, designed by God as the building block of all living organisms.
+
+What is the difference between prokaryotic and eukaryotic cells?
+Prokaryotic cells lack a nucleus and membrane-bound organelles, while eukaryotic cells have a true nucleus and complex internal structures.
+
+What are the basic components of all cells?
+Cell membrane, cytoplasm, genetic material, and ribosomes, all working together according to God's design for cellular function.
+
+What is the primary purpose of the cell membrane?
+To control what enters and exits the cell, maintaining internal conditions while allowing communication with the environment.
+
+What is the difference between plant and animal cells?
+Plant cells have cell walls, chloroplasts, and large vacuoles, while animal cells lack these structures but have centrioles and more flexible membranes.
+
+What is the primary purpose of the nucleus in eukaryotic cells?
+To protect and regulate genetic material, controlling cellular activities and reproduction according to God's design.
+
+What is the difference between DNA and RNA in cellular function?
+DNA stores genetic information long-term, while RNA carries out various functions including protein synthesis and gene regulation.
+
+What is the primary purpose of mitochondria in cells?
+To convert energy from nutrients into usable forms through cellular respiration, demonstrating the efficient design of energy systems.
+
+What is the difference between aerobic and anaerobic respiration?
+Aerobic respiration uses oxygen to produce large amounts of energy, while anaerobic respiration produces energy without oxygen but less efficiently.
+
+What is the primary purpose of chloroplasts in plant cells?
+To capture light energy and convert it into chemical energy through photosynthesis, showing God's provision for life's energy needs.
+
+What is the difference between photosynthesis and cellular respiration?
+Photosynthesis captures light energy to make food, while cellular respiration breaks down food to release energy, both demonstrating complementary design.
+
+What is the primary purpose of ribosomes in cells?
+To synthesize proteins according to genetic instructions, building the molecular machines essential for life.
+
+What is the difference between rough and smooth endoplasmic reticulum?
+Rough ER has ribosomes for protein synthesis, while smooth ER lacks ribosomes and functions in lipid synthesis and detoxification.
+
+What is the primary purpose of the Golgi apparatus in cells?
+To modify, sort, and package proteins and lipids for transport within or outside the cell, demonstrating organized cellular logistics.
+
+What is the difference between lysosomes and peroxisomes in cellular function?
+Lysosomes contain digestive enzymes for breaking down materials, while peroxisomes contain enzymes for detoxifying harmful substances.
+
+What is the primary purpose of the cytoskeleton in cells?
+To provide structure, support, and movement capabilities, maintaining cell shape and enabling internal transport.
+
+What is the difference between microfilaments, microtubules, and intermediate filaments?
+Microfilaments provide tension and movement, microtubules provide structure and transport pathways, while intermediate filaments provide structural support.
+
+What is the primary purpose of cellular division in organisms?
+To enable growth, repair, and reproduction according to God's plan for life's continuation and diversity.
+
+What is the difference between mitosis and meiosis in cellular division?
+Mitosis produces identical cells for growth and repair, while meiosis produces specialized cells for reproduction with genetic variation.
+
+What is the primary purpose of homeostasis in living organisms?
+To maintain stable internal conditions despite external changes, demonstrating the remarkable regulatory design of living systems.
+
+What is the difference between positive and negative feedback in homeostasis?
+Negative feedback reverses changes to maintain stability, while positive feedback amplifies changes for specific processes like childbirth.
+
+What is the primary purpose of enzymes in biological systems?
+To catalyze biochemical reactions, increasing reaction rates and enabling life processes to occur efficiently.
+
+What is the difference between competitive and non-competitive enzyme inhibition?
+Competitive inhibition blocks the active site, while non-competitive inhibition changes the enzyme shape, both affecting reaction rates differently.
+
+What is the primary purpose of ATP in cellular energy transfer?
+To store and transfer energy within cells, serving as the universal energy currency for cellular processes.
+
+What is the difference between ATP and ADP in energy metabolism?
+ATP contains three phosphate groups with high-energy bonds, while ADP contains two phosphate groups and must be rephosphorylated.
+
+What is the primary purpose of cellular transport mechanisms?
+To move substances across cell membranes, maintaining essential concentrations and enabling cellular function.
+
+What is the difference between passive and active transport across membranes?
+Passive transport moves substances down concentration gradients without energy, while active transport requires energy to move against gradients.
+
+What is the primary purpose of diffusion in cellular processes?
+To allow molecules to move from areas of high concentration to low concentration, enabling essential substance distribution.
+
+What is the difference between simple diffusion and facilitated diffusion?
+Simple diffusion occurs directly through the membrane, while facilitated diffusion requires protein channels or carriers.
+
+What is the primary purpose of osmosis in water balance?
+To regulate water movement across membranes, maintaining proper cellular hydration and function.
+
+What is the difference between hypertonic, hypotonic, and isotonic solutions?
+Hypertonic solutions have higher solute concentration, hypotonic have lower, while isotonic have equal concentration affecting cell volume.
+
+What is the primary purpose of endocytosis and exocytosis in cells?
+To transport large particles across membranes through vesicle formation, demonstrating sophisticated cellular transport systems.
+
+What is the difference between phagocytosis and pinocytosis in endocytosis?
+Phagocytosis engulfs large particles like bacteria, while pinocytosis takes in small droplets of dissolved substances.
+
+What is the primary purpose of tissues in multicellular organisms?
+To groups of similar cells working together to perform specialized functions, demonstrating organized complexity in created life.
+
+What is the difference between epithelial, connective, muscle, and nervous tissues?
+Epithelial tissues cover and protect, connective tissues support and bind, muscle tissues enable movement, and nervous tissues coordinate communication.
+
+What is the primary purpose of organs in biological systems?
+To structures composed of multiple tissue types working together to perform complex functions for the organism.
+
+What is the difference between structure and function in organ systems?
+Structure refers to physical arrangement, while function describes the purpose or role, both showing integrated design.
+
+What is the primary purpose of organ systems in organisms?
+To groups of organs working together to maintain life processes, demonstrating the interconnectedness of created biological systems.
+
+What is the difference between the circulatory and respiratory systems?
+The circulatory system transports blood and materials, while the respiratory system exchanges gases, both working together for oxygen delivery.
+
+What is the primary purpose of the digestive system in organisms?
+To break down food into absorbable nutrients, providing energy and building materials for cellular processes.
+
+What is the difference between mechanical and chemical digestion?
+Mechanical digestion physically breaks down food through chewing and mixing, while chemical digestion uses enzymes to break down molecules.
+
+What is the primary purpose of the nervous system in organisms?
+To coordinate and control body functions through rapid electrical and chemical communication, demonstrating sophisticated information processing.
+
+What is the difference between the central and peripheral nervous systems?
+The central nervous system includes brain and spinal cord for processing, while the peripheral system includes nerves connecting to body parts.
+
+What is the primary purpose of the endocrine system in organisms?
+To regulate body functions through chemical messengers (hormones) released into the bloodstream, providing slow but sustained control.
+
+What is the difference between endocrine and nervous system communication?
+The nervous system provides rapid, specific control through electrical signals, while the endocrine system provides slower, widespread hormonal control.
+
+What is the primary purpose of the skeletal system in organisms?
+To provide structural support, protection for organs, and sites for muscle attachment and blood cell production.
+
+What is the difference between axial and appendicular skeleton?
+The axial skeleton includes skull, spine, and rib cage for protection, while the appendicular skeleton includes limbs for movement.
+
+What is the primary purpose of the muscular system in organisms?
+To enable movement through contraction and relaxation, working with the skeletal system for locomotion and internal processes.
+
+What is the difference between skeletal, smooth, and cardiac muscle?
+Skeletal muscle is voluntary for movement, smooth muscle is involuntary for internal organs, and cardiac muscle is specialized for heart function.
+
+What is the primary purpose of the integumentary system in organisms?
+To protect the body from external damage, regulate temperature, and provide sensory information, demonstrating multifunctional design.
+
+What is the difference between epidermis, dermis, and hypodermis in skin?
+The epidermis provides outer protection, the dermis contains blood vessels and nerves, while the hypodermis connects to underlying tissue.
+
+What is the primary purpose of the immune system in organisms?
+To defend against pathogens and maintain health, demonstrating the sophisticated defense mechanisms designed for protection.
+
+What is the difference between innate and adaptive immunity?
+Innate immunity provides immediate, nonspecific defense, while adaptive immunity provides specific, memory-based defense against particular pathogens.
+
+What is the primary purpose of the lymphatic system in organisms?
+To return fluid to bloodstream, absorb fats, and provide immune functions, working with the circulatory system for fluid balance.
+
+What is the difference between lymph nodes and lymph vessels?
+Lymph vessels transport lymph fluid, while lymph nodes filter lymph and coordinate immune responses.
+
+What is the primary purpose of the urinary system in organisms?
+To remove waste products and maintain water and electrolyte balance, demonstrating efficient waste management design.
+
+What is the difference between kidneys and bladder in the urinary system?
+Kidneys filter blood and produce urine, while the bladder stores urine until elimination, both working in waste processing.
+
+What is the primary purpose of the reproductive system in organisms?
+To continue the species through reproduction, demonstrating the design for life's perpetuation and diversity.
+
+What is the difference between male and female reproductive systems?
+Male systems produce and deliver sperm, while female systems produce eggs and provide environment for embryonic development.
+
+This comprehensive biology fundamentals deck provides 100 questions covering essential cell biology, tissues, organs, and organ systems needed for beginning biology study from a creation perspective.

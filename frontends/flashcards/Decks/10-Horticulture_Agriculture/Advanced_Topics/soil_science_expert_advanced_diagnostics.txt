@@ -1,0 +1,94 @@
+// Soil Science Expert - Advanced Diagnostics & Remediation
+
+Scenario: A client in Zone 6b presents with a vegetable garden showing chlorotic interveinal patterns on older leaves of tomatoes and beans, while new growth appears normal. Soil pH is 7.8, EC is 1.2 dS/m, and the soil is a silty clay loam with poor drainage. The client has been applying 10-10-10 fertilizer monthly.
+
+Question: Which THREE interventions are most appropriate? (Select ALL that apply)
+A) Apply elemental sulfur to lower pH to 6.5-7.0
+B) Incorporate gypsum (CaSO₄) at 2-3 lbs per 100 sq ft
+C) Add chelated iron as a foliar spray
+D) Increase nitrogen application with urea
+E) Install drainage tiles or French drain
+F) Apply compost tea to increase microbial activity
+
+Answer: B, C, E
+
+Rationale:
+- B) Correct because gypsum improves soil structure, provides calcium without affecting pH, and helps alleviate interveinal chlorosis in high pH soils by improving nutrient availability
+- C) Correct because chelated iron bypasses high pH lockout, providing immediate relief for iron deficiency symptoms while soil amendments take effect
+- E) Correct because poor drainage in clay soils contributes to nutrient uptake problems and root stress; addressing drainage is fundamental to long-term solution
+- A) Incorrect because elemental sulfur acts too slowly (6-12 months) for acute symptoms and may further complicate nutrient availability in the short term
+- D) Incorrect because excessive nitrogen can exacerbate micronutrient deficiencies by promoting rapid vegetative growth that dilutes available micronutrients
+- F) Incorrect as primary intervention; while beneficial for soil health, compost tea won't address the immediate pH-related micronutrient lockout
+
+Scenario: A commercial organic farm in Zone 8a is experiencing reduced yields despite adequate fertilization. Soil tests show: pH 6.2, OM 1.2%, P 45 ppm (high), K 120 ppm (adequate), Ca 800 ppm (low), Mg 200 ppm (adequate), Zn 0.5 ppm (deficient), B 0.3 ppm (adequate). The soil is sandy loam with rapid drainage.
+
+Question: Rank these approaches from MOST to LEAST critical for immediate yield recovery:
+1) Apply zinc sulfate with organic matter
+2) Increase calcium through calcitic lime
+3) Add compost to raise organic matter
+4) Implement cover cropping with legumes
+
+Answer: 1) Apply zinc sulfate with organic matter, 2) Add compost to raise organic matter, 3) Increase calcium through calcitic lime, 4) Implement cover cropping with legumes
+
+Rationale:
+1) Zinc deficiency at 0.5 ppm is critically low and directly impacts enzyme systems, photosynthesis, and hormone function - immediate correction is essential
+2) Organic matter at 1.2% is severely inadequate for nutrient holding capacity in sandy soils - compost provides immediate CEC improvement and micronutrients
+3) Calcium is low but pH is acceptable; calcitic lime would raise pH further potentially causing other issues
+4) Cover cropping is excellent long-term but won't address immediate yield constraints
+
+Scenario: A landscape contractor is working on a new development site with compacted subsoil (bulk density 1.6 g/cm³) showing signs of anaerobic conditions. The client wants to establish a native meadow without deep excavation due to budget constraints.
+
+Question: Which TWO methods provide the most effective soil rehabilitation without deep tillage? (Select TWO)
+A) Deep ripping with subsoiler to 24 inches
+B) Broadcast compost at 2 inches with aeration
+C) Plant daikon radish and other deep-rooted cover crops
+D) Apply mycorrhizal inoculants with minimal tillage
+E) Install drainage tiles with gravel backfill
+F) Use solarization to reduce compaction
+
+Answer: B, C
+
+Rationale:
+- B) Correct because 2 inches of compost provides organic matter to improve structure, while aeration creates channels for root penetration without complete disruption
+- C) Correct because daikon radish can penetrate compacted soil to 24 inches, creating bio-channels that improve structure and drainage as they decompose
+- A) Incorrect as it violates the "no deep excavation" budget constraint
+- D) Incorrect because mycorrhizae alone cannot overcome severe physical compaction
+- E) Incorrect due to budget constraints and over-engineering for meadow establishment
+- F) Incorrect because solarization affects soil biology but doesn't address physical compaction
+
+Scenario: A vineyard in Zone 7a shows variable vigor across rows despite uniform management. Soil mapping reveals three distinct areas: Area 1 - pH 5.8, high magnesium, low calcium; Area 2 - pH 7.2, adequate nutrients but poor drainage; Area 3 - pH 6.5, balanced nutrition but low organic matter (0.8%).
+
+Question: Which management strategy addresses each area's primary limitation?
+A) Area 1: Dolomitic lime, Area 2: Gypsum + drainage, Area 3: Compost + cover crops
+B) Area 1: Calcitic lime, Area 2: Subsoiling, Area 3: Green manure
+C) Area 1: Elemental sulfur, Area 2: Organic matter, Area 3: Fertilizer blend
+D) Area 1: Calcium nitrate, Area 2: Sand incorporation, Area 3: Biochar
+
+Answer: B) Area 1: Calcitic lime, Area 2: Subsoiling, Area 3: Green manure
+
+Rationale:
+- Area 1: Calcitic lime (CaCO₃) corrects calcium deficiency without adding more magnesium; dolomitic lime would worsen the high Mg situation
+- Area 2: Physical drainage issues require subsoiling to break compaction layers before organic amendments can be effective
+- Area 3: Green manure crops rapidly build organic matter and improve soil structure better than raw compost alone
+
+Scenario: An urban garden has elevated lead levels (450 ppm) from historical contamination. The client wants to grow vegetables safely while working within budget constraints.
+
+Question: Which THREE interventions form the most effective phytostabilization and food safety strategy? (Select ALL that apply)
+A) Remove and replace 12 inches of contaminated soil
+B) Build raised beds with clean soil and landscape fabric barrier
+C) Plant lead-accumulating hyperaccumulators for phytoextraction
+D) Add phosphate amendments to immobilize lead
+E) Install drip irrigation to reduce soil splash onto edible parts
+F) Focus on fruiting crops rather than leafy vegetables
+
+Answer: B, D, F
+
+Rationale:
+- B) Correct because raised beds with barriers provide immediate safe growing space within reasonable budget
+- D) Correct because phosphate amendments (rock phosphate, triple super phosphate) form stable lead-phosphate minerals reducing bioavailability
+- F) Correct because fruiting crops accumulate less lead than leafy vegetables; strategic crop selection reduces exposure risk
+- A) Incorrect due to excessive cost and disposal requirements for contaminated soil
+- C) Incorrect because hyperaccumulators are slow, require multiple seasons, and create hazardous biomass disposal issues
+- E) Incorrect as secondary measure; while helpful, doesn't address primary contamination source
+
+This expert-level soil science deck emphasizes diagnostic reasoning, multiple solution pathways, and evidence-based intervention selection appropriate for professional certification and advanced practice.

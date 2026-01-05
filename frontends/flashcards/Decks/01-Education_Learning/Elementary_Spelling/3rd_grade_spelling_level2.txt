@@ -1,0 +1,492 @@
+// 3rd Grade Spelling Words - Level 2 Deck
+
+What is the primary purpose of advancing to Level 2 spelling in 3rd grade?
+To introduce more complex spelling patterns and longer words while building confidence in writing and reading.
+
+Spell the word: beautiful
+B-E-A-U-T-I-F-U-L
+
+Spell the word: believe
+B-E-L-I-E-V-E
+
+Spell the word: bought
+B-O-U-G-H-T
+
+Spell the word: breakfast
+B-R-E-A-K-F-A-S-T
+
+Spell the word: brought
+B-R-O-U-G-H-T
+
+Spell the word: building
+B-U-I-L-D-I-N-G
+
+Spell the word: busy
+B-U-S-Y
+
+Spell the word: caught
+C-A-U-G-H-T
+
+Spell the word: center
+C-E-N-T-E-R
+
+Spell the word: certain
+C-E-R-T-A-I-N
+
+Spell the word: change
+C-H-A-N-G-E
+
+Spell the word: cheese
+C-H-E-E-S-E
+
+Spell the word: children
+C-H-I-L-D-R-E-N
+
+Spell the word: city
+C-I-T-Y
+
+Spell the word: clean
+C-L-E-A-N
+
+Spell the word: close
+C-L-O-S-E
+
+Spell the word: country
+C-O-U-N-T-R-Y
+
+Spell the word: different
+D-I-F-F-E-R-E-N-T
+
+Spell the word: dinner
+D-I-N-N-E-R
+
+Spell the word: doctor
+D-O-C-T-O-R
+
+Spell the word: doesn't
+D-O-E-S-N-'-T
+
+Spell the word: door
+D-O-O-R
+
+Spell the word: early
+E-A-R-L-Y
+
+Spell the word: easy
+E-A-S-Y
+
+Spell the word: enough
+E-N-O-U-G-H
+
+Spell the word: every
+E-V-E-R-Y
+
+Spell the word: family
+F-A-M-I-L-Y
+
+Spell the word: father
+F-A-T-H-E-R
+
+Spell the word: favorite
+F-A-V-O-R-I-T-E
+
+Spell the word: feel
+F-E-E-L
+
+Spell the word: field
+F-I-E-L-D
+
+Spell the word: finally
+F-I-N-A-L-L-Y
+
+Spell the word: floor
+F-L-O-O-R
+
+Spell the word: friend
+F-R-I-E-N-D
+
+Spell the word: front
+F-R-O-N-T
+
+Spell the word: fruit
+F-R-U-I-T
+
+Spell the word: full
+F-U-L-L
+
+Spell the word: game
+G-A-M-E
+
+Spell the word: garden
+G-A-R-D-E-N
+
+Spell the word: gave
+G-A-V-E
+
+Spell the word: getting
+G-E-T-T-I-N-G
+
+Spell the word: girl
+G-I-R-L
+
+Spell the word: give
+G-I-V-E
+
+Spell the word: glass
+G-L-A-S-S
+
+Spell the word: great
+G-R-E-A-T
+
+Spell the word: green
+G-R-E-E-N
+
+Spell the word: ground
+G-R-O-U-N-D
+
+Spell the word: group
+G-R-O-U-P
+
+Spell the word: grow
+G-R-O-W
+
+Spell the word: half
+H-A-L-F
+
+Spell the word: happy
+H-A-P-P-Y
+
+Spell the word: hard
+H-A-R-D
+
+Spell the word: head
+H-E-A-D
+
+Spell the word: heard
+H-E-A-R-D
+
+Spell the word: heart
+H-E-A-R-T
+
+Spell the word: heavy
+H-E-A-V-Y
+
+Spell the word: help
+H-E-L-P
+
+Spell the word: here
+H-E-R-E
+
+Spell the word: high
+H-I-G-H
+
+Spell the word: hold
+H-O-L-D
+
+Spell the word: hour
+H-O-U-R
+
+Spell the word: house
+H-O-U-S-E
+
+Spell the word: how
+H-O-W
+
+Spell the word: however
+H-O-W-E-V-E-R
+
+Spell the word: important
+I-M-P-O-R-T-A-N-T
+
+Spell the word: inside
+I-N-S-I-D-E
+
+Spell the word: into
+I-N-T-O
+
+Spell the word: jacket
+J-A-C-K-E-T
+
+Spell the word: jump
+J-U-M-P
+
+Spell the word: keep
+K-E-E-P
+
+Spell the word: key
+K-E-Y
+
+Spell the word: kind
+K-I-N-D
+
+Spell the word: kitchen
+K-I-T-C-H-E-N
+
+Spell the word: knew
+K-N-E-W
+
+Spell the word: know
+K-N-O-W
+
+Spell the word: large
+L-A-R-G-E
+
+Spell the word: laugh
+L-A-U-G-H
+
+Spell the word: learn
+L-E-A-R-N
+
+Spell the word: leave
+L-E-A-V-E
+
+Spell the word: left
+L-E-F-T
+
+Spell the word: less
+L-E-S-S
+
+Spell the word: lesson
+L-E-S-S-O-N
+
+Spell the word: life
+L-I-F-E
+
+Spell the word: light
+L-I-G-H-T
+
+Spell the word: listen
+L-I-S-T-E-N
+
+Spell the word: little
+L-I-T-T-L-E
+
+Spell the word: live
+L-I-V-E
+
+Spell the word: long
+L-O-N-G
+
+Spell the word: look
+L-O-O-K
+
+Spell the word: lost
+L-O-S-T
+
+Spell the word: lot
+L-O-T
+
+Spell the word: love
+L-O-V-E
+
+Spell the word: lunch
+L-U-N-C-H
+
+Spell the word: made
+M-A-D-E
+
+Spell the word: mail
+M-A-I-L
+
+Spell the word: making
+M-A-K-I-N-G
+
+Spell the word: man
+M-A-N
+
+Spell the word: many
+M-A-N-Y
+
+Spell the word: maybe
+M-A-Y-B-E
+
+Spell the word: mean
+M-E-A-N
+
+Spell the word: measure
+M-E-A-S-U-R-E
+
+Spell the word: medicine
+M-E-D-I-C-I-N-E
+
+Spell the word: meet
+M-E-E-T
+
+Spell the word: member
+M-E-M-B-E-R
+
+Spell the word: mention
+M-E-N-T-I-O-N
+
+Spell the word: might
+M-I-G-H-T
+
+Spell the word: mind
+M-I-N-D
+
+Spell the word: minute
+M-I-N-U-T-E
+
+Spell the word: money
+M-O-N-E-Y
+
+Spell the word: month
+M-O-N-T-H
+
+Spell the word: morning
+M-O-R-N-I-N-G
+
+Spell the word: mother
+M-O-T-H-E-R
+
+Spell the word: mountain
+M-O-U-N-T-A-I-N
+
+Spell the word: mouth
+M-O-U-T-H
+
+Spell the word: move
+M-O-V-E
+
+Spell the word: much
+M-U-C-H
+
+Spell the word: music
+M-U-S-I-C
+
+Spell the word: must
+M-U-S-T
+
+Spell the word: name
+N-A-M-E
+
+Spell the word: near
+N-E-A-R
+
+Spell the word: need
+N-E-E-D
+
+Spell the word: never
+N-E-V-E-R
+
+Spell the word: new
+N-E-W
+
+Spell the word: news
+N-E-W-S
+
+Spell the word: next
+N-E-X-T
+
+Spell the word: nice
+N-I-C-E
+
+Spell the word: night
+N-I-G-H-T
+
+Spell the word: noise
+N-O-I-S-E
+
+Spell the word: none
+N-O-N-E
+
+Spell the word: nothing
+N-O-T-H-I-N-G
+
+Spell the word: notice
+N-O-T-I-C-E
+
+Spell the word: number
+N-U-M-B-E-R
+
+Spell the word: ocean
+O-C-E-A-N
+
+Spell the word: office
+O-F-F-I-C-E
+
+Spell the word: often
+O-F-T-E-N
+
+Spell the word: okay
+O-K-A-Y
+
+Spell the word: once
+O-N-C-E
+
+Spell the word: open
+O-P-E-N
+
+Spell the word: or
+O-R
+
+Spell the word: order
+O-R-D-E-R
+
+Spell the word: other
+O-T-H-E-R
+
+Spell the word: our
+O-U-R
+
+Spell the word: out
+O-U-T
+
+Spell the word: outside
+O-U-T-S-I-D-E
+
+Spell the word: over
+O-V-E-R
+
+Spell the word: own
+O-W-N
+
+Spell the word: page
+P-A-G-E
+
+Spell the word: paint
+P-A-I-N-T
+
+Spell the word: paper
+P-A-P-E-R
+
+Spell the word: parent
+P-A-R-E-N-T
+
+Spell the word: part
+P-A-R-T
+
+Spell the word: party
+P-A-R-T-Y
+
+Spell the word: pay
+P-A-Y
+
+Spell the word: people
+P-E-O-P-L-E
+
+Spell the word: person
+P-E-R-S-O-N
+
+Spell the word: picture
+P-I-C-T-U-R-E
+
+Spell the word: piece
+P-I-E-C-E
+
+Spell the word: place
+P-L-A-C-E
+
+Spell the word: plan
+P-L-A-N
+
+Spell the word: plant
+P-L-A-N-T
+
+Spell the word: play
+P-L-A-Y
+
+Spell the word: please
+P-L-E-A-S-E
+
+This comprehensive 3rd grade Level 2 spelling deck introduces more complex patterns and longer words to build advanced spelling skills.

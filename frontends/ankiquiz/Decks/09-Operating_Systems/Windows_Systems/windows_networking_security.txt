@@ -1,0 +1,345 @@
+// Windows Networking & Security Deck
+
+What is the primary purpose of TCP/IP networking in Windows?
+To provide the fundamental networking protocol suite for communication between Windows computers and network resources.
+
+What is the basic command to view IP configuration in Windows?
+"ipconfig /all" which displays detailed IP configuration including MAC address, DNS servers, and DHCP information.
+
+What is the difference between ipconfig and Get-NetIPAddress in PowerShell?
+ipconfig provides traditional command-line output, while Get-NetIPAddress offers structured objects with filtering and scripting capabilities.
+
+What is the primary purpose of DHCP client configuration in Windows?
+To automatically obtain IP addresses, subnet masks, default gateways, and DNS server settings from DHCP servers.
+
+What is the basic command to renew DHCP lease in Windows?
+"ipconfig /renew" which requests new IP configuration from DHCP server, or "Renew-DhcpClientInterface" in PowerShell.
+
+What is the difference between DHCP lease renewal and release?
+Renew requests extension of current lease, while release surrenders the current IP address back to the DHCP server.
+
+What is the primary purpose of static IP configuration in Windows?
+To assign fixed IP addresses for servers, network infrastructure, and systems requiring consistent network identification.
+
+What is the basic command to configure static IP via PowerShell?
+"New-NetIPAddress -InterfaceAlias 'Ethernet' -IPAddress 192.168.1.100 -PrefixLength 24 -DefaultGateway 192.168.1.1"
+
+What is the difference between static and dynamic IP addressing in Windows?
+Static addresses are manually configured and persistent, while dynamic addresses are assigned automatically by DHCP.
+
+What is the primary purpose of DNS client configuration in Windows?
+To enable domain name resolution for converting human-readable hostnames to IP addresses for network communication.
+
+What is the basic command to flush DNS cache in Windows?
+"ipconfig /flushdns" which clears the local DNS resolver cache, or "Clear-DnsClientCache" in PowerShell.
+
+What is the difference between DNS cache and hosts file resolution?
+DNS cache stores recent lookups for performance, while hosts file provides static local hostname mappings checked first.
+
+What is the primary purpose of Windows Firewall in network security?
+To filter network traffic based on rules, protecting systems from unauthorized access and controlling application network communications.
+
+What is the basic command to view firewall rules via PowerShell?
+"Get-NetFirewallRule" which displays all firewall rules with detailed properties and filtering options.
+
+What is the difference between Windows Defender Firewall and third-party firewalls?
+Windows Defender Firewall provides basic network protection, while third-party solutions may offer advanced features like intrusion detection.
+
+What is the primary purpose of firewall rule profiles in Windows?
+To apply different firewall rules based on network location (Domain, Private, Public) for appropriate security levels.
+
+What is the basic command to configure firewall profiles via PowerShell?
+"Set-NetFirewallProfile -Profile Domain -Enabled True -DefaultInboundAction Block" for domain profile configuration.
+
+What is the difference between inbound and outbound firewall rules?
+Inbound rules control incoming network traffic, while outbound rules manage traffic originating from the local computer.
+
+What is the primary purpose of Windows Defender Antivirus?
+To provide real-time protection against malware, spyware, and viruses through scanning and threat detection capabilities.
+
+What is the basic command to run Windows Defender scan via PowerShell?
+"Start-MpScan -ScanType QuickScan" for quick scan, or "Start-MpScan -ScanType FullScan" for comprehensive scan.
+
+What is the difference between real-time protection and scheduled scans in Windows Defender?
+Real-time protection continuously monitors system activity, while scheduled scans perform periodic comprehensive checks.
+
+What is the primary purpose of Windows Defender Exploit Guard?
+To provide advanced protection against exploits and zero-day vulnerabilities through attack surface reduction and network protection.
+
+What is the basic command to configure Exploit Guard via PowerShell?
+"Set-MpPreference -AttackSurfaceReductionRules_Ids '...' -AttackSurfaceReductionRules_Actions '...'" for rule configuration.
+
+What is the difference between Exploit Guard and traditional antivirus?
+Exploit Guard prevents exploitation techniques, while traditional antivirus detects known malware signatures and behaviors.
+
+What is the primary purpose of Windows Defender Application Control?
+To control which applications can run on systems through application whitelisting and code integrity policies.
+
+What is the basic command to create AppLocker rules via PowerShell?
+"New-AppLockerPolicy -RuleType Publisher,Hash,Path -User Everyone -Optimize" for comprehensive policy creation.
+
+What is the difference between Application Control and traditional antivirus?
+Application Control prevents unauthorized applications from running, while antivirus detects and removes malicious software.
+
+What is the primary purpose of Windows BitLocker Drive Encryption?
+To provide full-disk encryption for protecting data on lost or stolen computers through volume-level encryption.
+
+What is the basic command to enable BitLocker via PowerShell?
+"Enable-BitLocker -MountPoint 'C:' -EncryptionMethod XtsAes256 -UsedSpaceOnly -TpmProtector"
+
+What is the difference between BitLocker and EFS encryption?
+BitLocker encrypts entire volumes for full-disk protection, while EFS encrypts individual files tied to user accounts.
+
+What is the primary purpose of Windows BitLocker To Go?
+To encrypt removable USB drives for portable data protection with password or smart card authentication.
+
+What is the basic command to configure BitLocker To Go via PowerShell?
+"Enable-BitLocker -MountPoint 'E:' -EncryptionMethod XtsAes256 -PasswordProtector" for USB drive encryption.
+
+What is the difference between BitLocker To Go and standard BitLocker?
+BitLocker To Go encrypts removable drives with portable access, while standard BitLocker protects internal system drives.
+
+What is the primary purpose of Windows Device Guard?
+To provide hardware-based security through virtualization-based security (VBS) and hypervisor-enforced code integrity.
+
+What is the basic command to check Device Guard status via PowerShell?
+"Confirm-SecureBootUEFI" to verify Secure Boot, or "Get-CimInstance -ClassName Win32_DeviceGuard" for detailed status.
+
+What is the difference between Device Guard and Credential Guard?
+Device Guard protects against kernel-level exploits, while Credential Guard protects authentication credentials in virtual secure mode.
+
+What is the primary purpose of Windows Credential Guard?
+To protect authentication credentials (NTLM, Kerberos) from theft using virtualization-based security and hardware isolation.
+
+What is the basic command to enable Credential Guard via PowerShell?
+"Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\DeviceGuard' -Name 'EnableVirtualizationBasedSecurity' -Value 1"
+
+What is the difference between Credential Guard and Windows Hello?
+Credential Guard protects stored credentials, while Windows Hello provides biometric authentication for user sign-in.
+
+What is the primary purpose of Windows Hello for Business?
+To provide modern, password-less authentication through biometrics (fingerprint, facial recognition) and PIN codes.
+
+What is the basic command to configure Windows Hello via PowerShell?
+"Enable-Biometric -DeviceID (Get-BiometricDevice -Type Facial).DeviceID" for biometric device configuration.
+
+What is the difference between Windows Hello and traditional passwords?
+Windows Hello uses biometric authentication and device-bound credentials, while traditional passwords use knowledge-based authentication.
+
+What is the primary purpose of Windows Remote Access (VPN)?
+To provide secure remote connectivity to corporate networks through virtual private network connections.
+
+What is the basic command to configure VPN via PowerShell?
+"Add-VpnConnection -Name 'Corporate VPN' -ServerAddress 'vpn.company.com' -TunnelType IKEv2 -EncryptionLevel Required"
+
+What is the difference between VPN and DirectAccess in Windows?
+VPN requires user initiation for remote access, while DirectAccess provides seamless always-on connectivity for domain-joined computers.
+
+What is the primary purpose of Windows Network Location Awareness?
+To automatically detect and apply appropriate network profiles and firewall settings based on network connection type.
+
+What is the basic command to view network location via PowerShell?
+"Get-NetConnectionProfile" which displays network profiles with network category and interface information.
+
+What is the difference between Domain, Private, and Public network profiles?
+Domain profile applies to corporate networks with authentication, Private for trusted networks, Public for unsecure public networks.
+
+What is the primary purpose of Windows Network Diagnostics?
+To automatically detect and troubleshoot common network connectivity problems through guided diagnostic tools.
+
+What is the basic command to run network diagnostics via PowerShell?
+"Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | Test-NetConnection -Port 80" for connectivity testing.
+
+What is the difference between network diagnostics and manual troubleshooting?
+Diagnostics provide automated problem detection and resolution, while manual troubleshooting requires systematic investigation.
+
+What is the primary purpose of Windows Network Performance monitoring?
+To track network throughput, latency, and utilization for optimizing network performance and identifying bottlenecks.
+
+What is the basic command to monitor network performance via PowerShell?
+"Get-Counter '\Network Interface(*)\Bytes Total/sec' -SampleInterval 1 -MaxSamples 10" for network throughput monitoring.
+
+What is the difference between Performance Monitor and Resource Monitor for networks?
+Performance Monitor tracks long-term network trends, while Resource Monitor shows real-time network usage by processes.
+
+What is the primary purpose of Windows Quality of Service (QoS)?
+To prioritize network traffic for critical applications and services through bandwidth management and traffic shaping.
+
+What is the basic command to configure QoS via PowerShell?
+"New-NetQosPolicy -Name 'VoIP Traffic' -AppPathNameMatchCondition 'voip.exe' -ThrottleRateActionBitsPerSecond 1000000"
+
+What is the difference between QoS and standard network traffic management?
+QoS provides prioritization and bandwidth control, while standard management treats all traffic equally.
+
+What is the primary purpose of Windows Network Bridge?
+To connect multiple network segments at Layer 2, enabling transparent bridging and network connectivity between different interfaces.
+
+What is the basic command to create network bridge via PowerShell?
+"New-NetAdapter -Name 'Bridge' -InterfaceDescription 'Network Bridge'" then "Add-NetAdapterToBridge -Name 'Ethernet' -BridgeName 'Bridge'"
+
+What is the difference between network bridging and routing?
+Bridging operates at Layer 2 forwarding based on MAC addresses, while routing operates at Layer 3 using IP addresses.
+
+What is the primary purpose of Windows Internet Connection Sharing (ICS)?
+To share a single internet connection with multiple computers through network address translation (NAT).
+
+What is the basic command to configure ICS via PowerShell?
+"Set-NetConnectionSharing -InternetPortName 'Ethernet' -LocalPortName 'WiFi' -Enabled $true" for connection sharing.
+
+What is the difference between ICS and traditional routing?
+ICS provides simple NAT-based sharing for small networks, while routing offers advanced network traffic management.
+
+What is the primary purpose of Windows Network Load Balancing (NLB)?
+To distribute network traffic across multiple servers for improved availability and scalability of stateless applications.
+
+What is the basic command to configure NLB via PowerShell?
+"New-NlbCluster -InterfaceName 'Ethernet' -ClusterName 'WebCluster' -ClusterPrimaryIP 192.168.1.100" for cluster creation.
+
+What is the difference between NLB and failover clustering?
+NLB distributes traffic for scalability, while failover clustering provides high availability through redundancy.
+
+What is the primary purpose of Windows SMB (Server Message Block) protocol?
+To provide file sharing, printer sharing, and inter-process communication between Windows computers over networks.
+
+What is the basic command to configure SMB shares via PowerShell?
+"New-SmbShare -Name 'Data' -Path 'C:\Data' -ReadAccess 'Domain Users' -FullAccess 'Domain Admins'" for share creation.
+
+What is the difference between SMB version 1.0, 2.0, and 3.0?
+SMB 1.0 provides basic file sharing, SMB 2.0 improves performance and security, SMB 3.0 adds encryption and SMB Direct.
+
+What is the primary purpose of Windows SMB security features?
+To provide secure file sharing through encryption, signing, and access control for protecting data in transit.
+
+What is the basic command to configure SMB security via PowerShell?
+"Set-SmbServerConfiguration -EnableSMB1Protocol $false -EnableSMB2Protocol $true -EncryptData $true" for security configuration.
+
+What is the difference between SMB signing and SMB encryption?
+Signing provides data integrity verification, while encryption provides confidentiality of SMB traffic.
+
+What is the primary purpose of Windows NFS (Network File System) client?
+To enable access to Unix/Linux NFS shares from Windows computers for cross-platform file sharing.
+
+What is the basic command to install NFS client via PowerShell?
+"Install-WindowsFeature -Name NFS-Client" to install NFS client capabilities.
+
+What is the difference between NFS and SMB file sharing protocols?
+NFS provides cross-platform file sharing commonly used in Unix environments, while SMB is Windows-native with integrated authentication.
+
+What is the primary purpose of Windows Network Policy Server (NPS)?
+To provide centralized network access control through RADIUS authentication and authorization for VPN and wireless connections.
+
+What is the basic command to install NPS via PowerShell?
+"Install-WindowsFeature -Name NPAS -IncludeManagementTools" to install Network Policy Server role.
+
+What is the difference between NPS and Active Directory authentication?
+NPS provides network access control for connections, while Active Directory provides system authentication and authorization.
+
+What is the primary purpose of Windows Network Access Protection (NAP)?
+To enforce health policies for network access, ensuring computers meet security requirements before connecting to the network.
+
+What is the basic command to configure NAP via PowerShell?
+"New-NetIPsecMainModeCryptoSet -DisplayName 'NAP Crypto Set' -Encryption AES256" for NAP IPsec configuration.
+
+What is the difference between NAP and traditional network access control?
+NAP enforces system health requirements, while traditional access control focuses on user authentication and authorization.
+
+What is the primary purpose of Windows IPsec (Internet Protocol Security)?
+To provide network-level encryption and authentication for protecting IP traffic between computers.
+
+What is the basic command to configure IPsec via PowerShell?
+"New-NetIPsecRule -DisplayName 'Server Encryption' -InboundSecurity Require -OutboundSecurity Require" for IPsec rule creation.
+
+What is the difference between IPsec transport and tunnel mode?
+Transport mode encrypts IP packet payload, while tunnel mode encrypts entire IP packet for site-to-site VPN.
+
+What is the primary purpose of Windows Network Isolation?
+To separate network traffic into different security zones through network virtualization and isolation policies.
+
+What is the basic command to configure network isolation via PowerShell?
+"New-NetFirewallRule -DisplayName 'Isolation Rule' -Direction Inbound -Protocol Any -Action Block" for isolation rules.
+
+What is the difference between network isolation and VLAN segmentation?
+Network isolation uses software-based traffic separation, while VLAN segmentation uses hardware-level network separation.
+
+What is the primary purpose of Windows Network Teaming (NIC Teaming)?
+To combine multiple network interfaces for increased bandwidth, redundancy, and load balancing.
+
+What is the basic command to configure NIC teaming via PowerShell?
+"New-NetLbfoTeam -Name 'Team1' -TeamMembers 'Ethernet','Ethernet2' -TeamingMode SwitchIndependent" for team creation.
+
+What is the difference between Switch Independent and LACP teaming modes?
+Switch Independent works with any switch, while LACP requires switch support for dynamic link aggregation.
+
+What is the primary purpose of Windows Data Center Bridging (DCB)?
+To provide hardware-based QoS and bandwidth management for converged network environments (storage, networking).
+
+What is the basic command to configure DCB via PowerShell?
+"Set-NetQosDcbxSetting -Willow $true -Willing $true" for DCB configuration.
+
+What is the difference between DCB and traditional QoS?
+DCB provides hardware-based traffic prioritization, while traditional QoS uses software-based traffic management.
+
+What is the primary purpose of Windows Software Defined Networking (SDN)?
+To provide centralized network management and automation through software control of network hardware and virtualization.
+
+What is the basic command to manage SDN via PowerShell?
+"Get-SDNControllerStatus" to check SDN controller status in software-defined networking environments.
+
+What is the difference between SDN and traditional network management?
+SDN provides centralized programmable network control, while traditional management uses individual device configuration.
+
+What is the primary purpose of Windows Network Virtualization?
+To provide virtual network overlays for multi-tenant cloud environments with isolated network segments.
+
+What is the basic command to configure network virtualization via PowerShell?
+"New-NetVirtualizationLookupRecord -CustomerID 'Contoso' -VirtualSubnetID 5000 -MACAddress '00-15-5D-01-02-03'" for virtual network configuration.
+
+What is the difference between network virtualization and VLANs?
+Network virtualization provides software-based network isolation, while VLANs use hardware-based network segmentation.
+
+What is the primary purpose of Windows Hyper-V Virtual Switch?
+To provide network connectivity for virtual machines with features like port mirroring, bandwidth management, and security policies.
+
+What is the basic command to create virtual switch via PowerShell?
+"New-VMSwitch -Name 'External Switch' -SwitchType External -NetAdapterName 'Ethernet'" for external switch creation.
+
+What is the difference between External, Internal, and Private virtual switches?
+External connects to physical network, Internal provides VM-to-host communication, Private allows only VM-to-VM communication.
+
+What is the primary purpose of Windows Network Monitoring and Diagnostics?
+To provide comprehensive network traffic analysis, performance monitoring, and troubleshooting capabilities.
+
+What is the basic command to capture network packets via PowerShell?
+"New-NetEventSession -Name 'CaptureSession' -CaptureMode SaveToFile" then "Add-NetEventPacketCaptureProvider -SessionName 'CaptureSession'"
+
+What is the difference between packet capture and performance monitoring?
+Packet capture analyzes individual network packets for troubleshooting, while performance monitoring tracks overall network metrics.
+
+What is the primary purpose of Windows Network Security Auditing?
+To track network access attempts, authentication events, and security policy changes for compliance and monitoring.
+
+What is the basic command to configure network auditing via PowerShell?
+"Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Services\LanmanServer\Parameters' -Name 'EnableSecuritySignature' -Value 1" for SMB auditing.
+
+What is the difference between network auditing and system auditing?
+Network auditing focuses on network-specific events and access, while system auditing tracks broader system activities and changes.
+
+What is the primary purpose of Windows Network Compliance and Security Baselines?
+To provide standardized security configurations for network services and components based on industry best practices.
+
+What is the basic command to apply network security baselines via PowerShell?
+"Import-Module SecurityPolicy" then "Invoke-SecurityPolicyAnalysis -Path 'C:\NetworkBaseline.xml'" for baseline application.
+
+What is the difference between security baselines and custom network policies?
+Security baselines provide industry-standard configurations, while custom policies address specific organizational network requirements.
+
+What is the primary purpose of Windows Network Threat Protection?
+To provide advanced threat detection and prevention for network-based attacks through integration with security services.
+
+What is the basic command to configure network threat protection via PowerShell?
+"Set-MpPreference -DisableRealtimeMonitoring $false -DisableBehaviorMonitoring $false" for Windows Defender network protection.
+
+What is the difference between threat protection and traditional network security?
+Threat protection uses advanced detection techniques and intelligence, while traditional security relies on known signatures and rules.
+
+This comprehensive Windows networking and security deck provides 150 questions covering essential network configuration, security hardening, and protection mechanisms needed for secure Windows network administration.

@@ -1,0 +1,240 @@
+// Circuit Analysis AC Analysis & Impedance Deck
+
+What is the primary purpose of AC analysis in circuit theory?
+To understand circuit behavior with alternating current sources, using phasors, impedance, and frequency-domain analysis for sinusoidal steady-state conditions.
+
+What is impedance in AC circuit analysis?
+The total opposition to AC current flow, combining resistance and reactance, represented as complex quantity Z = R + jX, where R is resistance and X is reactance.
+
+What is the difference between resistance and impedance?
+Resistance opposes all current flow and is frequency-independent, while impedance includes frequency-dependent reactance from capacitors and inductors.
+
+What is reactance in AC circuits?
+The frequency-dependent opposition to current flow from capacitors and inductors, causing phase shifts between voltage and current without dissipating power.
+
+What is the difference between capacitive and inductive reactance?
+Capacitive reactance (Xc = 1/ωC) decreases with frequency and causes current to lead voltage, while inductive reactance (XL = ωL) increases with frequency and causes current to lag voltage.
+
+What is the primary purpose of phasors in AC analysis?
+To represent sinusoidal quantities as rotating vectors in the complex plane, simplifying AC calculations using magnitude and phase instead of time-varying functions.
+
+What is the difference between time-domain and phasor representation?
+Time-domain shows instantaneous values over time, while phasors show steady-state magnitude and phase for sinusoidal analysis at specific frequency.
+
+What is the primary purpose of complex power in AC circuits?
+To comprehensively describe power relationships including real (P), reactive (Q), and apparent (S) power: S = P + jQ, where |S| = √(P² + Q²).
+
+What is the difference between real power and reactive power?
+Real power (watts) does useful work and is dissipated as heat, while reactive power (VARs) maintains electric and magnetic fields but doesn't do net work over complete cycles.
+
+What is power factor in AC systems?
+The ratio of real power to apparent power (PF = cos φ), indicating efficiency of power usage and affecting system design and utility costs.
+
+What is the difference between leading and lagging power factor?
+Leading power factor occurs in capacitive circuits with current leading voltage, while lagging power factor occurs in inductive circuits with current lagging voltage.
+
+What is the primary purpose of admittance in AC analysis?
+To represent the ease of current flow in AC circuits, being the reciprocal of impedance (Y = 1/Z), with conductance (G) and susceptance (B) components: Y = G + jB.
+
+What is the difference between impedance and admittance?
+Impedance measures opposition to current flow, while admittance measures how easily current flows; they are reciprocals: Y = 1/Z.
+
+What is the primary purpose of frequency response analysis?
+To understand how circuit behavior changes with frequency, essential for filters, amplifiers, and communication systems.
+
+What is the difference between magnitude and phase response?
+Magnitude response shows how signal amplitude changes with frequency, while phase response shows how signal timing shifts with frequency.
+
+What is the primary purpose of Bode plots in circuit analysis?
+To display frequency response using logarithmic scales, showing magnitude (in dB) and phase (in degrees) versus frequency on log scale.
+
+What is the difference between Bode magnitude and phase plots?
+Magnitude plot shows gain/attenuation in decibels versus log frequency, while phase plot shows phase shift in degrees versus log frequency.
+
+What is the primary purpose of resonance in RLC circuits?
+To create conditions where inductive and capacitive reactances cancel (XL = XC), resulting in maximum current flow and frequency-selective behavior.
+
+What is the difference between series and parallel resonance?
+Series resonance has minimum impedance at resonant frequency with maximum current, while parallel resonance has maximum impedance with minimum current.
+
+What is the quality factor (Q) in resonant circuits?
+A measure of resonance sharpness: Q = ω₀L/R for series circuits, determining bandwidth and selectivity in filters and oscillators.
+
+What is the difference between high Q and low Q resonant circuits?
+High Q circuits have narrow bandwidth and sharp frequency selectivity, while low Q circuits have wide bandwidth and broad frequency response.
+
+What is the primary purpose of transfer functions in AC analysis?
+To describe the relationship between input and output signals in frequency domain, essential for understanding circuit behavior and system design.
+
+What is the difference between voltage and current transfer functions?
+Voltage transfer functions relate output voltage to input voltage, while current transfer functions relate output current to input current.
+
+What is the primary purpose of poles and zeros in transfer functions?
+To determine circuit stability and frequency response characteristics; poles cause magnitude peaks while zeros cause magnitude dips.
+
+What is the difference between poles and zeros in circuit behavior?
+Poles are frequencies where transfer function goes to infinity (maximum response), while zeros are frequencies where transfer function goes to zero (minimum response).
+
+What is the primary purpose of mesh analysis in AC circuits?
+To systematically analyze circuits using loop currents and Kirchhoff's Voltage Law, extended to AC using complex impedances instead of resistances.
+
+What is the difference between AC and DC mesh analysis?
+AC mesh analysis uses complex impedances and phasor quantities, while DC mesh analysis uses real resistances and DC quantities.
+
+What is the primary purpose of nodal analysis in AC circuits?
+To systematically analyze circuits using node voltages and Kirchhoff's Current Law, extended to AC using complex admittances.
+
+What is the difference between AC and DC nodal analysis?
+AC nodal analysis uses complex admittances and phasor voltages, while DC nodal analysis uses real conductances and DC voltages.
+
+What is the primary purpose of superposition in AC circuits?
+To analyze circuits with multiple sources by considering each AC source individually and summing results using phasor addition.
+
+What is the difference between AC and DC superposition?
+AC superposition uses phasor quantities and complex arithmetic, while DC superposition uses real quantities and simple arithmetic.
+
+What is the primary purpose of Thevenin's theorem in AC circuits?
+To replace complex AC networks with equivalent voltage source and series impedance, simplifying load analysis in AC systems.
+
+What is the difference between AC and DC Thevenin equivalents?
+AC Thevenin uses phasor voltage source and complex impedance, while DC Thevenin uses DC voltage source and real resistance.
+
+What is the primary purpose of Norton's theorem in AC circuits?
+To replace complex AC networks with equivalent current source and parallel impedance, useful for current-based AC analysis.
+
+What is the difference between AC and DC Norton equivalents?
+AC Norton uses phasor current source and complex impedance, while DC Norton uses DC current source and real resistance.
+
+What is the primary purpose of maximum power transfer in AC circuits?
+To determine load impedance that receives maximum power: ZL = ZS* (complex conjugate of source impedance).
+
+What is the difference between AC and DC maximum power transfer?
+AC maximum power transfer requires complex conjugate matching, while DC requires simple resistance matching (RL = RS).
+
+What is the primary purpose of filters in AC circuits?
+To selectively pass or reject signals based on frequency, using reactive components to create frequency-dependent impedance.
+
+What is the difference between passive and active AC filters?
+Passive filters use only R, L, C components, while active filters use op-amps or other active components for better performance.
+
+What is the primary purpose of low-pass filters in AC systems?
+To allow low-frequency signals to pass while attenuating high-frequency signals, essential for anti-aliasing and noise reduction.
+
+What is the difference between first-order and second-order low-pass filters?
+First-order filters have -20 dB/decade roll-off with simple RC circuits, while second-order filters have -40 dB/decade roll-off with RLC or active circuits.
+
+What is the primary purpose of high-pass filters in AC circuits?
+To allow high-frequency signals to pass while attenuating low-frequency signals, used for AC coupling and DC blocking.
+
+What is the difference between capacitive and inductive high-pass filters?
+Capacitive high-pass filters place capacitors in series with signal path, while inductive filters place inductors in parallel with load.
+
+What is the primary purpose of band-pass filters in AC systems?
+To allow a specific frequency band to pass while attenuating frequencies outside the band, essential for communication and signal processing.
+
+What is the difference between wideband and narrowband band-pass filters?
+Wideband filters have large bandwidth covering many octaves, while narrowband filters have small bandwidth covering limited frequency range.
+
+What is the primary purpose of band-stop (notch) filters in AC circuits?
+To reject a specific frequency band while passing all other frequencies, used for eliminating interference and noise.
+
+What is the difference between notch and band-stop filters?
+Notch filters are designed to reject very narrow frequency bands, while band-stop filters reject wider frequency ranges.
+
+What is the primary purpose of operational amplifiers in AC circuits?
+To provide high-gain AC amplification with frequency-dependent behavior, enabling precise signal processing and filtering.
+
+What is the difference between inverting and non-inverting AC amplifiers?
+Inverting amplifiers have 180° phase shift with gain -Rf/Rin, while non-inverting amplifiers have 0° phase shift with gain 1 + Rf/Rin.
+
+What is the primary purpose of frequency response in op-amp circuits?
+To understand how op-amp gain and phase change with frequency, limited by gain-bandwidth product and slew rate.
+
+What is the difference between open-loop and closed-loop frequency response?
+Open-loop response shows intrinsic op-amp characteristics, while closed-loop response shows behavior with feedback applied.
+
+What is the primary purpose of active filters using op-amps?
+To create filters with better performance than passive filters, providing gain, steep roll-off, and buffer isolation.
+
+What is the difference between Sallen-Key and multiple feedback (MFB) active filters?
+Sallen-Key uses non-inverting configuration with unity gain buffer, while MFB uses inverting configuration with different component sensitivities.
+
+What is the primary purpose of oscillators in AC circuits?
+To generate continuous AC signals without input, using positive feedback and frequency-selective networks.
+
+What is the difference between sinusoidal and relaxation oscillators?
+Sinusoidal oscillators produce smooth sine waves using resonance, while relaxation oscillators produce non-sinusoidal waves using switching.
+
+What is the primary purpose of phase shift oscillators?
+To generate sinusoidal signals using cascaded RC networks providing 180° phase shift, with op-amp providing additional 180° for positive feedback.
+
+What is the difference between RC and LC phase shift oscillators?
+RC oscillators use resistors and capacitors for audio frequencies, while LC oscillators use inductors and capacitors for radio frequencies.
+
+What is the primary purpose of Wien bridge oscillators?
+To generate low-distortion sinusoidal signals using bridge network with frequency-selective feedback, essential for audio signal generation.
+
+What is the difference between bridge and phase shift oscillator topologies?
+Bridge oscillators use balanced bridge networks for frequency selection, while phase shift oscillators use cascaded RC sections.
+
+What is the primary purpose of crystal oscillators in AC systems?
+To generate highly stable and accurate frequency references using piezoelectric crystal resonance, essential for clocks and communication systems.
+
+What is the difference between crystal and LC oscillators?
+Crystal oscillators have much higher frequency stability and accuracy due to crystal Q factor, while LC oscillators are less stable but tunable.
+
+What is the primary purpose of power factor correction in AC circuits?
+To improve power factor by adding capacitors or inductors to cancel reactive power, reducing current and improving efficiency.
+
+What is the difference between leading and lagging power factor correction?
+Leading correction adds capacitors to inductive loads, while lagging correction adds inductors to capacitive loads.
+
+What is the primary purpose of harmonic analysis in AC power systems?
+To understand and mitigate harmonic distortion from non-linear loads, essential for power quality and equipment protection.
+
+What is the difference between fundamental and harmonic frequencies?
+Fundamental frequency is the primary system frequency (50/60 Hz), while harmonics are integer multiples causing distortion.
+
+What is the primary purpose of three-phase AC analysis?
+To analyze balanced three-phase power systems using phasor techniques, essential for power generation and distribution.
+
+What is the difference between balanced and unbalanced three-phase systems?
+Balanced systems have equal voltages and 120° phase shifts, while unbalanced systems have unequal conditions requiring special analysis.
+
+What is the primary purpose of symmetrical components in power analysis?
+To simplify unbalanced three-phase analysis by decomposing into positive, negative, and zero sequence components.
+
+What is the difference between sequence components in fault analysis?
+Positive sequence represents normal operation, negative sequence represents unbalance, and zero sequence represents ground faults.
+
+What is the primary purpose of transmission line analysis in AC systems?
+To understand signal propagation, impedance matching, and reflections in long transmission lines using distributed parameters.
+
+What is the difference between lumped and distributed parameter models?
+Lumped models concentrate parameters at discrete points, while distributed models spread parameters continuously along line length.
+
+What is the primary purpose of characteristic impedance in transmission lines?
+To determine impedance matching and signal reflection: Z₀ = √(L/C) for lossless lines, critical for maximum power transfer.
+
+What is the difference between characteristic and load impedance?
+Characteristic impedance is inherent line property, while load impedance is connected termination; matching prevents reflections.
+
+What is the primary purpose of standing wave ratio (SWR) in transmission lines?
+To measure impedance matching quality: SWR = (1 + |Γ|)/(1 - |Γ|), where Γ is reflection coefficient.
+
+What is the difference between forward and reflected waves in transmission lines?
+Forward waves travel from source to load, while reflected waves travel back due to impedance mismatch.
+
+What is the primary purpose of Smith charts in RF circuit analysis?
+To graphically solve impedance matching problems and visualize complex impedance transformations using polar coordinates.
+
+What is the difference between impedance and admittance Smith charts?
+Impedance charts plot normalized impedance, while admittance charts plot normalized admittance; both are rotations of each other.
+
+What is the primary purpose of scattering parameters (S-parameters) in RF circuits?
+To characterize high-frequency circuit behavior using incident and reflected waves, essential for microwave and RF design.
+
+What is the difference between S-parameters and traditional circuit parameters?
+S-parameters use power wave relationships for high frequencies, while traditional parameters use voltage/current for low frequencies.
+
+This comprehensive AC analysis and impedance deck provides 100 questions covering essential frequency-domain analysis, impedance concepts, and AC circuit applications needed for intermediate circuit analysis study.

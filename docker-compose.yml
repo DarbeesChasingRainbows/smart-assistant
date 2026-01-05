@@ -1,0 +1,163 @@
+version: "3.8"
+
+services:
+  # ArangoDB - Multi-model Graph Database
+  arangodb:
+    image: arangodb:latest
+    environment:
+      ARANGO_ROOT_PASSWORD: ${ARANGO_ROOT_PASSWORD:-lifeos123}
+    ports:
+      - "8529:8529"
+    volumes:
+      - arangodb_data:/var/lib/arangodb3
+      - arangodb_apps:/var/lib/arangodb3-apps
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "arangosh --server.endpoint http://127.0.0.1:8529 --server.username root --server.password \"$ARANGO_ROOT_PASSWORD\" --javascript.execute-string \"db._version()\" >/dev/null 2>&1",
+      ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lifeos-network
+
+  arango-init:
+    image: arangodb:latest
+    environment:
+      ARANGO_ROOT_PASSWORD: ${ARANGO_ROOT_PASSWORD:-lifeos123}
+    volumes:
+      - ./scripts/init-arangodb.js:/init/init-arangodb.js:ro
+    depends_on:
+      arangodb:
+        condition: service_healthy
+    command: >
+      arangosh
+      --server.endpoint http://arangodb:8529
+      --server.username root
+      --server.password "${ARANGO_ROOT_PASSWORD:-lifeos123}"
+      --server.database _system
+      --javascript.execute /init/init-arangodb.js
+    restart: "no"
+    networks:
+      - lifeos-network
+
+  # .NET API Backend
+  api:
+    build:
+      context: ./LifeOS
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5120
+      - ArangoDB__Endpoint=http://arangodb:8529
+      - ArangoDB__Database=lifeos
+      - ArangoDB__Username=root
+      - ArangoDB__Password=${ARANGO_ROOT_PASSWORD:-lifeos123}
+      - MinIO__Endpoint=minio:9000
+      - MinIO__AccessKey=${MINIO_ROOT_USER:-minioadmin}
+      - MinIO__SecretKey=${MINIO_ROOT_PASSWORD:-minioadmin123}
+      - MinIO__UseSSL=false
+    ports:
+      - "5120:5120"
+    depends_on:
+      arangodb:
+        condition: service_healthy
+    networks:
+      - lifeos-network
+
+  # MinIO - S3-compatible Object Storage for receipts/files
+  minio:
+    image: quay.io/minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lifeos-network
+
+  # Deno Fresh Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - API_BASE_URL=http://api:5120
+    depends_on:
+      - api
+    networks:
+      - lifeos-network
+
+  # Caddy Gateway (Single Entrypoint)
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - frontend
+      - garage-frontend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - lifeos-network
+
+  # Flashcards Frontend (Fresh) - uses LifeOS API (ArangoDB + MinIO)
+  flashcards-frontend:
+    build:
+      context: ./frontends/flashcards
+      dockerfile: Dockerfile
+    environment:
+      - DENO_ENV=production
+      - FRESH_BASE_PATH=/flashcards  # This helps Fresh align its internal router
+      - VITE_API_URL=http://api:5120
+      - VITE_UPLOADS_URL=http://api:5120
+      - DENO_DEPLOYMENT_ID=${GIT_REVISION:-local}
+    ports:
+      - "8030:8000"
+    depends_on:
+      - api
+      - minio
+    networks:
+      - lifeos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Garage Frontend (VehicleMaintenence) - uses LifeOS API
+  garage-frontend:
+    build:
+      context: ./frontends/garage
+      dockerfile: Dockerfile
+    environment:
+      - DENO_ENV=production
+      - VITE_API_URL=http://api:5120
+      - VITE_UPLOADS_URL=http://api:5120
+    depends_on:
+      - api
+    networks:
+      - lifeos-network
+
+volumes:
+  arangodb_data:
+    driver: local
+  arangodb_apps:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  lifeos-network:
+    driver: bridge

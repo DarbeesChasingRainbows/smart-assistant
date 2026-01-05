@@ -1,0 +1,94 @@
+// Incident Response & Threat Hunting Deck
+
+What is the most critical capability for detecting advanced persistent threats in enterprise environments?
+Comprehensive baseline establishment with behavioral anomaly detection, threat intelligence integration, and continuous monitoring across all assets combined with automated response capabilities.
+
+In incident response, what is the most effective method to contain ransomware propagation?
+Network segmentation with automated isolation capabilities, comprehensive backup verification, and proper containment procedures combined with threat intelligence integration.
+
+What is the primary security consideration when implementing an incident response program?
+Executive leadership involvement with clear roles and responsibilities, regular testing, and comprehensive communication procedures combined with proper legal and regulatory compliance.
+
+When conducting threat hunting, what is the most effective methodology for identifying novel attack patterns?
+Hypothesis-driven hunting with comprehensive data analysis, threat intelligence integration, and regular security assessments combined with automated hunting tools and techniques.
+
+What is the most critical component of an effective security operations center for incident detection?
+Comprehensive visibility across all assets with behavioral baseline establishment, real-time anomaly detection, and threat intelligence integration combined with automated response capabilities.
+
+In incident response, what is the most effective method to preserve forensic evidence while maintaining business operations?
+Proper evidence collection procedures with comprehensive documentation, chain of custody maintenance, and minimal system impact combined with regular testing and validation.
+
+What is the primary security consideration when implementing incident response automation?
+Proper validation and testing with comprehensive error handling, rollback capabilities, and human oversight combined with regular security assessments and compliance management.
+
+When conducting security incident analysis, what is the most effective method to determine attack scope and impact?
+Comprehensive log analysis with timeline reconstruction, asset mapping, and impact assessment combined with threat intelligence integration and proper documentation.
+
+What is the most critical capability for effective incident response in cloud environments?
+Automated response capabilities with comprehensive monitoring, proper access controls, and regular security assessments combined with cloud-specific incident response procedures.
+
+In incident response communication, what is the most effective approach for managing stakeholder expectations?
+Clear, timely communication with comprehensive situation reports, proper escalation procedures, and regular updates combined with proper media management and regulatory compliance.
+
+What is the primary security consideration when implementing incident response playbooks?
+Comprehensive testing with regular updates, proper role definitions, and automated response capabilities combined with threat intelligence integration and continuous improvement.
+
+When conducting post-incident analysis, what is the most effective method to prevent recurrence?
+Comprehensive root cause analysis with proper remediation planning, regular security assessments, and continuous improvement combined with threat intelligence integration and proper documentation.
+
+What is the most critical component of effective threat hunting in enterprise environments?
+Comprehensive data collection with proper analysis tools, threat intelligence integration, and skilled analysts combined with automated hunting capabilities and regular security assessments.
+
+In incident response, what is the most effective method to coordinate with external stakeholders?
+Proper communication procedures with comprehensive documentation, legal and regulatory compliance, and regular testing combined with threat intelligence integration and proper escalation procedures.
+
+What is the primary security consideration when implementing incident response metrics?
+Comprehensive measurement with proper key performance indicators, regular reporting, and continuous improvement combined with executive leadership involvement and proper resource allocation.
+
+When conducting security incident triage, what is the most effective methodology for prioritizing response efforts?
+Risk-based prioritization with comprehensive impact assessment, business criticality evaluation, and threat intelligence integration combined with automated triage tools and regular security assessments.
+
+What is the most critical capability for effective incident response in distributed environments?
+Centralized monitoring with comprehensive visibility, automated response capabilities, and proper coordination procedures combined with threat intelligence integration and regular security assessments.
+
+In incident response, what is the most effective method to maintain business continuity during security incidents?
+Comprehensive business continuity planning with regular testing, proper communication procedures, and automated response capabilities combined with proper resource allocation and executive leadership involvement.
+
+What is the primary security consideration when implementing incident response automation tools?
+Proper validation with comprehensive testing, error handling, and human oversight combined with regular security assessments and continuous improvement procedures.
+
+When conducting threat hunting, what is the most effective methodology for identifying insider threats?
+Behavioral analysis with comprehensive user activity monitoring, access pattern analysis, and anomaly detection combined with proper privacy considerations and regular security assessments.
+
+What is the most critical component of effective incident response in regulated industries?
+Comprehensive compliance management with proper documentation, regular security assessments, and regulatory reporting combined with proper legal and privacy considerations.
+
+In incident response, what is the most effective method to coordinate with law enforcement and regulatory agencies?
+Proper communication procedures with comprehensive documentation, legal counsel involvement, and regular testing combined with threat intelligence integration and proper escalation procedures.
+
+What is the primary security consideration when implementing incident response training programs?
+Comprehensive training with regular testing, proper scenario development, and continuous improvement combined with executive leadership involvement and proper resource allocation.
+
+When conducting security incident analysis, what is the most effective method to determine attacker techniques and procedures?
+Comprehensive forensic analysis with proper evidence collection, timeline reconstruction, and threat intelligence integration combined with regular security assessments and proper documentation.
+
+What is the most critical capability for effective incident response in multinational organizations?
+Coordinated response with proper communication procedures, comprehensive regulatory compliance, and regular testing combined with threat intelligence integration and proper resource allocation.
+
+In incident response, what is the most effective method to manage third-party vendor incidents?
+Comprehensive vendor management with proper communication procedures, regular security assessments, and coordinated response efforts combined with proper contractual obligations and legal compliance.
+
+What is the primary security consideration when implementing incident response automation in critical infrastructure?
+Proper validation with comprehensive testing, fail-safe mechanisms, and human oversight combined with regular security assessments and continuous improvement procedures.
+
+When conducting threat hunting, what is the most effective methodology for identifying advanced persistent threats?
+Comprehensive threat intelligence integration with behavioral analysis, timeline reconstruction, and proper hypothesis development combined with automated hunting tools and regular security assessments.
+
+What is the most critical component of effective incident response in healthcare environments?
+Comprehensive privacy protection with proper communication procedures, regulatory compliance, and regular testing combined with threat intelligence integration and proper documentation.
+
+In incident response, what is the most effective method to manage communication during major security breaches?
+Comprehensive communication planning with proper media management, stakeholder coordination, and regular testing combined with legal counsel involvement and regulatory compliance.
+
+What is the primary security consideration when implementing incident response capabilities for small organizations?
+Scalable solutions with proper resource allocation, comprehensive training, and regular testing combined with threat intelligence integration and continuous improvement procedures.

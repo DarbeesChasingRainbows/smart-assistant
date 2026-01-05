@@ -1,0 +1,129 @@
+/* 3D Flip Card Styles */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+ .transform-3d {
+  transform-style: preserve-3d;
+ }
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Fade in animation for rating buttons */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Shadcn-style design tokens for compatibility */
+:root {
+  --foreground: oklch(0.145 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --border: oklch(0.922 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+}
+
+.dark {
+  --foreground: oklch(0.985 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+}
+
+/* Utility classes for shadcn tokens */
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+.border-border {
+  border-color: var(--border);
+}
+
+.bg-primary\/10 {
+  background-color: color-mix(in oklab, var(--primary) 10%, transparent);
+}
+
+.bg-primary\/5 {
+  background-color: color-mix(in oklab, var(--primary) 5%, transparent);
+}
+
+.bg-primary\/20 {
+  background-color: color-mix(in oklab, var(--primary) 20%, transparent);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-foreground {
+  color: var(--primary-foreground);
+}
+
+.hover\:bg-error\/10:hover {
+  background-color: color-mix(in oklab, var(--error) 10%, transparent);
+}
+
+.hover\:bg-warning\/10:hover {
+  background-color: color-mix(in oklab, var(--warning) 10%, transparent);
+}
+
+.hover\:bg-info\/10:hover {
+  background-color: color-mix(in oklab, var(--info) 10%, transparent);
+}
+
+.hover\:bg-success\/10:hover {
+  background-color: color-mix(in oklab, var(--success) 10%, transparent);
+}
+
+/* Flashcard hover effects */
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Progress bar styling */
+.progress {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Arbitrary value support */
+.h-\[400px\] {
+  height: 400px;
+}

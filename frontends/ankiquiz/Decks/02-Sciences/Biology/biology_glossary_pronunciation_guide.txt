@@ -1,0 +1,415 @@
+# Biology Glossary with Pronunciation Guide
+
+## Overview
+Comprehensive pronunciation guide for all biological terms found in the Biology deck collection. Organized alphabetically with simplified phonetics and deck references.
+
+## Quick Reference: Commonly Confused Terms
+**Mitosis vs Meiosis**: Mitosis (my-TOH-sis) produces identical cells for growth/repair; Meiosis (my-OH-sis) produces reproductive cells with half genetic material
+**Prokaryotic vs Eukaryotic**: Prokaryotic (proh-KAR-ee-OT-ik) cells lack nucleus; Eukaryotic (yoo-KAR-ee-OT-ik) cells have nucleus and organelles
+**Genotype vs Phenotype**: Genotype (JEE-noh-type) is genetic makeup; Phenotype (FEE-noh-type) is observable traits
+**Arteries vs Veins**: Arteries (AR-tuh-reez) carry blood away from heart; Veins (vaynz) return blood to heart
+**DNA vs RNA**: DNA (DEE-en-AY) stores genetic info; RNA (AR-en-AY) carries out protein synthesis
+
+## Recommended Learning Progression
+1. **Start with**: Cell Biology terms (foundational concepts)
+2. **Progress to**: Genetics & Heredity (builds on cellular knowledge)
+3. **Then study**: Diversity & Ecology (expands to organism level)
+4. **Finish with**: Human Biology Applications (applies concepts to human body)
+
+## Pronunciation Key
+- **Vowels**: a (cat), ā (day), e (met), ē (see), i (sit), ī (eye), o (hot), ō (go), u (cup), ū (rule)
+- **Consonants**: Standard English pronunciation, with emphasis on stressed syllables in ALL CAPS
+
+## A
+
+**Aerobic** (air-OH-bik) - [Cell Biology]
+- Requiring oxygen; referring to processes that use oxygen
+- Related to: Cellular respiration, metabolism
+
+**Allele** (uh-LEEL) - [Genetics & Heredity]
+- Different versions of the same gene
+- Related to: Genotype, phenotype, variation
+
+**Anaerobic** (an-air-OH-bik) - [Cell Biology]
+- Not requiring oxygen; referring to processes without oxygen
+- Related to: Fermentation, cellular respiration
+
+**Anatomy** (uh-NAT-uh-mee) - [Human Biology Applications]
+- Study of body structure and organization
+- Related to: Physiology, body systems
+
+**Archaebacteria** (ar-kee-bak-TEER-ee-uh) - [Diversity & Ecology]
+- Ancient bacteria often living in extreme environments
+- Related to: Prokaryotes, classification
+
+**Arteries** (AR-tuh-reez) - [Human Biology Applications]
+- Blood vessels carrying oxygenated blood away from heart
+- Related to: Circulatory system, veins
+
+**Asexual reproduction** (ay-SEK-shoo-al ree-pro-DUK-shun) - [Genetics & Heredity]
+- Reproduction without genetic contribution from another organism
+- Related to: Mitosis, binary fission
+
+## B
+
+**Bacteria** (bak-TEER-ee-uh) - [Diversity & Ecology]
+- Single-celled prokaryotic organisms
+- Related to: Decomposition, nutrient cycling
+
+**Binary fission** (BY-nuh-ree FISH-un) - [Genetics & Heredity]
+- Simple cell division in prokaryotes
+- Related to: Asexual reproduction, prokaryotes
+
+**Binomial nomenclature** (by-NO-mee-al no-men-KLAY-chur) - [Diversity & Ecology]
+- Two-part scientific naming system for species
+- Related to: Classification, genus, species
+
+**Biodiversity** (by-oh-dy-VER-sih-tee) - [Diversity & Ecology]
+- Variety of life at genetic, species, and ecosystem levels
+- Related to: Ecosystem diversity, species diversity
+
+## C
+
+**Cardiac muscle** (CAR-dee-ak MUSS-ul) - [Human Biology Applications]
+- Specialized muscle tissue of the heart
+- Related to: Muscular system, heart function
+
+**Cell** (sell) - [Cell Biology]
+- Basic structural and functional unit of life
+- Related to: Organelles, cellular processes
+
+**Cell membrane** (sell MEM-brane) - [Cell Biology]
+- Outer boundary controlling what enters and exits cell
+- Related to: Transport, protection, communication
+
+**Cell wall** (sell wall) - [Cell Biology]
+- Rigid outer structure in plant cells and some organisms
+- Related to: Plant cells, support, protection
+
+**Cellular respiration** (SELL-yoo-lar res-puh-RAY-shun) - [Cell Biology]
+- Process of converting nutrients to usable energy
+- Related to: Mitochondria, ATP, metabolism
+
+**Centrioles** (SEN-tree-ohlz) - [Cell Biology]
+- Paired structures involved in cell division in animal cells
+- Related to: Mitosis, cell division
+
+**Cerebellum** (ser-uh-BEL-um) - [Human Biology Applications]
+- Brain region coordinating balance and fine motor control
+- Related to: Brain, nervous system, coordination
+
+**Cerebrum** (suh-REE-brum) - [Human Biology Applications]
+- Largest brain region handling conscious thought and actions
+- Related to: Brain, cognition, voluntary actions
+
+**Chloroplasts** (KLOR-uh-plasts) - [Cell Biology]
+- Organelles for photosynthesis in plant cells
+- Related to: Photosynthesis, plant cells, energy
+
+**Chromosomes** (KRO-muh-sohmz) - [Genetics & Heredity]
+- Structures containing genetic material in cells
+- Related to: DNA, genes, cell division
+
+**Classification** (klas-ih-fih-KAY-shun) - [Diversity & Ecology]
+- System of organizing living things by characteristics
+- Related to: Taxonomy, kingdoms, species
+
+**Compact bone** (KOM-pakt bohn) - [Human Biology Applications]
+- Dense outer layer of bone providing strength
+- Related to: Skeletal system, bone structure
+
+**Cytoplasm** (SY-toh-plaz-um) - [Cell Biology]
+- Gel-like substance inside cell membrane
+- Related to: Cell structure, organelles
+
+## D
+
+**Decomposition** (dee-kom-puh-ZISH-un) - [Diversity & Ecology]
+- Breakdown of organic materials by decomposers
+- Related to: Nutrient cycling, bacteria, fungi
+
+**Dermis** (DER-miss) - [Human Biology Applications]
+- Inner layer of skin containing blood vessels and nerves
+- Related to: Skin, integumentary system, epidermis
+
+**DNA** (DEE-en-AY) - [Cell Biology, Genetics & Heredity]
+- Deoxyribonucleic acid; molecule storing genetic information
+- Related to: Genes, chromosomes, heredity
+
+**Dominant genes** (DOM-ih-nunt jeenz) - [Genetics & Heredity]
+- Genes that mask effects of recessive genes
+- Related to: Inheritance, genotype, phenotype
+
+## E
+
+**Ecosystem diversity** (EE-koh-sis-tem dy-VER-sih-tee) - [Diversity & Ecology]
+- Variety of habitats and ecological communities
+- Related to: Biodiversity, species diversity
+
+**Endocrine glands** (EN-doh-krin glandz) - [Human Biology Applications]
+- Glands releasing hormones directly into bloodstream
+- Related to: Hormones, regulation, exocrine glands
+
+**Endoplasmic reticulum** (en-doh-PLAZ-mik reh-TIK-yoo-lum) - [Cell Biology]
+- Network of membranes for protein and lipid synthesis
+- Related to: Rough ER, smooth ER, protein synthesis
+
+**Epidermis** (ep-ih-DER-miss) - [Human Biology Applications]
+- Outer layer of skin providing protection
+- Related to: Skin, dermis, protection
+
+**Eukaryotic** (yoo-KAR-ee-OT-ik) - [Cell Biology, Diversity & Ecology]
+- Cells with nucleus and membrane-bound organelles
+- Related to: Prokaryotic, complex cells, organelles
+
+**Eubacteria** (yoo-bak-TEER-ee-uh) - [Diversity & Ecology]
+- Common bacteria with diverse functions
+- Related to: Bacteria, prokaryotes, archaebacteria
+
+**Exocrine glands** (EK-soh-krin glandz) - [Human Biology Applications]
+- Glands releasing substances through ducts
+- Related to: Endocrine glands, secretion
+
+## F
+
+**Fertilization** (fur-tih-luh-ZAY-shun) - [Genetics & Heredity]
+- Union of genetic material from two parents
+- Related to: Sexual reproduction, zygote formation
+
+**Fungi** (FUN-jy) - [Diversity & Ecology]
+- Kingdom of organisms including mushrooms, molds, yeasts
+- Related to: Decomposition, saprophytic, parasitic
+
+## G
+
+**Genes** (jeenz) - [Genetics & Heredity]
+- Units of heredity containing instructions for traits
+- Related to: DNA, chromosomes, inheritance
+
+**Genetic diversity** (jeh-NET-ik dy-VER-sih-tee) - [Diversity & Ecology]
+- Variation of genes within species
+- Related to: Biodiversity, adaptation, evolution
+
+**Genotype** (JEE-noh-type) - [Genetics & Heredity]
+- Genetic makeup of an organism
+- Related to: Phenotype, alleles, inheritance
+
+**Genus** (JEE-nus) - [Diversity & Ecology]
+- Taxonomic category grouping closely related species
+- Related to: Binomial nomenclature, species, classification
+
+## H
+
+**Heredity** (huh-RED-ih-tee) - [Genetics & Heredity]
+- Passing of traits from parents to offspring
+- Related to: Genetics, inheritance, DNA
+
+**Homeostasis** (hoh-mee-oh-STAY-sis) - [Cell Biology, Human Biology Applications]
+- Maintenance of stable internal conditions
+- Related to: Regulation, balance, body systems
+
+**Homologous chromosomes** (huh-MOL-uh-gus KRO-muh-sohmz) - [Genetics & Heredity]
+- Paired chromosomes from each parent with similar genes
+- Related to: Chromosomes, meiosis, inheritance
+
+**Homozygous** (hoh-moh-ZY-gus) - [Genetics & Heredity]
+- Having two identical alleles for a gene
+- Related to: Genotype, heterozygous, alleles
+
+**Heterozygous** (het-uh-roh-ZY-gus) - [Genetics & Heredity]
+- Having two different alleles for a gene
+- Related to: Genotype, homozygous, alleles
+
+## I
+
+**Integumentary system** (in-teg-yoo-MEN-tuh-ree SIS-tem) - [Human Biology Applications]
+- Body system including skin, hair, nails
+- Related to: Protection, temperature regulation, skin
+
+## K
+
+**Kingdom** (KING-dum) - [Diversity & Ecology]
+- Highest taxonomic category in classification
+- Related to: Classification, taxonomy, species
+
+## M
+
+**Meiosis** (my-OH-sis) - [Genetics & Heredity]
+- Cell division producing cells with half genetic material
+- Related to: Sexual reproduction, gametes, chromosomes
+
+**Metabolism** (meh-TAB-uh-liz-um) - [Cell Biology]
+- Chemical processes in living organisms
+- Related to: Energy, cellular respiration, enzymes
+
+**Mitochondria** (my-toh-KON-dree-uh) - [Cell Biology]
+- Organelles for cellular respiration and energy production
+- Related to: ATP, cellular respiration, energy
+
+**Mitosis** (my-TOH-sis) - [Cell Biology, Genetics & Heredity]
+- Cell division producing identical daughter cells
+- Related to: Growth, repair, asexual reproduction
+
+**Monera** (muh-NEER-uh) - [Diversity & Ecology]
+- Kingdom including bacteria and cyanobacteria
+- Related to: Classification, prokaryotes, bacteria
+
+**Muscular system** (MUSS-yoo-lar SIS-tem) - [Human Biology Applications]
+- Body system enabling movement through muscle contraction
+- Related to: Movement, skeletal muscle, cardiac muscle
+
+## N
+
+**Nervous system** (NER-vus SIS-tem) - [Human Biology Applications]
+- Body system for communication and coordination
+- Related to: Brain, nerves, coordination
+
+**Nucleus** (NOO-klee-us) - [Cell Biology]
+- Control center of eukaryotic cells containing genetic material
+- Related to: DNA, chromosomes, cell control
+
+**Nutrient cycling** (NOO-tree-ent SY-kling) - [Diversity & Ecology]
+- Movement and recycling of nutrients in ecosystems
+- Related to: Decomposition, bacteria, ecosystem function
+
+## O
+
+**Organelles** (or-guh-NELZ) - [Cell Biology]
+- Specialized structures within cells
+- Related to: Cell structure, mitochondria, chloroplasts
+
+**Organisms** (OR-guh-niz-umz) - [Cell Biology, Diversity & Ecology]
+- Individual living things
+- Related to: Life, cells, classification
+
+## P
+
+**Parasitic fungi** (par-uh-SIT-ik FUN-jy) - [Diversity & Ecology]
+- Fungi obtaining nutrients from living hosts
+- Related to: Fungi, saprophytic, decomposition
+
+**Peripheral nervous system** (peh-RIF-uh-rul NER-vus SIS-tem) - [Human Biology Applications]
+- Nerves connecting central nervous system to body parts
+- Related to: Nervous system, central nervous system
+
+**Phenotype** (FEE-noh-type) - [Genetics & Heredity]
+- Observable characteristics of an organism
+- Related to: Genotype, traits, genetic expression
+
+**Photosynthesis** (foh-toh-SIN-thuh-sis) - [Cell Biology]
+- Process of converting light energy to chemical energy
+- Related to: Chloroplasts, plant cells, energy
+
+**Plant cells** (plant sellz) - [Cell Biology]
+- Cells with cell walls, chloroplasts, large vacuoles
+- Related to: Plants, photosynthesis, cell walls
+
+**Prokaryotic** (proh-KAR-ee-OT-ik) - [Cell Biology, Diversity & Ecology]
+- Cells lacking nucleus and membrane-bound organelles
+- Related to: Bacteria, simple cells, eukaryotic
+
+**Protists** (PROH-tists) - [Diversity & Ecology]
+- Diverse kingdom of mostly single-celled eukaryotes
+- Related to: Classification, eukaryotes, aquatic ecosystems
+
+**Proteins** (PROH-teenz) - [Cell Biology]
+- Molecules built by ribosomes for cellular functions
+- Related to: Ribosomes, amino acids, cell structure
+
+**Protista** (proh-TIS-tuh) - [Diversity & Ecology]
+- Kingdom including protists
+- Related to: Classification, protists, eukaryotes
+
+## R
+
+**Recessive genes** (reh-SESS-iv jeenz) - [Genetics & Heredity]
+- Genes whose effects are masked by dominant genes
+- Related to: Inheritance, genotype, phenotype
+
+**Respiratory system** (RES-puh-ruh-tor-ee SIS-tem) - [Human Biology Applications]
+- Body system for gas exchange
+- Related to: Breathing, oxygen, carbon dioxide
+
+**RNA** (AR-en-AY) - [Cell Biology, Genetics & Heredity]
+- Ribonucleic acid; molecule for protein synthesis and gene regulation
+- Related to: DNA, protein synthesis, gene expression
+
+**Ribosomes** (RY-buh-sohmz) - [Cell Biology]
+- Organelles for protein synthesis
+- Related to: Protein synthesis, cell structure, RNA
+
+**Rough endoplasmic reticulum** (ruf en-doh-PLAZ-mik reh-TIK-yoo-lum) - [Cell Biology]
+- ER with ribosomes for protein synthesis
+- Related to: Protein synthesis, smooth ER, organelles
+
+## S
+
+**Saprophytic fungi** (sap-roh-FIT-ik FUN-jy) - [Diversity & Ecology]
+- Fungi decomposing dead organic material
+- Related to: Decomposition, nutrient cycling, fungi
+
+**Skeletal muscle** (SKEL-uh-tul MUSS-ul) - [Human Biology Applications]
+- Muscle tissue enabling voluntary movement
+- Related to: Muscular system, movement, bones
+
+**Skeletal system** (SKEL-uh-tul SIS-tem) - [Human Biology Applications]
+- Body system providing support and protection
+- Related to: Bones, movement, protection
+
+**Smooth endoplasmic reticulum** (smooth en-doh-PLAZ-mik reh-TIK-yoo-lum) - [Cell Biology]
+- ER without ribosomes for lipid synthesis and detoxification
+- Related to: Lipid synthesis, rough ER, organelles
+
+**Smooth muscle** (smooth MUSS-ul) - [Human Biology Applications]
+- Involuntary muscle tissue for internal organs
+- Related to: Muscular system, internal organs, digestion
+
+**Spongy bone** (SPUN-jee bohn) - [Human Biology Applications]
+- Porous bone containing red marrow for blood cell production
+- Related to: Skeletal system, blood cells, compact bone
+
+**Species** (SPEE-sheez) - [Diversity & Ecology]
+- Group of similar organisms that can interbreed
+- Related to: Classification, genus, biodiversity
+
+**Species diversity** (SPEE-sheez dy-VER-sih-tee) - [Diversity & Ecology]
+- Variety of different species in an area
+- Related to: Biodiversity, ecosystem diversity
+
+## V
+
+**Vacuoles** (VAK-yoo-ohlz) - [Cell Biology]
+- Storage organelles in plant and animal cells
+- Related to: Storage, plant cells, cell structure
+
+**Veins** (vaynz) - [Human Biology Applications]
+- Blood vessels returning deoxygenated blood to heart
+- Related to: Circulatory system, arteries
+
+## Z
+
+**Zygote** (ZY-goht) - [Genetics & Heredity]
+- Cell formed by fertilization containing genetic material from both parents
+- Related to: Fertilization, development, reproduction
+
+## Study Tips
+
+### Memory Strategies
+1. **Word Origins**: Many biological terms have Greek/Latin roots (e.g., "prokaryotic" = "before nucleus")
+2. **Visual Connections**: Associate terms with diagrams or mental images
+3. **Group Similar Terms**: Study related terms together (e.g., all organelles, all systems)
+4. **Practice Pronunciation**: Say terms aloud while studying definitions
+
+### Cross-Reference System
+- **Cell Biology**: Focus on cellular structures and processes
+- **Diversity & Ecology**: Emphasize classification and ecosystem roles
+- **Genetics & Heredity**: Concentrate on inheritance mechanisms
+- **Human Biology Applications**: Apply knowledge to body systems
+
+### Common Pronunciation Patterns
+- "-ic" ending: pronounced "ik" (prokaryot**ic**, eukaryot**ic**)
+- "-ology" ending: pronounced "OL-uh-jee" (biolog**y**, physiolog**y**)
+- "-plasm" ending: pronounced "plaz-um" (cyto**plasm**, proto**plasm**)
+- "-some" ending: pronounced "sohm" (chromo**some**, lyso**some**)
+
+This glossary provides comprehensive pronunciation support for all biology terms across the deck collection, facilitating effective learning and communication in biological studies.

@@ -1,0 +1,237 @@
+// First Aid Specialized Injuries & Environmental Conditions Deck
+
+What is the primary purpose of wound classification in specialized first aid?
+To determine infection risk, healing potential, and appropriate treatment based on wound characteristics like depth, contamination, and location.
+
+What is the difference between clean and contaminated wounds?
+Clean wounds have minimal infection risk and can be closed primarily, while contaminated wounds have high infection risk requiring special management.
+
+What is the primary purpose of animal bite management in first aid?
+To control bleeding, clean wound thoroughly, assess rabies risk, and provide appropriate antibiotics and tetanus prophylaxis.
+
+What is the difference between dog bites and cat bites management?
+Dog bites typically cause crushing injuries, while cat bites cause deep puncture wounds with higher infection risk requiring antibiotics.
+
+What is the primary purpose of human bite wound management?
+To recognize high infection risk from human mouth bacteria, provide thorough cleaning, and consider antibiotics due to infection potential.
+
+What is the difference between occlusive and non-occlusive bite wound treatment?
+Occlusive dressings are avoided in bite wounds due to infection risk, while non-occlusive allows drainage and monitoring for infection.
+
+What is the primary purpose of puncture wound management in first aid?
+To clean deep narrow wounds, assess for retained foreign bodies, and provide tetanus prophylaxis due to infection risk.
+
+What is the difference between puncture and laceration wound care?
+Puncture wounds require probing for foreign bodies and may not be closed, while lacerations can often be cleaned and closed primarily.
+
+What is the primary purpose of avulsion injury management?
+To preserve tissue viability, control bleeding, and arrange for potential reimplantation or reconstructive surgery.
+
+What is the difference between partial and complete avulsion management?
+Partial avulsions may be reattached if viable, while complete avulsions require specialized reconstructive procedures.
+
+What is the primary purpose of degloving injury recognition and management?
+To identify tissue separation from underlying structures, prevent tissue death, and arrange urgent surgical consultation.
+
+What is the difference between degloving and simple laceration injuries?
+Degloving involves tissue separation requiring complex repair, while lacerations are simple cuts through skin layers.
+
+What is the primary purpose of amputation management in first aid?
+To control life-threatening bleeding, preserve amputated part for potential reattachment, and provide rapid transport to specialized center.
+
+What is the difference between complete and partial amputation first aid?
+Complete amputations require part preservation for reattachment, while partial amputions focus on maintaining tissue viability.
+
+What is the primary purpose of crush injury management beyond basic care?
+To recognize compartment syndrome risk, provide fluid resuscitation if needed, and monitor for systemic effects like crush syndrome.
+
+What is the difference between simple and complex crush injuries?
+Simple crush injuries affect local tissue, while complex injuries involve systemic effects requiring comprehensive medical management.
+
+What is the primary purpose of high-pressure injection injury recognition?
+To identify看似 minor wounds with severe internal tissue damage requiring immediate surgical intervention to prevent limb loss.
+
+What is the difference between high-pressure injection and simple puncture wounds?
+Injection injuries spread toxic material deep into tissues causing necrosis, while simple punctures damage only immediate tissue.
+
+What is the primary purpose of electrical burn depth assessment?
+To determine tissue damage extent beyond visible skin injury, as electrical current travels through tissues causing hidden damage.
+
+What is the difference between electrical and thermal burn assessment?
+Electrical burns require assessment of current path and internal injury, while thermal burns primarily damage skin and superficial tissues.
+
+What is the primary purpose of chemical burn neutralization in first aid?
+To stop ongoing chemical reaction, prevent deeper tissue penetration, and minimize systemic absorption of toxic substances.
+
+What is the difference between acid and alkali burn neutralization?
+Acid burns are copiously irrigated without neutralization, while some alkali burns may benefit from specific neutralizing agents.
+
+What is the primary purpose of radiation burn management?
+To decontaminate patient, prevent further exposure, and provide supportive care while monitoring for systemic radiation effects.
+
+What is the difference between thermal and radiation burn treatment?
+Radiation burns require decontamination and specialized monitoring, while thermal burns focus on cooling and infection prevention.
+
+What is the primary purpose of frostbite rewarming protocols?
+To provide controlled rewarming preventing refreezing, maximize tissue salvage, and minimize complications like compartment syndrome.
+
+What is the difference between rapid and slow frostbite rewarming?
+Rapid rewarming in warm water (37-39°C) is standard, while slow rewarming increases tissue damage risk.
+
+What is the primary purpose of non-freezing cold injury management?
+To recognize tissue damage from prolonged cold without freezing, provide gradual warming, and prevent long-term nerve damage.
+
+What is the difference between frostnip and non-freezing cold injury?
+Frostnip involves superficial skin freezing reversible with warming, while non-freezing injuries cause deeper tissue damage.
+
+What is the primary purpose of heat illness prevention and recognition?
+To identify early signs of heat stress, implement cooling strategies, and prevent progression to life-threatening heat stroke.
+
+What is the difference between heat exhaustion and heat urticaria management?
+Heat exhaustion requires cooling and rehydration, while heat urticaria (hives) may require antihistamines and avoiding heat triggers.
+
+What is the primary purpose of altitude acclimatization protocols?
+To allow gradual physiological adaptation to reduced oxygen, preventing altitude sickness while maintaining performance at elevation.
+
+What is the difference between acute and chronic altitude illness management?
+Acute illness requires immediate descent or oxygen, while chronic illness may involve medication and gradual acclimatization.
+
+What is the primary purpose of diving decompression procedures?
+To prevent bubble formation in tissues during ascent, avoiding decompression sickness through controlled ascent rates and safety stops.
+
+What is the difference between recreational and technical diving decompression?
+Recreational diving uses no-decompression limits, while technical diving requires planned decompression stops with gas mixtures.
+
+What is the primary purpose of marine envenomation management?
+To identify specific marine creatures, provide appropriate first aid like vinegar for jellyfish, and prevent systemic toxicity.
+
+What is the difference between jellyfish and stonefish envenomation treatment?
+Jellyfish stings use vinegar to prevent further nematocyst discharge, while stonefish require hot water immersion for pain relief.
+
+What is the primary purpose of snakebite field management?
+To identify venomous species, provide appropriate first aid like pressure immobilization, and arrange rapid antivenom administration.
+
+What is the difference between neurotoxic and hemotoxic snakebite field care?
+Neurotoxic bites require pressure immobilization to slow venom spread, while hemotoxic bites may require different field management.
+
+What is the primary purpose of insect and arachnid bite management?
+To recognize allergic reactions, provide appropriate wound care, and identify potentially serious bites requiring medical evaluation.
+
+What is the difference between tick and spider bite management?
+Tick bites require careful removal to prevent disease transmission, while spider bites focus on wound care and venom effects monitoring.
+
+What is the primary purpose of plant-related injury management?
+To identify poisonous plants like poison ivy, provide appropriate decontamination, and prevent systemic reactions through proper care.
+
+What is the difference between contact dermatitis and plant poisoning?
+Contact dermatitis causes local skin reactions, while plant poisoning involves ingestion causing systemic toxicity.
+
+What is the primary purpose of sports injury assessment in first aid?
+To differentiate between minor strains and serious injuries, implement appropriate immediate care, and determine need for medical evaluation.
+
+What is the difference between acute and overuse sports injury management?
+Acute injuries require immediate RICE therapy and assessment, while overuse injuries need activity modification and gradual rehabilitation.
+
+What is the primary purpose of concussion recognition and management in sports?
+To identify brain injury symptoms, remove athlete from play immediately, and prevent second impact syndrome through proper recovery.
+
+What is the difference between concussion and more serious head injury in sports?
+Concussions typically resolve with rest, while serious injuries may have bleeding requiring immediate emergency care.
+
+What is the primary purpose of eye injury management in first aid?
+To prevent further damage, protect the eye, and arrange urgent specialized evaluation to preserve vision.
+
+What is the difference between chemical and mechanical eye injury management?
+Chemical injuries require immediate irrigation, while mechanical injuries require protection and avoiding pressure on the eye.
+
+What is the primary purpose of ear injury assessment and management?
+To differentiate external ear injuries from middle/inner ear damage, provide appropriate care, and prevent hearing loss.
+
+What is the difference between barotrauma and mechanical ear injury management?
+Barotrauma requires pressure equalization and monitoring, while mechanical injuries focus on wound care and infection prevention.
+
+What is the primary purpose of dental emergency management in first aid?
+To control bleeding, preserve teeth if avulsed, provide pain relief, and arrange urgent dental evaluation.
+
+What is the difference between tooth fracture and avulsion management?
+Fractures require dental evaluation and pain control, while avulsed teeth need immediate replantation or proper storage.
+
+What is the primary purpose of musculoskeletal injury assessment beyond basic care?
+To identify specific tissue damage, implement appropriate immobilization, and determine need for specialized orthopedic evaluation.
+
+What is the difference between ligament sprain and tendon strain management?
+Sprains involve ligament damage requiring stability, while strains involve tendon/muscle injury needing different rehabilitation.
+
+What is the primary purpose of compartment syndrome monitoring in limb injuries?
+To recognize increased pressure causing tissue death, requiring emergency fasciotomy to prevent permanent damage and limb loss.
+
+What is the difference between acute and chronic compartment syndrome?
+Acute compartment syndrome requires emergency surgery, while chronic compartment syndrome may be managed with activity modification.
+
+What is the primary purpose of vascular injury recognition in limb trauma?
+To identify disrupted blood flow requiring immediate intervention to prevent limb loss and systemic complications.
+
+What is the difference between arterial and venous injury management?
+Arterial injuries require immediate control to prevent exsanguination, while venous injuries typically have slower bleeding.
+
+What is the primary purpose of nerve injury assessment in trauma?
+To identify sensory and motor deficits, document baseline function, and arrange specialized evaluation to optimize recovery.
+
+What is the difference between central and peripheral nerve injury management?
+Central nerve injuries affect spinal cord/brain requiring specialized care, while peripheral injuries may be managed with specific protocols.
+
+What is the primary purpose of burn center transfer criteria?
+To identify severe burns requiring specialized multidisciplinary care beyond general hospital capabilities.
+
+What is the difference between minor and major burn center requirements?
+Minor burns can be managed locally, while major burns need specialized care including surgery, rehabilitation, and psychological support.
+
+What is the primary purpose of disaster triage systems in mass casualty incidents?
+To maximize survival by prioritizing limited resources to patients most likely to benefit from treatment.
+
+What is the difference between START and SALT triage systems?
+START uses simple color categories, while SALT provides more detailed assessment for resource allocation decisions.
+
+What is the primary purpose of pediatric specialized injury assessment?
+To recognize age-specific injury patterns, provide appropriate equipment and techniques, and consider developmental factors in care.
+
+What is the difference between pediatric and adult injury patterns?
+Children have different injury mechanisms due to anatomy and development, requiring specialized assessment and treatment approaches.
+
+What is the primary purpose of geriatric specialized injury considerations?
+To recognize atypical presentations, consider comorbidities and medications, and provide age-appropriate care and rehabilitation.
+
+What is the difference between geriatric and adult injury response?
+Elderly patients may have subtle symptoms and slower healing, requiring different monitoring and treatment priorities.
+
+What is the primary purpose of workplace injury management protocols?
+To implement specific care for occupational injuries, document for workers' compensation, and arrange appropriate follow-up care.
+
+What is the difference between workplace and general injury management?
+Workplace injuries require specific documentation and may involve regulatory reporting, while general injuries focus on medical care only.
+
+What is the primary purpose of sports medicine specialized assessment?
+To evaluate sport-specific mechanisms, implement return-to-play protocols, and prevent future injuries through conditioning.
+
+What is the difference between sports and general injury rehabilitation?
+Sports rehabilitation focuses on return to specific activities, while general rehabilitation aims for daily function restoration.
+
+What is the primary purpose of wilderness first aid adaptation?
+To provide care in remote settings with limited resources, extended patient care times, and environmental challenges.
+
+What is the difference between wilderness and urban first aid?
+Wilderness care requires extended management and evacuation planning, while urban care has rapid access to emergency services.
+
+What is the primary purpose of tactical combat casualty care principles?
+To provide care under hostile conditions with tactical considerations, prioritizing life-threatening injuries for combat environment.
+
+What is the difference between tactical and civilian trauma care?
+Tactical care considers tactical situation and limited resources, while civilian care has unlimited resources and safe environment.
+
+What is the primary purpose of disaster psychology first aid integration?
+To address psychological trauma alongside physical injuries, promoting resilience and preventing long-term mental health consequences.
+
+What is the difference between psychological and physical first aid in disasters?
+Psychological first aid addresses emotional needs, while physical first aid treats bodily injuries; both are essential for comprehensive care.
+
+This comprehensive specialized injuries and environmental conditions deck provides 100 questions covering specific injury types, environmental emergencies, and specialized situations requiring detailed knowledge beyond basic first aid principles.

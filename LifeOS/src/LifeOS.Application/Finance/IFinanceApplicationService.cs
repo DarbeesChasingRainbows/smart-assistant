@@ -1,0 +1,60 @@
+using LifeOS.Domain.Common;
+using LifeOS.Domain.Finance;
+using Microsoft.FSharp.Core;
+
+namespace LifeOS.Application.Finance;
+
+public interface IFinanceApplicationService
+{
+    Task<FSharpResult<TransferExecutionResult, DomainError>> ExecuteTransferAsync(
+        CreateTransferCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<Transaction, DomainError>> CreateTransactionAsync(
+        CreateTransactionCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<Transaction, DomainError>> UpdateTransactionAsync(
+        UpdateTransactionCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<Transaction, DomainError>> VoidTransactionAsync(
+        string transactionKey,
+        CancellationToken cancellationToken = default);
+}
+
+public sealed record CreateTransferCommand(
+    string FromAccountKey,
+    string ToAccountKey,
+    decimal Amount,
+    string? Description,
+    global::System.DateTime? PostedAt);
+
+public sealed record TransferExecutionResult(
+    string WithdrawalTransactionKey,
+    string DepositTransactionKey,
+    string TransferId);
+
+public sealed record CreateTransactionCommand(
+    string AccountKey,
+    string? MerchantKey,
+    string? CategoryKey,
+    decimal Amount,
+    string Description,
+    string? Memo,
+    global::System.DateTime? PostedAt,
+    global::System.DateTime? AuthorizedAt,
+    string? CheckNumber,
+    List<string>? Tags);
+
+public sealed record UpdateTransactionCommand(
+    string TransactionKey,
+    string? MerchantKey,
+    string? CategoryKey,
+    decimal? Amount,
+    string? Description,
+    string? Memo,
+    global::System.DateTime? PostedAt,
+    string? Status,
+    string? CheckNumber,
+    List<string>? Tags);

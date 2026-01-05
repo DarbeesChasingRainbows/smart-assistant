@@ -1,0 +1,300 @@
+// Beginner Network Security & Reconnaissance Deck
+
+What is the primary purpose of network reconnaissance in ethical hacking?
+To gather information about target networks and systems to identify potential attack vectors, vulnerabilities, and entry points before conducting security testing.
+
+What is the difference between ping and traceroute commands?
+Ping tests basic connectivity and response time to a single host, while traceroute maps the network path showing all routers between you and the target.
+
+What is the basic command to perform a ping sweep across a network range?
+"for i in {1..254}; do ping -c 1 192.168.1.$i | grep 'bytes from' & done" which pings all hosts in the 192.168.1.0/24 network to identify live hosts.
+
+What is the primary purpose of ARP (Address Resolution Protocol) in local networks?
+To map IP addresses to MAC addresses, enabling communication within local network segments and useful for identifying devices on the same network.
+
+What is the basic command to display the ARP table on a system?
+"arp -a" which shows all IP-to-MAC address mappings the system has learned, useful for identifying other devices on the local network.
+
+What is the difference between ARP scanning and ICMP scanning?
+ARP scanning works within the local network segment and doesn't cross routers, while ICMP scanning can work across networks but may be blocked by firewalls.
+
+What is the primary purpose of the "netdiscover" tool in network reconnaissance?
+To perform active and passive ARP scanning to discover hosts on local networks, useful for identifying devices in your network segment.
+
+What is the basic command to perform passive ARP discovery with netdiscover?
+"netdiscover -p" which passively listens for ARP traffic to discover hosts on the network without sending any packets.
+
+What is the difference between active and passive network discovery?
+Active discovery sends packets to elicit responses, while passive discovery listens to existing network traffic without generating additional packets.
+
+What is the primary purpose of port scanning in network security testing?
+To identify open ports and running services on target systems, helping determine potential vulnerabilities and attack surfaces.
+
+What is the basic Nmap command to scan the top 100 most common ports?
+"nmap [target_ip]" which performs a quick scan of the most frequently used TCP ports on the specified target.
+
+What is the difference between TCP connect scan and SYN scan in Nmap?
+TCP connect scan completes the full three-way handshake (easier to detect), while SYN scan sends only SYN packets (stealthier and faster).
+
+What is the primary purpose of the "-sS" flag in Nmap?
+To perform a SYN scan (half-open scan) which is stealthier than a full TCP connect scan and less likely to be detected by intrusion detection systems.
+
+What is the basic command to perform a UDP scan with Nmap?
+"nmap -sU [target_ip]" which scans for open UDP ports on the target, though UDP scanning is generally slower and less reliable than TCP scanning.
+
+What is the difference between TCP and UDP port scanning?
+TCP scanning establishes connections to test port status, while UDP scanning sends UDP packets and analyzes responses, making UDP scanning more complex.
+
+What is the primary purpose of service version detection in Nmap?
+To identify specific software versions running on open ports, helping match known vulnerabilities and determine potential exploits.
+
+What is the basic command to perform service version detection with Nmap?
+"nmap -sV [target_ip]" which attempts to determine the version of services running on open ports of the target system.
+
+What is the difference between port state detection and service version detection?
+Port state detection only determines if ports are open or closed, while service version detection identifies the specific software and version running on those ports.
+
+What is the primary purpose of OS detection in Nmap?
+To identify the target operating system, which helps in selecting appropriate exploits and understanding the system's security characteristics.
+
+What is the basic command to perform OS detection with Nmap?
+"nmap -O [target_ip]" which attempts to identify the operating system of the target using TCP/IP stack fingerprinting.
+
+What is the difference between aggressive and normal Nmap scans?
+Aggressive scans use additional techniques and take longer but provide more information, while normal scans are faster and less intrusive.
+
+What is the primary purpose of the "-T4" timing template in Nmap?
+To perform faster scanning with aggressive timing, useful when network speed is good and you want quicker results.
+
+What is the basic command to perform a comprehensive Nmap scan?
+"nmap -sS -sV -O -T4 [target_ip]" which combines SYN scan, version detection, OS detection, and aggressive timing for thorough reconnaissance.
+
+What is the difference between script scanning with "-sC" and manual Nmap scripts?
+"-sC" runs default safe scripts automatically, while manual script selection allows you to choose specific scripts for targeted testing.
+
+What is the primary purpose of Nmap scripting engine (NSE)?
+To extend Nmap's capabilities with custom scripts for vulnerability detection, backdoor detection, and advanced network reconnaissance.
+
+What is the basic command to run all default Nmap scripts?
+"nmap -sC [target_ip]" which runs the default set of safe scripts to gather additional information about the target.
+
+What is the difference between safe, intrusive, and malware Nmap scripts?
+Safe scripts won't crash services, intrusive scripts might affect target systems, and malware scripts detect backdoors and malicious software.
+
+What is the primary purpose of the "nmap --script vuln" command?
+To run all vulnerability detection scripts to check for known vulnerabilities in the target services and configuration.
+
+What is the basic command to save Nmap results to a file?
+"nmap -oN [filename.txt] [target_ip]" which saves the scan results in normal format to the specified text file.
+
+What is the difference between normal, XML, and grepable output formats in Nmap?
+Normal format is human-readable, XML is machine-readable for tools, and grepable format is easily processed with command-line tools.
+
+What is the primary purpose of the "masscan" tool in network scanning?
+To perform extremely fast port scanning of large networks, capable of scanning the entire internet in minutes.
+
+What is the basic command to scan port 80 across a /16 network with Masscan?
+"masscan 192.168.0.0/16 -p80 --rate=1000" which scans port 80 across the entire /16 network at 1000 packets per second.
+
+What is the difference between Masscan and Nmap in scanning capabilities?
+Masscan is optimized for speed and can scan massive ranges quickly, while Nmap provides more detailed information and advanced features.
+
+What is the primary purpose of the "unicornscan" tool in network reconnaissance?
+To perform asynchronous network scanning with advanced TCP/IP stack fingerprinting and service detection capabilities.
+
+What is the basic command to perform a TCP scan with Unicornscan?
+"unicornscan [target_ip]:a" which scans all TCP ports on the target using asynchronous scanning techniques.
+
+What is the difference between synchronous and asynchronous scanning?
+Synchronous scanning waits for responses before sending new packets, while asynchronous scanning sends packets continuously without waiting.
+
+What is the primary purpose of the "zmap" tool in internet-scale scanning?
+To perform fast internet-wide network scanning, designed for researchers to scan large portions of the internet quickly.
+
+What is the basic command to scan for SSH servers across the internet with ZMap?
+"zmap -p 22 -o results.txt" which scans port 22 across the internet and saves responding IPs to results.txt.
+
+What is the difference between ZMap and Nmap in scope and purpose?
+ZMap is designed for internet-wide scanning and research, while Nmap is designed for detailed target-specific security testing.
+
+What is the primary purpose of DNS enumeration in network reconnaissance?
+To discover subdomains, mail servers, and other DNS records that reveal additional attack surfaces and infrastructure information.
+
+What is the basic command to perform a DNS zone transfer attempt?
+"dig axfr [domain] @[dns_server]" which attempts to retrieve all DNS records for a domain from a specific DNS server.
+
+What is the difference between DNS enumeration and subdomain brute forcing?
+DNS enumeration queries existing DNS records, while subdomain brute forcing attempts to discover subdomains by trying common names.
+
+What is the primary purpose of the "dnsenum" tool in DNS reconnaissance?
+To perform comprehensive DNS enumeration including zone transfers, subdomain brute forcing, and Google scraping for additional records.
+
+What is the basic command to run dnsenum on a target domain?
+"perl dnsenum.pl [domain]" which performs comprehensive DNS enumeration on the specified domain.
+
+What is the difference between forward and reverse DNS lookups?
+Forward lookups resolve domain names to IP addresses, while reverse lookups resolve IP addresses to domain names.
+
+What is the primary purpose of the "host" command in DNS testing?
+To perform DNS lookups and reverse lookups, useful for basic DNS reconnaissance and troubleshooting.
+
+What is the basic command to perform a reverse DNS lookup?
+"host [ip_address]" which attempts to resolve the specified IP address to a domain name.
+
+What is the the difference between A records and CNAME records in DNS?
+A records map domain names directly to IP addresses, while CNAME records create aliases that point to other domain names.
+
+What is the primary purpose of the "nslookup" tool in DNS reconnaissance?
+To perform interactive DNS queries and troubleshoot DNS resolution issues, useful for both reconnaissance and network diagnostics.
+
+What is the basic command to query a specific DNS server with nslookup?
+"nslookup [domain] [dns_server]" which queries the specified DNS server for information about the domain.
+
+What is the difference between authoritative and recursive DNS servers?
+Authoritative servers hold the actual DNS records for domains, while recursive servers fetch records on behalf of clients.
+
+What is the primary purpose of SMTP enumeration in network reconnaissance?
+To identify mail servers, test for open relays, and gather information about email infrastructure for potential exploitation.
+
+What is the basic command to connect to an SMTP server for testing?
+"telnet [smtp_server] 25" which connects to the SMTP server for manual command testing and banner grabbing.
+
+What is the difference between SMTP enumeration and DNS MX record lookup?
+SMTP enumeration tests the actual mail server functionality, while MX record lookup only identifies mail server addresses.
+
+What is the primary purpose of the "smtp-user-enum" tool in email security testing?
+To enumerate valid email addresses on SMTP servers using VRFY and EXPN commands, useful for social engineering and password attacks.
+
+What is the basic command to enumerate email addresses with smtp-user-enum?
+"smtp-user-enum -M VRFY -U [user_list] -t [smtp_server]" which enumerates valid email addresses using the VRFY command.
+
+What is the difference between VRFY and EXPN commands in SMTP?
+VRFY verifies if a specific email address exists, while EXPN expands mailing lists to show individual member addresses.
+
+What is the primary purpose of SNMP enumeration in network reconnaissance?
+To discover network devices, system information, and configuration details through Simple Network Management Protocol.
+
+What is the basic command to perform SNMP enumeration with "snmpwalk"?
+"snmpwalk -c public -v1 [target_ip]" which walks through all available SNMP OID values on the target using default community string.
+
+What is the difference between SNMP version 1, 2c, and 3?
+Version 1 and 2c use community strings for authentication, while version 3 provides stronger authentication and encryption capabilities.
+
+What is the primary purpose of the "onesixtyone" tool in SNMP scanning?
+To brute force SNMP community strings to gain access to SNMP information on network devices.
+
+What is the basic command to brute force SNMP community strings?
+"onesixtyone [target_ip] [community_list]" which attempts to guess the SNMP community string using a wordlist.
+
+What is the difference between read-only and read-write SNMP community strings?
+Read-only communities allow viewing device information, while read-write communities allow modifying device configuration.
+
+What is the primary purpose of SMB enumeration in Windows network testing?
+To discover Windows shares, users, and group information through Server Message Block protocol.
+
+What is the basic command to enumerate SMB shares with "smbclient"?
+"smbclient -L [target_ip]" which lists available SMB shares on the target Windows system.
+
+What is the difference between SMB null sessions and authenticated enumeration?
+Null sessions connect without credentials but have limited access, while authenticated enumeration provides full access with valid credentials.
+
+What is the primary purpose of the "enum4linux" tool in Linux SMB enumeration?
+To perform comprehensive SMB enumeration on Linux systems, including users, groups, and share information.
+
+What is the basic command to run enum4linux against a target?
+"enum4linux [target_ip]" which performs comprehensive SMB enumeration on the specified target.
+
+What is the difference between Linux and Windows SMB enumeration tools?
+Linux tools often provide more comprehensive automated enumeration, while Windows tools may be more integrated with Active Directory environments.
+
+What is the primary purpose of FTP enumeration in network testing?
+To discover anonymous FTP access, directory listings, and potential file disclosure vulnerabilities.
+
+What is the basic command to test anonymous FTP access?
+"ftp [target_ip]" then login with "anonymous" and any email address to test if anonymous access is allowed.
+
+What is the difference between active and passive FTP modes?
+Active mode requires the client to open a port for the server to connect, while passive mode has the server open a port for the client to connect.
+
+What is the primary purpose of the "nmap --script ftp-anon" command?
+To test FTP servers for anonymous login access and enumerate available directories and files.
+
+What is the basic command to test FTP with specific Nmap scripts?
+"nmap --script ftp-anon,ftp-brute -p 21 [target_ip]" which tests for anonymous access and brute forces FTP credentials.
+
+What is the difference between FTP enumeration and FTP brute forcing?
+Enumeration discovers available information and access, while brute forcing attempts to guess valid login credentials.
+
+What is the primary purpose of SSH enumeration in network security testing?
+To discover SSH services, test for weak configurations, and identify potential authentication bypasses.
+
+What is the basic command to grab SSH service banners?
+"nc -nv [target_ip] 22" which connects to the SSH service and displays version and configuration information.
+
+What is the difference between SSH version 1 and version 2 security?
+SSH version 1 has known vulnerabilities and weak cryptography, while SSH version 2 provides stronger security and is the current standard.
+
+What is the primary purpose of the "ssh-audit" tool in SSH security testing?
+To audit SSH server configurations for weak algorithms, outdated ciphers, and security misconfigurations.
+
+What is the basic command to audit an SSH server?
+"ssh-audit [target_ip]:22" which performs comprehensive security auditing of the specified SSH server.
+
+What is the difference between SSH configuration auditing and SSH brute forcing?
+Configuration audit examines server security settings, while brute forcing attempts to guess valid login credentials.
+
+What is the primary purpose of HTTP enumeration in web security testing?
+To discover web servers, technologies, and potential vulnerabilities through HTTP header analysis and service identification.
+
+What is the basic command to grab HTTP server banners?
+"curl -I [target_url]" which retrieves HTTP headers including server type, version, and additional information.
+
+What is the difference between HTTP and HTTPS enumeration?
+HTTP enumeration examines unencrypted web traffic, while HTTPS enumeration requires SSL/TLS handling and certificate analysis.
+
+What is the primary purpose of the "whatweb" tool in web technology identification?
+To identify web technologies, frameworks, and server software used by websites through fingerprinting techniques.
+
+What is the basic command to identify web technologies with WhatWeb?
+"whatweb [target_url]" which analyzes the website and reports detected technologies, frameworks, and server information.
+
+What is the difference between passive and active web technology identification?
+Passive identification uses only publicly available information, while active identification sends requests to probe for specific technologies.
+
+What is the primary purpose of SSL/TLS enumeration in network security?
+To discover certificate information, supported protocols, and potential cryptographic vulnerabilities.
+
+What is the basic command to enumerate SSL/TLS information with "sslscan"?
+"sslscan [target_ip]:[port]" which analyzes SSL/TLS configuration and reports supported protocols, ciphers, and certificate details.
+
+What is the difference between SSL and TLS protocol enumeration?
+SSL enumeration focuses on older SSL protocols, while TLS enumeration examines modern TLS configurations and vulnerabilities.
+
+What is the primary purpose of the "testssl.sh" script in SSL/TLS testing?
+To perform comprehensive SSL/TLS configuration testing including protocols, ciphers, certificates, and vulnerabilities.
+
+What is the basic command to run testssl.sh against a target?
+"./testssl.sh [target_ip]:[port]" which performs comprehensive SSL/TLS testing on the specified target.
+
+What is the difference between certificate analysis and cipher suite analysis?
+Certificate analysis examines the digital certificate and chain, while cipher suite analysis examines supported encryption algorithms.
+
+What is the primary purpose of network service fingerprinting?
+To identify specific software versions and configurations of network services for vulnerability matching and exploit selection.
+
+What is the basic command to fingerprint services with Nmap?
+"nmap -sV --version-intensity 9 [target_ip]" which performs intensive service version detection on the target.
+
+What is the difference between banner grabbing and service fingerprinting?
+Banner grabbing reads service welcome messages, while fingerprinting uses multiple techniques to identify software versions.
+
+What is the primary purpose of the "amap" tool in application mapping?
+To identify applications running on ports regardless of whether they're standard services, useful for detecting custom or unusual services.
+
+What is the basic command to map applications with amap?
+"amap -d [target_ip]" which performs detailed application mapping on all ports of the target system.
+
+What is the difference between port scanning and application mapping?
+Port scanning identifies open ports, while application mapping identifies the actual software running on those ports.
+
+This beginner network security deck provides 100 questions covering essential reconnaissance and network testing concepts needed for ethical hacking foundation.

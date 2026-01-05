@@ -1,0 +1,115 @@
+// Web Application Security & OWASP Top 10 Deck
+
+What is the most effective method to prevent SQL injection in modern web applications beyond basic parameterized queries?
+Using prepared statements with strongly typed parameters, input validation, least privilege database accounts, and query allowlisting combined with comprehensive error handling.
+
+In the OWASP Top 10, what is the critical security difference between Broken Authentication and Broken Access Control?
+Broken Authentication relates to identity verification flaws, while Broken Access Control involves authorization failures where authenticated users can access unauthorized functions.
+
+What is the most effective method to prevent Server-Side Request Forgery (SSRF) attacks in cloud applications?
+Implementing URL allowlisting with network segmentation and comprehensive input validation combined with response analysis and timeout restrictions.
+
+When implementing secure session management, what is the most critical security consideration for preventing session hijacking?
+Using cryptographically secure random session identifiers with proper expiration, secure cookie attributes, and session invalidation on privilege changes.
+
+What is the primary attack vector in Cross-Site Scripting (XSS) that developers most commonly miss?
+DOM-based XSS in client-side JavaScript frameworks where user input is directly manipulated without proper sanitization or context-aware encoding.
+
+In modern web applications, what is the most effective method to prevent insecure deserialization attacks?
+Implementing input validation, using safe deserialization libraries with type enforcement, and applying digital signatures to serialized objects.
+
+What is the critical security consideration when implementing secure file upload functionality?
+Validating file content using magic bytes rather than extensions, storing outside web root, implementing proper access controls, and scanning for malware.
+
+When implementing secure API authentication, what is the most effective approach to prevent API key abuse?
+Using short-lived tokens with proper rotation, implementing rate limiting, and monitoring for anomalous usage patterns combined with comprehensive audit logging.
+
+What is the most effective method to prevent Cross-Site Request Forgery (CSRF) in modern single-page applications?
+Implementing same-site cookies with anti-CSRF tokens and proper origin validation combined with framework-specific security headers.
+
+In the context of security misconfigurations, what is the most dangerous default setting that attackers exploit?
+Enabled debug modes or detailed error messages that expose sensitive information about application architecture and internal workings.
+
+What is the primary security weakness in most Content Security Policy (CSP) implementations?
+Overly permissive policies that allow inline scripts or unsafe-eval, defeating the purpose of CSP and allowing XSS attacks to succeed.
+
+When implementing secure logging for web applications, what is the most critical consideration for forensic analysis?
+Logging security events with sufficient detail while avoiding sensitive data exposure, ensuring log integrity, and implementing proper retention policies.
+
+What is the most effective method to prevent HTTP request smuggling attacks?
+Strict HTTP parsing with normalized request handling and comprehensive input validation combined with web application firewall configuration.
+
+In modern web frameworks, what is the most critical security consideration for preventing mass assignment vulnerabilities?
+Implementing proper parameter binding with explicit field allowlisting and input validation rather than accepting arbitrary request parameters.
+
+What is the primary attack vector in insecure cryptographic implementations that attackers most commonly exploit?
+Weak random number generation or predictable initialization vectors allowing cryptographic attacks and key recovery.
+
+When implementing secure password storage, what is the most effective approach beyond basic hashing?
+Using memory-hard functions like Argon2 or scrypt with proper salt generation, pepper implementation, and regular hashing algorithm updates.
+
+What is the most effective method to prevent XML External Entity (XXE) attacks in modern applications?
+Disabling DTD processing entirely, using secure XML parsers with external entity resolution disabled, and implementing strict input validation.
+
+In the context of security headers, what is the most critical implementation that developers commonly miss?
+Proper Content Security Policy implementation without unsafe directives combined with comprehensive security header configuration.
+
+What is the primary security consideration when implementing secure cookie management?
+Using secure, HttpOnly, and SameSite attributes with proper expiration and path restrictions combined with comprehensive session management.
+
+When implementing secure API design, what is the most effective method to prevent business logic abuse?
+Implementing comprehensive input validation with business rule enforcement, rate limiting, and anomaly detection for unusual usage patterns.
+
+What is the most effective method to prevent template injection attacks in modern web applications?
+Using sandboxed template engines with strict context isolation and proper input sanitization combined with comprehensive output encoding.
+
+In the context of secure file handling, what is the most critical vulnerability that attackers exploit?
+Path traversal vulnerabilities allowing directory traversal and access to unauthorized files outside intended directories.
+
+What is the primary security consideration when implementing secure authentication in microservices?
+Implementing centralized authentication with proper token validation, service-to-service authentication, and comprehensive audit logging.
+
+When implementing secure error handling, what is the most effective approach to prevent information disclosure?
+Generic error messages for users with detailed logging for administrators combined with proper exception handling and security monitoring.
+
+What is the most effective method to prevent insecure direct object references (IDOR) in modern applications?
+Implementing proper access control checks with authorization validation and indirect object references combined with comprehensive security testing.
+
+In the context of secure API security, what is the most critical implementation that developers commonly miss?
+Proper rate limiting with anomaly detection and comprehensive input validation combined with authentication and authorization enforcement.
+
+What is the primary security consideration when implementing secure session management in distributed systems?
+Centralized session storage with proper synchronization, secure session identifiers, and comprehensive session lifecycle management.
+
+When implementing secure web sockets, what is the most effective method to prevent attacks?
+Proper authentication during handshake, message validation, rate limiting, and comprehensive monitoring for anomalous connection patterns.
+
+What is the most effective method to prevent HTTP response splitting attacks?
+Strict input validation with proper HTTP header encoding and comprehensive output sanitization combined with secure framework configurations.
+
+In the context of secure third-party integrations, what is the most critical security consideration?
+Implementing proper input validation and output encoding for all external data combined with comprehensive security monitoring and rate limiting.
+
+What is the primary security consideration when implementing secure caching mechanisms?
+Proper cache key validation with access control checks and sensitive data exclusion combined with comprehensive cache management.
+
+When implementing secure form handling, what is the most effective method to prevent CSRF and other attacks?
+Anti-CSRF tokens with same-site cookie implementation, proper origin validation, and comprehensive input sanitization combined with security headers.
+
+What is the most effective method to prevent clickjacking attacks in modern web applications?
+Implementing X-Frame-Options headers with Content Security Policy frame-ancestors directive combined with JavaScript frame-busting techniques.
+
+In the context of secure API versioning, what is the most critical security consideration?
+Maintaining security controls across all API versions with proper deprecation planning and comprehensive backward compatibility testing.
+
+What is the primary security consideration when implementing secure content delivery networks?
+Proper access controls with signed URLs, comprehensive caching policies, and regular security audits combined with DDoS protection.
+
+When implementing secure web application firewalls, what is the most effective approach beyond default rule sets?
+Custom rule tuning based on application-specific behavior with comprehensive testing and regular updates combined with security monitoring.
+
+What is the most effective method to prevent race conditions in security-critical web application operations?
+Implementing atomic operations with proper locking mechanisms and transactional database operations combined with comprehensive testing.
+
+In the context of secure web application architecture, what is the most critical security principle?
+Defense-in-depth with multiple independent security controls, comprehensive monitoring, and automated response capabilities.

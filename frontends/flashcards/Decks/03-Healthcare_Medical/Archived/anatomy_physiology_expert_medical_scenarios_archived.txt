@@ -1,0 +1,170 @@
+// Anatomy & Physiology Expert - Medical Scenarios & Differential Diagnosis
+
+Scenario: A 45-year-old female presents to the emergency department with sudden onset of severe chest pain radiating to her left arm and jaw, accompanied by shortness of breath and diaphoresis. She has a history of hypertension and diabetes. Vital signs: BP 160/95, HR 110, RR 24, SpO2 92% on room air. ECG shows ST elevation in leads II, III, and aVF.
+
+Question: Which THREE anatomical structures are most critically affected in this patient's acute condition, and what is the primary pathophysiological mechanism? (Select ALL that apply)
+A) Right coronary artery supplying the inferior myocardial wall
+B) Left anterior descending artery supplying the anterior wall
+C) Aortic valve preventing backflow into left ventricle
+D) Pericardial space containing the heart within mediastinum
+E) Coronary sinus draining cardiac venous blood
+F) Cardiac conduction system regulating heart rhythm
+
+Answer: A, D, F
+The ECG findings indicate inferior wall myocardial infarction typically involving the right coronary artery (A). The pericardial space (D) contains the heart and its relationship to surrounding structures is critical for understanding complications. The conduction system (F) is often affected in inferior MIs due to AV node blood supply, explaining the tachycardia.
+
+Scenario: A 28-year-old male presents to the clinic with chronic abdominal pain, bloating, and alternating diarrhea and constipation for the past 6 months. Physical examination reveals tenderness in the left lower quadrant without guarding or rebound. He reports stress exacerbates symptoms, and colonoscopy was normal.
+
+Question: Which THREE anatomical/physiological factors best explain this patient's presentation, and what additional assessment should be performed? (Select ALL that apply)
+A) Descending colon motility dysfunction affecting stool consistency
+B) Vagus nerve parasympathetic input regulation disruption
+C) Small intestine malabsorption causing nutritional deficiencies
+D) Abdominal wall musculature guarding patterns in chronic pain
+E) Enteric nervous system autonomous function dysregulation
+F) Hepatic portal circulation affecting digestive processing
+
+Answer: A, B, E
+This presentation suggests irritable bowel syndrome involving descending colon motility dysfunction (A), vagus nerve autonomic regulation (B), and enteric nervous system dysregulation (E). These systems coordinate gastrointestinal function and are commonly affected in functional GI disorders.
+
+Scenario: A 65-year-old male with a history of COPD presents with increased dyspnea, productive cough with green sputum, and fever. Physical examination reveals decreased breath sounds in right lower lung field with dullness to percussion. Chest X-ray shows right lower lobe consolidation.
+
+Question: Which THREE anatomical structures are primarily involved in this patient's condition, and what physiologic processes are impaired? (Select ALL that apply)
+A) Right lower lobe bronchial tree obstruction and inflammation
+B) Pulmonary capillary alveolar gas exchange impairment
+C) Thoracic diaphragm excursion limitation due to hyperinflation
+D) Mediastinal lymph node enlargement affecting airway compression
+E) Pleural space involvement with potential effusion development
+F) Intercostal muscle fatigue affecting ventilation mechanics
+
+Answer: A, B, E
+This represents pneumonia affecting right lower lobe bronchial tree (A), impairing gas exchange at alveolar-capillary membrane (B), with potential pleural space involvement (E). The consolidation pattern indicates alveolar filling with inflammatory exudate affecting these specific structures.
+
+Scenario: A 35-year-old female presents with sudden onset of severe headache, photophobia, and neck stiffness. She has no fever but reports oral contraceptive use. Neurological examination is normal except for photophobia and nuchal rigidity.
+
+Question: Which THREE anatomical structures are most critical to assess in this patient, and what immediate diagnostic evaluation is indicated? (Select ALL that apply)
+A) Cerebral arterial circle (Circle of Willis) aneurysm evaluation
+B) Dural venous sinus thrombosis assessment
+C) Cerebrospinal fluid space meningeal irritation evaluation
+D) Cervical spine facet joint inflammatory assessment
+E) Brainstem cranial nerve nucleus function testing
+F) Cavernous sinus internal carotid artery assessment
+
+Answer: A, C, E
+This presentation suggests subarachnoid hemorrhage requiring evaluation of Circle of Willis aneurysm (A), meningeal irritation affecting CSF spaces (C), and brainstem cranial nerve function (E) as these structures are most commonly affected in this clinical scenario.
+
+Scenario: A 58-year-old male with diabetes presents with a non-healing ulcer on his left foot that has been present for 3 months. The ulcer is on the plantar surface of the forefoot, with surrounding callus and minimal drainage. He has decreased sensation in a stocking-glove distribution.
+
+Question: Which THREE anatomical/physiological factors are most responsible for this patient's condition, and what comprehensive assessment is required? (Select ALL that apply)
+A) Peripheral neuropathy affecting sensory nerve distribution
+B) Posterior tibial arterial circulation impairment
+C) Plantar fascia mechanical stress concentration
+D) Dermatome sensory loss patterns in neuropathic ulceration
+E) Venous stasis changes affecting tissue perfusion
+F) Metatarsal head pressure point formation
+
+Answer: A, B, F
+This represents a diabetic foot ulcer primarily caused by peripheral neuropathy (A), impaired arterial circulation (B), and mechanical stress at metatarsal heads (F). These factors combine to create tissue breakdown and impaired healing in diabetic patients.
+
+Scenario: A 42-year-old female presents with intermittent right upper quadrant pain, particularly after fatty meals. She reports nausea and occasional vomiting. Physical examination reveals right upper quadrant tenderness on deep inspiration. Ultrasound shows multiple gallstones.
+
+Question: Which THREE anatomical structures and relationships are most relevant to this patient's symptoms and potential complications? (Select ALL that apply)
+A) Gallbladder fundus body neck anatomy and stone impaction
+B) Cystic duct obstruction and biliary pressure dynamics
+C) Common bile duct pancreatic sphincter of Oddi function
+D) Hepatic portal venous circulation hepatic triad relationship
+E) Right hemidiaphragm phrenic nerve innervation patterns
+F) Greater omentum inflammatory response and adhesion formation
+
+Answer: A, B, C
+This represents cholelithiasis with potential cholecystitis involving gallbladder anatomy (A), cystic duct obstruction (B), and potential common bile duct complications affecting the sphincter of Oddi (C). These structures explain the pain pattern and potential complications.
+
+Scenario: A 25-year-old male presents after a motor vehicle accident with left knee pain and swelling. Physical examination reveals positive anterior drawer test and Lachman test. He reports a "pop" sensation at the time of injury.
+
+Question: Which THREE anatomical structures are most likely injured, and what immediate management is indicated? (Select ALL that apply)
+A) Anterior cruciate ligament tibial attachment integrity
+B) Medial collateral ligament femoral condyle attachment
+C) Posterior horn lateral meniscus tear patterns
+D) Patellar tendon quadriceps femoris force transmission
+E) Popliteal artery posterior knee vascular assessment
+F) Common peroneal nerve lateral knee motor function
+
+Answer: A, C, E
+This represents an ACL tear (A) with possible associated meniscal injury (C) and requires vascular assessment (E) due to risk of popliteal artery injury in knee trauma. The positive anterior drawer and Lachman tests specifically indicate ACL disruption.
+
+Scenario: A 67-year-old female presents with progressive memory loss, confusion, and difficulty performing daily activities over the past 2 years. She has a history of hypertension and hyperlipidemia. Family reports she gets lost in familiar places and forgets recent conversations.
+
+Question: Which THREE anatomical structures are most affected in this condition, and what comprehensive assessment is needed? (Select ALL that apply)
+A) Hippocampal formation memory consolidation impairment
+B) Cerebral cortical association area degeneration patterns
+C) Basal ganglia motor circuit cognitive integration
+D) Cerebellar vermis cognitive coordination functions
+E) Frontal lobe executive function planning impairment
+F) Brainstem reticular activating system arousal regulation
+
+Answer: A, B, E
+This presentation suggests Alzheimer's disease affecting hippocampal memory formation (A), cortical association areas (B), and frontal executive functions (E). These structures are most commonly affected in progressive cognitive decline and explain the specific symptoms described.
+
+Scenario: A 30-year-old female presents with palpitations, anxiety, and weight loss despite increased appetite. Physical examination reveals tachycardia, fine tremor, and mild exophthalmos. Laboratory studies show elevated thyroid hormone levels.
+
+Question: Which THREE anatomical/physiological systems are primarily affected, and what additional assessment is critical? (Select ALL that apply)
+A) Thyroid gland follicular cell hormone overproduction
+B) Hypothalamic-pituitary-thyroid axis feedback regulation
+C) Sympathetic nervous system beta-adrenergic receptor stimulation
+D) Parathyroid gland calcium metabolism disruption
+E) Extraocular muscle inflammatory infiltration mechanisms
+F) Carotid body chemoreceptor sensitivity alterations
+
+Answer: A, B, C
+This represents hyperthyroidism involving thyroid gland overproduction (A), HPT axis dysregulation (B), and sympathetic nervous system stimulation (C) causing the characteristic symptoms. The exophthalmos suggests Graves' disease with autoimmune mechanisms.
+
+Scenario: A 55-year-old male presents with sudden onset of left-sided weakness and speech difficulty. He has a history of atrial fibrillation and hypertension. Neurological examination reveals right facial droop, dysarthria, and 3/5 strength in left arm and leg.
+
+Question: Which THREE cerebral vascular territories are most likely affected, and what immediate imaging is indicated? (Select ALL that apply)
+A) Middle cerebral artery cortical distribution
+B) Anterior cerebral artery medial frontal lobe supply
+C) Posterior cerebral artery occipital lobe perfusion
+D) Lenticulostriate arteries basal ganglia perfusion
+E) Vertebrobasilar system brainstem circulation
+F) Internal carotid artery anterior circulation supply
+
+Answer: A, D, F
+This stroke presentation affects middle cerebral artery territory (A) causing cortical deficits, lenticulostriate arteries (D) affecting basal ganglia, and involves internal carotid circulation (F). The combination of facial droop, speech difficulty, and hemiparesis indicates MCA distribution ischemia.
+
+Scenario: A 40-year-old female presents with chronic fatigue, muscle pain, and cognitive difficulties. She reports poor sleep and widespread body pain for over 6 months. Physical examination reveals multiple tender points without inflammatory signs.
+
+Question: Which THREE anatomical/physiological systems are most likely involved, and what comprehensive assessment approach is needed? (Select ALL that apply)
+A) Central nervous system pain processing modulation
+B) Musculoskeletal system myofascial trigger point development
+C) Hypothalamic-pituitary-adrenal axis stress response dysregulation
+D) Peripheral nervous system small fiber neuropathy patterns
+E) Autonomic nervous system sympathetic/parasympathetic imbalance
+F) Endocrine system thyroid hormone metabolism alterations
+
+Answer: A, B, C
+This presentation suggests fibromyalgia involving central pain processing (A), myofascial trigger points (B), and HPA axis dysregulation (C). These systems explain the widespread pain, fatigue, and cognitive symptoms characteristic of this condition.
+
+Scenario: A 50-year-old male presents with progressive shortness of breath on exertion, orthopnea, and bilateral lower extremity edema. He has a history of coronary artery disease and previous myocardial infarction. Physical examination reveals elevated jugular venous pressure, pulmonary crackles, and pitting edema.
+
+Question: Which THREE cardiopulmonary structures are primarily affected, and what pathophysiological processes are occurring? (Select ALL that apply)
+A) Left ventricular systolic dysfunction reducing cardiac output
+B) Pulmonary capillary wedge pressure elevation causing edema
+C) Right ventricular diastolic pressure systemic venous congestion
+D) Pulmonary artery vasoconstriction secondary to hypoxia
+E) Atrial natriuretic peptide secretion volume regulation
+F) Thoracic duct lymphatic drainage impairment
+
+Answer: A, B, C
+This represents congestive heart failure with left ventricular dysfunction (A) causing pulmonary congestion (B) and right-sided failure with systemic congestion (C). These interconnected pathophysiological processes explain the complete clinical picture.
+
+Scenario: A 22-year-old female presents with acute onset of severe lower abdominal pain, nausea, and vomiting. She has a history of irregular menstrual cycles. Physical examination reveals right lower quadrant tenderness with rebound tenderness.
+
+Question: Which THREE anatomical structures must be urgently evaluated, and what immediate diagnostic studies are indicated? (Select ALL that apply)
+A) Right fallopian tube tubal pregnancy potential
+B) Appendiceal luminal obstruction inflammation patterns
+C) Right ovary cyst rupture hemorrhage evaluation
+D) Ureteric calculi obstruction renal colic assessment
+E) Cecal volvulus vascular compromise evaluation
+F) Psoas muscle irritation retroperitoneal processes
+
+Answer: A, B, C
+This acute abdominal presentation requires urgent evaluation of ectopic pregnancy (A), appendicitis (B), and ovarian cyst rupture (C) as these are the most common causes of acute lower abdominal pain in females of reproductive age and require different management approaches.

@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <OtherFlags>--strict-indentation-</OtherFlags>
+    <Nullable>disable</Nullable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Common.fs" />
+    <Compile Include="Common\DomainEvents.fs" />
+    <Compile Include="Common\AntiCorruptionLayer.fs" />
+    <Compile Include="SharedKernel\User.fs" />
+    <Compile Include="SharedKernel\Interop.fs" />
+    <Compile Include="SharedKernel\IUserRepository.fs" />
+    <Compile Include="Garage\DomainTypes.fs" />
+    <Compile Include="Garage\VehicleMaintenance.fs" />
+    <Compile Include="Garage\Component.fs" />
+    <Compile Include="Garage\Vehicle.fs" />
+    <Compile Include="Garage\IComponentRepository.fs" />
+    <Compile Include="Garage\IVehicleRepository.fs" />
+    <Compile Include="Garage\Services.fs" />
+    <Compile Include="Garage\Interop.fs" />
+    <Compile Include="Garden\DomainTypes.fs" />
+    <Compile Include="Garden\Species.fs" />
+    <Compile Include="Garden\SpeciesMonograph.fs" />
+    <Compile Include="Garden\GardenBed.fs" />
+    <Compile Include="Garden\CropBatch.fs" />
+    <Compile Include="Garden\IGardenRepository.fs" />
+    <Compile Include="Garden\Services.fs" />
+    <Compile Include="Garden\Interop.fs" />
+    <Compile Include="Academy\DomainTypes.fs" />
+    <Compile Include="Academy\Skill.fs" />
+    <Compile Include="Academy\Task.fs" />
+    <Compile Include="Academy\IAcademyRepository.fs" />
+    <Compile Include="Academy\Services.fs" />
+    <Compile Include="Academy\Retention\RetentionTypes.fs" />
+    <Compile Include="Academy\Retention\Flashcard.fs" />
+    <Compile Include="Academy\Retention\SchedulingEngine.fs" />
+    <Compile Include="Academy\Retention\QuizGenerator.fs" />
+    <Compile Include="Academy\Retention\IRetentionRepository.fs" />
+    <Compile Include="Academy\Retention\RetentionInterop.fs" />
+    <Compile Include="Dojo\DomainTypes.fs" />
+    <Compile Include="Dojo\Habit.fs" />
+    <Compile Include="Dojo\Identity.fs" />
+    <Compile Include="Dojo\IDojoRepository.fs" />
+    <Compile Include="Dojo\Services.fs" />
+    <Compile Include="Home\DomainTypes.fs" />
+    <Compile Include="Home\Household.fs" />
+    <Compile Include="Home\Chore.fs" />
+    <Compile Include="Home\Calendar.fs" />
+    <Compile Include="Home\IHomeRepository.fs" />
+    <Compile Include="Boardroom\DomainTypes.fs" />
+    <Compile Include="Boardroom\KPI.fs" />
+    <Compile Include="Boardroom\KRA.fs" />
+    <Compile Include="Boardroom\Vision.fs" />
+    <Compile Include="Boardroom\IBoardroomRepository.fs" />
+    <Compile Include="Boardroom\Services.fs" />
+    <Compile Include="Finance\DomainTypes.fs" />
+    <Compile Include="Finance\Account.fs" />
+    <Compile Include="Finance\Transaction.fs" />
+    <Compile Include="Finance\Budget.fs" />
+    <Compile Include="Finance\IFinanceRepository.fs" />
+    <Compile Include="Finance\Services.fs" />
+    <Compile Include="Inventory\Types.fs" />
+    <Compile Include="Inventory\InventoryTypes.fs" />
+    <Compile Include="Inventory\IInventoryRepository.fs" />
+    <Compile Include="Inventory\DomainTypes.fs" />
+    <!-- TODO: Fix GarageInventoryIntegration.fs errors
+    <Compile Include="Garage\GarageInventoryIntegration.fs" />
+    -->
+  </ItemGroup>
+
+</Project>
