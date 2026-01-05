@@ -52,3 +52,25 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Env files (never commit secrets)
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Node / Deno dependencies
+**/node_modules/
+
+# Fresh build output
+**/_fresh/
+
+# Common frontend build output
+**/dist/
+**/build/
+
+# IDE/OS
+.vs/
+.vscode/
+.DS_Store
+Thumbs.db
