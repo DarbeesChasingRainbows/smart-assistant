@@ -1,7 +1,6 @@
 using LifeOS.Domain.Common;
 using LifeOS.Domain.Garage;
 using LifeOS.Infrastructure.Persistence.Documents;
-using Microsoft.FSharp.Core;
 
 namespace LifeOS.Infrastructure.Garage;
 
@@ -17,7 +16,7 @@ public static class VehicleMapper
         {
             Key = Id.vehicleIdValue(vehicle.Id).ToString(),
             VIN = GarageInterop.GetVINValue(vehicle.VIN),
-            LicensePlate = GetLicensePlateValue(vehicle.LicensePlate),
+            LicensePlate = GarageInterop.GetLicensePlateValue(vehicle.LicensePlate),
             Make = GarageInterop.GetMakeValue(vehicle.Make),
             Model = GarageInterop.GetModelValue(vehicle.Model),
             Year = GarageInterop.GetYearValue(vehicle.Year),
@@ -29,37 +28,29 @@ public static class VehicleMapper
         };
     }
 
-    private static string GetLicensePlateValue(LicensePlate plate)
-    {
-        var optionValue = GarageInterop.GetLicensePlateValue(plate);
-        return FSharpOption<string>.get_IsSome(optionValue) ? optionValue.Value : null;
-    }
-
     public static Vehicle ToDomain(VehicleDocument doc)
     {
         if (doc == null)
             return null;
 
+        // Use the new C#-friendly GarageResult API
         var vinResult = GarageInterop.CreateVIN(doc.VIN);
-        var plateResult = GarageInterop.CreateLicensePlate(
-            string.IsNullOrEmpty(doc.LicensePlate)
-                ? FSharpOption<string>.None
-                : FSharpOption<string>.Some(doc.LicensePlate)
-        );
+        var plateResult = GarageInterop.CreateLicensePlate(doc.LicensePlate);
         var mileageResult = GarageInterop.CreateMileage(doc.CurrentMileage);
 
-        if (vinResult.IsError || plateResult.IsError || mileageResult.IsError)
+        // Check for failures using IsFailure (no more FSharpResult)
+        if (vinResult.IsFailure || plateResult.IsFailure || mileageResult.IsFailure)
             return null;
 
         return new Vehicle(
             id: Id.createVehicleIdFrom(Guid.Parse(doc.Key)),
-            vIN: vinResult.ResultValue,
-            licensePlate: plateResult.ResultValue,
+            vIN: vinResult.Value,
+            licensePlate: plateResult.Value,
             make: GarageInterop.CreateMake(doc.Make),
             model: GarageInterop.CreateModel(doc.Model),
             year: GarageInterop.CreateYear(doc.Year),
             vehicleType: MapVehicleTypeToDomain(doc.VehicleType),
-            currentMileage: mileageResult.ResultValue,
+            currentMileage: mileageResult.Value,
             isActive: doc.IsActive,
             createdAt: doc.CreatedAt,
             updatedAt: doc.UpdatedAt

@@ -69,28 +69,20 @@ public static class ComponentEndpoints
 
         var category = GarageInterop.CreateComponentCategory(request.Category);
 
+        // Use new C#-friendly API - pass nulls and Nullable<T> directly
         var result = GarageInterop.CreateComponent(
             request.Name,
-            string.IsNullOrWhiteSpace(request.PartNumber) ? FSharpOption<string>.None : FSharpOption<string>.Some(request.PartNumber),
+            request.PartNumber,  // Pass null directly
             category,
-            request.PurchaseDate.HasValue ? FSharpOption<global::System.DateTime>.Some(request.PurchaseDate.Value) : FSharpOption<global::System.DateTime>.None,
-            request.PurchaseCost.HasValue ? FSharpOption<decimal>.Some(request.PurchaseCost.Value) : FSharpOption<decimal>.None,
-            request.WarrantyExpiry.HasValue ? FSharpOption<global::System.DateTime>.Some(request.WarrantyExpiry.Value) : FSharpOption<global::System.DateTime>.None,
-            string.IsNullOrWhiteSpace(request.Notes) ? FSharpOption<string>.None : FSharpOption<string>.Some(request.Notes));
+            request.PurchaseDate,  // Nullable<DateTime> works directly
+            request.PurchaseCost,  // Nullable<decimal> works directly
+            request.WarrantyExpiry,
+            request.Notes);
 
-        if (result.IsError)
-        {
-            var error = result.ErrorValue;
-            var errorMessage = error switch
-            {
-                DomainError.ValidationError ve => ve.Item,
-                DomainError.BusinessRuleViolation br => br.Item,
-                _ => "Unknown error"
-            };
-            return Results.BadRequest(new ApiErrorResponse { Error = errorMessage });
-        }
+        if (result.IsFailure)
+            return Results.BadRequest(new ApiErrorResponse { Error = result.ErrorMessage });
 
-        var created = await repository.AddAsync(result.ResultValue);
+        var created = await repository.AddAsync(result.Value);
         return Results.Created($"/api/v1/components/{Id.componentIdValue(created.Id)}", MapToDto(created));
     }
 

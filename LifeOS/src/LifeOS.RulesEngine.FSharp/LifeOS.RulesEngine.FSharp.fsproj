@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OtherFlags>--strict-indentation-</OtherFlags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- C# Contracts (Interfaces + DTOs) - The PUBLIC API -->
+    <Compile Include="Contracts\IRulesEngine.fs" />
+    <Compile Include="Contracts\Dtos.fs" />
+    
+    <!-- Internal F# Domain (DUs, Options, Results) - NEVER EXPOSED -->
+    <Compile Include="Internal\DomainTypes.fs" />
+    <Compile Include="Internal\ValidationRules.fs" />
+    <Compile Include="Internal\BusinessRules.fs" />
+    <Compile Include="Internal\Mappers.fs" />
+    
+    <!-- Boundary Adapters - Implements C# interfaces, handles interop -->
+    <Compile Include="Adapters\AllowanceRulesEngine.fs" />
+    <Compile Include="Adapters\MaintenanceRulesEngine.fs" />
+    <Compile Include="Adapters\ServiceCollectionExtensions.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling" Version="4.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.*" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,7 @@
 using LifeOS.Application;
 using LifeOS.Infrastructure;
 using LifeOS.API.Endpoints;
+using LifeOS.RulesEngine.Adapters;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,9 @@ builder.Services.AddMediatR(cfg =>
 
 // Add Infrastructure services (ArangoDB, Repositories)
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+// Add F# Rules Engine services (Allowance, Maintenance rules)
+builder.Services.AddLifeOSRulesEngine();
 
 // Add CORS for Deno Fresh frontend
 builder.Services.AddCors(options =>
