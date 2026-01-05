@@ -59,6 +59,12 @@ nunit-*.xml
 **/.env
 **/.env.*
 
+# Allow env templates
+!.env.example
+!**/.env.example
+!.env.container.example
+!**/.env.container.example
+
 # Node / Deno dependencies
 **/node_modules/
 
