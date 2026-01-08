@@ -21,7 +21,8 @@ export class GarageApiClient {
   public baseUrl: string;
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl || Deno.env.get("VITE_API_URL") || "http://localhost:5120";
+    const envUrl = typeof Deno !== "undefined" ? Deno.env.get("VITE_API_URL") : undefined;
+    this.baseUrl = baseUrl || envUrl || "http://localhost:5120";
   }
 
   // ============================================================================

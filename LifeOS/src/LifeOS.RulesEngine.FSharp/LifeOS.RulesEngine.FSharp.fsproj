@@ -11,12 +11,14 @@
     <!-- C# Contracts (Interfaces + DTOs) - The PUBLIC API -->
     <Compile Include="Contracts\IRulesEngine.fs" />
     <Compile Include="Contracts\Dtos.fs" />
+    <Compile Include="Contracts\BudgetTypes.fs" />
     
     <!-- Internal F# Domain (DUs, Options, Results) - NEVER EXPOSED -->
     <Compile Include="Internal\DomainTypes.fs" />
     <Compile Include="Internal\ValidationRules.fs" />
     <Compile Include="Internal\BusinessRules.fs" />
     <Compile Include="Internal\Mappers.fs" />
+    <Compile Include="Internal\BudgetRulesEngine.fs" />
     
     <!-- Boundary Adapters - Implements C# interfaces, handles interop -->
     <Compile Include="Adapters\AllowanceRulesEngine.fs" />

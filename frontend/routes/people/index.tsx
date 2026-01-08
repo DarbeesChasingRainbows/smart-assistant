@@ -4,12 +4,12 @@ import PeopleListIsland from "../../islands/people/PeopleListIsland.tsx";
 
 export default define.page(function PeoplePage() {
   return (
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-100">
       <Head>
         <title>People - LifeOS</title>
       </Head>
 
-      <header class="bg-white shadow-sm">
+      <header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -21,17 +21,25 @@ export default define.page(function PeoplePage() {
                 </p>
               </div>
             </div>
-            <a
-              href="/"
-              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-            >
-              Back to Home
-            </a>
+            <div class="flex items-center gap-3">
+              <a
+                href="/people/new"
+                class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-sm"
+              >
+                + Add Family Member
+              </a>
+              <a
+                href="/"
+                class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-colors"
+              >
+                Back to Home
+              </a>
+            </div>
           </div>
         </div>
       </header>
 
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <PeopleListIsland />
       </main>
     </div>

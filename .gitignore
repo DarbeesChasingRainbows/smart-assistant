@@ -80,3 +80,5 @@ nunit-*.xml
 .vscode/
 .DS_Store
 Thumbs.db
+
+.fake

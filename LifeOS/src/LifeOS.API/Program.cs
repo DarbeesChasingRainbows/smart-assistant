@@ -1,6 +1,6 @@
+using LifeOS.API.Endpoints;
 using LifeOS.Application;
 using LifeOS.Infrastructure;
-using LifeOS.API.Endpoints;
 using LifeOS.RulesEngine.Adapters;
 using MediatR;
 
@@ -25,20 +25,37 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 // Add F# Rules Engine services (Allowance, Maintenance rules)
 builder.Services.AddLifeOSRulesEngine();
 
+builder.Services.AddHttpClient(
+    "VinProvider",
+    client =>
+    {
+        var baseUrl =
+            builder.Configuration["Vin:BaseUrl"]
+            ?? Environment.GetEnvironmentVariable("LIFEOS_VIN_BASE_URL")
+            ?? "https://vpic.nhtsa.dot.gov";
+        client.BaseAddress = new Uri(baseUrl);
+    }
+);
+
 // Add CORS for Deno Fresh frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.WithOrigins(
-                  "http://localhost:8000",
-                  "http://localhost:3000",
-                  "http://localhost:5173",
-                  "http://127.0.0.1:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // Added for future auth support and preflight consistency
-    });
+    options.AddPolicy(
+        "AllowFrontend",
+        policy =>
+        {
+            policy
+                .WithOrigins(
+                    "http://localhost:8000",
+                    "http://localhost:3000",
+                    "http://localhost:5173",
+                    "http://127.0.0.1:5173"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Added for future auth support and preflight consistency
+        }
+    );
 });
 
 var app = builder.Build();
@@ -66,6 +83,8 @@ app.MapFinanceEndpoints();
 app.MapHomeEndpoints();
 app.MapVehicleEventsExample();
 app.MapEventsEndpoints();
+app.MapVinEndpoints();
+app.MapBudgetEndpoints();
 
 // Health check endpoint
 app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }))

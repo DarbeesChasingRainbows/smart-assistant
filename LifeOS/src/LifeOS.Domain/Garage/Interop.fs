@@ -245,3 +245,71 @@ type GarageInterop private () =
     /// <summary>Gets component age in days.</summary>
     static member GetComponentAgeInDays(comp: Component, currentDate: DateTime) : int =
         Component.getAgeInDays comp currentDate
+    
+    /// <summary>Updates component properties. Pass null for optional parameters to keep existing values.</summary>
+    static member UpdateComponent(
+        comp: Component,
+        name: string,
+        partNumber: string,
+        category: ComponentCategory,
+        purchaseDate: Nullable<DateTime>,
+        purchaseCost: Nullable<decimal>,
+        warrantyExpiry: Nullable<DateTime>,
+        notes: string
+    ) : GarageResult<Component> =
+        let optPartNumber = if isNull partNumber then comp.PartNumber else Some partNumber
+        let optPurchaseDate = if purchaseDate.HasValue then Some purchaseDate.Value else comp.PurchaseDate
+        let optPurchaseCost = if purchaseCost.HasValue then Some purchaseCost.Value else comp.PurchaseCost
+        let optWarrantyExpiry = if warrantyExpiry.HasValue then Some warrantyExpiry.Value else comp.WarrantyExpiry
+        let optNotes = if isNull notes then comp.Notes else Some notes
+        
+        Ok {
+            comp with 
+                Name = name
+                PartNumber = optPartNumber
+                Category = category
+                PurchaseDate = optPurchaseDate
+                PurchaseCost = optPurchaseCost
+                WarrantyExpiry = optWarrantyExpiry
+                Notes = optNotes
+                UpdatedAt = DateTime.utcNow()
+        } |> GarageResult.FromResult
+    
+    /// <summary>Gets component part number. Returns null if none.</summary>
+    static member GetComponentPartNumber(comp: Component) : string =
+        match comp.PartNumber with
+        | Some pn -> pn
+        | None -> null
+    
+    /// <summary>Gets component purchase date. Returns null if none.</summary>
+    static member GetComponentPurchaseDate(comp: Component) : Nullable<DateTime> =
+        match comp.PurchaseDate with
+        | Some pd -> Nullable pd
+        | None -> Nullable()
+    
+    /// <summary>Gets component purchase cost. Returns null if none.</summary>
+    static member GetComponentPurchaseCost(comp: Component) : Nullable<decimal> =
+        match comp.PurchaseCost with
+        | Some pc -> Nullable pc
+        | None -> Nullable()
+    
+    /// <summary>Gets component warranty expiry. Returns null if none.</summary>
+    static member GetComponentWarrantyExpiry(comp: Component) : Nullable<DateTime> =
+        match comp.WarrantyExpiry with
+        | Some we -> Nullable we
+        | None -> Nullable()
+    
+    /// <summary>Gets component notes. Returns null if none.</summary>
+    static member GetComponentNotes(comp: Component) : string =
+        match comp.Notes with
+        | Some n -> n
+        | None -> null
+    
+    /// <summary>Gets storage location. Returns null if none.</summary>
+    static member GetStorageLocation(location: ComponentLocation) : string =
+        match location with
+        | ComponentLocation.InStorage opt -> 
+            match opt with
+            | Some s -> s
+            | None -> null
+        | _ -> null

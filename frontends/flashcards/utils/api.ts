@@ -24,7 +24,7 @@ import type {
   CreateFlashcardRequest,
   ImportResult,
   DeckImportResult,
-  HealthCheckResponse as _HealthCheckResponse,
+  HealthCheckResponse,
 } from "./contracts.ts";
 
 export class RetentionApiClient {
@@ -271,9 +271,22 @@ export class RetentionApiClient {
   // Health Check
   // ============================================================================
 
-  async healthCheck(): Promise<{ status: string; cardCount: number }> {
+  async healthCheck(): Promise<HealthCheckResponse> {
     const response = await fetch(`${this.baseUrl}/health`);
     if (!response.ok) throw new Error(`Health check failed: ${response.statusText}`);
-    return response.json();
+    const data: unknown = await response.json();
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "status" in data &&
+      "cardCount" in data
+    ) {
+      const status = (data as { status: unknown }).status;
+      const cardCount = (data as { cardCount: unknown }).cardCount;
+      if ((status === "Healthy" || status === "Unhealthy") && typeof cardCount === "number") {
+        return { status, cardCount };
+      }
+    }
+    throw new Error("Health check returned unexpected payload");
   }
 }

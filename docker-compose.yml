@@ -46,7 +46,7 @@ services:
   api:
     build:
       context: ./LifeOS
-      dockerfile: Dockerfile
+      dockerfile: Containerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5120
@@ -90,9 +90,9 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Containerfile
     environment:
-      - API_BASE_URL=http://api:5120
+      - VITE_API_URL=http://api:5120/api
     depends_on:
       - api
     networks:
@@ -115,12 +115,12 @@ services:
   flashcards-frontend:
     build:
       context: ./frontends/flashcards
-      dockerfile: Dockerfile
+      dockerfile: Containerfile
     environment:
       - DENO_ENV=production
       - FRESH_BASE_PATH=/flashcards  # This helps Fresh align its internal router
-      - VITE_API_URL=http://api:5120
-      - VITE_UPLOADS_URL=http://api:5120
+      - VITE_API_URL=http://api:5120/api
+      - VITE_UPLOADS_URL=http://api:5120/api
       - DENO_DEPLOYMENT_ID=${GIT_REVISION:-local}
     ports:
       - "8030:8000"
@@ -140,15 +140,38 @@ services:
   garage-frontend:
     build:
       context: ./frontends/garage
-      dockerfile: Dockerfile
+      dockerfile: Containerfile
     environment:
       - DENO_ENV=production
-      - VITE_API_URL=http://api:5120
-      - VITE_UPLOADS_URL=http://api:5120
+      - VITE_API_URL=http://api:5120/api
+      - VITE_UPLOADS_URL=http://api:5120/api
     depends_on:
       - api
     networks:
       - lifeos-network
+
+  # Budget Frontend (Pay-Period Zero-Based Budgeting) - LifeOS version (frontends/budget)
+  budget-frontend:
+    build:
+      context: ./frontends/budget
+      dockerfile: Containerfile
+    environment:
+      - DENO_ENV=production
+      - FRESH_BASE_PATH=/budget
+      - VITE_API_URL=http://api:5120/api
+      - DENO_DEPLOYMENT_ID=${GIT_REVISION:-local}
+    ports:
+      - "8040:8000"
+    depends_on:
+      - api
+    networks:
+      - lifeos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   arangodb_data:

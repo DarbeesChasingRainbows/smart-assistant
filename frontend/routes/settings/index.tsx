@@ -1,10 +1,17 @@
+import { Head } from "fresh/runtime";
 import { define } from "@/utils.ts";
+import { SettingsShell } from "../../components/SettingsShell.tsx";
+import SettingsOverviewIsland from "../../islands/settings/SettingsOverviewIsland.tsx";
 
 export default define.page(function Settings() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Settings</h1>
-      <p className="text-gray-600">Settings panel coming soon...</p>
+    <div>
+      <Head>
+        <title>Settings - LifeOS</title>
+      </Head>
+      <SettingsShell activeTab="overview">
+        <SettingsOverviewIsland />
+      </SettingsShell>
     </div>
   );
 });

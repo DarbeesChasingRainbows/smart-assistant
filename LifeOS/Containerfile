@@ -1,0 +1,31 @@
+# .NET API Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy project files
+COPY src/LifeOS.Domain/LifeOS.Domain.fsproj src/LifeOS.Domain/
+COPY src/LifeOS.Infrastructure/LifeOS.Infrastructure.csproj src/LifeOS.Infrastructure/
+COPY src/LifeOS.API/LifeOS.API.csproj src/LifeOS.API/
+
+# Restore dependencies
+RUN dotnet restore src/LifeOS.API/LifeOS.API.csproj
+
+# Copy source code
+COPY src/ src/
+
+# Build and publish
+WORKDIR /src/src/LifeOS.API
+RUN dotnet publish -c Release -o /app/publish
+
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /app/publish .
+
+EXPOSE 5120
+
+ENTRYPOINT ["dotnet", "LifeOS.API.dll"]
