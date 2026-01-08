@@ -3,7 +3,20 @@
  * Connects Deno Fresh frontend to .NET API
  */
 
-const API_BASE_URL = "http://localhost:5120/api/v1";
+function getApiBaseUrl(): string {
+  // Islands run in the browser and must not rely on the Deno global.
+  if (typeof globalThis.window !== "undefined") {
+    return "/api";
+  }
+
+  if (typeof Deno !== "undefined" && Deno.env?.get) {
+    return Deno.env.get("VITE_API_URL") || "http://localhost:5120/api";
+  }
+
+  return "http://localhost:5120/api";
+}
+
+const API_BASE_URL = `${getApiBaseUrl()}/v1`;
 
 // Types matching the .NET API DTOs
 export interface VehicleDto {

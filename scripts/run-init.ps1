@@ -5,7 +5,7 @@
 $ArangoURL = "http://localhost:8529"
 $Database = "_system"
 $Username = "root"
-$Password = ""
+$Password = "lifeos123"  # Default password from docker-compose.yml
 
 Write-Host "Connecting to ArangoDB at $ArangoURL..." -ForegroundColor Green
 

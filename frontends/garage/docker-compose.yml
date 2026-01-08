@@ -27,4 +27,4 @@ services:
 
 networks:
   lifeos-network:
-    external: true
+    driver: bridge

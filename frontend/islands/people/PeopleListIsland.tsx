@@ -24,6 +24,8 @@ export default function PeopleListIsland() {
   const loading = useSignal(true);
   const error = useSignal<string | null>(null);
 
+  const searchQuery = useSignal("");
+
   const showAddPerson = useSignal(false);
   const saving = useSignal(false);
 
@@ -272,6 +274,15 @@ export default function PeopleListIsland() {
     );
   }
 
+  const selectedPerson = people.value.find((p) => p.id === selectedPersonId.value) ?? null;
+  const q = searchQuery.value.trim().toLowerCase();
+  const filteredPeople = q.length === 0
+    ? people.value
+    : people.value.filter((p) => {
+      const haystack = `${p.username} ${p.email ?? ""} ${p.role}`.toLowerCase();
+      return haystack.includes(q);
+    });
+
   return (
     <div class="space-y-6">
       {error.value && (
@@ -280,168 +291,250 @@ export default function PeopleListIsland() {
         </div>
       )}
 
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold text-gray-800">All People</h2>
-        <button
-          type="button"
-          onClick={() => {
-            showAddPerson.value = true;
-            resetForm();
-          }}
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          + Add Person
-        </button>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-slate-900">Directory</h2>
+            <p class="text-sm text-slate-500">Search, select, and manage relationships and work history.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-sm"
+              onClick={() => {
+                showAddPerson.value = true;
+                resetForm();
+              }}
+            >
+              + Add person
+            </button>
+            <button
+              type="button"
+              class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-colors"
+              onClick={loadPeople}
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="relative block">
+            <span class="sr-only">Search people</span>
+            <input
+              value={searchQuery.value}
+              onInput={(e) => searchQuery.value = (e.target as HTMLInputElement).value}
+              class="w-full pl-10 pr-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Search by name, email, or role..."
+              type="search"
+            />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+              </svg>
+            </span>
+          </label>
+        </div>
       </div>
 
       {people.value.length === 0
         ? (
           <div class="bg-white rounded-xl shadow-md p-8 text-center">
-            <p class="text-gray-500">
-              No people added yet. Click "+ Add Person" to get started.
+            <span class="text-5xl">👨‍👩‍👧‍👦</span>
+            <p class="text-gray-500 mt-4">
+              No family members added yet.
             </p>
+            <button
+              type="button"
+              class="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+              onClick={() => {
+                showAddPerson.value = true;
+                resetForm();
+              }}
+            >
+              + Add your first person
+            </button>
           </div>
         )
         : (
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div class="lg:col-span-1 space-y-3">
-              <label class="select w-full">
-                <span class="label">Selected person</span>
-                <select
-                  value={selectedPersonId.value}
-                  onChange={async (e) => {
-                    selectedPersonId.value =
-                      (e.target as HTMLSelectElement).value;
-                    await loadSelectedPersonDetails();
-                  }}
-                >
-                  {people.value.map((p) => (
-                    <option value={p.id} key={p.id}>
-                      {p.username} ({p.role})
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <div class="bg-white rounded-xl shadow-md p-4">
-                <div class="text-sm text-gray-600">Person</div>
-                <div class="font-semibold">
-                  {people.value.find((p) => p.id === selectedPersonId.value)
-                    ?.username}
-                </div>
-                <div class="text-sm text-gray-600">
-                  {people.value.find((p) => p.id === selectedPersonId.value)
-                    ?.email}
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 gap-3">
-                {people.value.map((person) => (
-                  <div
-                    key={person.id}
-                    class="bg-white rounded-xl shadow-md p-4 flex items-center justify-between"
-                  >
-                    <div>
-                      <div class="font-semibold">{person.username}</div>
-                      <div class="text-sm text-gray-500">
-                        {person.role} •{" "}
-                        {person.isActive ? "Active" : "Inactive"}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => deletePerson(person.id)}
-                      class="btn btn-ghost btn-sm text-error"
-                    >
-                      Delete
-                    </button>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1">
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-4 py-3 border-b border-slate-200 bg-slate-50">
+                  <div class="text-sm font-medium text-slate-700">
+                    People ({filteredPeople.length})
                   </div>
-                ))}
+                </div>
+                <div class="divide-y">
+                  {filteredPeople.map((person) => {
+                    const isSelected = person.id === selectedPersonId.value;
+                    return (
+                      <button
+                        key={person.id}
+                        type="button"
+                        class={`w-full text-left px-4 py-3 hover:bg-slate-50 transition-colors ${isSelected ? "bg-blue-50" : "bg-white"}`}
+                        onClick={async () => {
+                          selectedPersonId.value = person.id;
+                          await loadSelectedPersonDetails();
+                        }}
+                      >
+                        <div class="flex items-center justify-between gap-3">
+                          <div>
+                            <div class="font-semibold text-slate-900">{person.username}</div>
+                            <div class="text-xs text-slate-500">
+                              {person.role} • {person.isActive ? "Active" : "Inactive"}
+                            </div>
+                          </div>
+                          <div class="text-xs text-slate-400">›</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
             <div class="lg:col-span-2 space-y-4">
-              <div class="bg-white rounded-xl shadow-md p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Genealogy</h3>
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="text-sm text-slate-600">Selected person</div>
+                    <div class="text-xl font-semibold text-slate-900">
+                      {selectedPerson?.username ?? "—"}
+                    </div>
+                    <div class="text-sm text-slate-600">{selectedPerson?.email ?? ""}</div>
+                  </div>
+                  {selectedPerson && (
+                    <div class="flex items-center gap-2">
+                      <a
+                        href={`/people/${selectedPerson.id}`}
+                        class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors text-sm"
+                      >
+                        View profile
+                      </a>
+                      <button
+                        type="button"
+                        class="px-3 py-2 rounded-xl bg-red-50 text-red-700 hover:bg-red-100 transition-colors text-sm"
+                        onClick={() => deletePerson(selectedPerson.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-                <div class="mt-3">
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-900">👨‍👩‍👧‍👦 Genealogy</h3>
+                    <p class="text-sm text-slate-500">Relationships and family links</p>
+                  </div>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
                     onClick={() => {
                       showAddRelationship.value = true;
                       resetRelationshipForm();
                     }}
                   >
-                    Add relationship
+                    + Add relationship
                   </button>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-2">
                   {loadingDetails.value
-                    ? <div class="text-gray-500">Loading relationships…</div>
+                    ? <div class="text-slate-500">Loading relationships…</div>
                     : relationships.value.length === 0
-                    ? <div class="text-gray-500">No relationships yet.</div>
+                    ? (
+                      <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-600">
+                        No relationships yet.
+                      </div>
+                    )
                     : (
                       <div class="space-y-2">
-                        {relationships.value.map((r) => (
-                          <div key={r.key} class="border rounded-lg p-3">
-                            <div class="font-medium">{r.type}</div>
-                            <div class="text-sm text-gray-600">
-                              To: {people.value.find((p) =>
-                                p.id === r.toPersonId
-                              )
-                                ?.username ?? r.toPersonId}
-                            </div>
-                            {!r.isValid && (
-                              <div class="text-sm text-error">
-                                Invalidated: {r.invalidatedReason}
+                        {relationships.value.map((r) => {
+                          const toName = people.value.find((p) => p.id === r.toPersonId)?.username ?? r.toPersonId;
+                          return (
+                            <div
+                              key={r.key}
+                              class={`p-3 rounded-xl border ${
+                                r.isValid
+                                  ? "border-blue-100 bg-white hover:bg-blue-50 transition-colors"
+                                  : "border-slate-200 bg-slate-50 opacity-60"
+                              }`}
+                            >
+                              <div class="flex items-start justify-between gap-3">
+                                <div>
+                                  <div class="font-semibold text-slate-900">{r.type}</div>
+                                  <div class="text-sm text-slate-600">To: {toName}</div>
+                                  {!r.isValid && (
+                                    <div class="text-sm text-slate-500 mt-1">Invalidated: {r.invalidatedReason}</div>
+                                  )}
+                                </div>
                               </div>
-                            )}
-                          </div>
-                        ))}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                 </div>
               </div>
 
-              <div class="bg-white rounded-xl shadow-md p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Employment</h3>
-
-                <div class="mt-3">
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-900">💼 Employment</h3>
+                    <p class="text-sm text-slate-500">Work history and employers</p>
+                  </div>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
                     onClick={() => {
                       showAddEmployment.value = true;
                       resetEmploymentForm();
                     }}
                   >
-                    Add employment
+                    + Add employment
                   </button>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-2">
                   {loadingDetails.value
-                    ? <div class="text-gray-500">Loading employment…</div>
+                    ? <div class="text-slate-500">Loading employment…</div>
                     : employment.value.length === 0
                     ? (
-                      <div class="text-gray-500">
+                      <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-600">
                         No employment records yet.
                       </div>
                     )
                     : (
                       <div class="space-y-2">
                         {employment.value.map((j) => (
-                          <div key={j.key} class="border rounded-lg p-3">
-                            <div class="font-medium">
-                              {j.employer}
-                              {j.title ? ` — ${j.title}` : ""}
-                            </div>
-                            <div class="text-sm text-gray-600">
-                              {j.startDate}
-                              {j.endDate ? ` → ${j.endDate}` : ""}
-                              {j.isCurrent ? " (current)" : ""}
+                          <div
+                            key={j.key}
+                            class={`p-3 rounded-xl border ${
+                              j.isCurrent
+                                ? "border-green-200 bg-green-50"
+                                : "border-slate-200 bg-slate-50"
+                            }`}
+                          >
+                            <div class="flex items-center justify-between gap-3">
+                              <div>
+                                <div class="font-semibold text-slate-900">
+                                  {j.employer}{j.title ? ` — ${j.title}` : ""}
+                                </div>
+                                <div class="text-sm text-slate-600">
+                                  {j.startDate}
+                                  {j.endDate ? ` → ${j.endDate}` : ""}
+                                  {j.isCurrent ? " (current)" : ""}
+                                </div>
+                              </div>
+                              {j.isCurrent && (
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                                  Current
+                                </span>
+                              )}
                             </div>
                           </div>
                         ))}

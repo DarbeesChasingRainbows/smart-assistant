@@ -1,4 +1,7 @@
 import { createDefine } from "fresh";
+import { asset as freshAsset } from "fresh/runtime";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export interface State {
   shared: string;
@@ -15,10 +18,17 @@ const BASE_PATH = "/garage";
  * Always adds the /garage prefix since this app is served under that path
  */
 export function url(path: string): string {
+  if (path === BASE_PATH) return BASE_PATH;
+  if (path.startsWith(`${BASE_PATH}/`)) return path;
   // Remove leading slash to ensure we don't get "//garage"
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return `${BASE_PATH}/${cleanPath}`;
 }
 
-// Alias 'asset' to 'url' so your old code still works if you want
-export const asset = url;
+export function asset(path: string): string {
+  return url(freshAsset(path));
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}

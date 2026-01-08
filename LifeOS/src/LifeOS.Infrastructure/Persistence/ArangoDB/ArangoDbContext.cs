@@ -64,6 +64,18 @@ public class ArangoDbContext : IAsyncDisposable
         public const string FinancialCategories = "financial_categories";
         public const string PayPeriodConfig = "pay_period_config";
 
+        // Budget domain collections (pay-period based zero-based budgeting)
+        public const string BudgetPayPeriods = "budget_pay_periods";
+        public const string BudgetCategoryGroups = "budget_category_groups";
+        public const string BudgetCategories = "budget_categories";
+        public const string BudgetAssignments = "budget_assignments";
+        public const string BudgetCategoryCarryovers = "budget_category_carryovers";
+        public const string BudgetIncomeEntries = "budget_income_entries";
+        public const string BudgetAccounts = "budget_accounts";
+        public const string BudgetBills = "budget_bills";
+        public const string BudgetGoals = "budget_goals";
+        public const string BudgetTransactions = "budget_transactions";
+
         // Edge collections (Verbs)
         public const string InstalledOn = "installed_on";
         public const string AssetInstallations = "asset_installations";

@@ -1,13 +1,15 @@
 using LifeOS.API.DTOs;
 using LifeOS.Domain.Garage;
 using LifeOS.Domain.Common;
-using Microsoft.FSharp.Core;
+using LifeOS.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FSharp.Core;
 
 namespace LifeOS.API.Endpoints;
 
 /// <summary>
 /// Vehicle API endpoints - Primary Adapter (Hexagonal Architecture)
+/// Uses new GarageResult API for C#-friendly interop with F# domain.
 /// </summary>
 public static class VehicleEndpoints
 {
@@ -81,38 +83,27 @@ public static class VehicleEndpoints
         // Map VehicleType from DTO
         var vehicleType = MapVehicleType(request.VehicleType);
 
-        // Create vehicle using F# domain factory via Interop
+        // Create vehicle using F# domain factory via new C#-friendly Interop
         var result = GarageInterop.CreateVehicle(
             request.VIN,
-            string.IsNullOrEmpty(request.LicensePlate)
-                ? FSharpOption<string>.None
-                : FSharpOption<string>.Some(request.LicensePlate),
+            request.LicensePlate,  // Pass null directly - Interop handles conversion
             request.Make,
             request.Model,
             request.Year,
             vehicleType);
 
-        if (result.IsError)
-        {
-            var error = result.ErrorValue;
-            var errorMessage = error switch
-            {
-                DomainError.ValidationError ve => ve.Item,
-                DomainError.BusinessRuleViolation br => br.Item,
-                _ => "Unknown error"
-            };
-            return Results.BadRequest(new ApiErrorResponse { Error = errorMessage });
-        }
+        if (result.IsFailure)
+            return Results.BadRequest(new ApiErrorResponse { Error = result.ErrorMessage });
 
         // Check VIN uniqueness
         var isUnique = await repository.IsVINUniqueAsync(
-            result.ResultValue.VIN,
+            result.Value.VIN,
             FSharpOption<VehicleId>.None);
 
         if (!isUnique)
             return Results.Conflict(new ApiErrorResponse { Error = "VIN already exists" });
 
-        var vehicle = await repository.AddAsync(result.ResultValue);
+        var vehicle = await repository.AddAsync(result.Value);
         return Results.Created($"/api/v1/vehicles/{Id.vehicleIdValue(vehicle.Id)}", MapToDto(vehicle));
     }
 
@@ -129,37 +120,29 @@ public static class VehicleEndpoints
 
         var vehicle = vehicleOption.Value!;
 
-        // Apply updates
+        // Apply updates using new C#-friendly GarageResult API
         if (request.CurrentMileage.HasValue)
         {
             var mileageResult = GarageInterop.CreateMileage(request.CurrentMileage.Value);
-            if (mileageResult.IsError)
-                return Results.BadRequest(new ApiErrorResponse { Error = "Invalid mileage value" });
+            if (mileageResult.IsFailure)
+                return Results.BadRequest(new ApiErrorResponse { Error = mileageResult.ErrorMessage });
 
-            var updateResult = vehicle.UpdateMileage(mileageResult.ResultValue);
-            if (updateResult.IsError)
-            {
-                var error = updateResult.ErrorValue;
-                var errorMessage = error switch
-                {
-                    DomainError.BusinessRuleViolation br => br.Item,
-                    _ => "Update failed"
-                };
-                return Results.BadRequest(new ApiErrorResponse { Error = errorMessage });
-            }
-            vehicle = updateResult.ResultValue;
+            var updateResult = GarageInterop.UpdateVehicleMileage(vehicle, mileageResult.Value);
+            if (updateResult.IsFailure)
+                return Results.BadRequest(new ApiErrorResponse { Error = updateResult.ErrorMessage });
+            
+            vehicle = updateResult.Value;
         }
 
         if (request.LicensePlate != null)
         {
-            var plateResult = GarageInterop.CreateLicensePlate(
-                FSharpOption<string>.Some(request.LicensePlate));
-            if (plateResult.IsError)
-                return Results.BadRequest(new ApiErrorResponse { Error = "Invalid license plate" });
+            var plateResult = GarageInterop.CreateLicensePlate(request.LicensePlate);
+            if (plateResult.IsFailure)
+                return Results.BadRequest(new ApiErrorResponse { Error = plateResult.ErrorMessage });
 
-            var updateResult = GarageInterop.UpdateVehicleLicensePlate(vehicle, plateResult.ResultValue);
-            if (updateResult.IsOk)
-                vehicle = updateResult.ResultValue;
+            var updateResult = GarageInterop.UpdateVehicleLicensePlate(vehicle, plateResult.Value);
+            if (updateResult.IsSuccess)
+                vehicle = updateResult.Value;
         }
 
         if (request.IsActive.HasValue)
@@ -167,8 +150,8 @@ public static class VehicleEndpoints
             var updateResult = request.IsActive.Value
                 ? GarageInterop.ActivateVehicle(vehicle)
                 : GarageInterop.DeactivateVehicle(vehicle);
-            if (updateResult.IsOk)
-                vehicle = updateResult.ResultValue;
+            if (updateResult.IsSuccess)
+                vehicle = updateResult.Value;
         }
 
         // Update Make/Model/Year/VehicleType by recreating the vehicle with new values
@@ -245,8 +228,8 @@ public static class VehicleEndpoints
 
     private static string? GetLicensePlateString(LicensePlate plate)
     {
-        var option = GarageInterop.GetLicensePlateValue(plate);
-        return FSharpOption<string>.get_IsSome(option) ? option.Value : null;
+        // New API returns string directly (null if none)
+        return GarageInterop.GetLicensePlateValue(plate);
     }
 
     private static VehicleTypeDto MapVehicleTypeToDto(VehicleType vehicleType)

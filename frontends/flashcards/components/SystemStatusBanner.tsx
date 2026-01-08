@@ -1,6 +1,14 @@
 /** @jsxImportSource preact */
 
-import type { SystemStatus } from "../utils/api.ts";
+type SystemStatus = {
+  circuitBreakers: Record<
+    string,
+    {
+      state: "Closed" | "Open" | "HalfOpen" | string;
+      retryAfterSeconds?: number;
+    }
+  >;
+};
 
 interface SystemStatusBannerProps {
   status: SystemStatus | null;

@@ -46,7 +46,7 @@ app.layout("/*", (ctx) => {
             
             {/* INTERNAL LINK: Dashboard */}
             <li>
-              <a href={url("/")} class={currentPath === url("/") ? "active" : ""}>
+              <a href={url("/dashboard")} class={currentPath.startsWith(url("/dashboard")) ? "active" : ""}>
                 Dashboard
               </a>
             </li>
@@ -60,7 +60,7 @@ app.layout("/*", (ctx) => {
 
             {/* INTERNAL LINK: Study Mode */}
             <li>
-              <a href={url("/study")} class={currentPath.startsWith(url("/study")) ? "active" : ""}>
+              <a href={url("/quiz/interleaved")} class={currentPath.startsWith(url("/quiz")) ? "active" : ""}>
                 Study
               </a>
             </li>

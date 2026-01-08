@@ -3,16 +3,22 @@ import GardenDashboardIsland from "../../islands/garden/GardenDashboardIsland.ts
 
 export default define.page(function GardenSpecies() {
   return (
-    <div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
-      <header class="bg-white shadow-sm border-b border-green-200">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="min-h-screen bg-linear-to-br from-emerald-50 via-white to-green-100">
+      <header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <a href="/garden" class="text-gray-500 hover:text-gray-700">← Garden</a>
-            <h1 class="text-2xl font-bold text-green-800">Species</h1>
+            <a href="/garden" class="text-slate-500 hover:text-slate-700">← Garden</a>
+            <h1 class="text-2xl font-bold text-slate-900">Species</h1>
           </div>
+          <a
+            href="/garden/species/add"
+            class="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700"
+          >
+            + Add species
+          </a>
         </div>
       </header>
-      <main class="max-w-7xl mx-auto px-4 py-8">
+      <main class="max-w-7xl mx-auto px-4 py-7">
         <GardenDashboardIsland initialTab="species" />
       </main>
     </div>

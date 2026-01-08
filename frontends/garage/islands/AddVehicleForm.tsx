@@ -17,7 +17,17 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
     ? globalThis.sessionStorage?.getItem("vinData") 
     : null;
   
-  const vinDataFromStorage = storedVinData ? JSON.parse(storedVinData) as VinData : null;
+  let vinDataFromStorage: VinData | null = null;
+  if (storedVinData) {
+    try {
+      vinDataFromStorage = JSON.parse(storedVinData) as VinData;
+    } catch {
+      if (IS_BROWSER) {
+        globalThis.sessionStorage?.removeItem("vinData");
+      }
+      vinDataFromStorage = null;
+    }
+  }
   
   // Use stored data if no initial data provided
   const effectiveVinData = initialVinData || vinDataFromStorage;
