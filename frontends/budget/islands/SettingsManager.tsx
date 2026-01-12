@@ -36,10 +36,14 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
 
   const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString();
 
+  // Format date as "Month Year" (e.g., "January 2024")
+  const formatMonthYear = (date: Date) =>
+    new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long" }).format(date);
+
   const openPeriodModal = () => {
     const today = new Date();
     const twoWeeksLater = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
-    periodName.value = `Pay Period ${today.toLocaleDateString()}`;
+    periodName.value = formatMonthYear(today);
     periodStart.value = today.toISOString().split("T")[0];
     periodEnd.value = twoWeeksLater.toISOString().split("T")[0];
     periodExpectedIncome.value = "";
@@ -151,6 +155,78 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
     }
   };
 
+  const closePeriod = async () => {
+    if (!currentPeriod?.key) return;
+    if (currentPeriod.isClosed) {
+      alert("This period is already closed.");
+      return;
+    }
+
+    // Fetch budget summary to check for unassigned funds
+    try {
+      const summaryRes = await fetch(`${API_BASE}/pay-periods/${encodeURIComponent(currentPeriod.key)}/summary`);
+      if (summaryRes.ok) {
+        const summary = await summaryRes.json();
+
+        if (summary.unassigned > 0) {
+          const proceed = globalThis.confirm(
+            `This period has $${summary.unassigned.toFixed(2)} unassigned. Are you sure you want to close it without assigning all funds?`
+          );
+          if (!proceed) return;
+        } else if (summary.unassigned < 0) {
+          alert(`Cannot close period: You have over-assigned by $${Math.abs(summary.unassigned).toFixed(2)}.`);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching budget summary:", error);
+    }
+
+    const ok = globalThis.confirm(
+      `Close "${currentPeriod.name}"? This will mark the period as closed and propagate carryovers to future periods.`
+    );
+    if (!ok) return;
+
+    isSubmitting.value = true;
+    try {
+      const periodKey = encodeURIComponent(currentPeriod.key.trim());
+
+      // Mark period as closed
+      const updateRes = await fetch(`${API_BASE}/pay-periods/${periodKey}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: currentPeriod.name,
+          startDate: currentPeriod.startDate,
+          endDate: currentPeriod.endDate,
+          expectedIncome: currentPeriod.expectedIncome,
+          isClosed: true,
+        }),
+      });
+
+      if (!updateRes.ok) {
+        throw new Error("Failed to close period");
+      }
+
+      // Recalculate year to propagate carryovers
+      const recalcRes = await fetch(`${API_BASE}/pay-periods/${periodKey}/recalculate-year`, {
+        method: "POST",
+      });
+
+      if (!recalcRes.ok) {
+        console.warn("Recalculate year failed but period was closed");
+      }
+
+      // Reload to show updated state
+      globalThis.location?.reload();
+    } catch (error) {
+      console.error("Error closing period:", error);
+      alert("Failed to close period. Please try again.");
+    } finally {
+      isSubmitting.value = false;
+    }
+  };
+
   const recalculateYear = async () => {
     if (!currentPeriod?.key) return;
     isSubmitting.value = true;
@@ -220,6 +296,16 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
               <button type="button" class="btn btn-success btn-sm" onClick={openIncomeModal}>
                 + Add Income
               </button>
+              {currentPeriod && !currentPeriod.isClosed && (
+                <button
+                  type="button"
+                  class="btn btn-warning btn-sm"
+                  onClick={closePeriod}
+                  disabled={isSubmitting.value}
+                >
+                  Close Period
+                </button>
+              )}
               <button type="button" class="btn btn-outline btn-sm" onClick={recalculateYear} disabled={isSubmitting.value || !currentPeriod?.key}>
                 Recalculate Year
               </button>
