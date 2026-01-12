@@ -1,22 +1,24 @@
 import { useSignal, useComputed } from "@preact/signals";
-import type { Category, CategoryGroup, BudgetSummary } from "../types/api.ts";
+import type { Category, CategoryGroup, BudgetSummary, CategoryBalance } from "../types/api.ts";
 
 interface Props {
   categories: CategoryGroup[];
   assignments: Record<number, number>;
   summary: BudgetSummary;
   payPeriodId: number;
+  categoryBalances?: CategoryBalance[];
 }
 
 const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget/api/v1/budget"
   : "/api/v1/budget";
 
-export default function BudgetAssignmentIsland({ categories: initialCategories, assignments: initialAssignments, summary: initialSummary, payPeriodId }: Props) {
+export default function BudgetAssignmentIsland({ categories: initialCategories, assignments: initialAssignments, summary: initialSummary, payPeriodId, categoryBalances: initialCategoryBalances }: Props) {
   const groups = useSignal<CategoryGroup[]>(initialCategories);
   const assignments = useSignal<Record<number, number>>(initialAssignments);
   const isUpdating = useSignal<Record<number, boolean>>({});
   const summary = useSignal<BudgetSummary>(initialSummary);
+  const categoryBalances = useSignal<CategoryBalance[]>(initialCategoryBalances || []);
 
   // Drag state
   const draggedCategoryId = useSignal<number | null>(null);
@@ -55,11 +57,25 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
   const getAssignedAmount = (categoryId: number) => assignments.value[categoryId] || 0;
 
-  // For now, spent is simulated (in real app, would come from transactions)
-  // TODO: Replace with actual spent data from transactions API
-  const getSpentAmount = (_categoryId: number) => {
-    // Placeholder: in production this would be sum of transactions for this category
-    return 0;
+  // Get spent amount from category balances (maps from numeric ID to string key)
+  const getSpentAmount = (categoryId: number): number => {
+    // Find the category to get its key
+    let categoryKey: string | undefined;
+    for (const group of groups.value) {
+      const category = group.categories?.find(c => c.id === categoryId || c.key === categoryId.toString());
+      if (category) {
+        categoryKey = category.key || category.id?.toString();
+        break;
+      }
+    }
+
+    if (!categoryKey) {
+      return 0;
+    }
+
+    // Look up spent amount from categoryBalances
+    const balance = categoryBalances.value.find(b => b.categoryKey === categoryKey);
+    return balance?.spent || 0;
   };
 
   const toggleCategorySelection = (categoryId: number) => {

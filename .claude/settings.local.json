@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir)",
+      "Bash(dir:*)",
+      "mcp__memory__read_graph",
+      "Bash(ls -la \"D:\\repos\\smart-assistant\\scripts\"\" | grep -E \"seed)",
+      "Bash(init \")",
+      "Bash(git show:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat(budget-frontend): connect category spent calculation to API data\n\nReplace placeholder getSpentAmount() with real category balance lookup from backend API. This enables BudgetAssignment island to display actual spent amounts per category instead of returning 0.\n\nChanges:\n- Update CategoryBalance interface to match backend DTO (string keys + carryover field)\n- Add CategoryBalance type import to dashboard route\n- Properly type categoryBalances array in BudgetDashboardDto\n- Add categoryBalances prop to BudgetAssignment island\n- Implement getSpentAmount() with numeric ID → string key mapping\n- Add compatibility layer for legacy numeric IDs and new string keys\n\nBackend already provides spent data via CalculateCategoryBalancesInternal endpoint. Frontend now consumes this data correctly.\n\nPhase: 1.1 - Category Spent Calculation Integration\nRelated: #budget-mvp-enhancement\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")"
+    ]
+  }
+}

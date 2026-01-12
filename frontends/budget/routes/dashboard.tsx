@@ -1,5 +1,6 @@
 import { Head } from "fresh/runtime";
 import { define, url } from "../utils.ts";
+import type { CategoryBalance } from "../types/api.ts";
 
 interface AccountSummaryDto {
   accountKey: string;
@@ -55,7 +56,7 @@ interface BudgetDashboardDto {
   accounts: AccountSummaryDto[];
   upcomingBills: UpcomingBillDto[];
   goals: BudgetGoalDto[];
-  categoryBalances: Array<unknown>;
+  categoryBalances: CategoryBalance[];
 }
 
 interface DashboardData {

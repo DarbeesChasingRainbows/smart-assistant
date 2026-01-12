@@ -307,9 +307,10 @@ export interface ReceiptItem {
 }
 
 export interface CategoryBalance {
-  categoryId: number;
+  categoryKey: string;
   categoryName: string;
   groupName: string;
+  carryover: number;
   assigned: number;
   spent: number;
   available: number;
