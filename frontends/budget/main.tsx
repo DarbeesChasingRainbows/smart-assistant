@@ -33,7 +33,7 @@ app.layout("/*", (ctx) => {
       <nav class="navbar bg-primary text-primary-content">
         <div class="flex-1">
           {/* EXTERNAL LINK: Goes to Root LifeOS App */}
-          <a class="btn btn-ghost text-xl" href="/">LifeOS</a>
+          <a class="btn btn-ghost text-xl" href={url("/")}>LifeOS</a>
           <span class="badge badge-accent ml-2">Budget</span>
         </div>
         <div class="flex-none">

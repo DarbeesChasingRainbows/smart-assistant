@@ -6,7 +6,9 @@ interface Props {
   categories: Category[];
 }
 
-const API_BASE = "/api";
+const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget/api/v1/budget"
+  : "/api/v1/budget";
 
 const FREQUENCIES = [
   { value: "weekly", label: "Weekly" },

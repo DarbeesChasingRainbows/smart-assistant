@@ -1,0 +1,31 @@
+# .NET API Dockerfile - Optimized for caching
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy and restore NuGet packages first (most stable layer)
+COPY src/LifeOS.Domain/LifeOS.Domain.fsproj src/LifeOS.Domain/
+COPY src/LifeOS.Infrastructure/LifeOS.Infrastructure.csproj src/LifeOS.Infrastructure/
+COPY src/LifeOS.API/LifeOS.API.csproj src/LifeOS.API/
+RUN dotnet restore src/LifeOS.API/LifeOS.API.csproj --use-lock-file
+
+# Copy source code (changes frequently)
+COPY src/ src/
+
+# Build and publish
+WORKDIR /src/src/LifeOS.API
+RUN dotnet publish -c Release -o /app/publish --no-restore
+
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+# Install curl for health checks (combined with cleanup)
+RUN apt-get update && apt-get install -y curl --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY --from=build /app/publish .
+
+EXPOSE 5120
+
+ENTRYPOINT ["dotnet", "LifeOS.API.dll"]

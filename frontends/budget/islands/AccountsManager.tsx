@@ -5,7 +5,9 @@ interface Props {
   initialAccounts: Account[];
 }
 
-const API_BASE = "/api";
+const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget/api/v1/budget"
+  : "/api/v1/budget";
 
 const ACCOUNT_TYPES = [
   { value: "checking", label: "Checking" },

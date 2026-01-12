@@ -14,7 +14,9 @@ interface TaxRow {
   taxAmount: string;
 }
 
-const API_BASE = "/api";
+const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget/api/v1/budget"
+  : "/api/v1/budget";
 
 export default function ReceiptsManager({ initialReceipts, unmatchedTransactions, accounts, linkTransactionId }: Props) {
   const receipts = useSignal<Receipt[]>(initialReceipts);

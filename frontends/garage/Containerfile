@@ -14,18 +14,26 @@ COPY deno.json deno.lock ./
 # Copy entry points used by deno cache (must exist before caching)
 COPY vite.config.ts main.tsx utils.ts ./
 
-# Cache dependencies - use vite.config.ts and main.tsx
-RUN deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts
-RUN deno cache --lock=deno.lock --node-modules-dir=auto main.tsx
+# Create a temporary cache directory
+RUN mkdir -p /tmp/deno_cache
 
-# Install npm dependencies
-RUN deno install --allow-scripts
+# Cache dependencies with persistent cache
+RUN --mount=type=cache,target=/tmp/deno_cache \
+    DENO_DIR=/tmp/deno_cache \
+    deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts main.tsx
 
-# Copy source code
+# Install npm dependencies (cached)
+RUN --mount=type=cache,target=/tmp/deno_cache \
+    DENO_DIR=/tmp/deno_cache \
+    deno install --allow-scripts
+
+# Copy source code (changes frequently)
 COPY . .
 
-# Build the application
-RUN deno task build
+# Build with cache mount
+RUN --mount=type=cache,target=/tmp/deno_cache \
+    DENO_DIR=/tmp/deno_cache \
+    deno task build
 
 # Expose port
 EXPOSE 8000

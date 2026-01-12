@@ -5,7 +5,9 @@ interface Props {
   initialGoals: Goal[];
 }
 
-const API_BASE = "/api";
+const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget/api/v1/budget"
+  : "/api/v1/budget";
 
 const GOAL_TYPES = [
   { value: "savings", label: "Savings" },

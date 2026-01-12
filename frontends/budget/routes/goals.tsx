@@ -1,5 +1,5 @@
 import { Head } from "fresh/runtime";
-import { define } from "../utils.ts";
+import { define, url } from "../utils.ts";
 import type { Goal } from "../types/api.ts";
 import GoalsManager from "../islands/GoalsManager.tsx";
 
@@ -38,16 +38,16 @@ export default define.page<typeof handler>(function GoalsPage(props) {
 
       <header class="bg-slate-800 text-white p-4 shadow-lg">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-          <a href="/dashboard" class="text-2xl font-bold hover:text-slate-300">
+          <a href={url("/dashboard")} class="text-2xl font-bold hover:text-slate-300">
             💰 Budget
           </a>
           <nav class="flex items-center gap-2">
-            <a href="/dashboard" class="btn btn-ghost btn-sm">Dashboard</a>
-            <a href="/accounts" class="btn btn-ghost btn-sm">Accounts</a>
-            <a href="/transactions" class="btn btn-ghost btn-sm">Transactions</a>
-            <a href="/bills" class="btn btn-ghost btn-sm">Bills</a>
-            <a href="/goals" class="btn btn-primary btn-sm">Goals</a>
-            <a href="/settings" class="btn btn-ghost btn-sm">Settings</a>
+            <a href={url("/dashboard")} class="btn btn-ghost btn-sm">Dashboard</a>
+            <a href={url("/accounts")} class="btn btn-ghost btn-sm">Accounts</a>
+            <a href={url("/transactions")} class="btn btn-ghost btn-sm">Transactions</a>
+            <a href={url("/bills")} class="btn btn-ghost btn-sm">Bills</a>
+            <a href={url("/goals")} class="btn btn-primary btn-sm">Goals</a>
+            <a href={url("/settings")} class="btn btn-ghost btn-sm">Settings</a>
           </nav>
         </div>
       </header>

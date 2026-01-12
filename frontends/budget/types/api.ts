@@ -140,19 +140,24 @@ export interface AddIncomeRequest {
 // ============================================
 
 export interface Account {
-  id: number;
-  familyId: number;
-  name: string;
-  accountType: string;
-  institution: string | null;
-  lastFour: string | null;
-  currentBalance: number;
-  clearedBalance: number;
-  isOnBudget: boolean;
-  isClosed: boolean;
-  sortOrder: number;
-  createdAt: string;
-  updatedAt: string;
+  // LifeOS shape
+  accountKey?: string;
+  accountName?: string;
+  balance?: number;
+  // Legacy shape
+  id?: number;
+  familyId?: number;
+  name?: string;
+  accountType?: string;
+  institution?: string | null;
+  lastFour?: string | null;
+  currentBalance?: number;
+  clearedBalance?: number;
+  isOnBudget?: boolean;
+  isClosed?: boolean;
+  sortOrder?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // ============================================
@@ -183,25 +188,40 @@ export interface Bill {
 // ============================================
 
 export interface Transaction {
-  id: number;
-  familyId: number;
-  accountId: number;
-  categoryId: number | null;
-  payPeriodId: number | null;
-  payee: string | null;
-  memo: string | null;
+  // LifeOS shape
+  key?: string;
+  accountKey?: string;
+  categoryKey?: string | null;
+  payPeriodKey?: string | null;
+  payee?: string;
+  memo?: string | null;
   amount: number;
   transactionDate: string;
-  clearedStatus: string;
-  isTransfer: boolean;
-  transferAccountId: number | null;
-  billId: number | null;
-  isOpeningBalance: boolean;
-  createdByUserId: number | null;
-  createdAt: string;
-  updatedAt: string;
-  splits?: TransactionSplit[];
-  receipt?: Receipt | null; // Linked receipt (two-way access)
+  isCleared?: boolean;
+  isReconciled?: boolean;
+  createdAt?: string;
+
+  // Legacy shape
+  id?: number;
+  familyId?: number;
+  accountId?: number;
+  categoryId?: number | null;
+  payPeriodId?: number | null;
+  clearedStatus?: string;
+  isTransfer?: boolean;
+  transferAccountId?: number | null;
+  billId?: number | null;
+  isOpeningBalance?: boolean;
+  createdByUserId?: number | null;
+  receipt?: {
+    id: number;
+    fileName: string;
+  };
+  splits?: Array<{
+    categoryId: number;
+    amount: number;
+    memo?: string;
+  }>;
   accountName?: string; // For display in unified list
 }
 

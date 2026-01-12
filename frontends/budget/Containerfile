@@ -1,34 +1,60 @@
-# Use Deno runtime image
+# syntax=docker/dockerfile:1.4
 FROM denoland/deno:latest AS base
 
 ARG GIT_REVISION
 ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
 ENV DENO_NODE_MODULES_DIR=auto
 
-# Set working directory
 WORKDIR /app
 
-# Copy deno.json and deno.lock
+# Copy dependency files first (least likely to change)
 COPY deno.json deno.lock ./
 
-# Copy entry points used by deno cache (must exist before caching)
+# Copy only essential config files
 COPY vite.config.ts main.tsx utils.ts ./
 
-# Cache dependencies - use vite.config.ts and main.tsx
-RUN deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts
-RUN deno cache --lock=deno.lock --node-modules-dir=auto main.tsx
+# Use BuildKit cache for dependencies (persists across builds)
+RUN --mount=type=cache,target=/deno-dir/cache,sharing=shared \
+    --mount=type=cache,target=/deno-dir/node_modules,sharing=shared \
+    DENO_DIR=/deno-dir/cache \
+    deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts main.tsx
 
-# Install npm dependencies
-RUN deno install --allow-scripts
+# Install npm scripts with cache
+RUN --mount=type=cache,target=/deno-dir/cache,sharing=shared \
+    --mount=type=cache,target=/deno-dir/node_modules,sharing=shared \
+    DENO_DIR=/deno-dir/cache \
+    deno install --allow-scripts
 
-# Copy source code
+# Copy source code (most likely to change)
 COPY . .
 
-# Build the application
-RUN deno task build
+# Build with optimized cache
+RUN --mount=type=cache,target=/deno-dir/cache,sharing=shared \
+    --mount=type=cache,target=/deno-dir/node_modules,sharing=shared \
+    DENO_DIR=/deno-dir/cache \
+    deno task build
 
-# Expose port
+# Production stage - copy only what's needed
+FROM denoland/deno:latest AS runtime
+
+ARG GIT_REVISION
+ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
+ENV DENO_NODE_MODULES_DIR=auto
+
+WORKDIR /app
+
+# Copy only built artifacts and runtime files
+COPY --from=base /app/_fresh ./_fresh
+COPY --from=base /app/deno.json ./
+COPY --from=base /app/deno.lock ./
+COPY --from=base /app/islands ./islands
+COPY --from=base /app/routes ./routes
+COPY --from=base /app/static ./static
+COPY --from=base /app/main.tsx ./
+
+# Copy node_modules from build stage
+COPY --from=base /app/node_modules ./node_modules
+
 EXPOSE 8000
 
-# Run the application
 CMD ["deno", "serve", "-A", "_fresh/server.js"]

@@ -1,4 +1,5 @@
 import { useSignal, useComputed } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 import type { Transaction, Account, Category, CategoryGroup, CategoryBalance } from "../types/api.ts";
 
 interface Props {
@@ -16,32 +17,38 @@ interface SplitRow {
   memo: string;
 }
 
-const API_BASE = "/api";
+const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget/api/v1/budget"
+  : "/api/v1/budget";
+
+const UI_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget"
+  : "";
 
 export default function TransactionsManager({ 
-  initialTransactions, 
-  accounts, 
-  categories, 
-  categoryGroups,
-  categoryBalances: initialCategoryBalances,
+  initialTransactions = [], 
+  accounts = [], 
+  categories = [], 
+  categoryGroups = [],
+  categoryBalances: initialCategoryBalances = [],
   currentPeriodId 
 }: Props) {
-  const transactions = useSignal<Transaction[]>(initialTransactions);
-  const categoryBalancesSignal = useSignal<CategoryBalance[]>(initialCategoryBalances);
-  const accountBalances = useSignal<Map<number, { spent: number; balance: number }>>(new Map());
-  const flippedCards = useSignal<Set<number>>(new Set());
-  const filterAccountId = useSignal<number | null>(null);
+  const transactions = useSignal<Transaction[]>(initialTransactions ?? []);
+  const categoryBalancesSignal = useSignal<CategoryBalance[]>(initialCategoryBalances ?? []);
+  const accountBalances = useSignal<Map<string, { spent: number; balance: number }>>(new Map());
+  const flippedCards = useSignal<Set<string>>(new Set());
+  const filterAccountId = useSignal<string | null>(null);
   const isModalOpen = useSignal(false);
   const isSubmitting = useSignal(false);
 
   // Bulk selection state
-  const selectedTxIds = useSignal<Set<number>>(new Set());
+  const selectedTxIds = useSignal<Set<string>>(new Set());
   const isBulkCategoryModalOpen = useSignal(false);
   const bulkCategoryId = useSignal<string>("");
 
   // Split editor state
   const isSplitModalOpen = useSignal(false);
-  const splitTransactionId = useSignal<number | null>(null);
+  const splitTransactionId = useSignal<string | null>(null);
   const splitRows = useSignal<SplitRow[]>([]);
   const splitTransactionAmount = useSignal<number>(0);
 
@@ -54,13 +61,33 @@ export default function TransactionsManager({
   const transferMemo = useSignal("");
 
   // Form state
-  const formAccountId = useSignal<string>(accounts[0]?.id.toString() || "");
+  const formAccountId = useSignal<string>(accounts[0]?.accountKey ?? accounts[0]?.id?.toString() ?? "");
   const formPayee = useSignal("");
   const formAmount = useSignal("");
   const formDate = useSignal(new Date().toISOString().split("T")[0]);
   const formCategoryId = useSignal<string>("");
   const formMemo = useSignal("");
   const formIsInflow = useSignal(false);
+
+  const getAccountKey = (acc: Account): string => acc.accountKey ?? (acc.id != null ? String(acc.id) : "");
+  const getAccountLabel = (acc: Account): string => acc.accountName ?? acc.name ?? "Unknown";
+  const getTxAccountKey = (tx: Transaction): string => (tx as unknown as { accountKey?: string; accountId?: number }).accountKey ?? ((tx as unknown as { accountId?: number }).accountId != null ? String((tx as unknown as { accountId?: number }).accountId) : "");
+  const getTxKey = (tx: Transaction): string => (tx as unknown as { key?: string; id?: number }).key ?? (((tx as unknown as { id?: number }).id != null) ? String((tx as unknown as { id?: number }).id) : "");
+
+  useEffect(() => {
+    if (!formAccountId.value && accounts.length > 0) {
+      const k = getAccountKey(accounts[0]);
+      if (k) formAccountId.value = k;
+    }
+    if (!transferFromAccountId.value && accounts.length > 0) {
+      const k = getAccountKey(accounts[0]);
+      if (k) transferFromAccountId.value = k;
+    }
+    if (!transferToAccountId.value && accounts.length > 1) {
+      const k = getAccountKey(accounts[1]);
+      if (k) transferToAccountId.value = k;
+    }
+  }, [accounts.length]);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
@@ -69,31 +96,37 @@ export default function TransactionsManager({
 
   // Calculate account spent/balance from transactions
   const calculateAccountStats = () => {
-    const stats = new Map<number, { spent: number; balance: number }>();
+    const stats = new Map<string, { spent: number; balance: number }>();
     accounts.forEach(acc => {
-      const accTxs = transactions.value.filter(t => t.accountId === acc.id);
-      const spent = accTxs.filter(t => t.amount < 0 && !t.isOpeningBalance).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+      const key = getAccountKey(acc);
+      if (!key) return;
+      const accTxs = transactions.value.filter(t => getTxAccountKey(t) === key);
+      const spent = accTxs
+        .filter(t => t.amount < 0 && !(t as unknown as { isOpeningBalance?: boolean }).isOpeningBalance)
+        .reduce((sum, t) => sum + Math.abs(t.amount), 0);
       const balance = accTxs.reduce((sum, t) => sum + t.amount, 0);
-      stats.set(acc.id, { spent, balance });
+      stats.set(key, { spent, balance });
     });
     accountBalances.value = stats;
   };
 
-  // Initialize account stats
-  if (accountBalances.value.size === 0) {
+  // Initialize account stats after mount (avoid render loops when accounts is empty)
+  useEffect(() => {
     calculateAccountStats();
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Filtered transactions
   const filteredTransactions = useComputed(() => {
-    let txs = transactions.value.filter(t => !t.isOpeningBalance);
+    let txs = transactions.value.filter(t => !(t as unknown as { isOpeningBalance?: boolean }).isOpeningBalance);
     if (filterAccountId.value !== null) {
-      txs = txs.filter(t => t.accountId === filterAccountId.value);
+      const filterKey = filterAccountId.value;
+      txs = txs.filter(t => getTxAccountKey(t) === filterKey);
     }
     return txs.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime());
   });
 
-  const toggleCardFlip = (accountId: number) => {
+  const toggleCardFlip = (accountId: string) => {
     const newSet = new Set(flippedCards.value);
     if (newSet.has(accountId)) {
       newSet.delete(accountId);
@@ -105,7 +138,7 @@ export default function TransactionsManager({
 
   const loadAllTransactions = async () => {
     try {
-      const res = await fetch(`${API_BASE}/transactions/family/1?limit=500`);
+      const res = await fetch(`${API_BASE}/transactions?limit=500`);
       if (res.ok) {
         transactions.value = await res.json();
         calculateAccountStats();
@@ -128,7 +161,8 @@ export default function TransactionsManager({
   };
 
   const openAddModal = () => {
-    formAccountId.value = accounts[0]?.id.toString() || "";
+    const k = accounts[0] ? getAccountKey(accounts[0]) : "";
+    if (!formAccountId.value) formAccountId.value = k;
     formPayee.value = "";
     formAmount.value = "";
     formDate.value = new Date().toISOString().split("T")[0];
@@ -150,15 +184,12 @@ export default function TransactionsManager({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          accountId: parseInt(formAccountId.value),
-          categoryId: formCategoryId.value ? parseInt(formCategoryId.value) : null,
-          payPeriodId: currentPeriodId,
-          payee: formPayee.value || null,
+          accountKey: formAccountId.value,
+          categoryKey: formCategoryId.value || null,
+          payee: formPayee.value || "",
           memo: formMemo.value || null,
           amount: finalAmount,
           transactionDate: formDate.value,
-          isCleared: false,
-          isTransfer: false,
         }),
       });
       if (res.ok) {
@@ -174,15 +205,36 @@ export default function TransactionsManager({
   };
 
   const toggleCleared = async (tx: Transaction) => {
-    const newStatus = tx.clearedStatus === "cleared" ? "uncleared" : "cleared";
+    const key = getTxKey(tx);
+    if (!key) return;
+
+    // LifeOS shape: server toggles isCleared
+    if ((tx as unknown as { key?: string }).key) {
+      try {
+        const res = await fetch(`${API_BASE}/transactions/${key}/clear`, { method: "POST" });
+        if (res.ok) {
+          const payload = await res.json().catch(() => null) as { isCleared?: boolean } | null;
+          const newIsCleared = payload?.isCleared ?? !Boolean((tx as unknown as { isCleared?: boolean }).isCleared);
+          transactions.value = transactions.value.map(t =>
+            getTxKey(t) === key ? { ...(t as unknown as Record<string, unknown>), isCleared: newIsCleared } as Transaction : t
+          );
+        }
+      } catch (error) {
+        console.error("Error updating cleared status:", error);
+      }
+      return;
+    }
+
+    // Legacy shape
+    const newStatus = (tx as unknown as { clearedStatus?: string }).clearedStatus === "cleared" ? "uncleared" : "cleared";
     try {
-      await fetch(`${API_BASE}/transactions/${tx.id}/clear`, {
+      await fetch(`${API_BASE}/transactions/${key}/clear`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      transactions.value = transactions.value.map(t => 
-        t.id === tx.id ? { ...t, clearedStatus: newStatus } : t
+      transactions.value = transactions.value.map(t =>
+        getTxKey(t) === key ? { ...(t as unknown as Record<string, unknown>), clearedStatus: newStatus } as Transaction : t
       );
     } catch (error) {
       console.error("Error updating cleared status:", error);
@@ -191,7 +243,9 @@ export default function TransactionsManager({
 
   // Split editor functions
   const openSplitEditor = (tx: Transaction) => {
-    splitTransactionId.value = tx.id;
+    const txKey = getTxKey(tx);
+    if (!txKey) return;
+    splitTransactionId.value = txKey;
     splitTransactionAmount.value = tx.amount;
     // Initialize with existing splits or single row
     if (tx.splits && tx.splits.length > 0) {
@@ -253,7 +307,7 @@ export default function TransactionsManager({
       if (res.ok) {
         const newSplits = await res.json();
         transactions.value = transactions.value.map(t => 
-          t.id === splitTransactionId.value ? { ...t, splits: newSplits } : t
+          getTxKey(t) === splitTransactionId.value ? { ...(t as unknown as Record<string, unknown>), splits: newSplits } as Transaction : t
         );
         isSplitModalOpen.value = false;
       }
@@ -276,7 +330,7 @@ export default function TransactionsManager({
   };
 
   // Bulk action functions
-  const toggleSelectTx = (txId: number) => {
+  const toggleSelectTx = (txId: string) => {
     const newSet = new Set(selectedTxIds.value);
     if (newSet.has(txId)) {
       newSet.delete(txId);
@@ -287,10 +341,8 @@ export default function TransactionsManager({
   };
 
   const selectAllVisible = () => {
-    const visibleTxs = filterAccountId.value 
-      ? transactions.value.filter(t => t.accountId === filterAccountId.value)
-      : transactions.value;
-    selectedTxIds.value = new Set(visibleTxs.map(t => t.id));
+    const visibleTxs = filteredTransactions.value;
+    selectedTxIds.value = new Set(visibleTxs.map(t => getTxKey(t)).filter(Boolean));
   };
 
   const clearSelection = () => {
@@ -309,7 +361,7 @@ export default function TransactionsManager({
         });
       }
       transactions.value = transactions.value.map(t => 
-        selectedTxIds.value.has(t.id) ? { ...t, clearedStatus: "cleared" } : t
+        selectedTxIds.value.has(getTxKey(t)) ? { ...(t as unknown as Record<string, unknown>), clearedStatus: "cleared" } as Transaction : t
       );
       clearSelection();
     } catch (error) {
@@ -327,7 +379,7 @@ export default function TransactionsManager({
       for (const txId of selectedTxIds.value) {
         await fetch(`${API_BASE}/transactions/${txId}`, { method: "DELETE" });
       }
-      transactions.value = transactions.value.filter(t => !selectedTxIds.value.has(t.id));
+      transactions.value = transactions.value.filter(t => !selectedTxIds.value.has(getTxKey(t)));
       clearSelection();
       calculateAccountStats();
     } catch (error) {
@@ -355,7 +407,7 @@ export default function TransactionsManager({
         });
       }
       transactions.value = transactions.value.map(t => 
-        selectedTxIds.value.has(t.id) ? { ...t, categoryId } : t
+        selectedTxIds.value.has(getTxKey(t)) ? { ...(t as unknown as Record<string, unknown>), categoryId } as Transaction : t
       );
       isBulkCategoryModalOpen.value = false;
       clearSelection();
@@ -367,12 +419,25 @@ export default function TransactionsManager({
     }
   };
 
-  const getAccountName = (accountId: number) => accounts.find(a => a.id === accountId)?.name || "Unknown";
+  const getAccountName = (tx: Transaction) => {
+    const key = getTxAccountKey(tx);
+    if (!key) return "Unknown";
+    return accounts.find(a => getAccountKey(a) === key)?.accountName
+      ?? accounts.find(a => getAccountKey(a) === key)?.name
+      ?? "Unknown";
+  };
+
+  const getAccountNameByKey = (accountKey: string) => {
+    if (!accountKey) return "Unknown";
+    return accounts.find(a => getAccountKey(a) === accountKey)?.accountName
+      ?? accounts.find(a => getAccountKey(a) === accountKey)?.name
+      ?? "Unknown";
+  };
 
   // Transfer functions
   const openTransferModal = () => {
-    transferFromAccountId.value = accounts[0]?.id.toString() || "";
-    transferToAccountId.value = accounts[1]?.id.toString() || "";
+    transferFromAccountId.value = accounts[0] ? getAccountKey(accounts[0]) : "";
+    transferToAccountId.value = accounts[1] ? getAccountKey(accounts[1]) : "";
     transferAmount.value = "";
     transferDate.value = new Date().toISOString().split("T")[0];
     transferMemo.value = "";
@@ -415,70 +480,13 @@ export default function TransactionsManager({
 
   return (
     <div class="space-y-6">
-      {/* Account Cards - Flippable */}
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {accounts.filter(a => !a.isClosed).map(account => {
-          const stats = accountBalances.value.get(account.id) || { spent: 0, balance: 0 };
-          const isFlipped = flippedCards.value.has(account.id);
-          const isSelected = filterAccountId.value === account.id;
-          
-          return (
-            <div 
-              key={account.id} 
-              class={`card bg-white shadow-lg cursor-pointer transition-all hover:shadow-xl ${isSelected ? "ring-2 ring-primary" : ""}`}
-              onClick={() => {
-                if (filterAccountId.value === account.id) {
-                  filterAccountId.value = null;
-                } else {
-                  filterAccountId.value = account.id;
-                }
-              }}
-            >
-              <div class="card-body p-4">
-                <div class="flex justify-between items-start">
-                  <div class="flex-1">
-                    <h3 class="font-semibold text-sm truncate">{account.name}</h3>
-                    <div class="text-xs text-slate-400 capitalize">{account.accountType.replace("_", " ")}</div>
-                  </div>
-                  <button 
-                    type="button"
-                    class="btn btn-ghost btn-xs"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleCardFlip(account.id);
-                    }}
-                  >
-                    ↻
-                  </button>
-                </div>
-                
-                {!isFlipped ? (
-                  <div class="mt-2">
-                    <div class="text-xs text-slate-500">Spent This Period</div>
-                    <div class="text-xl font-bold text-red-600">
-                      {formatCurrency(stats.spent)}
-                    </div>
-                  </div>
-                ) : (
-                  <div class="mt-2">
-                    <div class="text-xs text-slate-500">Current Balance</div>
-                    <div class={`text-xl font-bold ${stats.balance >= 0 ? "text-green-600" : "text-red-600"}`}>
-                      {formatCurrency(stats.balance)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
 
       {/* Filter indicator and Add button */}
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
           {filterAccountId.value !== null && (
             <div class="badge badge-primary gap-2">
-              Showing: {getAccountName(filterAccountId.value)}
+              Showing: {getAccountNameByKey(filterAccountId.value)}
               <button type="button" class="btn btn-ghost btn-xs" onClick={() => filterAccountId.value = null}>×</button>
             </div>
           )}
@@ -541,27 +549,27 @@ export default function TransactionsManager({
                 {filteredTransactions.value.length === 0 ? (
                   <tr><td colSpan={10} class="text-center text-slate-500 py-8">No transactions yet</td></tr>
                 ) : filteredTransactions.value.map((tx) => (
-                  <tr key={tx.id} class={`hover ${tx.clearedStatus === "reconciled" ? "opacity-50" : ""} ${selectedTxIds.value.has(tx.id) ? "bg-primary/5" : ""}`}>
+                  <tr key={getTxKey(tx)} class={`hover ${((tx as unknown as { isReconciled?: boolean }).isReconciled ?? ((tx as unknown as { clearedStatus?: string }).clearedStatus === "reconciled")) ? "opacity-50" : ""} ${selectedTxIds.value.has(getTxKey(tx)) ? "bg-primary/5" : ""}`}>
                     <td>
                       <input 
                         type="checkbox" 
                         class="checkbox checkbox-sm"
-                        checked={selectedTxIds.value.has(tx.id)}
-                        onChange={() => toggleSelectTx(tx.id)}
+                        checked={selectedTxIds.value.has(getTxKey(tx))}
+                        onChange={() => toggleSelectTx(getTxKey(tx))}
                       />
                     </td>
                     <td>
                       <button
                         type="button"
-                        class={`btn btn-xs btn-circle ${tx.clearedStatus !== "uncleared" ? "btn-success" : "btn-ghost border"}`}
+                        class={`btn btn-xs btn-circle ${((tx as unknown as { isCleared?: boolean }).isCleared ?? ((tx as unknown as { clearedStatus?: string }).clearedStatus !== "uncleared")) ? "btn-success" : "btn-ghost border"}`}
                         onClick={() => toggleCleared(tx)}
                       >
-                        {tx.clearedStatus !== "uncleared" ? "✓" : ""}
+                        {((tx as unknown as { isCleared?: boolean }).isCleared ?? ((tx as unknown as { clearedStatus?: string }).clearedStatus !== "uncleared")) ? "✓" : ""}
                       </button>
                     </td>
                     <td class="text-sm whitespace-nowrap">{formatDate(tx.transactionDate)}</td>
                     <td class="text-sm">
-                      <span class="badge badge-ghost badge-sm">{getAccountName(tx.accountId)}</span>
+                      <span class="badge badge-ghost badge-sm">{getAccountName(tx)}</span>
                     </td>
                     <td class="font-medium">{tx.payee || "—"}</td>
                     <td class="text-sm text-slate-500">
@@ -589,7 +597,7 @@ export default function TransactionsManager({
                     <td>
                       {tx.receipt ? (
                         <a 
-                          href={`/receipts?view=${tx.receipt.id}`}
+                          href={`${UI_BASE}/receipts?view=${tx.receipt.id}`}
                           class="btn btn-ghost btn-xs text-success"
                           title="View Receipt"
                         >
@@ -597,7 +605,7 @@ export default function TransactionsManager({
                         </a>
                       ) : (
                         <a 
-                          href={`/receipts?link=${tx.id}`}
+                          href={`${UI_BASE}/receipts?link=${tx.id}`}
                           class="btn btn-ghost btn-xs text-slate-300 hover:text-slate-500"
                           title="Add Receipt"
                         >
@@ -646,8 +654,8 @@ export default function TransactionsManager({
                     onChange={(e) => formAccountId.value = e.currentTarget.value}
                     required
                   >
-                    {accounts.filter(a => !a.isClosed).map(acc => (
-                      <option key={acc.id} value={acc.id}>{acc.name}</option>
+                    {(accounts || []).filter(a => !(a as unknown as { isClosed?: boolean }).isClosed).map(acc => (
+                      <option key={getAccountKey(acc)} value={getAccountKey(acc)}>{getAccountLabel(acc)}</option>
                     ))}
                   </select>
                 </div>
@@ -676,9 +684,9 @@ export default function TransactionsManager({
                     onChange={(e) => formCategoryId.value = e.currentTarget.value}
                   >
                     <option value="">Uncategorized</option>
-                    {categoryGroups.map(group => (
+                    {(categoryGroups || []).map(group => (
                       <optgroup key={group.id} label={group.name}>
-                        {group.categories.map(cat => {
+                        {(group.categories || []).map(cat => {
                           const bal = categoryBalancesSignal.value.find((b: CategoryBalance) => b.categoryId === cat.id);
                           const available = bal?.available ?? 0;
                           return (
@@ -771,9 +779,9 @@ export default function TransactionsManager({
                       onChange={(e) => updateSplitRow(index, "categoryId", e.currentTarget.value)}
                     >
                       <option value="">Uncategorized</option>
-                      {categoryGroups.map(group => (
+                      {(categoryGroups || []).map(group => (
                         <optgroup key={group.id} label={group.name}>
-                          {categories.filter(c => c.categoryGroupId === group.id).map(cat => (
+                          {(categories || []).filter(c => c.categoryGroupId === group.id).map(cat => (
                             <option key={cat.id} value={cat.id}>{cat.name}</option>
                           ))}
                         </optgroup>
@@ -845,9 +853,9 @@ export default function TransactionsManager({
                 onChange={(e) => bulkCategoryId.value = e.currentTarget.value}
               >
                 <option value="">Select a category...</option>
-                {categoryGroups.map(group => (
+                {(categoryGroups || []).map(group => (
                   <optgroup key={group.id} label={group.name}>
-                    {categories.filter(c => c.categoryGroupId === group.id).map(cat => (
+                    {(categories || []).filter(c => c.categoryGroupId === group.id).map(cat => (
                       <option key={cat.id} value={cat.id}>{cat.name}</option>
                     ))}
                   </optgroup>
@@ -883,8 +891,8 @@ export default function TransactionsManager({
                   value={transferFromAccountId.value}
                   onChange={(e) => transferFromAccountId.value = e.currentTarget.value}
                 >
-                  {accounts.filter(a => !a.isClosed).map(acc => (
-                    <option key={acc.id} value={acc.id}>{acc.name}</option>
+                  {(accounts || []).filter(a => !(a as unknown as { isClosed?: boolean }).isClosed).map(acc => (
+                    <option key={getAccountKey(acc)} value={getAccountKey(acc)}>{getAccountLabel(acc)}</option>
                   ))}
                 </select>
               </div>
@@ -895,8 +903,8 @@ export default function TransactionsManager({
                   value={transferToAccountId.value}
                   onChange={(e) => transferToAccountId.value = e.currentTarget.value}
                 >
-                  {accounts.filter(a => !a.isClosed).map(acc => (
-                    <option key={acc.id} value={acc.id}>{acc.name}</option>
+                  {(accounts || []).filter(a => !(a as unknown as { isClosed?: boolean }).isClosed).map(acc => (
+                    <option key={getAccountKey(acc)} value={getAccountKey(acc)}>{getAccountLabel(acc)}</option>
                   ))}
                 </select>
               </div>
