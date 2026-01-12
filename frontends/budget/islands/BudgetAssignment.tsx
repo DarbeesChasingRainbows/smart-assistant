@@ -41,6 +41,14 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   const transferAmount = useSignal("");
   const isTransferring = useSignal(false);
 
+  // Add category modal state
+  const isAddCategoryModalOpen = useSignal(false);
+  const addCategoryGroupId = useSignal<number | null>(null);
+  const newCategoryName = useSignal("");
+  const newCategoryTarget = useSignal("");
+  const isCreatingCategory = useSignal(false);
+  const createCategoryError = useSignal("");
+
   // Assignment input state (per category) to keep typing stable
   const assignmentInputs = useSignal<Record<number, string>>({});
 
@@ -104,7 +112,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
   const executeTransfer = async () => {
     if (!transferFromCategoryId.value || !transferToCategoryId.value || !transferAmount.value) return;
-    
+
     const amount = parseFloat(transferAmount.value) || 0;
     if (amount <= 0) return;
 
@@ -142,6 +150,65 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
       console.error("Error transferring funds:", error);
     } finally {
       isTransferring.value = false;
+    }
+  };
+
+  const createCategory = async () => {
+    if (!addCategoryGroupId.value || !newCategoryName.value.trim()) {
+      createCategoryError.value = "Category name is required";
+      return;
+    }
+
+    const targetAmount = parseFloat(newCategoryTarget.value) || 0;
+    if (targetAmount < 0) {
+      createCategoryError.value = "Target amount cannot be negative";
+      return;
+    }
+
+    // Find the group to get its key
+    const group = groups.value.find(g => g.id === addCategoryGroupId.value || g.key === addCategoryGroupId.value?.toString());
+    if (!group) {
+      createCategoryError.value = "Group not found";
+      return;
+    }
+
+    const groupKey = group.key || group.id?.toString() || "";
+
+    isCreatingCategory.value = true;
+    createCategoryError.value = "";
+
+    try {
+      const response = await fetch(`${API_BASE}/categories`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          groupKey,
+          familyId: "default",
+          name: newCategoryName.value.trim(),
+          targetAmount
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create category: ${response.statusText}`);
+      }
+
+      // Reload category groups to get the new category
+      const groupsResponse = await fetch(`${API_BASE}/category-groups?familyId=default`);
+      if (groupsResponse.ok) {
+        const updatedGroups = await groupsResponse.json();
+        groups.value = updatedGroups;
+      }
+
+      // Close modal and reset form
+      isAddCategoryModalOpen.value = false;
+      newCategoryName.value = "";
+      newCategoryTarget.value = "";
+    } catch (error) {
+      console.error("Error creating category:", error);
+      createCategoryError.value = error instanceof Error ? error.message : "Failed to create category";
+    } finally {
+      isCreatingCategory.value = false;
     }
   };
 
@@ -638,12 +705,15 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
               {/* Add Item link */}
               <div class="px-4 py-3 border-t">
-                <button 
+                <button
                   type="button"
                   class="text-primary hover:text-primary-focus text-sm font-medium"
                   onClick={() => {
-                    // TODO: Implement add category
-                    console.log("Add category to group", group.id);
+                    addCategoryGroupId.value = group.id ?? null;
+                    newCategoryName.value = "";
+                    newCategoryTarget.value = "";
+                    createCategoryError.value = "";
+                    isAddCategoryModalOpen.value = true;
                   }}
                 >
                   Add Item
@@ -768,6 +838,108 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
             </div>
           </div>
           <div class="modal-backdrop" onClick={() => isTransferModalOpen.value = false}></div>
+        </div>
+      )}
+
+      {/* Add Category Modal */}
+      {isAddCategoryModalOpen.value && (
+        <div class="modal modal-open">
+          <div class="modal-box max-w-md">
+            <h3 class="font-bold text-xl mb-4">Add Category</h3>
+            <p class="text-slate-500 text-sm mb-6">
+              {(() => {
+                const group = groups.value.find(g => g.id === addCategoryGroupId.value);
+                return group ? `Create a new category in "${group.name}"` : "Create a new budget category";
+              })()}
+            </p>
+
+            {/* Error Message */}
+            {createCategoryError.value && (
+              <div class="alert alert-error mb-4">
+                <span>{createCategoryError.value}</span>
+              </div>
+            )}
+
+            {/* Category Name */}
+            <div class="mb-4">
+              <label class="label">
+                <span class="label-text font-medium">Category Name *</span>
+              </label>
+              <input
+                type="text"
+                class="input input-bordered w-full"
+                placeholder="e.g., Groceries, Gas, Entertainment"
+                value={newCategoryName.value}
+                onInput={(e) => {
+                  newCategoryName.value = e.currentTarget.value;
+                  createCategoryError.value = "";
+                }}
+                maxLength={50}
+              />
+            </div>
+
+            {/* Target Amount */}
+            <div class="mb-6">
+              <label class="label">
+                <span class="label-text font-medium">Target Amount (Optional)</span>
+              </label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
+                <input
+                  type="number"
+                  class="input input-bordered w-full pl-7"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                  value={newCategoryTarget.value}
+                  onInput={(e) => {
+                    newCategoryTarget.value = e.currentTarget.value;
+                    createCategoryError.value = "";
+                  }}
+                />
+              </div>
+              <label class="label">
+                <span class="label-text-alt text-slate-500">Set a monthly spending target for this category</span>
+              </label>
+            </div>
+
+            {/* Actions */}
+            <div class="modal-action">
+              <button
+                type="button"
+                class="btn btn-ghost"
+                onClick={() => {
+                  isAddCategoryModalOpen.value = false;
+                  newCategoryName.value = "";
+                  newCategoryTarget.value = "";
+                  createCategoryError.value = "";
+                }}
+                disabled={isCreatingCategory.value}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                disabled={isCreatingCategory.value || !newCategoryName.value.trim()}
+                onClick={createCategory}
+              >
+                {isCreatingCategory.value ? (
+                  <span class="loading loading-spinner loading-sm"></span>
+                ) : (
+                  "Create Category"
+                )}
+              </button>
+            </div>
+          </div>
+          <div class="modal-backdrop" onClick={() => {
+            if (!isCreatingCategory.value) {
+              isAddCategoryModalOpen.value = false;
+              newCategoryName.value = "";
+              newCategoryTarget.value = "";
+              createCategoryError.value = "";
+            }
+          }}></div>
         </div>
       )}
     </div>
