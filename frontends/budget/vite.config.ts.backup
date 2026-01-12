@@ -17,13 +17,4 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    // Build optimizations
-    minify: "esbuild",
-    sourcemap: false, // Disable sourcemaps for faster builds
-  },
-  // Optimize dependency pre-bundling
-  optimizeDeps: {
-    include: ["preact", "@preact/signals"],
-  },
 });

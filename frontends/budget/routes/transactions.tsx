@@ -1,10 +1,25 @@
 import { Head } from "fresh/runtime";
-import { define } from "../utils.ts";
+import { define, url } from "../utils.ts";
 import type { Account, Transaction, Category, CategoryGroup, PayPeriod, CategoryBalance } from "../types/api.ts";
 import TransactionsManager from "../islands/TransactionsManager.tsx";
 
+async function fetchJsonWithTimeout<T>(input: string, timeoutMs: number): Promise<{ ok: boolean; status: number; data?: T }> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(input, { signal: controller.signal });
+    if (!res.ok) return { ok: false, status: res.status };
+    const data = await res.json() as T;
+    return { ok: true, status: res.status, data };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function getApiBase(): string {
-  return (Deno.env.get("VITE_API_URL") || "http://api:5120/api").replace(/\/$/, "");
+  const base = (Deno.env.get("VITE_API_URL") || "http://api:5120/api").replace(/\/$/, "");
+  // Ensure we have the full path including /v1/budget
+  return base.endsWith("/v1/budget") ? base : `${base}/v1/budget`;
 }
 
 interface TransactionsData {
@@ -20,25 +35,53 @@ interface TransactionsData {
 export const handler = define.handlers({
   async GET(_ctx) {
     try {
+      const started = Date.now();
       const apiBase = getApiBase();
-      const [accountsRes, categoriesRes, periodRes, txRes] = await Promise.all([
-        fetch(`${apiBase}/accounts`),
-        fetch(`${apiBase}/categories`),
-        fetch(`${apiBase}/payperiods/current`),
-        fetch(`${apiBase}/transactions/family/1?limit=500`),
+      const timeoutMs = 10_000;
+
+      console.log(JSON.stringify({
+        level: "info",
+        msg: "budget:transactions:fetch:start",
+        apiBase,
+      }));
+
+      const [accountsR, categoriesR, periodR, txR] = await Promise.all([
+        fetchJsonWithTimeout<Account[]>(`${apiBase}/accounts`, timeoutMs),
+        fetchJsonWithTimeout<CategoryGroup[]>(`${apiBase}/categories`, timeoutMs),
+        fetchJsonWithTimeout<PayPeriod | null>(`${apiBase}/payperiods/current`, timeoutMs),
+        fetchJsonWithTimeout<Transaction[]>(`${apiBase}/transactions?limit=500`, timeoutMs),
       ]);
 
-      const accounts: Account[] = accountsRes.ok ? await accountsRes.json() : [];
-      const categoryGroups: CategoryGroup[] = categoriesRes.ok ? await categoriesRes.json() : [];
-      const currentPeriod: PayPeriod | null = periodRes.ok ? await periodRes.json() : null;
-      const transactions: Transaction[] = txRes.ok ? await txRes.json() as Transaction[] : [];
+      console.log(JSON.stringify({
+        level: "info",
+        msg: "budget:transactions:fetch:responses",
+        elapsedMs: Date.now() - started,
+        statuses: {
+          accounts: accountsR.status,
+          categories: categoriesR.status,
+          currentPeriod: periodR.status,
+          transactions: txR.status,
+        },
+      }));
+
+      const accounts: Account[] = accountsR.ok ? (accountsR.data ?? []) : [];
+      const categoryGroups: CategoryGroup[] = categoriesR.ok ? (categoriesR.data ?? []) : [];
+      const currentPeriod: PayPeriod | null = periodR.ok ? (periodR.data ?? null) : null;
+      const transactions: Transaction[] = txR.ok ? (txR.data ?? []) : [];
       const categories = categoryGroups.flatMap(g => g.categories);
 
       // Fetch category balances if we have a current period
       let categoryBalances: CategoryBalance[] = [];
       if (currentPeriod) {
-        const balRes = await fetch(`${apiBase}/budget/balances/${currentPeriod.id}`);
-        if (balRes.ok) categoryBalances = await balRes.json();
+        const balStarted = Date.now();
+        const balR = await fetchJsonWithTimeout<CategoryBalance[]>(`${apiBase}/budget/balances/${currentPeriod.id}`, timeoutMs);
+        console.log(JSON.stringify({
+          level: "info",
+          msg: "budget:transactions:fetch:balances",
+          elapsedMs: Date.now() - balStarted,
+          status: balR.status,
+        }));
+        if (balR.ok) categoryBalances = balR.data ?? [];
       }
 
       return { data: { transactions, accounts, categories, categoryGroups, categoryBalances, currentPeriod } };
@@ -61,17 +104,17 @@ export default define.page<typeof handler>(function TransactionsPage(props) {
 
       <header class="bg-slate-800 text-white p-4 shadow-lg">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-          <a href="/dashboard" class="text-2xl font-bold hover:text-slate-300">
+          <a href={url("/dashboard")} class="text-2xl font-bold hover:text-slate-300">
             💰 Budget
           </a>
           <nav class="flex items-center gap-2">
-            <a href="/dashboard" class="btn btn-ghost btn-sm">Dashboard</a>
-            <a href="/accounts" class="btn btn-ghost btn-sm">Accounts</a>
-            <a href="/transactions" class="btn btn-primary btn-sm">Transactions</a>
-            <a href="/receipts" class="btn btn-ghost btn-sm">Receipts</a>
-            <a href="/bills" class="btn btn-ghost btn-sm">Bills</a>
-            <a href="/goals" class="btn btn-ghost btn-sm">Goals</a>
-            <a href="/settings" class="btn btn-ghost btn-sm">Settings</a>
+            <a href={url("/dashboard")} class="btn btn-ghost btn-sm">Dashboard</a>
+            <a href={url("/accounts")} class="btn btn-ghost btn-sm">Accounts</a>
+            <a href={url("/transactions")} class="btn btn-primary btn-sm">Transactions</a>
+            <a href={url("/receipts")} class="btn btn-ghost btn-sm">Receipts</a>
+            <a href={url("/bills")} class="btn btn-ghost btn-sm">Bills</a>
+            <a href={url("/goals")} class="btn btn-ghost btn-sm">Goals</a>
+            <a href={url("/settings")} class="btn btn-ghost btn-sm">Settings</a>
           </nav>
         </div>
       </header>

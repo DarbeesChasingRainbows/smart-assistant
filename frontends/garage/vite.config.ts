@@ -21,4 +21,29 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Build optimizations
+    minify: "terser",
+    sourcemap: false, // Disable sourcemaps for faster builds
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor code for better caching
+          vendor: ["preact", "@preact/signals", "lucide-preact"],
+          fresh: ["@fresh/core"],
+          ui: ["daisyui", "clsx", "tailwind-merge", "class-variance-authority"],
+        },
+      },
+    },
+    // Enable parallel processing
+    terserOptions: {
+      compress: {
+        passes: 2, // Multiple passes for better compression
+      },
+    },
+  },
+  // Optimize dependency pre-bundling
+  optimizeDeps: {
+    include: ["preact", "@preact/signals", "@fresh/core", "lucide-preact"],
+  },
 });

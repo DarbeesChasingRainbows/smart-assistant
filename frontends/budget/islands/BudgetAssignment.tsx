@@ -8,7 +8,9 @@ interface Props {
   payPeriodId: number;
 }
 
-const API_BASE = "/api";
+const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
+  ? "/budget/api/v1/budget"
+  : "/api/v1/budget";
 
 export default function BudgetAssignmentIsland({ categories: initialCategories, assignments: initialAssignments, summary: initialSummary, payPeriodId }: Props) {
   const groups = useSignal<CategoryGroup[]>(initialCategories);
@@ -153,7 +155,8 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
   // Inline edit handlers
   const startEditCategory = (cat: Category) => {
-    editingCategoryId.value = cat.id;
+    editingCategoryId.value = cat.id ?? null;
+    if (editingCategoryId.value == null) return;
     editName.value = cat.name;
     editTarget.value = cat.targetAmount.toString();
   };
@@ -186,7 +189,8 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   };
 
   const startEditGroup = (group: CategoryGroup) => {
-    editingGroupId.value = group.id;
+    editingGroupId.value = group.id ?? null;
+    if (editingGroupId.value == null) return;
     editName.value = group.name;
   };
 
@@ -290,13 +294,13 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     
     const updatedTargetGroup = groups.value.find(g => g.id === targetGroupId);
     updatedTargetGroup?.categories.forEach((c, idx) => {
-      reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: targetGroupId });
+      if (c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: targetGroupId });
     });
 
     if (fromGroupId !== targetGroupId) {
       const updatedFromGroup = groups.value.find(g => g.id === fromGroupId);
       updatedFromGroup?.categories.forEach((c, idx) => {
-        reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: fromGroupId! });
+        if (fromGroupId != null && c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: fromGroupId });
       });
     }
 
@@ -357,12 +361,12 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     
     const updatedTargetGroup = groups.value.find(g => g.id === targetGroupId);
     updatedTargetGroup?.categories.forEach((c, idx) => {
-      reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: targetGroupId });
+      if (c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: targetGroupId });
     });
 
     const updatedFromGroup = groups.value.find(g => g.id === fromGroupId);
     updatedFromGroup?.categories.forEach((c, idx) => {
-      reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: fromGroupId! });
+      if (fromGroupId != null && c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: fromGroupId });
     });
 
     try {
@@ -418,16 +422,19 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
       </div>
 
       {/* Category Groups */}
-      {groups.value.filter((g: CategoryGroup) => g.categories.length > 0).map((group: CategoryGroup) => (
+      {groups.value.filter((g: CategoryGroup) => g.categories.length > 0).map((group: CategoryGroup) => {
+        const groupId = group.id;
+        if (groupId == null) return null;
+        return (
         <div 
-          key={group.id} 
+          key={groupId} 
           class="card bg-white shadow-xl overflow-hidden"
           onDragOver={handleDragOver}
-          onDrop={(e) => handleDropOnGroup(e, group.id)}
+          onDrop={(e) => handleDropOnGroup(e, groupId)}
         >
           <div class="card-body p-0">
             {/* Group Header - Editable */}
-            {editingGroupId.value === group.id ? (
+            {editingGroupId.value === groupId ? (
               <div class="flex items-center gap-2 p-4 border-b">
                 <input
                   type="text"
@@ -465,26 +472,30 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
             {/* Categories - Draggable */}
             <div>
               {group.categories.map((category: Category) => {
-                const assigned = getAssignedAmount(category.id);
-                const spent = getSpentAmount(category.id);
+                const groupId = group.id;
+                const categoryId = category.id;
+                if (groupId == null || categoryId == null) return null;
+
+                const assigned = getAssignedAmount(categoryId);
+                const spent = getSpentAmount(categoryId);
                 const remaining = assigned - spent;
-                const isLoading = isUpdating.value[category.id];
-                const isEditing = editingCategoryId.value === category.id;
-                const isDragging = draggedCategoryId.value === category.id;
-                const isSelected = selectedCategoryId.value === category.id;
+                const isLoading = isUpdating.value[categoryId];
+                const isEditing = editingCategoryId.value === categoryId;
+                const isDragging = draggedCategoryId.value === categoryId;
+                const isSelected = selectedCategoryId.value === categoryId;
                 
                 return (
                   <div 
-                    key={category.id} 
+                    key={categoryId} 
                     class={`flex items-center transition-all border-l-4 cursor-pointer
                       ${isSelected ? "border-l-primary bg-primary/5" : "border-l-transparent hover:bg-slate-50"}
                       ${isDragging ? "opacity-50" : ""}
                     `}
                     draggable={!isEditing}
-                    onDragStart={(e) => handleDragStart(e, category.id, group.id)}
+                    onDragStart={(e) => handleDragStart(e, categoryId, groupId)}
                     onDragOver={handleDragOver}
-                    onDrop={(e) => handleDropOnCategory(e, category.id, group.id)}
-                    onClick={() => !isEditing && toggleCategorySelection(category.id)}
+                    onDrop={(e) => handleDropOnCategory(e, categoryId, groupId)}
+                    onClick={() => !isEditing && toggleCategorySelection(categoryId)}
                   >
                     {/* Drag Handle */}
                     <div 
@@ -537,7 +548,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                               <input
                                 type="number"
                                 class={`input input-bordered input-sm w-24 text-right ${isLoading ? "opacity-50" : ""}`}
-                                value={assignmentInputs.value[category.id] ?? (assigned ? assigned.toString() : "")}
+                                value={assignmentInputs.value[categoryId] ?? (assigned ? assigned.toString() : "")}
                                 placeholder="0.00"
                                 step="0.01"
                                 min="0"
@@ -546,25 +557,25 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                                   // ensure input is synced when focused
                                   assignmentInputs.value = {
                                     ...assignmentInputs.value,
-                                    [category.id]: assignmentInputs.value[category.id] ?? (assigned ? assigned.toString() : "")
+                                    [categoryId]: assignmentInputs.value[categoryId] ?? (assigned ? assigned.toString() : "")
                                   };
                                 }}
                                 onInput={(e) => {
                                   assignmentInputs.value = {
                                     ...assignmentInputs.value,
-                                    [category.id]: e.currentTarget.value
+                                    [categoryId]: e.currentTarget.value
                                   };
                                 }}
                                 onBlur={(e) => {
                                   const newValue = e.currentTarget.value;
                                   const newAmount = parseFloat(newValue) || 0;
                                   if (newAmount !== assigned) {
-                                    handleAssignmentChange(category.id, newValue);
+                                    handleAssignmentChange(categoryId, newValue);
                                   }
                                 }}
                                 onKeyDown={(e) => {
                                   if (e.key === "Enter") {
-                                    handleAssignmentChange(category.id, e.currentTarget.value);
+                                    handleAssignmentChange(categoryId, e.currentTarget.value);
                                     e.currentTarget.blur();
                                   }
                                 }}
@@ -595,7 +606,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                               class="text-slate-400 hover:text-primary"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                openTransferModal(category.id);
+                                openTransferModal(categoryId);
                               }}
                               title="Transfer funds"
                             >
@@ -625,7 +636,8 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
             </div>
           </div>
         </div>
-      ))}
+      );
+      })}
 
       {/* Fund Transfer Modal */}
       {isTransferModalOpen.value && (
@@ -652,7 +664,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 <div class="border rounded-lg p-3">
                   {(() => {
                     const fromCat = allCategories.value.find(c => c.id === transferFromCategoryId.value);
-                    const fromRemaining = fromCat ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id) : 0;
+                    const fromRemaining = fromCat?.id != null ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id) : 0;
                     return fromCat ? (
                       <div>
                         <div class="font-medium">{fromCat.name}</div>
@@ -676,10 +688,11 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 >
                   <option value="">Select Budget Item</option>
                   {groups.value.map((group: CategoryGroup) => (
-                    <optgroup key={group.id} label={group.name}>
+                    <optgroup key={group.id ?? group.name} label={group.name}>
                       {group.categories
                         .filter((c: Category) => c.id !== transferFromCategoryId.value)
                         .map((c: Category) => {
+                          if (c.id == null) return null;
                           const catRemaining = getAssignedAmount(c.id) - getSpentAmount(c.id);
                           return (
                             <option key={c.id} value={c.id}>
@@ -710,7 +723,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
               </div>
               {transferFromCategoryId.value && (() => {
                 const fromCat = allCategories.value.find(c => c.id === transferFromCategoryId.value);
-                const available = fromCat ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id) : 0;
+                const available = fromCat?.id != null ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id) : 0;
                 const transferAmt = parseFloat(transferAmount.value) || 0;
                 if (transferAmt > available) {
                   return <p class="text-error text-sm mt-1">Amount exceeds available balance</p>;

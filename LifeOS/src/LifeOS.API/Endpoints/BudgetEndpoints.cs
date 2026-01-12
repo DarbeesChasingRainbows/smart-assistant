@@ -1259,10 +1259,12 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             COLLECT AGGREGATE total = SUM(doc.assignedAmount)
             RETURN total";
 
-        var assignedCursor = await db.Client.Cursor.PostCursorAsync<decimal>(
+        var assignedCursor = await db.Client.Cursor.PostCursorAsync<dynamic>(
             assignedQuery, new Dictionary<string, object> { { "payPeriodKey", payPeriodKey } });
 
-        var totalAssigned = assignedCursor.Result.FirstOrDefault();
+        var firstResult = assignedCursor.Result.FirstOrDefault();
+        decimal assigned = 0m;
+        var totalAssigned = firstResult != null && decimal.TryParse(firstResult.ToString(), out assigned) ? assigned : 0m;
 
         return new PayPeriodBudgetSummaryDto
         {
