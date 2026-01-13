@@ -124,6 +124,21 @@ export default define.page<typeof handler>(function Dashboard(props) {
     0,
   );
 
+  // Calculate bills due soon (next 3 days) and overdue for reminders
+  const now = new Date();
+  const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+  const billsDueSoon = upcomingBills.filter((bill) => {
+    if (!bill.dueDate) return false;
+    const dueDate = new Date(bill.dueDate);
+    return dueDate >= now && dueDate <= threeDaysFromNow;
+  });
+  const overdueBills = upcomingBills.filter((bill) => {
+    if (!bill.dueDate) return false;
+    const dueDate = new Date(bill.dueDate);
+    return dueDate < now;
+  });
+  const billsNeedingAttention = overdueBills.length + billsDueSoon.length;
+
   return (
     <div class="min-h-screen bg-slate-100">
       <Head>
@@ -153,7 +168,22 @@ export default define.page<typeof handler>(function Dashboard(props) {
             <a href={url("/transactions")} class="btn btn-ghost btn-sm">
               Transactions
             </a>
-            <a href={url("/bills")} class="btn btn-ghost btn-sm">Bills</a>
+            {billsNeedingAttention > 0
+              ? (
+                <div class="indicator">
+                  <span
+                    class={`indicator-item badge badge-xs ${
+                      overdueBills.length > 0 ? "badge-error" : "badge-warning"
+                    }`}
+                  >
+                    {billsNeedingAttention}
+                  </span>
+                  <a href={url("/bills")} class="btn btn-ghost btn-sm">
+                    Bills
+                  </a>
+                </div>
+              )
+              : <a href={url("/bills")} class="btn btn-ghost btn-sm">Bills</a>}
             <a href={url("/goals")} class="btn btn-ghost btn-sm">Goals</a>
             <a href={url("/settings")} class="btn btn-ghost btn-sm">Settings</a>
           </nav>
@@ -217,7 +247,54 @@ export default define.page<typeof handler>(function Dashboard(props) {
             {/* Upcoming Bills */}
             <div class="card bg-white shadow-xl">
               <div class="card-body">
-                <h2 class="card-title text-lg">📅 Upcoming Bills</h2>
+                <div class="flex justify-between items-center mb-2">
+                  <h2 class="card-title text-lg">📅 Upcoming Bills</h2>
+                  {billsNeedingAttention > 0 && (
+                    <span
+                      class={`badge ${
+                        overdueBills.length > 0
+                          ? "badge-error"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {billsNeedingAttention} need attention
+                    </span>
+                  )}
+                </div>
+
+                {/* Bill Reminder Summary */}
+                {(overdueBills.length > 0 || billsDueSoon.length > 0) && (
+                  <div class="alert alert-warning mb-3 py-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="stroke-current shrink-0 h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    <span class="text-sm">
+                      {overdueBills.length > 0 && (
+                        <span class="font-semibold text-error">
+                          {overdueBills.length} overdue
+                        </span>
+                      )}
+                      {overdueBills.length > 0 && billsDueSoon.length > 0 &&
+                        " • "}
+                      {billsDueSoon.length > 0 && (
+                        <span>
+                          {billsDueSoon.length} due within 3 days
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                )}
+
                 {upcomingBills.length === 0
                   ? (
                     <p class="text-slate-500 text-sm">
@@ -238,9 +315,15 @@ export default define.page<typeof handler>(function Dashboard(props) {
                         return (
                           <div
                             key={bill.billKey}
-                            class="py-3 flex justify-between items-center"
+                            class={`py-3 flex justify-between items-center ${
+                              isOverdue
+                                ? "bg-red-50 -mx-4 px-4"
+                                : isDueSoon
+                                ? "bg-yellow-50 -mx-4 px-4"
+                                : ""
+                            }`}
                           >
-                            <div>
+                            <div class="flex-1">
                               <div class="font-medium flex items-center gap-2">
                                 {bill.billName}
                                 {bill.isAutoPay && (
@@ -248,22 +331,32 @@ export default define.page<typeof handler>(function Dashboard(props) {
                                     Auto
                                   </span>
                                 )}
+                                {isOverdue && (
+                                  <span class="badge badge-xs badge-error">
+                                    OVERDUE
+                                  </span>
+                                )}
+                                {isDueSoon && !isOverdue && (
+                                  <span class="badge badge-xs badge-warning">
+                                    Due Soon
+                                  </span>
+                                )}
                               </div>
-                              <div
-                                class={`text-xs ${
-                                  isOverdue
-                                    ? "text-red-600 font-semibold"
-                                    : isDueSoon
-                                    ? "text-yellow-600"
-                                    : "text-slate-500"
-                                }`}
-                              >
-                                {isOverdue
-                                  ? "OVERDUE"
-                                  : dueDate?.toLocaleDateString()}
+                              <div class="text-xs text-slate-500 mt-1">
+                                {dueDate?.toLocaleDateString()}
+                                {" • "}
+                                {bill.accountName}
                               </div>
                             </div>
-                            <div class="font-semibold text-slate-700">
+                            <div
+                              class={`font-semibold ${
+                                isOverdue
+                                  ? "text-red-700"
+                                  : isDueSoon
+                                  ? "text-yellow-700"
+                                  : "text-slate-700"
+                              }`}
+                            >
                               {formatCurrency(bill.amount)}
                             </div>
                           </div>
