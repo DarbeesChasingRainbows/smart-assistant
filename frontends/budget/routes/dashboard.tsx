@@ -259,20 +259,34 @@ export default define.page<typeof handler>(function Dashboard(props) {
             {summary && period ? (
               <div class="card bg-white shadow-xl">
                 <div class="card-body">
-                  <h2 class="card-title text-2xl text-slate-800">Summary</h2>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div class="flex justify-between items-center mb-4">
+                    <h2 class="card-title text-2xl text-slate-800">Summary</h2>
+                    <a href={url("/settings")} class="btn btn-success btn-sm">
+                      + Add Income
+                    </a>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="stat bg-slate-50 rounded-lg">
                       <div class="stat-title">Income</div>
                       <div class="stat-value text-lg">{formatCurrency(summary.totalIncome)}</div>
+                      <div class="stat-desc text-emerald-600">
+                        {summary.totalIncome > 0 ? "Ready to assign" : "Add your income"}
+                      </div>
                     </div>
                     <div class="stat bg-slate-50 rounded-lg">
                       <div class="stat-title">Assigned</div>
                       <div class="stat-value text-lg">{formatCurrency(summary.totalAssigned)}</div>
+                      <div class="stat-desc">
+                        {summary.totalAssigned > 0 ? `${((summary.totalAssigned / summary.totalIncome) * 100).toFixed(0)}% allocated` : "Not assigned yet"}
+                      </div>
                     </div>
                     <div class="stat bg-slate-50 rounded-lg">
                       <div class="stat-title">Unassigned</div>
                       <div class={`stat-value text-lg ${summary.unassigned === 0 ? "text-emerald-600" : "text-orange-600"}`}>
                         {formatCurrency(summary.unassigned)}
+                      </div>
+                      <div class="stat-desc">
+                        {summary.unassigned === 0 ? "✓ Fully allocated" : summary.unassigned > 0 ? "Needs assignment" : "Over-assigned!"}
                       </div>
                     </div>
                   </div>
