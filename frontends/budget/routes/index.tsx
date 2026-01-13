@@ -1,6 +1,6 @@
 import { Head } from "fresh/runtime";
 import { define, url } from "../utils.ts";
- 
+
 interface PickerUser {
   id: string;
   name: string;
@@ -38,11 +38,20 @@ export const handler = define.handlers({
       },
     };
 
-    console.log(JSON.stringify({ level: "info", msg: "budget:index:fetch_users:start", ...logBase }));
+    console.log(
+      JSON.stringify({
+        level: "info",
+        msg: "budget:index:fetch_users:start",
+        ...logBase,
+      }),
+    );
 
     const abortController = new AbortController();
     const timeoutMs = 8000;
-    const timeoutId = setTimeout(() => abortController.abort(new Error(`timeout_after_${timeoutMs}ms`)), timeoutMs);
+    const timeoutId = setTimeout(
+      () => abortController.abort(new Error(`timeout_after_${timeoutMs}ms`)),
+      timeoutMs,
+    );
 
     try {
       const response = await fetch(fullUrl, {
@@ -78,10 +87,17 @@ export const handler = define.handlers({
             bodyPreview: bodyText.slice(0, 2000),
           }),
         );
-        return { data: { users: [], error: `Backend error (${response.status}) calling ${endpoint}` } };
+        return {
+          data: {
+            users: [],
+            error: `Backend error (${response.status}) calling ${endpoint}`,
+          },
+        };
       }
 
-      const people: Array<{ id: string; username: string; role: string; isActive: boolean }> = await response.json();
+      const people: Array<
+        { id: string; username: string; role: string; isActive: boolean }
+      > = await response.json();
       const users: PickerUser[] = people.map((p) => ({
         id: p.id,
         name: p.username,
@@ -112,7 +128,12 @@ export const handler = define.handlers({
           errorStack: err?.stack,
         }),
       );
-      return { data: { users: [], error: `Could not connect to backend (requestId: ${requestId})` } };
+      return {
+        data: {
+          users: [],
+          error: `Could not connect to backend (requestId: ${requestId})`,
+        },
+      };
     } finally {
       clearTimeout(timeoutId);
     }
@@ -135,7 +156,9 @@ function getAvatar(user: PickerUser): string {
 function getCardColor(user: PickerUser): string {
   switch (user.role) {
     case "Parent":
-      return user.name === "Mom" ? "bg-pink-100 hover:bg-pink-200" : "bg-blue-100 hover:bg-blue-200";
+      return user.name === "Mom"
+        ? "bg-pink-100 hover:bg-pink-200"
+        : "bg-blue-100 hover:bg-blue-200";
     case "Child":
       return "bg-green-100 hover:bg-green-200";
     default:
@@ -150,7 +173,11 @@ export default define.page<typeof handler>(function UserPicker(props) {
     <div class="min-h-screen bg-linear-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-center p-8">
       <Head>
         <title>Budget - Who's Budgeting?</title>
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/daisyui.css" rel="stylesheet" type="text/css" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/daisyui.css"
+          rel="stylesheet"
+          type="text/css"
+        />
       </Head>
 
       <div class="text-center mb-12">
@@ -173,7 +200,9 @@ export default define.page<typeof handler>(function UserPicker(props) {
           <a
             key={user.id}
             href={url(`/dashboard?userId=${encodeURIComponent(user.id)}`)}
-            class={`card ${getCardColor(user)} shadow-xl cursor-pointer transform transition-all duration-200 hover:scale-105 hover:shadow-2xl`}
+            class={`card ${
+              getCardColor(user)
+            } shadow-xl cursor-pointer transform transition-all duration-200 hover:scale-105 hover:shadow-2xl`}
           >
             <div class="card-body items-center text-center py-12">
               <div class="text-7xl mb-4">

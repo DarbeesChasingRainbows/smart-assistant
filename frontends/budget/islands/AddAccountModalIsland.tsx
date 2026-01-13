@@ -69,7 +69,9 @@ export default function AddAccountModalIsland({ familyId }: Props) {
       reset();
       globalThis.location?.reload();
     } catch (e) {
-      formError.value = e instanceof Error ? e.message : "Failed to create account";
+      formError.value = e instanceof Error
+        ? e.message
+        : "Failed to create account";
     } finally {
       submitting.value = false;
     }
@@ -104,7 +106,9 @@ export default function AddAccountModalIsland({ familyId }: Props) {
             <div class="px-5 py-4 border-b border-base-300 flex items-start justify-between gap-3">
               <div>
                 <div class="text-lg font-semibold">Add account</div>
-                <div class="text-sm opacity-70">Create a new budget account</div>
+                <div class="text-sm opacity-70">
+                  Create a new budget account
+                </div>
               </div>
               <button
                 type="button"
@@ -132,7 +136,8 @@ export default function AddAccountModalIsland({ familyId }: Props) {
                 <input
                   class="input input-bordered w-full"
                   value={name.value}
-                  onInput={(e) => name.value = (e.target as HTMLInputElement).value}
+                  onInput={(e) =>
+                    name.value = (e.target as HTMLInputElement).value}
                   placeholder="e.g., Checking"
                 />
               </div>
@@ -162,7 +167,8 @@ export default function AddAccountModalIsland({ familyId }: Props) {
                     class="input input-bordered w-full"
                     value={openingBalance.value}
                     onInput={(e) =>
-                      openingBalance.value = (e.target as HTMLInputElement).value}
+                      openingBalance.value =
+                        (e.target as HTMLInputElement).value}
                     inputMode="decimal"
                     placeholder="0.00"
                   />

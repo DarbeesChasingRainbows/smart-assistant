@@ -1,3 +1,4 @@
+using System.Globalization;
 using LifeOS.API.DTOs;
 using LifeOS.Infrastructure.Persistence.ArangoDB;
 using Microsoft.AspNetCore.Mvc;
@@ -93,6 +94,8 @@ public static class BudgetEndpoints
         transactions.MapPost("/", CreateTransaction).WithName("CreateBudgetTransaction");
         transactions.MapPut("/{key}", UpdateTransaction).WithName("UpdateBudgetTransaction");
         transactions.MapPost("/{key}/clear", ClearTransaction).WithName("ClearBudgetTransaction");
+        transactions.MapDelete("/{key}", DeleteTransaction).WithName("DeleteBudgetTransaction");
+        transactions.MapPost("/{key}/splits/replace", ReplaceSplits).WithName("ReplaceBudgetTransactionSplits");
     }
 
     // ==================== DASHBOARD (CQRS Query) ====================
@@ -1133,28 +1136,52 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         CreateBudgetTransactionRequest request,
         [FromServices] ArangoDbContext db)
     {
-        var now = DateTime.UtcNow;
-        var doc = new
+        try
         {
-            _key = Guid.NewGuid().ToString("N")[..12],
-            accountKey = request.AccountKey,
-            categoryKey = request.CategoryKey,
-            payPeriodKey = (string?)null, // Will be determined based on transaction date
-            payee = request.Payee,
-            memo = request.Memo,
-            amount = request.Amount,
-            transactionDate = request.TransactionDate,
-            isCleared = false,
-            isReconciled = false,
-            createdAt = now
-        };
+            if (string.IsNullOrWhiteSpace(request.AccountKey))
+            {
+                return Results.BadRequest(new { error = "accountKey is required" });
+            }
 
-        var result = await db.Client.Document.PostDocumentAsync(TransactionCollection, doc);
+            var now = DateTime.UtcNow;
+            var doc = new
+            {
+                _key = Guid.NewGuid().ToString("N")[..12],
+                accountKey = request.AccountKey,
+                categoryKey = request.CategoryKey,
+                payPeriodKey = (string?)null, // Will be determined based on transaction date
+                payee = request.Payee,
+                memo = request.Memo,
+                amount = request.Amount,
+                transactionDate = request.TransactionDate,
+                isCleared = false,
+                isReconciled = false,
+                createdAt = now
+            };
 
-        // Update account balance
-        await UpdateAccountBalance(db, request.AccountKey);
+            var result = await db.Client.Document.PostDocumentAsync(TransactionCollection, doc);
 
-        return Results.Created($"/api/v1/budget/transactions/{result._key}", MapTransaction(doc));
+            // Update account balance
+            try
+            {
+                await UpdateAccountBalance(db, request.AccountKey);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Results.BadRequest(new { error = ex.Message });
+            }
+
+            return Results.Created($"/api/v1/budget/transactions/{result._key}", MapTransaction(doc));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating transaction: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            return Results.Problem(
+                title: "Error creating transaction",
+                detail: ex.Message,
+                statusCode: 500);
+        }
     }
 
     private static async Task<IResult> UpdateTransaction(
@@ -1210,6 +1237,59 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             }
 
             return Results.Ok(new { isCleared = !isCleared });
+        }
+        catch
+        {
+            return Results.NotFound();
+        }
+    }
+
+    private static async Task<IResult> DeleteTransaction(string key, [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            var existing = await db.Client.Document.GetDocumentAsync<dynamic>(TransactionCollection, key);
+            var accountKey = existing.accountKey?.ToString();
+
+            await db.Client.Document.DeleteDocumentAsync(TransactionCollection, key);
+
+            // Update account balance after deletion
+            if (accountKey != null)
+            {
+                await UpdateAccountBalance(db, accountKey);
+            }
+
+            return Results.NoContent();
+        }
+        catch
+        {
+            return Results.NotFound();
+        }
+    }
+
+    private static async Task<IResult> ReplaceSplits(
+        string key,
+        ReplaceSplitsRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            // Verify transaction exists
+            var existing = await db.Client.Document.GetDocumentAsync<dynamic>(TransactionCollection, key);
+
+            // Update transaction with new splits
+            var splits = request.Splits.Select(s => new
+            {
+                categoryKey = s.CategoryKey,
+                amount = s.Amount,
+                memo = s.Memo
+            }).ToList();
+
+            await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(
+                TransactionCollection, key,
+                new Dictionary<string, object> { { "splits", splits } });
+
+            return Results.Ok(splits);
         }
         catch
         {
@@ -1378,33 +1458,79 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
     private static async Task UpdateAccountBalance(ArangoDbContext db, string accountKey)
     {
-        var balanceQuery = $@"
-            FOR doc IN {TransactionCollection}
-            FILTER doc.accountKey == @accountKey
-            COLLECT AGGREGATE 
-                total = SUM(doc.amount),
-                cleared = SUM(doc.isCleared ? doc.amount : 0)
-            RETURN {{ total: total, cleared: cleared }}";
+        try
+        {
+            var balanceQuery = $@"
+                FOR doc IN {TransactionCollection}
+                FILTER doc.accountKey == @accountKey
+                COLLECT AGGREGATE
+                    total = SUM(doc.amount),
+                    cleared = SUM(doc.isCleared ? doc.amount : 0)
+                RETURN {{ total: total, cleared: cleared }}";
 
-        var cursor = await db.Client.Cursor.PostCursorAsync<dynamic>(
-            balanceQuery, new Dictionary<string, object> { { "accountKey", accountKey } });
+            var cursor = await db.Client.Cursor.PostCursorAsync<dynamic>(
+                balanceQuery, new Dictionary<string, object> { { "accountKey", accountKey } });
 
-        var result = cursor.Result.FirstOrDefault();
-        var balance = decimal.TryParse(result?.total?.ToString(), out decimal b) ? b : 0m;
-        var clearedBalance = decimal.TryParse(result?.cleared?.ToString(), out decimal c) ? c : 0m;
+            var result = cursor.Result.FirstOrDefault();
+            var balanceStr = result?.total != null
+                ? Convert.ToString(result.total, CultureInfo.InvariantCulture)
+                : null;
+            var balance = decimal.TryParse(
+                balanceStr ?? "0",
+                NumberStyles.Number,
+                CultureInfo.InvariantCulture,
+                out decimal b)
+                ? b
+                : 0m;
 
-        // Get opening balance
-        var account = await db.Client.Document.GetDocumentAsync<dynamic>(AccountCollection, accountKey);
-        var openingBalance = decimal.TryParse(account.openingBalance?.ToString(), out decimal ob) ? ob : 0m;
+            var clearedStr = result?.cleared != null
+                ? Convert.ToString(result.cleared, CultureInfo.InvariantCulture)
+                : null;
+            var clearedBalance = decimal.TryParse(
+                clearedStr ?? "0",
+                NumberStyles.Number,
+                CultureInfo.InvariantCulture,
+                out decimal c)
+                ? c
+                : 0m;
 
-        await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(
-            AccountCollection, accountKey,
-            new Dictionary<string, object>
+            // Get opening balance
+            dynamic account;
+            try
             {
-                { "balance", openingBalance + balance },
-                { "clearedBalance", openingBalance + clearedBalance },
-                { "updatedAt", DateTime.UtcNow }
-            });
+                account = await db.Client.Document.GetDocumentAsync<dynamic>(AccountCollection, accountKey);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting account {accountKey}: {ex.Message}");
+                throw new InvalidOperationException($"Account not found: {accountKey}", ex);
+            }
+
+            var openingBalanceStr = account.openingBalance != null
+                ? Convert.ToString(account.openingBalance, CultureInfo.InvariantCulture)
+                : null;
+            var openingBalance = decimal.TryParse(
+                openingBalanceStr ?? "0",
+                NumberStyles.Number,
+                CultureInfo.InvariantCulture,
+                out decimal ob)
+                ? ob
+                : 0m;
+
+            await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(
+                AccountCollection, accountKey,
+                new Dictionary<string, object>
+                {
+                    { "balance", openingBalance + balance },
+                    { "clearedBalance", openingBalance + clearedBalance },
+                    { "updatedAt", DateTime.UtcNow }
+                });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating account balance for {accountKey}: {ex.Message}");
+            throw;
+        }
     }
 
     // ==================== MAPPERS ====================
@@ -1522,6 +1648,14 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         Payee = doc.payee?.ToString() ?? "",
         Memo = doc.memo?.ToString(),
         Amount = decimal.TryParse(doc.amount?.ToString(), out decimal amount) ? amount : 0,
+        Splits = doc.splits != null
+            ? ((IEnumerable<dynamic>)doc.splits).Select(s => new SplitItem
+            {
+                CategoryKey = s.categoryKey?.ToString(),
+                Amount = decimal.TryParse(s.amount?.ToString(), out decimal splitAmount) ? splitAmount : 0,
+                Memo = s.memo?.ToString()
+            }).ToList()
+            : null,
         TransactionDate = DateTime.TryParse(doc.transactionDate?.ToString(), out DateTime date) ? date : DateTime.MinValue,
         IsCleared = doc.isCleared == true,
         IsReconciled = doc.isReconciled == true,

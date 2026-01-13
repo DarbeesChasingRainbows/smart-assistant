@@ -1,5 +1,10 @@
-import { useSignal, useComputed } from "@preact/signals";
-import type { Category, CategoryGroup, BudgetSummary, CategoryBalance } from "../types/api.ts";
+import { useComputed, useSignal } from "@preact/signals";
+import type {
+  BudgetSummary,
+  Category,
+  CategoryBalance,
+  CategoryGroup,
+} from "../types/api.ts";
 
 interface Props {
   categories: CategoryGroup[];
@@ -13,12 +18,22 @@ const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget/api/v1/budget"
   : "/api/v1/budget";
 
-export default function BudgetAssignmentIsland({ categories: initialCategories, assignments: initialAssignments, summary: initialSummary, payPeriodId, categoryBalances: initialCategoryBalances }: Props) {
+export default function BudgetAssignmentIsland(
+  {
+    categories: initialCategories,
+    assignments: initialAssignments,
+    summary: initialSummary,
+    payPeriodId,
+    categoryBalances: initialCategoryBalances,
+  }: Props,
+) {
   const groups = useSignal<CategoryGroup[]>(initialCategories);
   const assignments = useSignal<Record<number, number>>(initialAssignments);
   const isUpdating = useSignal<Record<number, boolean>>({});
   const summary = useSignal<BudgetSummary>(initialSummary);
-  const categoryBalances = useSignal<CategoryBalance[]>(initialCategoryBalances || []);
+  const categoryBalances = useSignal<CategoryBalance[]>(
+    initialCategoryBalances || [],
+  );
 
   // Drag state
   const draggedCategoryId = useSignal<number | null>(null);
@@ -52,25 +67,29 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   // Assignment input state (per category) to keep typing stable
   const assignmentInputs = useSignal<Record<number, string>>({});
 
-  const totalAssigned = useComputed(() => 
+  const totalAssigned = useComputed(() =>
     Object.values(assignments.value).reduce((sum, amt) => sum + amt, 0)
   );
 
-  const unassigned = useComputed(() => 
+  const unassigned = useComputed(() =>
     summary.value.totalIncome - totalAssigned.value
   );
 
-  const formatCurrency = (amount: number) => 
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
+      .format(amount);
 
-  const getAssignedAmount = (categoryId: number) => assignments.value[categoryId] || 0;
+  const getAssignedAmount = (categoryId: number) =>
+    assignments.value[categoryId] || 0;
 
   // Get spent amount from category balances (maps from numeric ID to string key)
   const getSpentAmount = (categoryId: number): number => {
     // Find the category to get its key
     let categoryKey: string | undefined;
     for (const group of groups.value) {
-      const category = group.categories?.find(c => c.id === categoryId || c.key === categoryId.toString());
+      const category = group.categories?.find((c) =>
+        c.id === categoryId || c.key === categoryId.toString()
+      );
       if (category) {
         categoryKey = category.key || category.id?.toString();
         break;
@@ -82,7 +101,9 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     }
 
     // Look up spent amount from categoryBalances
-    const balance = categoryBalances.value.find(b => b.categoryKey === categoryKey);
+    const balance = categoryBalances.value.find((b) =>
+      b.categoryKey === categoryKey
+    );
     return balance?.spent || 0;
   };
 
@@ -96,7 +117,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     const currentAssigned = getAssignedAmount(categoryId);
     assignmentInputs.value = {
       ...assignmentInputs.value,
-      [categoryId]: currentAssigned ? currentAssigned.toString() : ""
+      [categoryId]: currentAssigned ? currentAssigned.toString() : "",
     };
 
     selectedCategoryId.value = categoryId;
@@ -111,7 +132,10 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   };
 
   const executeTransfer = async () => {
-    if (!transferFromCategoryId.value || !transferToCategoryId.value || !transferAmount.value) return;
+    if (
+      !transferFromCategoryId.value || !transferToCategoryId.value ||
+      !transferAmount.value
+    ) return;
 
     const amount = parseFloat(transferAmount.value) || 0;
     if (amount <= 0) return;
@@ -129,20 +153,28 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
         fetch(`${API_BASE}/budget/assign`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ payPeriodId, categoryId: fromId, amount: fromAmount - amount }),
+          body: JSON.stringify({
+            payPeriodId,
+            categoryId: fromId,
+            amount: fromAmount - amount,
+          }),
         }),
         fetch(`${API_BASE}/budget/assign`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ payPeriodId, categoryId: toId, amount: toAmount + amount }),
-        })
+          body: JSON.stringify({
+            payPeriodId,
+            categoryId: toId,
+            amount: toAmount + amount,
+          }),
+        }),
       ]);
 
       // Update local state
       assignments.value = {
         ...assignments.value,
         [fromId]: fromAmount - amount,
-        [toId]: toAmount + amount
+        [toId]: toAmount + amount,
       };
 
       isTransferModalOpen.value = false;
@@ -166,7 +198,10 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     }
 
     // Find the group to get its key
-    const group = groups.value.find(g => g.id === addCategoryGroupId.value || g.key === addCategoryGroupId.value?.toString());
+    const group = groups.value.find((g) =>
+      g.id === addCategoryGroupId.value ||
+      g.key === addCategoryGroupId.value?.toString()
+    );
     if (!group) {
       createCategoryError.value = "Group not found";
       return;
@@ -185,7 +220,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
           groupKey,
           familyId: "default",
           name: newCategoryName.value.trim(),
-          targetAmount
+          targetAmount,
         }),
       });
 
@@ -194,7 +229,9 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
       }
 
       // Reload category groups to get the new category
-      const groupsResponse = await fetch(`${API_BASE}/category-groups?familyId=default`);
+      const groupsResponse = await fetch(
+        `${API_BASE}/category-groups?familyId=default`,
+      );
       if (groupsResponse.ok) {
         const updatedGroups = await groupsResponse.json();
         groups.value = updatedGroups;
@@ -206,15 +243,19 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
       newCategoryTarget.value = "";
     } catch (error) {
       console.error("Error creating category:", error);
-      createCategoryError.value = error instanceof Error ? error.message : "Failed to create category";
+      createCategoryError.value = error instanceof Error
+        ? error.message
+        : "Failed to create category";
     } finally {
       isCreatingCategory.value = false;
     }
   };
 
   // Get all categories flattened for the transfer dropdown
-  const allCategories = useComputed(() => 
-    groups.value.flatMap(g => g.categories.map(c => ({ ...c, groupName: g.name })))
+  const allCategories = useComputed(() =>
+    groups.value.flatMap((g) =>
+      g.categories.map((c) => ({ ...c, groupName: g.name }))
+    )
   );
 
   // Assignment change handler
@@ -247,23 +288,29 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   const saveEditCategory = async () => {
     if (!editingCategoryId.value) return;
     const catId = editingCategoryId.value;
-    
+
     try {
       await fetch(`${API_BASE}/categories/${catId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          name: editName.value, 
-          targetAmount: parseFloat(editTarget.value) || 0 
+        body: JSON.stringify({
+          name: editName.value,
+          targetAmount: parseFloat(editTarget.value) || 0,
         }),
       });
-      
+
       // Update local state
-      groups.value = groups.value.map(g => ({
+      groups.value = groups.value.map((g) => ({
         ...g,
-        categories: g.categories.map(c => 
-          c.id === catId ? { ...c, name: editName.value, targetAmount: parseFloat(editTarget.value) || 0 } : c
-        )
+        categories: g.categories.map((c) =>
+          c.id === catId
+            ? {
+              ...c,
+              name: editName.value,
+              targetAmount: parseFloat(editTarget.value) || 0,
+            }
+            : c
+        ),
       }));
     } catch (error) {
       console.error("Error updating category:", error);
@@ -280,15 +327,15 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   const saveEditGroup = async () => {
     if (!editingGroupId.value) return;
     const groupId = editingGroupId.value;
-    
+
     try {
       await fetch(`${API_BASE}/categories/groups/${groupId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: editName.value }),
       });
-      
-      groups.value = groups.value.map(g => 
+
+      groups.value = groups.value.map((g) =>
         g.id === groupId ? { ...g, name: editName.value } : g
       );
     } catch (error) {
@@ -298,7 +345,11 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   };
 
   // Drag and drop handlers
-  const handleDragStart = (e: DragEvent, categoryId: number, groupId: number) => {
+  const handleDragStart = (
+    e: DragEvent,
+    categoryId: number,
+    groupId: number,
+  ) => {
     draggedCategoryId.value = categoryId;
     draggedFromGroupId.value = groupId;
     if (e.dataTransfer) {
@@ -313,11 +364,17 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     }
   };
 
-  const handleDropOnCategory = async (e: DragEvent, targetCategoryId: number, targetGroupId: number) => {
+  const handleDropOnCategory = async (
+    e: DragEvent,
+    targetCategoryId: number,
+    targetGroupId: number,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    if (!draggedCategoryId.value || draggedCategoryId.value === targetCategoryId) {
+
+    if (
+      !draggedCategoryId.value || draggedCategoryId.value === targetCategoryId
+    ) {
       draggedCategoryId.value = null;
       draggedFromGroupId.value = null;
       return;
@@ -328,8 +385,8 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
     // Find the dragged category BEFORE modifying state
     const draggedCat = groups.value
-      .flatMap(g => g.categories)
-      .find(c => c.id === draggedId);
+      .flatMap((g) => g.categories)
+      .find((c) => c.id === draggedId);
 
     if (!draggedCat) {
       draggedCategoryId.value = null;
@@ -338,34 +395,46 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     }
 
     // Find target category's position
-    const targetGroup = groups.value.find(g => g.id === targetGroupId);
-    let targetIndex = targetGroup?.categories.findIndex(c => c.id === targetCategoryId) ?? 0;
+    const targetGroup = groups.value.find((g) => g.id === targetGroupId);
+    let targetIndex =
+      targetGroup?.categories.findIndex((c) => c.id === targetCategoryId) ?? 0;
 
     // Handle same-group reordering
     if (fromGroupId === targetGroupId) {
-      const currentIndex = targetGroup?.categories.findIndex(c => c.id === draggedId) ?? 0;
+      const currentIndex = targetGroup?.categories.findIndex((c) =>
+        c.id === draggedId
+      ) ?? 0;
       // If dragging down, adjust target index since we'll remove the item first
       if (currentIndex < targetIndex) {
         targetIndex--;
       }
-      
-      groups.value = groups.value.map(g => {
+
+      groups.value = groups.value.map((g) => {
         if (g.id === targetGroupId) {
-          const newCats = g.categories.filter(c => c.id !== draggedId);
-          newCats.splice(targetIndex, 0, { ...draggedCat, categoryGroupId: targetGroupId });
+          const newCats = g.categories.filter((c) => c.id !== draggedId);
+          newCats.splice(targetIndex, 0, {
+            ...draggedCat,
+            categoryGroupId: targetGroupId,
+          });
           return { ...g, categories: newCats };
         }
         return g;
       });
     } else {
       // Cross-group move
-      groups.value = groups.value.map(g => {
+      groups.value = groups.value.map((g) => {
         if (g.id === fromGroupId) {
-          return { ...g, categories: g.categories.filter(c => c.id !== draggedId) };
+          return {
+            ...g,
+            categories: g.categories.filter((c) => c.id !== draggedId),
+          };
         }
         if (g.id === targetGroupId) {
           const newCats = [...g.categories];
-          newCats.splice(targetIndex, 0, { ...draggedCat, categoryGroupId: targetGroupId });
+          newCats.splice(targetIndex, 0, {
+            ...draggedCat,
+            categoryGroupId: targetGroupId,
+          });
           return { ...g, categories: newCats };
         }
         return g;
@@ -373,17 +442,31 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     }
 
     // Build reorder request for affected groups
-    const reorderItems: Array<{id: number; sortOrder: number; categoryGroupId: number}> = [];
-    
-    const updatedTargetGroup = groups.value.find(g => g.id === targetGroupId);
+    const reorderItems: Array<
+      { id: number; sortOrder: number; categoryGroupId: number }
+    > = [];
+
+    const updatedTargetGroup = groups.value.find((g) => g.id === targetGroupId);
     updatedTargetGroup?.categories.forEach((c, idx) => {
-      if (c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: targetGroupId });
+      if (c.id != null) {
+        reorderItems.push({
+          id: c.id,
+          sortOrder: idx,
+          categoryGroupId: targetGroupId,
+        });
+      }
     });
 
     if (fromGroupId !== targetGroupId) {
-      const updatedFromGroup = groups.value.find(g => g.id === fromGroupId);
+      const updatedFromGroup = groups.value.find((g) => g.id === fromGroupId);
       updatedFromGroup?.categories.forEach((c, idx) => {
-        if (fromGroupId != null && c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: fromGroupId });
+        if (fromGroupId != null && c.id != null) {
+          reorderItems.push({
+            id: c.id,
+            sortOrder: idx,
+            categoryGroupId: fromGroupId,
+          });
+        }
       });
     }
 
@@ -404,7 +487,7 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
   const handleDropOnGroup = async (e: DragEvent, targetGroupId: number) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!draggedCategoryId.value) return;
 
     const draggedId = draggedCategoryId.value;
@@ -419,8 +502,8 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
     // Find the dragged category BEFORE modifying state
     const draggedCat = groups.value
-      .flatMap(g => g.categories)
-      .find(c => c.id === draggedId);
+      .flatMap((g) => g.categories)
+      .find((c) => c.id === draggedId);
 
     if (!draggedCat) {
       draggedCategoryId.value = null;
@@ -429,27 +512,50 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
     }
 
     // Move category to end of target group
-    groups.value = groups.value.map(g => {
+    groups.value = groups.value.map((g) => {
       if (g.id === fromGroupId) {
-        return { ...g, categories: g.categories.filter(c => c.id !== draggedId) };
+        return {
+          ...g,
+          categories: g.categories.filter((c) => c.id !== draggedId),
+        };
       }
       if (g.id === targetGroupId) {
-        return { ...g, categories: [...g.categories, { ...draggedCat, categoryGroupId: targetGroupId }] };
+        return {
+          ...g,
+          categories: [...g.categories, {
+            ...draggedCat,
+            categoryGroupId: targetGroupId,
+          }],
+        };
       }
       return g;
     });
 
     // Save both affected groups to backend
-    const reorderItems: Array<{id: number; sortOrder: number; categoryGroupId: number}> = [];
-    
-    const updatedTargetGroup = groups.value.find(g => g.id === targetGroupId);
+    const reorderItems: Array<
+      { id: number; sortOrder: number; categoryGroupId: number }
+    > = [];
+
+    const updatedTargetGroup = groups.value.find((g) => g.id === targetGroupId);
     updatedTargetGroup?.categories.forEach((c, idx) => {
-      if (c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: targetGroupId });
+      if (c.id != null) {
+        reorderItems.push({
+          id: c.id,
+          sortOrder: idx,
+          categoryGroupId: targetGroupId,
+        });
+      }
     });
 
-    const updatedFromGroup = groups.value.find(g => g.id === fromGroupId);
+    const updatedFromGroup = groups.value.find((g) => g.id === fromGroupId);
     updatedFromGroup?.categories.forEach((c, idx) => {
-      if (fromGroupId != null && c.id != null) reorderItems.push({ id: c.id, sortOrder: idx, categoryGroupId: fromGroupId });
+      if (fromGroupId != null && c.id != null) {
+        reorderItems.push({
+          id: c.id,
+          sortOrder: idx,
+          categoryGroupId: fromGroupId,
+        });
+      }
     });
 
     try {
@@ -474,26 +580,48 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
           <div class="grid grid-cols-3 gap-4 text-center">
             <div>
               <div class="text-sm text-slate-500">Income</div>
-              <div class="text-xl font-bold text-green-600">{formatCurrency(summary.value.totalIncome)}</div>
+              <div class="text-xl font-bold text-green-600">
+                {formatCurrency(summary.value.totalIncome)}
+              </div>
             </div>
             <div>
               <div class="text-sm text-slate-500">Assigned</div>
-              <div class="text-xl font-bold text-blue-600">{formatCurrency(totalAssigned.value)}</div>
+              <div class="text-xl font-bold text-blue-600">
+                {formatCurrency(totalAssigned.value)}
+              </div>
             </div>
             <div>
               <div class="text-sm text-slate-500">Unassigned</div>
-              <div class={`text-xl font-bold ${unassigned.value === 0 ? "text-emerald-600" : unassigned.value > 0 ? "text-yellow-600" : "text-red-600"}`}>
+              <div
+                class={`text-xl font-bold ${
+                  unassigned.value === 0
+                    ? "text-emerald-600"
+                    : unassigned.value > 0
+                    ? "text-yellow-600"
+                    : "text-red-600"
+                }`}
+              >
                 {formatCurrency(unassigned.value)}
               </div>
             </div>
           </div>
           <div class="w-full bg-slate-200 rounded-full h-2 mt-2">
-            <div 
+            <div
               class={`h-2 rounded-full transition-all duration-300 ${
-                unassigned.value === 0 ? "bg-emerald-500" : 
-                unassigned.value > 0 ? "bg-blue-500" : "bg-red-500"
+                unassigned.value === 0
+                  ? "bg-emerald-500"
+                  : unassigned.value > 0
+                  ? "bg-blue-500"
+                  : "bg-red-500"
               }`}
-              style={{ width: `${Math.min(100, (totalAssigned.value / summary.value.totalIncome) * 100)}%` }}
+              style={{
+                width: `${
+                  Math.min(
+                    100,
+                    (totalAssigned.value / summary.value.totalIncome) * 100,
+                  )
+                }%`,
+              }}
             />
           </div>
           {unassigned.value === 0 && (
@@ -505,225 +633,306 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
       </div>
 
       {/* Category Groups */}
-      {groups.value.filter((g: CategoryGroup) => g.categories.length > 0).map((group: CategoryGroup) => {
-        const groupId = group.id;
-        if (groupId == null) return null;
-        return (
-        <div 
-          key={groupId} 
-          class="card bg-white shadow-xl overflow-hidden"
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDropOnGroup(e, groupId)}
-        >
-          <div class="card-body p-0">
-            {/* Group Header - Editable */}
-            {editingGroupId.value === groupId ? (
-              <div class="flex items-center gap-2 p-4 border-b">
-                <input
-                  type="text"
-                  class="input input-bordered input-sm flex-1"
-                  value={editName.value}
-                  onInput={(e) => editName.value = e.currentTarget.value}
-                  onKeyDown={(e) => e.key === "Enter" && saveEditGroup()}
-                  autoFocus
-                />
-                <button type="button" class="btn btn-sm btn-primary" onClick={saveEditGroup}>Save</button>
-                <button type="button" class="btn btn-sm btn-ghost" onClick={() => editingGroupId.value = null}>Cancel</button>
-              </div>
-            ) : (
-              <div class="flex items-center px-4 py-3 bg-slate-50 border-b">
-                <h3 
-                  class="font-semibold text-slate-700 cursor-pointer hover:text-primary flex items-center gap-2"
-                  onClick={() => startEditGroup(group)}
-                >
-                  {group.name}
-                  <span class="text-xs">▲</span>
-                </h3>
-                <div class="ml-auto flex items-center gap-8 text-sm text-slate-500">
-                  <span class="w-24 text-right">Planned</span>
-                  <span 
-                    class="w-28 text-right cursor-pointer hover:text-primary flex items-center justify-end gap-1"
-                    onClick={() => showSpent.value = !showSpent.value}
-                  >
-                    {showSpent.value ? "Spent" : "Remaining"}
-                    <span class="text-xs">▼</span>
-                  </span>
-                </div>
-              </div>
-            )}
+      {groups.value.filter((g: CategoryGroup) => g.categories.length > 0).map(
+        (group: CategoryGroup) => {
+          const groupId = group.id;
+          if (groupId == null) return null;
+          return (
+            <div
+              key={groupId}
+              class="card bg-white shadow-xl overflow-hidden"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDropOnGroup(e, groupId)}
+            >
+              <div class="card-body p-0">
+                {/* Group Header - Editable */}
+                {editingGroupId.value === groupId
+                  ? (
+                    <div class="flex items-center gap-2 p-4 border-b">
+                      <input
+                        type="text"
+                        class="input input-bordered input-sm flex-1"
+                        value={editName.value}
+                        onInput={(e) => editName.value = e.currentTarget.value}
+                        onKeyDown={(e) => e.key === "Enter" && saveEditGroup()}
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-primary"
+                        onClick={saveEditGroup}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-ghost"
+                        onClick={() => editingGroupId.value = null}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )
+                  : (
+                    <div class="flex items-center px-4 py-3 bg-slate-50 border-b">
+                      <h3
+                        class="font-semibold text-slate-700 cursor-pointer hover:text-primary flex items-center gap-2"
+                        onClick={() => startEditGroup(group)}
+                      >
+                        {group.name}
+                        <span class="text-xs">▲</span>
+                      </h3>
+                      <div class="ml-auto flex items-center gap-8 text-sm text-slate-500">
+                        <span class="w-24 text-right">Planned</span>
+                        <span
+                          class="w-28 text-right cursor-pointer hover:text-primary flex items-center justify-end gap-1"
+                          onClick={() => showSpent.value = !showSpent.value}
+                        >
+                          {showSpent.value ? "Spent" : "Remaining"}
+                          <span class="text-xs">▼</span>
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-            {/* Categories - Draggable */}
-            <div>
-              {group.categories.map((category: Category) => {
-                const groupId = group.id;
-                const categoryId = category.id;
-                if (groupId == null || categoryId == null) return null;
+                {/* Categories - Draggable */}
+                <div>
+                  {group.categories.map((category: Category) => {
+                    const groupId = group.id;
+                    const categoryId = category.id;
+                    if (groupId == null || categoryId == null) return null;
 
-                const assigned = getAssignedAmount(categoryId);
-                const spent = getSpentAmount(categoryId);
-                const remaining = assigned - spent;
-                const isLoading = isUpdating.value[categoryId];
-                const isEditing = editingCategoryId.value === categoryId;
-                const isDragging = draggedCategoryId.value === categoryId;
-                const isSelected = selectedCategoryId.value === categoryId;
-                
-                return (
-                  <div 
-                    key={categoryId} 
-                    class={`flex items-center transition-all border-l-4 cursor-pointer
-                      ${isSelected ? "border-l-primary bg-primary/5" : "border-l-transparent hover:bg-slate-50"}
+                    const assigned = getAssignedAmount(categoryId);
+                    const spent = getSpentAmount(categoryId);
+                    const remaining = assigned - spent;
+                    const isLoading = isUpdating.value[categoryId];
+                    const isEditing = editingCategoryId.value === categoryId;
+                    const isDragging = draggedCategoryId.value === categoryId;
+                    const isSelected = selectedCategoryId.value === categoryId;
+
+                    return (
+                      <div
+                        key={categoryId}
+                        class={`flex items-center transition-all border-l-4 cursor-pointer
+                      ${
+                          isSelected
+                            ? "border-l-primary bg-primary/5"
+                            : "border-l-transparent hover:bg-slate-50"
+                        }
                       ${isDragging ? "opacity-50" : ""}
                     `}
-                    draggable={!isEditing}
-                    onDragStart={(e) => handleDragStart(e, categoryId, groupId)}
-                    onDragOver={handleDragOver}
-                    onDrop={(e) => handleDropOnCategory(e, categoryId, groupId)}
-                    onClick={() => !isEditing && toggleCategorySelection(categoryId)}
-                  >
-                    {/* Drag Handle */}
-                    <div 
-                      class="px-2 py-4 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500"
-                      onClick={(e) => e.stopPropagation()}
-                    >⋮⋮</div>
-
-                    {/* Category Name - Click to edit when selected */}
-                    {isEditing ? (
-                      <div class="flex-1 flex gap-2 py-2 pr-4" onClick={(e) => e.stopPropagation()}>
-                        <input
-                          type="text"
-                          class="input input-bordered input-sm flex-1"
-                          value={editName.value}
-                          onInput={(e) => editName.value = e.currentTarget.value}
-                          placeholder="Category name"
-                          autoFocus
-                        />
-                        <input
-                          type="number"
-                          class="input input-bordered input-sm w-28"
-                          value={editTarget.value}
-                          onInput={(e) => editTarget.value = e.currentTarget.value}
-                          placeholder="Target"
-                          step="0.01"
-                        />
-                        <button type="button" class="btn btn-sm btn-primary" onClick={saveEditCategory}>Save</button>
-                        <button type="button" class="btn btn-sm btn-ghost" onClick={() => editingCategoryId.value = null}>×</button>
-                      </div>
-                    ) : (
-                      <>
-                        <div 
-                          class="flex-1 py-3"
-                          onClick={(e) => {
-                            if (isSelected) {
-                              e.stopPropagation();
-                              startEditCategory(category);
-                            }
-                          }}
+                        draggable={!isEditing}
+                        onDragStart={(e) =>
+                          handleDragStart(e, categoryId, groupId)}
+                        onDragOver={handleDragOver}
+                        onDrop={(e) =>
+                          handleDropOnCategory(e, categoryId, groupId)}
+                        onClick={() =>
+                          !isEditing && toggleCategorySelection(categoryId)}
+                      >
+                        {/* Drag Handle */}
+                        <div
+                          class="px-2 py-4 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500"
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <span class={`font-medium ${isSelected ? "text-primary hover:underline cursor-text" : "text-slate-800"}`}>
-                            {category.name}
-                          </span>
+                          ⋮⋮
                         </div>
 
-                        {/* Planned (Assigned) Amount */}
-                        <div class="w-24 text-right py-3" onClick={(e) => e.stopPropagation()}>
-                          {isSelected ? (
-                            <div class="relative inline-block">
+                        {/* Category Name - Click to edit when selected */}
+                        {isEditing
+                          ? (
+                            <div
+                              class="flex-1 flex gap-2 py-2 pr-4"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <input
+                                type="text"
+                                class="input input-bordered input-sm flex-1"
+                                value={editName.value}
+                                onInput={(e) =>
+                                  editName.value = e.currentTarget.value}
+                                placeholder="Category name"
+                                autoFocus
+                              />
                               <input
                                 type="number"
-                                class={`input input-bordered input-sm w-24 text-right ${isLoading ? "opacity-50" : ""}`}
-                                value={assignmentInputs.value[categoryId] ?? (assigned ? assigned.toString() : "")}
-                                placeholder="0.00"
+                                class="input input-bordered input-sm w-28"
+                                value={editTarget.value}
+                                onInput={(e) =>
+                                  editTarget.value = e.currentTarget.value}
+                                placeholder="Target"
                                 step="0.01"
-                                min="0"
-                                disabled={isLoading}
-                                onFocus={() => {
-                                  // ensure input is synced when focused
-                                  assignmentInputs.value = {
-                                    ...assignmentInputs.value,
-                                    [categoryId]: assignmentInputs.value[categoryId] ?? (assigned ? assigned.toString() : "")
-                                  };
-                                }}
-                                onInput={(e) => {
-                                  assignmentInputs.value = {
-                                    ...assignmentInputs.value,
-                                    [categoryId]: e.currentTarget.value
-                                  };
-                                }}
-                                onBlur={(e) => {
-                                  const newValue = e.currentTarget.value;
-                                  const newAmount = parseFloat(newValue) || 0;
-                                  if (newAmount !== assigned) {
-                                    handleAssignmentChange(categoryId, newValue);
-                                  }
-                                }}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    handleAssignmentChange(categoryId, e.currentTarget.value);
-                                    e.currentTarget.blur();
-                                  }
-                                }}
                               />
-                              {isLoading && (
-                                <span class="absolute right-2 top-1/2 -translate-y-1/2">
-                                  <span class="loading loading-spinner loading-xs"></span>
-                                </span>
-                              )}
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-primary"
+                                onClick={saveEditCategory}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-ghost"
+                                onClick={() => editingCategoryId.value = null}
+                              >
+                                ×
+                              </button>
                             </div>
-                          ) : (
-                            <span class="text-slate-700">{formatCurrency(assigned)}</span>
-                          )}
-                        </div>
+                          )
+                          : (
+                            <>
+                              <div
+                                class="flex-1 py-3"
+                                onClick={(e) => {
+                                  if (isSelected) {
+                                    e.stopPropagation();
+                                    startEditCategory(category);
+                                  }
+                                }}
+                              >
+                                <span
+                                  class={`font-medium ${
+                                    isSelected
+                                      ? "text-primary hover:underline cursor-text"
+                                      : "text-slate-800"
+                                  }`}
+                                >
+                                  {category.name}
+                                </span>
+                              </div>
 
-                        {/* Spent or Remaining - Toggleable */}
-                        <div class="w-28 text-right py-3 pr-4 flex items-center justify-end gap-2">
-                          <span class={`font-medium ${
-                            showSpent.value 
-                              ? (spent > 0 ? "text-green-600" : "text-slate-400")
-                              : (remaining >= 0 ? "text-sky-600" : "text-red-600")
-                          }`}>
-                            {showSpent.value ? formatCurrency(spent) : formatCurrency(remaining)}
-                          </span>
-                          {isSelected && (
-                            <button 
-                              type="button"
-                              class="text-slate-400 hover:text-primary"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openTransferModal(categoryId);
-                              }}
-                              title="Transfer funds"
-                            >
-                              ⇄
-                            </button>
+                              {/* Planned (Assigned) Amount */}
+                              <div
+                                class="w-24 text-right py-3"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {isSelected
+                                  ? (
+                                    <div class="relative inline-block">
+                                      <input
+                                        type="number"
+                                        class={`input input-bordered input-sm w-24 text-right ${
+                                          isLoading ? "opacity-50" : ""
+                                        }`}
+                                        value={assignmentInputs
+                                          .value[categoryId] ??
+                                          (assigned ? assigned.toString() : "")}
+                                        placeholder="0.00"
+                                        step="0.01"
+                                        min="0"
+                                        disabled={isLoading}
+                                        onFocus={() => {
+                                          // ensure input is synced when focused
+                                          assignmentInputs.value = {
+                                            ...assignmentInputs.value,
+                                            [categoryId]: assignmentInputs
+                                              .value[categoryId] ?? (assigned
+                                                ? assigned.toString()
+                                                : ""),
+                                          };
+                                        }}
+                                        onInput={(e) => {
+                                          assignmentInputs.value = {
+                                            ...assignmentInputs.value,
+                                            [categoryId]: e.currentTarget.value,
+                                          };
+                                        }}
+                                        onBlur={(e) => {
+                                          const newValue =
+                                            e.currentTarget.value;
+                                          const newAmount =
+                                            parseFloat(newValue) || 0;
+                                          if (newAmount !== assigned) {
+                                            handleAssignmentChange(
+                                              categoryId,
+                                              newValue,
+                                            );
+                                          }
+                                        }}
+                                        onKeyDown={(e) => {
+                                          if (e.key === "Enter") {
+                                            handleAssignmentChange(
+                                              categoryId,
+                                              e.currentTarget.value,
+                                            );
+                                            e.currentTarget.blur();
+                                          }
+                                        }}
+                                      />
+                                      {isLoading && (
+                                        <span class="absolute right-2 top-1/2 -translate-y-1/2">
+                                          <span class="loading loading-spinner loading-xs">
+                                          </span>
+                                        </span>
+                                      )}
+                                    </div>
+                                  )
+                                  : (
+                                    <span class="text-slate-700">
+                                      {formatCurrency(assigned)}
+                                    </span>
+                                  )}
+                              </div>
+
+                              {/* Spent or Remaining - Toggleable */}
+                              <div class="w-28 text-right py-3 pr-4 flex items-center justify-end gap-2">
+                                <span
+                                  class={`font-medium ${
+                                    showSpent.value
+                                      ? (spent > 0
+                                        ? "text-green-600"
+                                        : "text-slate-400")
+                                      : (remaining >= 0
+                                        ? "text-sky-600"
+                                        : "text-red-600")
+                                  }`}
+                                >
+                                  {showSpent.value
+                                    ? formatCurrency(spent)
+                                    : formatCurrency(remaining)}
+                                </span>
+                                {isSelected && (
+                                  <button
+                                    type="button"
+                                    class="text-slate-400 hover:text-primary"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      openTransferModal(categoryId);
+                                    }}
+                                    title="Transfer funds"
+                                  >
+                                    ⇄
+                                  </button>
+                                )}
+                              </div>
+                            </>
                           )}
-                        </div>
-                      </>
-                    )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Add Item link */}
+                  <div class="px-4 py-3 border-t">
+                    <button
+                      type="button"
+                      class="text-primary hover:text-primary-focus text-sm font-medium"
+                      onClick={() => {
+                        addCategoryGroupId.value = group.id ?? null;
+                        newCategoryName.value = "";
+                        newCategoryTarget.value = "";
+                        createCategoryError.value = "";
+                        isAddCategoryModalOpen.value = true;
+                      }}
+                    >
+                      Add Item
+                    </button>
                   </div>
-                );
-              })}
-
-              {/* Add Item link */}
-              <div class="px-4 py-3 border-t">
-                <button
-                  type="button"
-                  class="text-primary hover:text-primary-focus text-sm font-medium"
-                  onClick={() => {
-                    addCategoryGroupId.value = group.id ?? null;
-                    newCategoryName.value = "";
-                    newCategoryTarget.value = "";
-                    createCategoryError.value = "";
-                    isAddCategoryModalOpen.value = true;
-                  }}
-                >
-                  Add Item
-                </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      );
-      })}
+          );
+        },
+      )}
 
       {/* Fund Transfer Modal */}
       {isTransferModalOpen.value && (
@@ -738,9 +947,13 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 <span class="text-slate-600">⇄</span>
               </div>
             </div>
-            
-            <h3 class="font-bold text-xl mb-2">What would you like to transfer?</h3>
-            <p class="text-slate-500 text-sm mb-6">Just a reminder—your planned amounts won't change.</p>
+
+            <h3 class="font-bold text-xl mb-2">
+              What would you like to transfer?
+            </h3>
+            <p class="text-slate-500 text-sm mb-6">
+              Just a reminder—your planned amounts won't change.
+            </p>
 
             {/* From/To Selection */}
             <div class="grid grid-cols-[1fr_auto_1fr] gap-4 items-start mb-6">
@@ -749,14 +962,23 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 <label class="text-sm text-slate-500 mb-1 block">From</label>
                 <div class="border rounded-lg p-3">
                   {(() => {
-                    const fromCat = allCategories.value.find(c => c.id === transferFromCategoryId.value);
-                    const fromRemaining = fromCat?.id != null ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id) : 0;
-                    return fromCat ? (
-                      <div>
-                        <div class="font-medium">{fromCat.name}</div>
-                        <div class="text-sm text-slate-500">{formatCurrency(fromRemaining)} available</div>
-                      </div>
-                    ) : <span class="text-slate-400">Select category</span>;
+                    const fromCat = allCategories.value.find((c) =>
+                      c.id === transferFromCategoryId.value
+                    );
+                    const fromRemaining = fromCat?.id != null
+                      ? getAssignedAmount(fromCat.id) -
+                        getSpentAmount(fromCat.id)
+                      : 0;
+                    return fromCat
+                      ? (
+                        <div>
+                          <div class="font-medium">{fromCat.name}</div>
+                          <div class="text-sm text-slate-500">
+                            {formatCurrency(fromRemaining)} available
+                          </div>
+                        </div>
+                      )
+                      : <span class="text-slate-400">Select category</span>;
                   })()}
                 </div>
               </div>
@@ -770,16 +992,24 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 <select
                   class="select select-bordered w-full"
                   value={transferToCategoryId.value?.toString() || ""}
-                  onChange={(e) => transferToCategoryId.value = e.currentTarget.value ? parseInt(e.currentTarget.value) : null}
+                  onChange={(e) =>
+                    transferToCategoryId.value = e.currentTarget.value
+                      ? parseInt(e.currentTarget.value)
+                      : null}
                 >
                   <option value="">Select Budget Item</option>
                   {groups.value.map((group: CategoryGroup) => (
                     <optgroup key={group.id ?? group.name} label={group.name}>
                       {group.categories
-                        .filter((c: Category) => c.id !== transferFromCategoryId.value)
+                        .filter((c: Category) =>
+                          c.id !== transferFromCategoryId.value
+                        )
                         .map((c: Category) => {
-                          if (c.id == null) return null;
-                          const catRemaining = getAssignedAmount(c.id) - getSpentAmount(c.id);
+                          if (c.id == null) {
+                            return null;
+                          }
+                          const catRemaining = getAssignedAmount(c.id) -
+                            getSpentAmount(c.id);
                           return (
                             <option key={c.id} value={c.id}>
                               {c.name} • {formatCurrency(catRemaining)}
@@ -796,7 +1026,9 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
             <div class="mb-6">
               <label class="text-sm text-slate-500 mb-1 block">Amount</label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  $
+                </span>
                 <input
                   type="number"
                   class="input input-bordered w-full pl-7"
@@ -808,11 +1040,19 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 />
               </div>
               {transferFromCategoryId.value && (() => {
-                const fromCat = allCategories.value.find(c => c.id === transferFromCategoryId.value);
-                const available = fromCat?.id != null ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id) : 0;
+                const fromCat = allCategories.value.find((c) =>
+                  c.id === transferFromCategoryId.value
+                );
+                const available = fromCat?.id != null
+                  ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id)
+                  : 0;
                 const transferAmt = parseFloat(transferAmount.value) || 0;
                 if (transferAmt > available) {
-                  return <p class="text-error text-sm mt-1">Amount exceeds available balance</p>;
+                  return (
+                    <p class="text-error text-sm mt-1">
+                      Amount exceeds available balance
+                    </p>
+                  );
                 }
                 return null;
               })()}
@@ -820,9 +1060,9 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
 
             {/* Actions */}
             <div class="modal-action">
-              <button 
-                type="button" 
-                class="btn btn-ghost" 
+              <button
+                type="button"
+                class="btn btn-ghost"
                 onClick={() => isTransferModalOpen.value = false}
               >
                 Cancel
@@ -830,14 +1070,22 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
               <button
                 type="button"
                 class="btn btn-primary"
-                disabled={isTransferring.value || !transferToCategoryId.value || !transferAmount.value || parseFloat(transferAmount.value) <= 0}
+                disabled={isTransferring.value || !transferToCategoryId.value ||
+                  !transferAmount.value ||
+                  parseFloat(transferAmount.value) <= 0}
                 onClick={executeTransfer}
               >
-                {isTransferring.value ? <span class="loading loading-spinner loading-sm"></span> : "Transfer"}
+                {isTransferring.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : "Transfer"}
               </button>
             </div>
           </div>
-          <div class="modal-backdrop" onClick={() => isTransferModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isTransferModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
 
@@ -848,8 +1096,12 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
             <h3 class="font-bold text-xl mb-4">Add Category</h3>
             <p class="text-slate-500 text-sm mb-6">
               {(() => {
-                const group = groups.value.find(g => g.id === addCategoryGroupId.value);
-                return group ? `Create a new category in "${group.name}"` : "Create a new budget category";
+                const group = groups.value.find((g) =>
+                  g.id === addCategoryGroupId.value
+                );
+                return group
+                  ? `Create a new category in "${group.name}"`
+                  : "Create a new budget category";
               })()}
             </p>
 
@@ -881,10 +1133,14 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
             {/* Target Amount */}
             <div class="mb-6">
               <label class="label">
-                <span class="label-text font-medium">Target Amount (Optional)</span>
+                <span class="label-text font-medium">
+                  Target Amount (Optional)
+                </span>
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  $
+                </span>
                 <input
                   type="number"
                   class="input input-bordered w-full pl-7"
@@ -899,7 +1155,9 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
                 />
               </div>
               <label class="label">
-                <span class="label-text-alt text-slate-500">Set a monthly spending target for this category</span>
+                <span class="label-text-alt text-slate-500">
+                  Set a monthly spending target for this category
+                </span>
               </label>
             </div>
 
@@ -921,25 +1179,30 @@ export default function BudgetAssignmentIsland({ categories: initialCategories, 
               <button
                 type="button"
                 class="btn btn-primary"
-                disabled={isCreatingCategory.value || !newCategoryName.value.trim()}
+                disabled={isCreatingCategory.value ||
+                  !newCategoryName.value.trim()}
                 onClick={createCategory}
               >
-                {isCreatingCategory.value ? (
-                  <span class="loading loading-spinner loading-sm"></span>
-                ) : (
-                  "Create Category"
-                )}
+                {isCreatingCategory.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : (
+                    "Create Category"
+                  )}
               </button>
             </div>
           </div>
-          <div class="modal-backdrop" onClick={() => {
-            if (!isCreatingCategory.value) {
-              isAddCategoryModalOpen.value = false;
-              newCategoryName.value = "";
-              newCategoryTarget.value = "";
-              createCategoryError.value = "";
-            }
-          }}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => {
+              if (!isCreatingCategory.value) {
+                isAddCategoryModalOpen.value = false;
+                newCategoryName.value = "";
+                newCategoryTarget.value = "";
+                createCategoryError.value = "";
+              }
+            }}
+          >
+          </div>
         </div>
       )}
     </div>

@@ -4,14 +4,14 @@
  */
 
 import type {
-  User,
-  PayPeriod,
-  CategoryGroup,
+  AddIncomeRequest,
+  AssignMoneyRequest,
   BudgetAssignment,
   BudgetSummary,
+  CategoryGroup,
   IncomeEntry,
-  AssignMoneyRequest,
-  AddIncomeRequest,
+  PayPeriod,
+  User,
 } from "../types/api.ts";
 
 const API_BASE = Deno.env.get("VITE_API_URL") || "http://localhost:5120/api";
@@ -32,7 +32,7 @@ function getUserIdHeader(): HeadersInit {
 
 async function fetchApi<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T> {
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
@@ -75,7 +75,9 @@ export function getPayPeriods(): Promise<PayPeriod[]> {
 }
 
 export function getBudgetSummary(payPeriodId: string): Promise<BudgetSummary> {
-  return fetchApi<BudgetSummary>(`/v1/budget/pay-periods/${payPeriodId}/summary`);
+  return fetchApi<BudgetSummary>(
+    `/v1/budget/pay-periods/${payPeriodId}/summary`,
+  );
 }
 
 // ============================================
@@ -90,11 +92,17 @@ export function getCategories(): Promise<CategoryGroup[]> {
 // Budget API
 // ============================================
 
-export function getAssignments(payPeriodId: string): Promise<BudgetAssignment[]> {
-  return fetchApi<BudgetAssignment[]>(`/v1/budget/assignments?payPeriodKey=${payPeriodId}`);
+export function getAssignments(
+  payPeriodId: string,
+): Promise<BudgetAssignment[]> {
+  return fetchApi<BudgetAssignment[]>(
+    `/v1/budget/assignments?payPeriodKey=${payPeriodId}`,
+  );
 }
 
-export function assignMoney(request: AssignMoneyRequest): Promise<BudgetAssignment> {
+export function assignMoney(
+  request: AssignMoneyRequest,
+): Promise<BudgetAssignment> {
   return fetchApi<BudgetAssignment>("/v1/budget/assignments/assign", {
     method: "POST",
     body: JSON.stringify(request),
@@ -102,7 +110,9 @@ export function assignMoney(request: AssignMoneyRequest): Promise<BudgetAssignme
 }
 
 export function getIncomeEntries(payPeriodId: string): Promise<IncomeEntry[]> {
-  return fetchApi<IncomeEntry[]>(`/v1/budget/income?payPeriodKey=${payPeriodId}`);
+  return fetchApi<IncomeEntry[]>(
+    `/v1/budget/income?payPeriodKey=${payPeriodId}`,
+  );
 }
 
 export function addIncome(request: AddIncomeRequest): Promise<IncomeEntry> {

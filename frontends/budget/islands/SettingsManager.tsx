@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import type { PayPeriod, CategoryGroup, Category } from "../types/api.ts";
+import type { Category, CategoryGroup, PayPeriod } from "../types/api.ts";
 
 interface Props {
   currentPeriod: PayPeriod | null;
@@ -11,7 +11,9 @@ const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget/api/v1/budget"
   : "/api/v1/budget";
 
-export default function SettingsManager({ currentPeriod, allPeriods, categories: initialCategories }: Props) {
+export default function SettingsManager(
+  { currentPeriod, allPeriods, categories: initialCategories }: Props,
+) {
   const periods = useSignal<PayPeriod[]>(allPeriods);
   const categories = useSignal<CategoryGroup[]>(initialCategories);
   const isPeriodModalOpen = useSignal(false);
@@ -32,13 +34,17 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
   const incomeDate = useSignal(new Date().toISOString().split("T")[0]);
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
+      .format(amount);
 
-  const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString();
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString();
 
   // Format date as "Month Year" (e.g., "January 2024")
   const formatMonthYear = (date: Date) =>
-    new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long" }).format(date);
+    new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long" }).format(
+      date,
+    );
 
   const openPeriodModal = () => {
     const today = new Date();
@@ -164,17 +170,27 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
 
     // Fetch budget summary to check for unassigned funds
     try {
-      const summaryRes = await fetch(`${API_BASE}/pay-periods/${encodeURIComponent(currentPeriod.key)}/summary`);
+      const summaryRes = await fetch(
+        `${API_BASE}/pay-periods/${
+          encodeURIComponent(currentPeriod.key)
+        }/summary`,
+      );
       if (summaryRes.ok) {
         const summary = await summaryRes.json();
 
         if (summary.unassigned > 0) {
           const proceed = globalThis.confirm(
-            `This period has $${summary.unassigned.toFixed(2)} unassigned. Are you sure you want to close it without assigning all funds?`
+            `This period has $${
+              summary.unassigned.toFixed(2)
+            } unassigned. Are you sure you want to close it without assigning all funds?`,
           );
           if (!proceed) return;
         } else if (summary.unassigned < 0) {
-          alert(`Cannot close period: You have over-assigned by $${Math.abs(summary.unassigned).toFixed(2)}.`);
+          alert(
+            `Cannot close period: You have over-assigned by $${
+              Math.abs(summary.unassigned).toFixed(2)
+            }.`,
+          );
           return;
         }
       }
@@ -183,7 +199,7 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
     }
 
     const ok = globalThis.confirm(
-      `Close "${currentPeriod.name}"? This will mark the period as closed and propagate carryovers to future periods.`
+      `Close "${currentPeriod.name}"? This will mark the period as closed and propagate carryovers to future periods.`,
     );
     if (!ok) return;
 
@@ -209,9 +225,12 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
       }
 
       // Recalculate year to propagate carryovers
-      const recalcRes = await fetch(`${API_BASE}/pay-periods/${periodKey}/recalculate-year`, {
-        method: "POST",
-      });
+      const recalcRes = await fetch(
+        `${API_BASE}/pay-periods/${periodKey}/recalculate-year`,
+        {
+          method: "POST",
+        },
+      );
 
       if (!recalcRes.ok) {
         console.warn("Recalculate year failed but period was closed");
@@ -232,9 +251,12 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
     isSubmitting.value = true;
     try {
       const periodKey = encodeURIComponent(currentPeriod.key.trim());
-      const res = await fetch(`${API_BASE}/pay-periods/${periodKey}/recalculate-year`, {
-        method: "POST",
-      });
+      const res = await fetch(
+        `${API_BASE}/pay-periods/${periodKey}/recalculate-year`,
+        {
+          method: "POST",
+        },
+      );
 
       if (res.ok) {
         globalThis.location?.reload();
@@ -293,7 +315,11 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
           <div class="flex justify-between items-center">
             <h2 class="card-title text-xl">📅 Current Budget Period</h2>
             <div class="flex gap-2">
-              <button type="button" class="btn btn-success btn-sm" onClick={openIncomeModal}>
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                onClick={openIncomeModal}
+              >
                 + Add Income
               </button>
               {currentPeriod && !currentPeriod.isClosed && (
@@ -306,46 +332,58 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
                   Close Period
                 </button>
               )}
-              <button type="button" class="btn btn-outline btn-sm" onClick={recalculateYear} disabled={isSubmitting.value || !currentPeriod?.key}>
+              <button
+                type="button"
+                class="btn btn-outline btn-sm"
+                onClick={recalculateYear}
+                disabled={isSubmitting.value || !currentPeriod?.key}
+              >
                 Recalculate Year
               </button>
-              <button type="button" class="btn btn-primary btn-sm" onClick={openPeriodModal}>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                onClick={openPeriodModal}
+              >
                 + New Period
               </button>
             </div>
           </div>
-          
-          {currentPeriod ? (
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="stat bg-slate-50 rounded-lg">
-                <div class="stat-title">Period</div>
-                <div class="stat-value text-lg">{currentPeriod.name}</div>
-                <div class="stat-desc">
-                  {formatDate(currentPeriod.startDate)} - {formatDate(currentPeriod.endDate)}
+
+          {currentPeriod
+            ? (
+              <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="stat bg-slate-50 rounded-lg">
+                  <div class="stat-title">Period</div>
+                  <div class="stat-value text-lg">{currentPeriod.name}</div>
+                  <div class="stat-desc">
+                    {formatDate(currentPeriod.startDate)} -{" "}
+                    {formatDate(currentPeriod.endDate)}
+                  </div>
+                </div>
+                <div class="stat bg-green-50 rounded-lg">
+                  <div class="stat-title">Expected Income</div>
+                  <div class="stat-value text-lg text-green-600">
+                    {formatCurrency(currentPeriod.expectedIncome)}
+                  </div>
+                </div>
+                <div class="stat bg-blue-50 rounded-lg">
+                  <div class="stat-title">Status</div>
+                  <div class="stat-value text-lg">
+                    {currentPeriod.isClosed
+                      ? <span class="badge badge-error">Closed</span>
+                      : <span class="badge badge-success">Active</span>}
+                  </div>
                 </div>
               </div>
-              <div class="stat bg-green-50 rounded-lg">
-                <div class="stat-title">Expected Income</div>
-                <div class="stat-value text-lg text-green-600">
-                  {formatCurrency(currentPeriod.expectedIncome)}
-                </div>
+            )
+            : (
+              <div class="alert alert-warning mt-4">
+                <span>
+                  No active budget period. Create one to start budgeting!
+                </span>
               </div>
-              <div class="stat bg-blue-50 rounded-lg">
-                <div class="stat-title">Status</div>
-                <div class="stat-value text-lg">
-                  {currentPeriod.isClosed ? (
-                    <span class="badge badge-error">Closed</span>
-                  ) : (
-                    <span class="badge badge-success">Active</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div class="alert alert-warning mt-4">
-              <span>No active budget period. Create one to start budgeting!</span>
-            </div>
-          )}
+            )}
         </div>
       </div>
 
@@ -369,7 +407,8 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
                 {periods.value.map((period) => (
                   <tr
                     key={period.key ?? period.id}
-                    class={(period.key && currentPeriod?.key && period.key === currentPeriod.key)
+                    class={(period.key && currentPeriod?.key &&
+                        period.key === currentPeriod.key)
                       ? "bg-blue-50"
                       : ""}
                   >
@@ -378,33 +417,47 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
                     <td>{formatDate(period.endDate)}</td>
                     <td>{formatCurrency(period.expectedIncome)}</td>
                     <td>
-                      {period.isClosed ? (
-                        <span class="badge badge-ghost badge-sm">Closed</span>
-                      ) : period.key && currentPeriod?.key && period.key === currentPeriod.key ? (
-                        <span class="badge badge-success badge-sm">Current</span>
-                      ) : (
-                        <span class="badge badge-warning badge-sm">Upcoming</span>
-                      )}
+                      {period.isClosed
+                        ? <span class="badge badge-ghost badge-sm">Closed</span>
+                        : period.key && currentPeriod?.key &&
+                            period.key === currentPeriod.key
+                        ? (
+                          <span class="badge badge-success badge-sm">
+                            Current
+                          </span>
+                        )
+                        : (
+                          <span class="badge badge-warning badge-sm">
+                            Upcoming
+                          </span>
+                        )}
                     </td>
                     <td>
                       {(() => {
-                        const isCurrent = !!(period.key && currentPeriod?.key && period.key === currentPeriod.key);
-                        const canDelete = !!period.key && !isSubmitting.value && !isCurrent;
+                        const isCurrent = !!(period.key && currentPeriod?.key &&
+                          period.key === currentPeriod.key);
+                        const canDelete = !!period.key && !isSubmitting.value &&
+                          !isCurrent;
 
                         return (
-                      <div class="flex items-center justify-end gap-2">
-                        <button type="button" class="btn btn-ghost btn-xs" onClick={() => openEditPeriodModal(period)} disabled={!period.key}>
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-error btn-outline btn-xs"
-                          onClick={() => deletePeriod(period)}
-                          disabled={!canDelete}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                          <div class="flex items-center justify-end gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-ghost btn-xs"
+                              onClick={() => openEditPeriodModal(period)}
+                              disabled={!period.key}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-error btn-outline btn-xs"
+                              onClick={() => deletePeriod(period)}
+                              disabled={!canDelete}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         );
                       })()}
                     </td>
@@ -450,32 +503,82 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
             <h3 class="font-bold text-lg mb-4">Create Budget Period</h3>
             <form onSubmit={createPeriod}>
               <div class="form-control mb-4">
-                <label class="label"><span class="label-text">Period Name</span></label>
-                <input type="text" class="input input-bordered" value={periodName.value} onInput={(e) => periodName.value = e.currentTarget.value} required />
+                <label class="label">
+                  <span class="label-text">Period Name</span>
+                </label>
+                <input
+                  type="text"
+                  class="input input-bordered"
+                  value={periodName.value}
+                  onInput={(e) => periodName.value = e.currentTarget.value}
+                  required
+                />
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Start Date</span></label>
-                  <input type="date" class="input input-bordered" value={periodStart.value} onInput={(e) => periodStart.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Start Date</span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered"
+                    value={periodStart.value}
+                    onInput={(e) => periodStart.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">End Date</span></label>
-                  <input type="date" class="input input-bordered" value={periodEnd.value} onInput={(e) => periodEnd.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">End Date</span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered"
+                    value={periodEnd.value}
+                    onInput={(e) => periodEnd.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
               </div>
               <div class="form-control mt-4">
-                <label class="label"><span class="label-text">Expected Income</span></label>
-                <input type="number" step="0.01" class="input input-bordered" placeholder="0.00" value={periodExpectedIncome.value} onInput={(e) => periodExpectedIncome.value = e.currentTarget.value} />
+                <label class="label">
+                  <span class="label-text">Expected Income</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="input input-bordered"
+                  placeholder="0.00"
+                  value={periodExpectedIncome.value}
+                  onInput={(e) =>
+                    periodExpectedIncome.value = e.currentTarget.value}
+                />
               </div>
               <div class="modal-action">
-                <button type="button" class="btn" onClick={() => isPeriodModalOpen.value = false}>Cancel</button>
-                <button type="submit" class="btn btn-primary" disabled={isSubmitting.value}>
-                  {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Create"}
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => isPeriodModalOpen.value = false}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "Create"}
                 </button>
               </div>
             </form>
           </div>
-          <div class="modal-backdrop" onClick={() => isPeriodModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isPeriodModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
 
@@ -486,32 +589,82 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
             <h3 class="font-bold text-lg mb-4">Edit Budget Period</h3>
             <form onSubmit={updatePeriod}>
               <div class="form-control mb-4">
-                <label class="label"><span class="label-text">Period Name</span></label>
-                <input type="text" class="input input-bordered" value={periodName.value} onInput={(e) => periodName.value = e.currentTarget.value} required />
+                <label class="label">
+                  <span class="label-text">Period Name</span>
+                </label>
+                <input
+                  type="text"
+                  class="input input-bordered"
+                  value={periodName.value}
+                  onInput={(e) => periodName.value = e.currentTarget.value}
+                  required
+                />
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Start Date</span></label>
-                  <input type="date" class="input input-bordered" value={periodStart.value} onInput={(e) => periodStart.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Start Date</span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered"
+                    value={periodStart.value}
+                    onInput={(e) => periodStart.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">End Date</span></label>
-                  <input type="date" class="input input-bordered" value={periodEnd.value} onInput={(e) => periodEnd.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">End Date</span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered"
+                    value={periodEnd.value}
+                    onInput={(e) => periodEnd.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
               </div>
               <div class="form-control mt-4">
-                <label class="label"><span class="label-text">Expected Income</span></label>
-                <input type="number" step="0.01" class="input input-bordered" placeholder="0.00" value={periodExpectedIncome.value} onInput={(e) => periodExpectedIncome.value = e.currentTarget.value} />
+                <label class="label">
+                  <span class="label-text">Expected Income</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="input input-bordered"
+                  placeholder="0.00"
+                  value={periodExpectedIncome.value}
+                  onInput={(e) =>
+                    periodExpectedIncome.value = e.currentTarget.value}
+                />
               </div>
               <div class="modal-action">
-                <button type="button" class="btn" onClick={() => isEditPeriodModalOpen.value = false}>Cancel</button>
-                <button type="submit" class="btn btn-primary" disabled={isSubmitting.value}>
-                  {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Save"}
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => isEditPeriodModalOpen.value = false}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "Save"}
                 </button>
               </div>
             </form>
           </div>
-          <div class="modal-backdrop" onClick={() => isEditPeriodModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isEditPeriodModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
 
@@ -522,28 +675,72 @@ export default function SettingsManager({ currentPeriod, allPeriods, categories:
             <h3 class="font-bold text-lg mb-4">Add Income</h3>
             <form onSubmit={addIncome}>
               <div class="form-control mb-4">
-                <label class="label"><span class="label-text">Description</span></label>
-                <input type="text" class="input input-bordered" placeholder="e.g., Paycheck, Side Gig" value={incomeDescription.value} onInput={(e) => incomeDescription.value = e.currentTarget.value} required />
+                <label class="label">
+                  <span class="label-text">Description</span>
+                </label>
+                <input
+                  type="text"
+                  class="input input-bordered"
+                  placeholder="e.g., Paycheck, Side Gig"
+                  value={incomeDescription.value}
+                  onInput={(e) =>
+                    incomeDescription.value = e.currentTarget.value}
+                  required
+                />
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Amount</span></label>
-                  <input type="number" step="0.01" class="input input-bordered" placeholder="0.00" value={incomeAmount.value} onInput={(e) => incomeAmount.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Amount</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="input input-bordered"
+                    placeholder="0.00"
+                    value={incomeAmount.value}
+                    onInput={(e) => incomeAmount.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Date Received</span></label>
-                  <input type="date" class="input input-bordered" value={incomeDate.value} onInput={(e) => incomeDate.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Date Received</span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered"
+                    value={incomeDate.value}
+                    onInput={(e) => incomeDate.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
               </div>
               <div class="modal-action">
-                <button type="button" class="btn" onClick={() => isIncomeModalOpen.value = false}>Cancel</button>
-                <button type="submit" class="btn btn-success" disabled={isSubmitting.value}>
-                  {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Add Income"}
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => isIncomeModalOpen.value = false}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-success"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "Add Income"}
                 </button>
               </div>
             </form>
           </div>
-          <div class="modal-backdrop" onClick={() => isIncomeModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isIncomeModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
     </div>

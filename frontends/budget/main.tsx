@@ -1,5 +1,5 @@
 import { App, staticFiles } from "fresh";
-import { type State, asset, url } from "./utils.ts";
+import { asset, type State, url } from "./utils.ts";
 
 // 1. Set the Base Path for internal routing
 export const app = new App<State>({ basePath: "/budget" });
@@ -40,32 +40,52 @@ app.layout("/*", (ctx) => {
           <ul class="menu menu-horizontal px-1">
             {/* INTERNAL LINKS: Use url() helper */}
             <li>
-              <a href={url("/")} class={currentPath === url("/") ? "active" : ""}>
+              <a
+                href={url("/")}
+                class={currentPath === url("/") ? "active" : ""}
+              >
                 Dashboard
               </a>
             </li>
             <li>
-              <a href={url("/accounts")} class={currentPath.startsWith(url("/accounts")) ? "active" : ""}>
+              <a
+                href={url("/accounts")}
+                class={currentPath.startsWith(url("/accounts")) ? "active" : ""}
+              >
                 Accounts
               </a>
             </li>
             <li>
-              <a href={url("/transactions")} class={currentPath.startsWith(url("/transactions")) ? "active" : ""}>
+              <a
+                href={url("/transactions")}
+                class={currentPath.startsWith(url("/transactions"))
+                  ? "active"
+                  : ""}
+              >
                 Transactions
               </a>
             </li>
             <li>
-              <a href={url("/bills")} class={currentPath.startsWith(url("/bills")) ? "active" : ""}>
+              <a
+                href={url("/bills")}
+                class={currentPath.startsWith(url("/bills")) ? "active" : ""}
+              >
                 Bills
               </a>
             </li>
             <li>
-              <a href={url("/goals")} class={currentPath.startsWith(url("/goals")) ? "active" : ""}>
+              <a
+                href={url("/goals")}
+                class={currentPath.startsWith(url("/goals")) ? "active" : ""}
+              >
                 Goals
               </a>
             </li>
             <li>
-              <a href={url("/settings")} class={currentPath.startsWith(url("/settings")) ? "active" : ""}>
+              <a
+                href={url("/settings")}
+                class={currentPath.startsWith(url("/settings")) ? "active" : ""}
+              >
                 Settings
               </a>
             </li>

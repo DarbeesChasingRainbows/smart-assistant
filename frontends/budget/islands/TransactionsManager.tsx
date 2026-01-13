@@ -1,6 +1,12 @@
-import { useSignal, useComputed } from "@preact/signals";
+import { useComputed, useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
-import type { Transaction, Account, Category, CategoryGroup, CategoryBalance } from "../types/api.ts";
+import type {
+  Account,
+  Category,
+  CategoryBalance,
+  CategoryGroup,
+  Transaction,
+} from "../types/api.ts";
 
 interface Props {
   initialTransactions: Transaction[];
@@ -25,17 +31,21 @@ const UI_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget"
   : "";
 
-export default function TransactionsManager({ 
-  initialTransactions = [], 
-  accounts = [], 
-  categories = [], 
+export default function TransactionsManager({
+  initialTransactions = [],
+  accounts = [],
+  categories = [],
   categoryGroups = [],
   categoryBalances: initialCategoryBalances = [],
-  currentPeriodId 
+  currentPeriodId,
 }: Props) {
   const transactions = useSignal<Transaction[]>(initialTransactions ?? []);
-  const categoryBalancesSignal = useSignal<CategoryBalance[]>(initialCategoryBalances ?? []);
-  const accountBalances = useSignal<Map<string, { spent: number; balance: number }>>(new Map());
+  const categoryBalancesSignal = useSignal<CategoryBalance[]>(
+    initialCategoryBalances ?? [],
+  );
+  const accountBalances = useSignal<
+    Map<string, { spent: number; balance: number }>
+  >(new Map());
   const flippedCards = useSignal<Set<string>>(new Set());
   const filterAccountId = useSignal<string | null>(null);
   const isModalOpen = useSignal(false);
@@ -51,6 +61,7 @@ export default function TransactionsManager({
   const splitTransactionId = useSignal<string | null>(null);
   const splitRows = useSignal<SplitRow[]>([]);
   const splitTransactionAmount = useSignal<number>(0);
+  const splitTransactionSign = useSignal<1 | -1>(-1);
 
   // Transfer modal state
   const isTransferModalOpen = useSignal(false);
@@ -61,7 +72,9 @@ export default function TransactionsManager({
   const transferMemo = useSignal("");
 
   // Form state
-  const formAccountId = useSignal<string>(accounts[0]?.accountKey ?? accounts[0]?.id?.toString() ?? "");
+  const formAccountId = useSignal<string>(
+    accounts[0]?.accountKey ?? accounts[0]?.id?.toString() ?? "",
+  );
   const formPayee = useSignal("");
   const formAmount = useSignal("");
   const formDate = useSignal(new Date().toISOString().split("T")[0]);
@@ -69,10 +82,20 @@ export default function TransactionsManager({
   const formMemo = useSignal("");
   const formIsInflow = useSignal(false);
 
-  const getAccountKey = (acc: Account): string => acc.accountKey ?? (acc.id != null ? String(acc.id) : "");
-  const getAccountLabel = (acc: Account): string => acc.accountName ?? acc.name ?? "Unknown";
-  const getTxAccountKey = (tx: Transaction): string => (tx as unknown as { accountKey?: string; accountId?: number }).accountKey ?? ((tx as unknown as { accountId?: number }).accountId != null ? String((tx as unknown as { accountId?: number }).accountId) : "");
-  const getTxKey = (tx: Transaction): string => (tx as unknown as { key?: string; id?: number }).key ?? (((tx as unknown as { id?: number }).id != null) ? String((tx as unknown as { id?: number }).id) : "");
+  const getAccountKey = (acc: Account): string =>
+    acc.accountKey ?? (acc.id != null ? String(acc.id) : "");
+  const getAccountLabel = (acc: Account): string =>
+    acc.accountName ?? acc.name ?? "Unknown";
+  const getTxAccountKey = (tx: Transaction): string =>
+    (tx as unknown as { accountKey?: string; accountId?: number }).accountKey ??
+      ((tx as unknown as { accountId?: number }).accountId != null
+        ? String((tx as unknown as { accountId?: number }).accountId)
+        : "");
+  const getTxKey = (tx: Transaction): string =>
+    (tx as unknown as { key?: string; id?: number }).key ??
+      (((tx as unknown as { id?: number }).id != null)
+        ? String((tx as unknown as { id?: number }).id)
+        : "");
 
   useEffect(() => {
     if (!formAccountId.value && accounts.length > 0) {
@@ -90,19 +113,26 @@ export default function TransactionsManager({
   }, [accounts.length]);
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
+      .format(amount);
 
-  const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString();
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString();
 
   // Calculate account spent/balance from transactions
   const calculateAccountStats = () => {
     const stats = new Map<string, { spent: number; balance: number }>();
-    accounts.forEach(acc => {
+    accounts.forEach((acc) => {
       const key = getAccountKey(acc);
       if (!key) return;
-      const accTxs = transactions.value.filter(t => getTxAccountKey(t) === key);
+      const accTxs = transactions.value.filter((t) =>
+        getTxAccountKey(t) === key
+      );
       const spent = accTxs
-        .filter(t => t.amount < 0 && !(t as unknown as { isOpeningBalance?: boolean }).isOpeningBalance)
+        .filter((t) =>
+          t.amount < 0 &&
+          !(t as unknown as { isOpeningBalance?: boolean }).isOpeningBalance
+        )
         .reduce((sum, t) => sum + Math.abs(t.amount), 0);
       const balance = accTxs.reduce((sum, t) => sum + t.amount, 0);
       stats.set(key, { spent, balance });
@@ -118,15 +148,20 @@ export default function TransactionsManager({
 
   // Filtered transactions
   const filteredTransactions = useComputed(() => {
-    let txs = transactions.value.filter(t => !(t as unknown as { isOpeningBalance?: boolean }).isOpeningBalance);
+    let txs = transactions.value.filter((t) =>
+      !(t as unknown as { isOpeningBalance?: boolean }).isOpeningBalance
+    );
     if (filterAccountId.value !== null) {
       const filterKey = filterAccountId.value;
-      txs = txs.filter(t => getTxAccountKey(t) === filterKey);
+      txs = txs.filter((t) => getTxAccountKey(t) === filterKey);
     }
-    return txs.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime());
+    return txs.sort((a, b) =>
+      new Date(b.transactionDate).getTime() -
+      new Date(a.transactionDate).getTime()
+    );
   });
 
-  const toggleCardFlip = (accountId: string) => {
+  const _toggleCardFlip = (accountId: string) => {
     const newSet = new Set(flippedCards.value);
     if (newSet.has(accountId)) {
       newSet.delete(accountId);
@@ -177,7 +212,9 @@ export default function TransactionsManager({
     isSubmitting.value = true;
 
     const amount = parseFloat(formAmount.value) || 0;
-    const finalAmount = formIsInflow.value ? Math.abs(amount) : -Math.abs(amount);
+    const finalAmount = formIsInflow.value
+      ? Math.abs(amount)
+      : -Math.abs(amount);
 
     try {
       const res = await fetch(`${API_BASE}/transactions`, {
@@ -196,6 +233,14 @@ export default function TransactionsManager({
         await loadAllTransactions();
         await refreshCategoryBalances();
         isModalOpen.value = false;
+      } else {
+        const body = await res.text().catch(() => "");
+        console.error(
+          "Error creating transaction:",
+          res.status,
+          res.statusText,
+          body,
+        );
       }
     } catch (error) {
       console.error("Error creating transaction:", error);
@@ -211,12 +256,22 @@ export default function TransactionsManager({
     // LifeOS shape: server toggles isCleared
     if ((tx as unknown as { key?: string }).key) {
       try {
-        const res = await fetch(`${API_BASE}/transactions/${key}/clear`, { method: "POST" });
+        const res = await fetch(`${API_BASE}/transactions/${key}/clear`, {
+          method: "POST",
+        });
         if (res.ok) {
-          const payload = await res.json().catch(() => null) as { isCleared?: boolean } | null;
-          const newIsCleared = payload?.isCleared ?? !Boolean((tx as unknown as { isCleared?: boolean }).isCleared);
-          transactions.value = transactions.value.map(t =>
-            getTxKey(t) === key ? { ...(t as unknown as Record<string, unknown>), isCleared: newIsCleared } as Transaction : t
+          const payload = await res.json().catch(() => null) as {
+            isCleared?: boolean;
+          } | null;
+          const newIsCleared = payload?.isCleared ??
+            !(tx as unknown as { isCleared?: boolean }).isCleared;
+          transactions.value = transactions.value.map((t) =>
+            getTxKey(t) === key
+              ? {
+                ...(t as unknown as Record<string, unknown>),
+                isCleared: newIsCleared,
+              } as Transaction
+              : t
           );
         }
       } catch (error) {
@@ -226,15 +281,23 @@ export default function TransactionsManager({
     }
 
     // Legacy shape
-    const newStatus = (tx as unknown as { clearedStatus?: string }).clearedStatus === "cleared" ? "uncleared" : "cleared";
+    const newStatus =
+      (tx as unknown as { clearedStatus?: string }).clearedStatus === "cleared"
+        ? "uncleared"
+        : "cleared";
     try {
       await fetch(`${API_BASE}/transactions/${key}/clear`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      transactions.value = transactions.value.map(t =>
-        getTxKey(t) === key ? { ...(t as unknown as Record<string, unknown>), clearedStatus: newStatus } as Transaction : t
+      transactions.value = transactions.value.map((t) =>
+        getTxKey(t) === key
+          ? {
+            ...(t as unknown as Record<string, unknown>),
+            clearedStatus: newStatus,
+          } as Transaction
+          : t
       );
     } catch (error) {
       console.error("Error updating cleared status:", error);
@@ -246,24 +309,35 @@ export default function TransactionsManager({
     const txKey = getTxKey(tx);
     if (!txKey) return;
     splitTransactionId.value = txKey;
-    splitTransactionAmount.value = tx.amount;
+    splitTransactionAmount.value = Math.abs(tx.amount);
+    splitTransactionSign.value = tx.amount < 0 ? -1 : 1;
     // Initialize with existing splits or single row
     if (tx.splits && tx.splits.length > 0) {
-      splitRows.value = tx.splits.map(s => ({
-        categoryId: s.categoryId?.toString() || "",
-        amount: s.amount.toString(),
+      splitRows.value = tx.splits.map((s) => ({
+        categoryId:
+          (s as unknown as { categoryKey?: string | null }).categoryKey
+            ?.toString() || "",
+        amount: Math.abs(s.amount).toString(),
         memo: s.memo || "",
       }));
     } else {
       splitRows.value = [
-        { categoryId: tx.categoryId?.toString() || "", amount: tx.amount.toString(), memo: "" },
+        {
+          categoryId: tx.categoryKey?.toString() || "",
+          amount: Math.abs(tx.amount).toString(),
+          memo: "",
+        },
       ];
     }
     isSplitModalOpen.value = true;
   };
 
   const addSplitRow = () => {
-    splitRows.value = [...splitRows.value, { categoryId: "", amount: "0", memo: "" }];
+    splitRows.value = [...splitRows.value, {
+      categoryId: "",
+      amount: "0",
+      memo: "",
+    }];
   };
 
   const removeSplitRow = (index: number) => {
@@ -272,42 +346,67 @@ export default function TransactionsManager({
     }
   };
 
-  const updateSplitRow = (index: number, field: keyof SplitRow, value: string) => {
-    splitRows.value = splitRows.value.map((row, i) => 
-      i === index ? { ...row, [field]: value } : row
+  const updateSplitRow = (
+    index: number,
+    field: keyof SplitRow,
+    value: string,
+  ) => {
+    const normalized = field === "amount"
+      ? (value === "" ? "" : Math.abs(parseFloat(value) || 0).toString())
+      : value;
+    splitRows.value = splitRows.value.map((row, i) =>
+      i === index ? { ...row, [field]: normalized } : row
     );
   };
 
   const getSplitsTotal = () => {
-    return splitRows.value.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0);
+    return splitRows.value.reduce(
+      (sum, row) => sum + (parseFloat(row.amount) || 0),
+      0,
+    );
   };
 
   const saveSplits = async () => {
     if (!splitTransactionId.value) return;
-    
+
     const total = getSplitsTotal();
     if (Math.abs(total - splitTransactionAmount.value) > 0.01) {
-      alert(`Splits total (${formatCurrency(total)}) must equal transaction amount (${formatCurrency(splitTransactionAmount.value)})`);
+      alert(
+        `Splits total (${
+          formatCurrency(total)
+        }) must equal transaction amount (${
+          formatCurrency(splitTransactionAmount.value)
+        })`,
+      );
       return;
     }
 
     isSubmitting.value = true;
     try {
-      const res = await fetch(`${API_BASE}/transactions/${splitTransactionId.value}/splits/replace`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          splits: splitRows.value.map(row => ({
-            categoryId: row.categoryId ? parseInt(row.categoryId) : null,
-            amount: parseFloat(row.amount) || 0,
-            memo: row.memo || null,
-          })),
-        }),
-      });
+      const res = await fetch(
+        `${API_BASE}/transactions/${splitTransactionId.value}/splits/replace`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            splits: splitRows.value.map((row) => ({
+              categoryKey: row.categoryId || null,
+              amount: (parseFloat(row.amount) || 0) *
+                splitTransactionSign.value,
+              memo: row.memo || null,
+            })),
+          }),
+        },
+      );
       if (res.ok) {
         const newSplits = await res.json();
-        transactions.value = transactions.value.map(t => 
-          getTxKey(t) === splitTransactionId.value ? { ...(t as unknown as Record<string, unknown>), splits: newSplits } as Transaction : t
+        transactions.value = transactions.value.map((t) =>
+          getTxKey(t) === splitTransactionId.value
+            ? {
+              ...(t as unknown as Record<string, unknown>),
+              splits: newSplits,
+            } as Transaction
+            : t
         );
         isSplitModalOpen.value = false;
       }
@@ -322,7 +421,7 @@ export default function TransactionsManager({
     if (!confirm("Delete this transaction?")) return;
     try {
       await fetch(`${API_BASE}/transactions/${tx.id}`, { method: "DELETE" });
-      transactions.value = transactions.value.filter(t => t.id !== tx.id);
+      transactions.value = transactions.value.filter((t) => t.id !== tx.id);
       calculateAccountStats();
     } catch (error) {
       console.error("Error deleting transaction:", error);
@@ -342,7 +441,9 @@ export default function TransactionsManager({
 
   const selectAllVisible = () => {
     const visibleTxs = filteredTransactions.value;
-    selectedTxIds.value = new Set(visibleTxs.map(t => getTxKey(t)).filter(Boolean));
+    selectedTxIds.value = new Set(
+      visibleTxs.map((t) => getTxKey(t)).filter(Boolean),
+    );
   };
 
   const clearSelection = () => {
@@ -360,8 +461,13 @@ export default function TransactionsManager({
           body: JSON.stringify({ status: "cleared" }),
         });
       }
-      transactions.value = transactions.value.map(t => 
-        selectedTxIds.value.has(getTxKey(t)) ? { ...(t as unknown as Record<string, unknown>), clearedStatus: "cleared" } as Transaction : t
+      transactions.value = transactions.value.map((t) =>
+        selectedTxIds.value.has(getTxKey(t))
+          ? {
+            ...(t as unknown as Record<string, unknown>),
+            clearedStatus: "cleared",
+          } as Transaction
+          : t
       );
       clearSelection();
     } catch (error) {
@@ -379,7 +485,9 @@ export default function TransactionsManager({
       for (const txId of selectedTxIds.value) {
         await fetch(`${API_BASE}/transactions/${txId}`, { method: "DELETE" });
       }
-      transactions.value = transactions.value.filter(t => !selectedTxIds.value.has(getTxKey(t)));
+      transactions.value = transactions.value.filter((t) =>
+        !selectedTxIds.value.has(getTxKey(t))
+      );
       clearSelection();
       calculateAccountStats();
     } catch (error) {
@@ -398,16 +506,21 @@ export default function TransactionsManager({
     if (selectedTxIds.value.size === 0 || !bulkCategoryId.value) return;
     isSubmitting.value = true;
     try {
-      const categoryId = parseInt(bulkCategoryId.value);
+      const categoryKey = bulkCategoryId.value;
       for (const txId of selectedTxIds.value) {
         await fetch(`${API_BASE}/transactions/${txId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ categoryId }),
+          body: JSON.stringify({ categoryKey }),
         });
       }
-      transactions.value = transactions.value.map(t => 
-        selectedTxIds.value.has(getTxKey(t)) ? { ...(t as unknown as Record<string, unknown>), categoryId } as Transaction : t
+      transactions.value = transactions.value.map((t) =>
+        selectedTxIds.value.has(getTxKey(t))
+          ? {
+            ...(t as unknown as Record<string, unknown>),
+            categoryKey,
+          } as Transaction
+          : t
       );
       isBulkCategoryModalOpen.value = false;
       clearSelection();
@@ -422,16 +535,16 @@ export default function TransactionsManager({
   const getAccountName = (tx: Transaction) => {
     const key = getTxAccountKey(tx);
     if (!key) return "Unknown";
-    return accounts.find(a => getAccountKey(a) === key)?.accountName
-      ?? accounts.find(a => getAccountKey(a) === key)?.name
-      ?? "Unknown";
+    return accounts.find((a) => getAccountKey(a) === key)?.accountName ??
+      accounts.find((a) => getAccountKey(a) === key)?.name ??
+      "Unknown";
   };
 
   const getAccountNameByKey = (accountKey: string) => {
     if (!accountKey) return "Unknown";
-    return accounts.find(a => getAccountKey(a) === accountKey)?.accountName
-      ?? accounts.find(a => getAccountKey(a) === accountKey)?.name
-      ?? "Unknown";
+    return accounts.find((a) => getAccountKey(a) === accountKey)?.accountName ??
+      accounts.find((a) => getAccountKey(a) === accountKey)?.name ??
+      "Unknown";
   };
 
   // Transfer functions
@@ -445,7 +558,10 @@ export default function TransactionsManager({
   };
 
   const createTransfer = async () => {
-    if (!transferFromAccountId.value || !transferToAccountId.value || !transferAmount.value) return;
+    if (
+      !transferFromAccountId.value || !transferToAccountId.value ||
+      !transferAmount.value
+    ) return;
     if (transferFromAccountId.value === transferToAccountId.value) {
       alert("Cannot transfer to the same account");
       return;
@@ -480,23 +596,37 @@ export default function TransactionsManager({
 
   return (
     <div class="space-y-6">
-
       {/* Filter indicator and Add button */}
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
           {filterAccountId.value !== null && (
             <div class="badge badge-primary gap-2">
               Showing: {getAccountNameByKey(filterAccountId.value)}
-              <button type="button" class="btn btn-ghost btn-xs" onClick={() => filterAccountId.value = null}>×</button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-xs"
+                onClick={() => filterAccountId.value = null}
+              >
+                ×
+              </button>
             </div>
           )}
           <span class="text-sm text-slate-500">
-            {filteredTransactions.value.length} transaction{filteredTransactions.value.length !== 1 ? "s" : ""}
+            {filteredTransactions.value.length}{" "}
+            transaction{filteredTransactions.value.length !== 1 ? "s" : ""}
           </span>
         </div>
         <div class="flex gap-2">
-          <button type="button" class="btn btn-outline" onClick={openTransferModal}>↔️ Transfer</button>
-          <button type="button" class="btn btn-primary" onClick={openAddModal}>+ Add Transaction</button>
+          <button
+            type="button"
+            class="btn btn-outline"
+            onClick={openTransferModal}
+          >
+            ↔️ Transfer
+          </button>
+          <button type="button" class="btn btn-primary" onClick={openAddModal}>
+            + Add Transaction
+          </button>
         </div>
       </div>
 
@@ -504,16 +634,32 @@ export default function TransactionsManager({
       {selectedTxIds.value.size > 0 && (
         <div class="flex items-center gap-4 p-3 bg-primary/10 rounded-lg">
           <span class="font-medium">{selectedTxIds.value.size} selected</span>
-          <button type="button" class="btn btn-sm btn-outline" onClick={openBulkCategoryModal}>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline"
+            onClick={openBulkCategoryModal}
+          >
             Assign Category
           </button>
-          <button type="button" class="btn btn-sm btn-outline btn-success" onClick={bulkClear}>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline btn-success"
+            onClick={bulkClear}
+          >
             Mark Cleared
           </button>
-          <button type="button" class="btn btn-sm btn-outline btn-error" onClick={bulkDelete}>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline btn-error"
+            onClick={bulkDelete}
+          >
             Delete
           </button>
-          <button type="button" class="btn btn-sm btn-ghost" onClick={clearSelection}>
+          <button
+            type="button"
+            class="btn btn-sm btn-ghost"
+            onClick={clearSelection}
+          >
             Clear Selection
           </button>
         </div>
@@ -527,11 +673,16 @@ export default function TransactionsManager({
               <thead>
                 <tr class="bg-slate-50">
                   <th class="w-10">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       class="checkbox checkbox-sm"
-                      checked={selectedTxIds.value.size > 0 && selectedTxIds.value.size === filteredTransactions.value.length}
-                      onChange={(e) => e.currentTarget.checked ? selectAllVisible() : clearSelection()}
+                      checked={selectedTxIds.value.size > 0 &&
+                        selectedTxIds.value.size ===
+                          filteredTransactions.value.length}
+                      onChange={(e) =>
+                        e.currentTarget.checked
+                          ? selectAllVisible()
+                          : clearSelection()}
                     />
                   </th>
                   <th class="w-10">✓</th>
@@ -546,78 +697,141 @@ export default function TransactionsManager({
                 </tr>
               </thead>
               <tbody>
-                {filteredTransactions.value.length === 0 ? (
-                  <tr><td colSpan={10} class="text-center text-slate-500 py-8">No transactions yet</td></tr>
-                ) : filteredTransactions.value.map((tx) => (
-                  <tr key={getTxKey(tx)} class={`hover ${((tx as unknown as { isReconciled?: boolean }).isReconciled ?? ((tx as unknown as { clearedStatus?: string }).clearedStatus === "reconciled")) ? "opacity-50" : ""} ${selectedTxIds.value.has(getTxKey(tx)) ? "bg-primary/5" : ""}`}>
-                    <td>
-                      <input 
-                        type="checkbox" 
-                        class="checkbox checkbox-sm"
-                        checked={selectedTxIds.value.has(getTxKey(tx))}
-                        onChange={() => toggleSelectTx(getTxKey(tx))}
-                      />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class={`btn btn-xs btn-circle ${((tx as unknown as { isCleared?: boolean }).isCleared ?? ((tx as unknown as { clearedStatus?: string }).clearedStatus !== "uncleared")) ? "btn-success" : "btn-ghost border"}`}
-                        onClick={() => toggleCleared(tx)}
-                      >
-                        {((tx as unknown as { isCleared?: boolean }).isCleared ?? ((tx as unknown as { clearedStatus?: string }).clearedStatus !== "uncleared")) ? "✓" : ""}
-                      </button>
-                    </td>
-                    <td class="text-sm whitespace-nowrap">{formatDate(tx.transactionDate)}</td>
-                    <td class="text-sm">
-                      <span class="badge badge-ghost badge-sm">{getAccountName(tx)}</span>
-                    </td>
-                    <td class="font-medium">{tx.payee || "—"}</td>
-                    <td class="text-sm text-slate-500">
-                      <div class="flex items-center gap-1">
-                        {tx.splits && tx.splits.length > 1 ? (
-                          <span class="badge badge-info badge-xs">Split ({tx.splits.length})</span>
-                        ) : (
-                          categories.find(c => c.id === tx.categoryId)?.name || 
-                          <span class="text-slate-400 italic">Uncategorized</span>
-                        )}
-                        <button 
-                          type="button" 
-                          class="btn btn-ghost btn-xs opacity-50 hover:opacity-100"
-                          onClick={(e) => { e.stopPropagation(); openSplitEditor(tx); }}
-                          title="Split transaction"
+                {filteredTransactions.value.length === 0
+                  ? (
+                    <tr>
+                      <td colSpan={10} class="text-center text-slate-500 py-8">
+                        No transactions yet
+                      </td>
+                    </tr>
+                  )
+                  : filteredTransactions.value.map((tx) => (
+                    <tr
+                      key={getTxKey(tx)}
+                      class={`hover ${
+                        ((tx as unknown as { isReconciled?: boolean })
+                            .isReconciled ??
+                            ((tx as unknown as { clearedStatus?: string })
+                              .clearedStatus === "reconciled"))
+                          ? "opacity-50"
+                          : ""
+                      } ${
+                        selectedTxIds.value.has(getTxKey(tx))
+                          ? "bg-primary/5"
+                          : ""
+                      }`}
+                    >
+                      <td>
+                        <input
+                          type="checkbox"
+                          class="checkbox checkbox-sm"
+                          checked={selectedTxIds.value.has(getTxKey(tx))}
+                          onChange={() => toggleSelectTx(getTxKey(tx))}
+                        />
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class={`btn btn-xs btn-circle ${
+                            ((tx as unknown as { isCleared?: boolean })
+                                .isCleared ??
+                                ((tx as unknown as { clearedStatus?: string })
+                                  .clearedStatus !== "uncleared"))
+                              ? "btn-success"
+                              : "btn-ghost border"
+                          }`}
+                          onClick={() => toggleCleared(tx)}
                         >
-                          ✂️
+                          {((tx as unknown as { isCleared?: boolean })
+                              .isCleared ??
+                              ((tx as unknown as { clearedStatus?: string })
+                                .clearedStatus !== "uncleared"))
+                            ? "✓"
+                            : ""}
                         </button>
-                      </div>
-                    </td>
-                    <td class="text-sm text-slate-400 max-w-xs truncate">{tx.memo || ""}</td>
-                    <td class={`text-right font-semibold whitespace-nowrap ${tx.amount >= 0 ? "text-green-600" : "text-slate-800"}`}>
-                      {tx.amount >= 0 ? "+" : ""}{formatCurrency(tx.amount)}
-                    </td>
-                    <td>
-                      {tx.receipt ? (
-                        <a 
-                          href={`${UI_BASE}/receipts?view=${tx.receipt.id}`}
-                          class="btn btn-ghost btn-xs text-success"
-                          title="View Receipt"
+                      </td>
+                      <td class="text-sm whitespace-nowrap">
+                        {formatDate(tx.transactionDate)}
+                      </td>
+                      <td class="text-sm">
+                        <span class="badge badge-ghost badge-sm">
+                          {getAccountName(tx)}
+                        </span>
+                      </td>
+                      <td class="font-medium">{tx.payee || "—"}</td>
+                      <td class="text-sm text-slate-500">
+                        <div class="flex items-center gap-1">
+                          {tx.splits && tx.splits.length > 1
+                            ? (
+                              <span class="badge badge-info badge-xs">
+                                Split ({tx.splits.length})
+                              </span>
+                            )
+                            : (
+                              categories.find((c) => c.id === tx.categoryId)
+                                ?.name ||
+                              (
+                                <span class="text-slate-400 italic">
+                                  Uncategorized
+                                </span>
+                              )
+                            )}
+                          <button
+                            type="button"
+                            class="btn btn-ghost btn-xs opacity-50 hover:opacity-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openSplitEditor(tx);
+                            }}
+                            title="Split transaction"
+                          >
+                            ✂️
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-sm text-slate-400 max-w-xs truncate">
+                        {tx.memo || ""}
+                      </td>
+                      <td
+                        class={`text-right font-semibold whitespace-nowrap ${
+                          tx.amount >= 0 ? "text-green-600" : "text-slate-800"
+                        }`}
+                      >
+                        {tx.amount >= 0 ? "+" : ""}
+                        {formatCurrency(tx.amount)}
+                      </td>
+                      <td>
+                        {tx.receipt
+                          ? (
+                            <a
+                              href={`${UI_BASE}/receipts?view=${tx.receipt.id}`}
+                              class="btn btn-ghost btn-xs text-success"
+                              title="View Receipt"
+                            >
+                              🧾
+                            </a>
+                          )
+                          : (
+                            <a
+                              href={`${UI_BASE}/receipts?link=${tx.id}`}
+                              class="btn btn-ghost btn-xs text-slate-300 hover:text-slate-500"
+                              title="Add Receipt"
+                            >
+                              +
+                            </a>
+                          )}
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-ghost btn-xs text-error"
+                          onClick={() => deleteTransaction(tx)}
                         >
-                          🧾
-                        </a>
-                      ) : (
-                        <a 
-                          href={`${UI_BASE}/receipts?link=${tx.id}`}
-                          class="btn btn-ghost btn-xs text-slate-300 hover:text-slate-500"
-                          title="Add Receipt"
-                        >
-                          +
-                        </a>
-                      )}
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-ghost btn-xs text-error" onClick={() => deleteTransaction(tx)}>×</button>
-                    </td>
-                  </tr>
-                ))}
+                          ×
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -633,64 +847,122 @@ export default function TransactionsManager({
               {/* Inflow/Outflow Toggle */}
               <div class="form-control mb-4">
                 <label class="label cursor-pointer justify-start gap-4">
-                  <span class={`font-medium ${!formIsInflow.value ? "text-red-600" : "text-slate-400"}`}>Outflow</span>
+                  <span
+                    class={`font-medium ${
+                      !formIsInflow.value ? "text-red-600" : "text-slate-400"
+                    }`}
+                  >
+                    Outflow
+                  </span>
                   <input
                     type="checkbox"
                     class="toggle toggle-success"
                     checked={formIsInflow.value}
-                    onChange={(e) => formIsInflow.value = e.currentTarget.checked}
+                    onChange={(e) =>
+                      formIsInflow.value = e.currentTarget.checked}
                   />
-                  <span class={`font-medium ${formIsInflow.value ? "text-green-600" : "text-slate-400"}`}>Inflow</span>
+                  <span
+                    class={`font-medium ${
+                      formIsInflow.value ? "text-green-600" : "text-slate-400"
+                    }`}
+                  >
+                    Inflow
+                  </span>
                 </label>
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 {/* Account Selector */}
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Account</span></label>
-                  <select 
-                    class="select select-bordered" 
-                    value={formAccountId.value} 
-                    onChange={(e) => formAccountId.value = e.currentTarget.value}
+                  <label class="label">
+                    <span class="label-text">Account</span>
+                  </label>
+                  <select
+                    class="select select-bordered"
+                    value={formAccountId.value}
+                    onChange={(e) =>
+                      formAccountId.value = e.currentTarget.value}
                     required
                   >
-                    {(accounts || []).filter(a => !(a as unknown as { isClosed?: boolean }).isClosed).map(acc => (
-                      <option key={getAccountKey(acc)} value={getAccountKey(acc)}>{getAccountLabel(acc)}</option>
+                    {(accounts || []).filter((a) =>
+                      !(a as unknown as { isClosed?: boolean }).isClosed
+                    ).map((acc) => (
+                      <option
+                        key={getAccountKey(acc)}
+                        value={getAccountKey(acc)}
+                      >
+                        {getAccountLabel(acc)}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Date</span></label>
-                  <input type="date" class="input input-bordered" value={formDate.value} onInput={(e) => formDate.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Date</span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered"
+                    value={formDate.value}
+                    onInput={(e) => formDate.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
 
                 <div class="form-control col-span-2">
-                  <label class="label"><span class="label-text">Payee</span></label>
-                  <input type="text" class="input input-bordered" placeholder="e.g., Walmart, Shell Gas" value={formPayee.value} onInput={(e) => formPayee.value = e.currentTarget.value} />
+                  <label class="label">
+                    <span class="label-text">Payee</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="input input-bordered"
+                    placeholder="e.g., Walmart, Shell Gas"
+                    value={formPayee.value}
+                    onInput={(e) => formPayee.value = e.currentTarget.value}
+                  />
                 </div>
 
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Amount</span></label>
-                  <input type="number" step="0.01" min="0" class="input input-bordered" placeholder="0.00" value={formAmount.value} onInput={(e) => formAmount.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Amount</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    class="input input-bordered"
+                    placeholder="0.00"
+                    value={formAmount.value}
+                    onInput={(e) => formAmount.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
 
                 {/* Category with Available Balance */}
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Category</span></label>
-                  <select 
-                    class="select select-bordered" 
-                    value={formCategoryId.value} 
-                    onChange={(e) => formCategoryId.value = e.currentTarget.value}
+                  <label class="label">
+                    <span class="label-text">Category</span>
+                  </label>
+                  <select
+                    class="select select-bordered"
+                    value={formCategoryId.value}
+                    onChange={(e) =>
+                      formCategoryId.value = e.currentTarget.value}
                   >
                     <option value="">Uncategorized</option>
-                    {(categoryGroups || []).map(group => (
+                    {(categoryGroups || []).map((group) => (
                       <optgroup key={group.id} label={group.name}>
-                        {(group.categories || []).map(cat => {
-                          const bal = categoryBalancesSignal.value.find((b: CategoryBalance) => b.categoryId === cat.id);
+                        {(group.categories || []).map((cat) => {
+                          const catKey = cat.key || cat.id?.toString();
+                          const bal = categoryBalancesSignal.value.find((
+                            b: CategoryBalance,
+                          ) =>
+                            b.categoryKey === catKey
+                          );
                           const available = bal?.available ?? 0;
                           return (
-                            <option key={cat.id} value={cat.id}>
+                            <option key={catKey} value={catKey}>
                               {cat.name} ({formatCurrency(available)})
                             </option>
                           );
@@ -701,45 +973,80 @@ export default function TransactionsManager({
                 </div>
 
                 <div class="form-control col-span-2">
-                  <label class="label"><span class="label-text">Memo</span></label>
-                  <input type="text" class="input input-bordered" placeholder="Optional note" value={formMemo.value} onInput={(e) => formMemo.value = e.currentTarget.value} />
+                  <label class="label">
+                    <span class="label-text">Memo</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="input input-bordered"
+                    placeholder="Optional note"
+                    value={formMemo.value}
+                    onInput={(e) => formMemo.value = e.currentTarget.value}
+                  />
                 </div>
               </div>
 
               {/* Category Balances Quick View */}
-              {!formIsInflow.value && categoryBalancesSignal.value.length > 0 && (
-                <div class="mt-4 p-3 bg-slate-50 rounded-lg max-h-40 overflow-y-auto">
-                  <div class="text-xs font-semibold text-slate-500 mb-2">Category Balances</div>
-                  <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
-                    {categoryBalancesSignal.value
-                      .filter((b: CategoryBalance) => b.available !== 0)
-                      .sort((a: CategoryBalance, b: CategoryBalance) => b.available - a.available)
-                      .slice(0, 12)
-                      .map((bal: CategoryBalance) => (
-                        <div 
-                          key={bal.categoryId} 
-                          class={`flex justify-between p-1 rounded cursor-pointer hover:bg-slate-100 ${formCategoryId.value === bal.categoryId.toString() ? "bg-primary/10" : ""}`}
-                          onClick={() => formCategoryId.value = bal.categoryId.toString()}
-                        >
-                          <span class="truncate">{bal.categoryName}</span>
-                          <span class={bal.available >= 0 ? "text-green-600" : "text-red-600"}>
-                            {formatCurrency(bal.available)}
-                          </span>
-                        </div>
-                      ))}
+              {!formIsInflow.value && categoryBalancesSignal.value.length > 0 &&
+                (
+                  <div class="mt-4 p-3 bg-slate-50 rounded-lg max-h-40 overflow-y-auto">
+                    <div class="text-xs font-semibold text-slate-500 mb-2">
+                      Category Balances
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                      {categoryBalancesSignal.value
+                        .filter((b: CategoryBalance) => b.available !== 0)
+                        .sort((a: CategoryBalance, b: CategoryBalance) =>
+                          b.available - a.available
+                        )
+                        .slice(0, 12)
+                        .map((bal: CategoryBalance) => (
+                          <div
+                            key={bal.categoryKey}
+                            class={`flex justify-between p-1 rounded cursor-pointer hover:bg-slate-100 ${
+                              formCategoryId.value === bal.categoryKey
+                                ? "bg-primary/10"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              formCategoryId.value = bal.categoryKey}
+                          >
+                            <span class="truncate">{bal.categoryName}</span>
+                            <span
+                              class={bal.available >= 0
+                                ? "text-green-600"
+                                : "text-red-600"}
+                            >
+                              {formatCurrency(bal.available)}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               <div class="modal-action">
-                <button type="button" class="btn" onClick={() => isModalOpen.value = false}>Cancel</button>
-                <button type="submit" class="btn btn-primary" disabled={isSubmitting.value}>
-                  {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Save"}
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => isModalOpen.value = false}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "Save"}
                 </button>
               </div>
             </form>
           </div>
-          <div class="modal-backdrop" onClick={() => isModalOpen.value = false}></div>
+          <div class="modal-backdrop" onClick={() => isModalOpen.value = false}>
+          </div>
         </div>
       )}
 
@@ -751,65 +1058,105 @@ export default function TransactionsManager({
             <div class="mb-4 p-3 bg-slate-100 rounded-lg">
               <div class="flex justify-between">
                 <span class="font-medium">Transaction Total:</span>
-                <span class={`font-bold ${splitTransactionAmount.value >= 0 ? "text-green-600" : "text-slate-800"}`}>
+                <span
+                  class={`font-bold ${
+                    splitTransactionAmount.value >= 0
+                      ? "text-green-600"
+                      : "text-slate-800"
+                  }`}
+                >
                   {formatCurrency(splitTransactionAmount.value)}
                 </span>
               </div>
               <div class="flex justify-between text-sm">
                 <span>Splits Total:</span>
-                <span class={Math.abs(getSplitsTotal() - splitTransactionAmount.value) < 0.01 ? "text-green-600" : "text-red-600"}>
+                <span
+                  class={Math.abs(
+                      getSplitsTotal() - splitTransactionAmount.value,
+                    ) < 0.01
+                    ? "text-green-600"
+                    : "text-red-600"}
+                >
                   {formatCurrency(getSplitsTotal())}
                 </span>
               </div>
-              {Math.abs(getSplitsTotal() - splitTransactionAmount.value) >= 0.01 && (
+              {Math.abs(getSplitsTotal() - splitTransactionAmount.value) >=
+                  0.01 && (
                 <div class="text-xs text-red-500 mt-1">
-                  Remaining: {formatCurrency(splitTransactionAmount.value - getSplitsTotal())}
+                  Remaining: {formatCurrency(
+                    splitTransactionAmount.value - getSplitsTotal(),
+                  )}
                 </div>
               )}
             </div>
 
             <div class="space-y-3">
               {splitRows.value.map((row, index) => (
-                <div key={index} class="flex gap-2 items-start p-2 bg-slate-50 rounded">
+                <div
+                  key={index}
+                  class="flex gap-2 items-start p-2 bg-slate-50 rounded"
+                >
                   <div class="form-control flex-1">
-                    <label class="label py-0"><span class="label-text text-xs">Category</span></label>
-                    <select 
+                    <label class="label py-0">
+                      <span class="label-text text-xs">Category</span>
+                    </label>
+                    <select
                       class="select select-bordered select-sm w-full"
                       value={row.categoryId}
-                      onChange={(e) => updateSplitRow(index, "categoryId", e.currentTarget.value)}
+                      onChange={(e) =>
+                        updateSplitRow(
+                          index,
+                          "categoryId",
+                          e.currentTarget.value,
+                        )}
                     >
                       <option value="">Uncategorized</option>
-                      {(categoryGroups || []).map(group => (
+                      {(categoryGroups || []).map((group) => (
                         <optgroup key={group.id} label={group.name}>
-                          {(categories || []).filter(c => c.categoryGroupId === group.id).map(cat => (
-                            <option key={cat.id} value={cat.id}>{cat.name}</option>
-                          ))}
+                          {(categories || []).filter((c) => {
+                            const groupKey = group.key || group.id?.toString();
+                            return (groupKey && c.groupKey === groupKey) ||
+                              c.categoryGroupId === group.id;
+                          }).map((cat) => {
+                            const catKey = cat.key || cat.id?.toString();
+                            return (
+                              <option key={catKey} value={catKey}>
+                                {cat.name}
+                              </option>
+                            );
+                          })}
                         </optgroup>
                       ))}
                     </select>
                   </div>
                   <div class="form-control w-28">
-                    <label class="label py-0"><span class="label-text text-xs">Amount</span></label>
-                    <input 
-                      type="number" 
+                    <label class="label py-0">
+                      <span class="label-text text-xs">Amount</span>
+                    </label>
+                    <input
+                      type="number"
                       step="0.01"
                       class="input input-bordered input-sm"
                       value={row.amount}
-                      onInput={(e) => updateSplitRow(index, "amount", e.currentTarget.value)}
+                      onInput={(e) =>
+                        updateSplitRow(index, "amount", e.currentTarget.value)}
                     />
                   </div>
                   <div class="form-control flex-1">
-                    <label class="label py-0"><span class="label-text text-xs">Memo</span></label>
-                    <input 
-                      type="text" 
+                    <label class="label py-0">
+                      <span class="label-text text-xs">Memo</span>
+                    </label>
+                    <input
+                      type="text"
                       class="input input-bordered input-sm"
                       placeholder="Optional"
                       value={row.memo}
-                      onInput={(e) => updateSplitRow(index, "memo", e.currentTarget.value)}
+                      onInput={(e) =>
+                        updateSplitRow(index, "memo", e.currentTarget.value)}
                     />
                   </div>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     class="btn btn-ghost btn-sm btn-circle mt-6"
                     onClick={() => removeSplitRow(index)}
                     disabled={splitRows.value.length <= 1}
@@ -820,23 +1167,41 @@ export default function TransactionsManager({
               ))}
             </div>
 
-            <button type="button" class="btn btn-ghost btn-sm mt-3" onClick={addSplitRow}>
+            <button
+              type="button"
+              class="btn btn-ghost btn-sm mt-3"
+              onClick={addSplitRow}
+            >
               + Add Split
             </button>
 
             <div class="modal-action">
-              <button type="button" class="btn" onClick={() => isSplitModalOpen.value = false}>Cancel</button>
-              <button 
-                type="button" 
-                class="btn btn-primary" 
-                onClick={saveSplits}
-                disabled={isSubmitting.value || Math.abs(getSplitsTotal() - splitTransactionAmount.value) >= 0.01}
+              <button
+                type="button"
+                class="btn"
+                onClick={() => isSplitModalOpen.value = false}
               >
-                {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Save Splits"}
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={saveSplits}
+                disabled={isSubmitting.value ||
+                  Math.abs(getSplitsTotal() - splitTransactionAmount.value) >=
+                    0.01}
+              >
+                {isSubmitting.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : "Save Splits"}
               </button>
             </div>
           </div>
-          <div class="modal-backdrop" onClick={() => isSplitModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isSplitModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
 
@@ -844,18 +1209,24 @@ export default function TransactionsManager({
       {isBulkCategoryModalOpen.value && (
         <div class="modal modal-open">
           <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Assign Category to {selectedTxIds.value.size} Transaction(s)</h3>
+            <h3 class="font-bold text-lg mb-4">
+              Assign Category to {selectedTxIds.value.size} Transaction(s)
+            </h3>
             <div class="form-control">
-              <label class="label"><span class="label-text">Category</span></label>
-              <select 
+              <label class="label">
+                <span class="label-text">Category</span>
+              </label>
+              <select
                 class="select select-bordered w-full"
                 value={bulkCategoryId.value}
                 onChange={(e) => bulkCategoryId.value = e.currentTarget.value}
               >
                 <option value="">Select a category...</option>
-                {(categoryGroups || []).map(group => (
+                {(categoryGroups || []).map((group) => (
                   <optgroup key={group.id} label={group.name}>
-                    {(categories || []).filter(c => c.categoryGroupId === group.id).map(cat => (
+                    {(categories || []).filter((c) =>
+                      c.categoryGroupId === group.id
+                    ).map((cat) => (
                       <option key={cat.id} value={cat.id}>{cat.name}</option>
                     ))}
                   </optgroup>
@@ -863,18 +1234,30 @@ export default function TransactionsManager({
               </select>
             </div>
             <div class="modal-action">
-              <button type="button" class="btn" onClick={() => isBulkCategoryModalOpen.value = false}>Cancel</button>
-              <button 
-                type="button" 
-                class="btn btn-primary" 
+              <button
+                type="button"
+                class="btn"
+                onClick={() => isBulkCategoryModalOpen.value = false}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
                 onClick={applyBulkCategory}
                 disabled={isSubmitting.value || !bulkCategoryId.value}
               >
-                {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Apply"}
+                {isSubmitting.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : "Apply"}
               </button>
             </div>
           </div>
-          <div class="modal-backdrop" onClick={() => isBulkCategoryModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isBulkCategoryModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
 
@@ -885,58 +1268,80 @@ export default function TransactionsManager({
             <h3 class="font-bold text-lg mb-4">↔️ Transfer Between Accounts</h3>
             <div class="space-y-4">
               <div class="form-control">
-                <label class="label"><span class="label-text">From Account</span></label>
-                <select 
+                <label class="label">
+                  <span class="label-text">From Account</span>
+                </label>
+                <select
                   class="select select-bordered w-full"
                   value={transferFromAccountId.value}
-                  onChange={(e) => transferFromAccountId.value = e.currentTarget.value}
+                  onChange={(e) =>
+                    transferFromAccountId.value = e.currentTarget.value}
                 >
-                  {(accounts || []).filter(a => !(a as unknown as { isClosed?: boolean }).isClosed).map(acc => (
-                    <option key={getAccountKey(acc)} value={getAccountKey(acc)}>{getAccountLabel(acc)}</option>
+                  {(accounts || []).filter((a) =>
+                    !(a as unknown as { isClosed?: boolean }).isClosed
+                  ).map((acc) => (
+                    <option key={getAccountKey(acc)} value={getAccountKey(acc)}>
+                      {getAccountLabel(acc)}
+                    </option>
                   ))}
                 </select>
               </div>
               <div class="form-control">
-                <label class="label"><span class="label-text">To Account</span></label>
-                <select 
+                <label class="label">
+                  <span class="label-text">To Account</span>
+                </label>
+                <select
                   class="select select-bordered w-full"
                   value={transferToAccountId.value}
-                  onChange={(e) => transferToAccountId.value = e.currentTarget.value}
+                  onChange={(e) =>
+                    transferToAccountId.value = e.currentTarget.value}
                 >
-                  {(accounts || []).filter(a => !(a as unknown as { isClosed?: boolean }).isClosed).map(acc => (
-                    <option key={getAccountKey(acc)} value={getAccountKey(acc)}>{getAccountLabel(acc)}</option>
+                  {(accounts || []).filter((a) =>
+                    !(a as unknown as { isClosed?: boolean }).isClosed
+                  ).map((acc) => (
+                    <option key={getAccountKey(acc)} value={getAccountKey(acc)}>
+                      {getAccountLabel(acc)}
+                    </option>
                   ))}
                 </select>
               </div>
               {transferFromAccountId.value === transferToAccountId.value && (
-                <div class="text-error text-sm">Cannot transfer to the same account</div>
+                <div class="text-error text-sm">
+                  Cannot transfer to the same account
+                </div>
               )}
               <div class="form-control">
-                <label class="label"><span class="label-text">Amount</span></label>
-                <input 
-                  type="number" 
-                  step="0.01" 
+                <label class="label">
+                  <span class="label-text">Amount</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
                   min="0.01"
-                  class="input input-bordered" 
+                  class="input input-bordered"
                   placeholder="0.00"
                   value={transferAmount.value}
                   onInput={(e) => transferAmount.value = e.currentTarget.value}
                 />
               </div>
               <div class="form-control">
-                <label class="label"><span class="label-text">Date</span></label>
-                <input 
-                  type="date" 
-                  class="input input-bordered" 
+                <label class="label">
+                  <span class="label-text">Date</span>
+                </label>
+                <input
+                  type="date"
+                  class="input input-bordered"
                   value={transferDate.value}
                   onInput={(e) => transferDate.value = e.currentTarget.value}
                 />
               </div>
               <div class="form-control">
-                <label class="label"><span class="label-text">Memo (optional)</span></label>
-                <input 
-                  type="text" 
-                  class="input input-bordered" 
+                <label class="label">
+                  <span class="label-text">Memo (optional)</span>
+                </label>
+                <input
+                  type="text"
+                  class="input input-bordered"
                   placeholder="Optional note"
                   value={transferMemo.value}
                   onInput={(e) => transferMemo.value = e.currentTarget.value}
@@ -944,18 +1349,31 @@ export default function TransactionsManager({
               </div>
             </div>
             <div class="modal-action">
-              <button type="button" class="btn" onClick={() => isTransferModalOpen.value = false}>Cancel</button>
-              <button 
-                type="button" 
-                class="btn btn-primary" 
-                onClick={createTransfer}
-                disabled={isSubmitting.value || !transferAmount.value || transferFromAccountId.value === transferToAccountId.value}
+              <button
+                type="button"
+                class="btn"
+                onClick={() => isTransferModalOpen.value = false}
               >
-                {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Create Transfer"}
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={createTransfer}
+                disabled={isSubmitting.value || !transferAmount.value ||
+                  transferFromAccountId.value === transferToAccountId.value}
+              >
+                {isSubmitting.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : "Create Transfer"}
               </button>
             </div>
           </div>
-          <div class="modal-backdrop" onClick={() => isTransferModalOpen.value = false}></div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isTransferModalOpen.value = false}
+          >
+          </div>
         </div>
       )}
     </div>

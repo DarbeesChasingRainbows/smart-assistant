@@ -34,14 +34,20 @@ export default function BillsManager({ initialBills, categories }: Props) {
   const formNotes = useSignal("");
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
+      .format(amount);
 
   const totalMonthly = () => {
-    return bills.value.filter(b => b.isActive).reduce((sum, b) => {
-      const monthly = b.frequency === "weekly" ? b.amount * 4.33 :
-                      b.frequency === "biweekly" ? b.amount * 2.17 :
-                      b.frequency === "quarterly" ? b.amount / 3 :
-                      b.frequency === "yearly" ? b.amount / 12 : b.amount;
+    return bills.value.filter((b) => b.isActive).reduce((sum, b) => {
+      const monthly = b.frequency === "weekly"
+        ? b.amount * 4.33
+        : b.frequency === "biweekly"
+        ? b.amount * 2.17
+        : b.frequency === "quarterly"
+        ? b.amount / 3
+        : b.frequency === "yearly"
+        ? b.amount / 12
+        : b.amount;
       return sum + monthly;
     }, 0);
   };
@@ -96,7 +102,9 @@ export default function BillsManager({ initialBills, categories }: Props) {
         });
         if (res.ok) {
           const updated = await res.json();
-          bills.value = bills.value.map(b => b.id === updated.id ? updated : b);
+          bills.value = bills.value.map((b) =>
+            b.id === updated.id ? updated : b
+          );
         }
       } else {
         const res = await fetch(`${API_BASE}/bills`, {
@@ -122,7 +130,9 @@ export default function BillsManager({ initialBills, categories }: Props) {
       await fetch(`${API_BASE}/bills/${bill.id}/paid`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paidDate: new Date().toISOString().split("T")[0] }),
+        body: JSON.stringify({
+          paidDate: new Date().toISOString().split("T")[0],
+        }),
       });
       // Refresh bills
       const res = await fetch(`${API_BASE}/bills?activeOnly=false`);
@@ -136,7 +146,7 @@ export default function BillsManager({ initialBills, categories }: Props) {
     if (!confirm(`Delete "${bill.name}"?`)) return;
     try {
       await fetch(`${API_BASE}/bills/${bill.id}`, { method: "DELETE" });
-      bills.value = bills.value.filter(b => b.id !== bill.id);
+      bills.value = bills.value.filter((b) => b.id !== bill.id);
     } catch (error) {
       console.error("Error deleting bill:", error);
     }
@@ -146,10 +156,16 @@ export default function BillsManager({ initialBills, categories }: Props) {
     if (!bill.nextDueDate) return { class: "badge-ghost", text: "No date" };
     const due = new Date(bill.nextDueDate);
     const today = new Date();
-    const daysUntil = Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (daysUntil < 0) return { class: "badge-error", text: `${Math.abs(daysUntil)}d overdue` };
-    if (daysUntil <= 3) return { class: "badge-warning", text: `${daysUntil}d` };
+    const daysUntil = Math.ceil(
+      (due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    if (daysUntil < 0) {
+      return { class: "badge-error", text: `${Math.abs(daysUntil)}d overdue` };
+    }
+    if (daysUntil <= 3) {
+      return { class: "badge-warning", text: `${daysUntil}d` };
+    }
     if (daysUntil <= 7) return { class: "badge-info", text: `${daysUntil}d` };
     return { class: "badge-ghost", text: `${daysUntil}d` };
   };
@@ -161,9 +177,17 @@ export default function BillsManager({ initialBills, categories }: Props) {
           <div class="flex justify-between items-center">
             <div>
               <h2 class="text-lg text-slate-500">Monthly Bills Total</h2>
-              <div class="text-3xl font-bold text-slate-800">{formatCurrency(totalMonthly())}</div>
+              <div class="text-3xl font-bold text-slate-800">
+                {formatCurrency(totalMonthly())}
+              </div>
             </div>
-            <button type="button" class="btn btn-primary" onClick={openAddModal}>+ Add Bill</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick={openAddModal}
+            >
+              + Add Bill
+            </button>
           </div>
         </div>
       </div>
@@ -183,30 +207,60 @@ export default function BillsManager({ initialBills, categories }: Props) {
                 </tr>
               </thead>
               <tbody>
-                {bills.value.filter(b => b.isActive).map((bill) => {
+                {bills.value.filter((b) => b.isActive).map((bill) => {
                   const status = getDueStatus(bill);
                   return (
                     <tr key={bill.id}>
                       <td>
                         <div class="font-medium flex items-center gap-2">
                           {bill.name}
-                          {bill.isAutoPay && <span class="badge badge-success badge-xs">Auto</span>}
+                          {bill.isAutoPay && (
+                            <span class="badge badge-success badge-xs">
+                              Auto
+                            </span>
+                          )}
                         </div>
                         <div class="text-sm text-slate-500">
-                          {categories.find(c => c.id === bill.categoryId)?.name || "Uncategorized"}
+                          {categories.find((c) => c.id === bill.categoryId)
+                            ?.name || "Uncategorized"}
                         </div>
                       </td>
-                      <td class="font-semibold">{formatCurrency(bill.amount)}</td>
-                      <td>
-                        <span class={`badge ${status.class}`}>{status.text}</span>
+                      <td class="font-semibold">
+                        {formatCurrency(bill.amount)}
                       </td>
-                      <td>{FREQUENCIES.find(f => f.value === bill.frequency)?.label}</td>
+                      <td>
+                        <span class={`badge ${status.class}`}>
+                          {status.text}
+                        </span>
+                      </td>
+                      <td>
+                        {FREQUENCIES.find((f) => f.value === bill.frequency)
+                          ?.label}
+                      </td>
                       <td>Day {bill.dueDay}</td>
                       <td>
                         <div class="flex gap-1">
-                          <button type="button" class="btn btn-success btn-xs" onClick={() => markPaid(bill)}>Paid</button>
-                          <button type="button" class="btn btn-ghost btn-xs" onClick={() => openEditModal(bill)}>Edit</button>
-                          <button type="button" class="btn btn-ghost btn-xs text-error" onClick={() => deleteBill(bill)}>×</button>
+                          <button
+                            type="button"
+                            class="btn btn-success btn-xs"
+                            onClick={() => markPaid(bill)}
+                          >
+                            Paid
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-ghost btn-xs"
+                            onClick={() => openEditModal(bill)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-ghost btn-xs text-error"
+                            onClick={() => deleteBill(bill)}
+                          >
+                            ×
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -221,58 +275,141 @@ export default function BillsManager({ initialBills, categories }: Props) {
       {isModalOpen.value && (
         <div class="modal modal-open">
           <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">{editingBill.value ? "Edit Bill" : "Add Bill"}</h3>
+            <h3 class="font-bold text-lg mb-4">
+              {editingBill.value ? "Edit Bill" : "Add Bill"}
+            </h3>
             <form onSubmit={handleSubmit}>
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control col-span-2">
-                  <label class="label"><span class="label-text">Bill Name</span></label>
-                  <input type="text" class="input input-bordered" value={formName.value} onInput={(e) => formName.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Bill Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="input input-bordered"
+                    value={formName.value}
+                    onInput={(e) => formName.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Amount</span></label>
-                  <input type="number" step="0.01" class="input input-bordered" value={formAmount.value} onInput={(e) => formAmount.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Amount</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="input input-bordered"
+                    value={formAmount.value}
+                    onInput={(e) => formAmount.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Due Day</span></label>
-                  <input type="number" min="1" max="31" class="input input-bordered" value={formDueDay.value} onInput={(e) => formDueDay.value = e.currentTarget.value} required />
+                  <label class="label">
+                    <span class="label-text">Due Day</span>
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="31"
+                    class="input input-bordered"
+                    value={formDueDay.value}
+                    onInput={(e) => formDueDay.value = e.currentTarget.value}
+                    required
+                  />
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Frequency</span></label>
-                  <select class="select select-bordered" value={formFrequency.value} onChange={(e) => formFrequency.value = e.currentTarget.value}>
-                    {FREQUENCIES.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
+                  <label class="label">
+                    <span class="label-text">Frequency</span>
+                  </label>
+                  <select
+                    class="select select-bordered"
+                    value={formFrequency.value}
+                    onChange={(e) =>
+                      formFrequency.value = e.currentTarget.value}
+                  >
+                    {FREQUENCIES.map((f) => (
+                      <option key={f.value} value={f.value}>{f.label}</option>
+                    ))}
                   </select>
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Category</span></label>
-                  <select class="select select-bordered" value={formCategoryId.value} onChange={(e) => formCategoryId.value = e.currentTarget.value}>
+                  <label class="label">
+                    <span class="label-text">Category</span>
+                  </label>
+                  <select
+                    class="select select-bordered"
+                    value={formCategoryId.value}
+                    onChange={(e) =>
+                      formCategoryId.value = e.currentTarget.value}
+                  >
                     <option value="">None</option>
-                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
                   </select>
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Reminder Days</span></label>
-                  <input type="number" min="0" max="30" class="input input-bordered" value={formReminderDays.value} onInput={(e) => formReminderDays.value = e.currentTarget.value} />
+                  <label class="label">
+                    <span class="label-text">Reminder Days</span>
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="30"
+                    class="input input-bordered"
+                    value={formReminderDays.value}
+                    onInput={(e) =>
+                      formReminderDays.value = e.currentTarget.value}
+                  />
                 </div>
                 <div class="form-control">
                   <label class="label cursor-pointer">
                     <span class="label-text">Auto-Pay</span>
-                    <input type="checkbox" class="checkbox checkbox-primary" checked={formIsAutoPay.value} onChange={(e) => formIsAutoPay.value = e.currentTarget.checked} />
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-primary"
+                      checked={formIsAutoPay.value}
+                      onChange={(e) =>
+                        formIsAutoPay.value = e.currentTarget.checked}
+                    />
                   </label>
                 </div>
                 <div class="form-control col-span-2">
-                  <label class="label"><span class="label-text">Notes</span></label>
-                  <textarea class="textarea textarea-bordered" value={formNotes.value} onInput={(e) => formNotes.value = e.currentTarget.value}></textarea>
+                  <label class="label">
+                    <span class="label-text">Notes</span>
+                  </label>
+                  <textarea
+                    class="textarea textarea-bordered"
+                    value={formNotes.value}
+                    onInput={(e) => formNotes.value = e.currentTarget.value}
+                  >
+                  </textarea>
                 </div>
               </div>
               <div class="modal-action">
-                <button type="button" class="btn" onClick={() => isModalOpen.value = false}>Cancel</button>
-                <button type="submit" class="btn btn-primary" disabled={isSubmitting.value}>
-                  {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Save"}
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => isModalOpen.value = false}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "Save"}
                 </button>
               </div>
             </form>
           </div>
-          <div class="modal-backdrop" onClick={() => isModalOpen.value = false}></div>
+          <div class="modal-backdrop" onClick={() => isModalOpen.value = false}>
+          </div>
         </div>
       )}
     </div>
