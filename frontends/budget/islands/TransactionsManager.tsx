@@ -340,6 +340,55 @@ export default function TransactionsManager({
     }];
   };
 
+  const applySplitPreset = (
+    type: "50/50" | "thirds" | "quarters" | "custom",
+  ) => {
+    const total = Math.abs(splitTransactionAmount.value);
+
+    switch (type) {
+      case "50/50":
+        splitRows.value = [
+          { categoryId: "", amount: (total / 2).toFixed(2), memo: "" },
+          { categoryId: "", amount: (total / 2).toFixed(2), memo: "" },
+        ];
+        break;
+      case "thirds":
+        splitRows.value = [
+          { categoryId: "", amount: (total / 3).toFixed(2), memo: "" },
+          { categoryId: "", amount: (total / 3).toFixed(2), memo: "" },
+          { categoryId: "", amount: (total / 3).toFixed(2), memo: "" },
+        ];
+        break;
+      case "quarters":
+        splitRows.value = [
+          { categoryId: "", amount: (total / 4).toFixed(2), memo: "" },
+          { categoryId: "", amount: (total / 4).toFixed(2), memo: "" },
+          { categoryId: "", amount: (total / 4).toFixed(2), memo: "" },
+          { categoryId: "", amount: (total / 4).toFixed(2), memo: "" },
+        ];
+        break;
+      case "custom":
+        splitRows.value = [{ categoryId: "", amount: "0", memo: "" }];
+        break;
+    }
+  };
+
+  const autoDistributeRemaining = () => {
+    if (splitRows.value.length === 0) return;
+
+    const total = Math.abs(splitTransactionAmount.value);
+    const currentTotal = getSplitsTotal();
+    const remaining = total - currentTotal;
+
+    if (Math.abs(remaining) < 0.01) return;
+
+    const lastIndex = splitRows.value.length - 1;
+    const lastAmount = parseFloat(splitRows.value[lastIndex].amount) || 0;
+    const newAmount = (lastAmount + remaining).toFixed(2);
+
+    updateSplitRow(lastIndex, "amount", newAmount);
+  };
+
   const removeSplitRow = (index: number) => {
     if (splitRows.value.length > 1) {
       splitRows.value = splitRows.value.filter((_, i) => i !== index);
@@ -1050,42 +1099,136 @@ export default function TransactionsManager({
         </div>
       )}
 
-      {/* Split Transaction Modal */}
+      {/* Split Transaction Modal - ENHANCED */}
       {isSplitModalOpen.value && (
         <div class="modal modal-open">
           <div class="modal-box max-w-2xl">
             <h3 class="font-bold text-lg mb-4">✂️ Split Transaction</h3>
-            <div class="mb-4 p-3 bg-slate-100 rounded-lg">
-              <div class="flex justify-between">
-                <span class="font-medium">Transaction Total:</span>
-                <span
-                  class={`font-bold ${
-                    splitTransactionAmount.value >= 0
-                      ? "text-green-600"
-                      : "text-slate-800"
-                  }`}
+
+            {/* Preset Buttons */}
+            <div class="mb-4">
+              <label class="label">
+                <span class="label-text font-medium">Quick Presets:</span>
+              </label>
+              <div class="flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline"
+                  onClick={() => applySplitPreset("50/50")}
                 >
-                  {formatCurrency(splitTransactionAmount.value)}
+                  50/50
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline"
+                  onClick={() => applySplitPreset("thirds")}
+                >
+                  Thirds
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline"
+                  onClick={() => applySplitPreset("quarters")}
+                >
+                  Quarters
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline btn-ghost"
+                  onClick={() => applySplitPreset("custom")}
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            {/* Enhanced Total Indicator with Border Color */}
+            <div
+              class={`mb-4 p-4 bg-slate-50 rounded-lg border-2 ${
+                Math.abs(
+                    getSplitsTotal() - Math.abs(splitTransactionAmount.value),
+                  ) < 0.01
+                  ? "border-green-500"
+                  : "border-red-500"
+              }`}
+            >
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-medium text-slate-700">
+                  Transaction Total:
+                </span>
+                <span class="text-xl font-bold text-slate-800">
+                  {formatCurrency(Math.abs(splitTransactionAmount.value))}
                 </span>
               </div>
-              <div class="flex justify-between text-sm">
-                <span>Splits Total:</span>
+              <div class="divider my-1"></div>
+              <div class="flex justify-between items-center">
+                <span class="font-medium text-slate-700">Splits Total:</span>
                 <span
-                  class={Math.abs(
-                      getSplitsTotal() - splitTransactionAmount.value,
-                    ) < 0.01
-                    ? "text-green-600"
-                    : "text-red-600"}
+                  class={`text-xl font-bold ${
+                    Math.abs(
+                        getSplitsTotal() -
+                          Math.abs(splitTransactionAmount.value),
+                      ) < 0.01
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
                 >
                   {formatCurrency(getSplitsTotal())}
                 </span>
               </div>
-              {Math.abs(getSplitsTotal() - splitTransactionAmount.value) >=
-                  0.01 && (
-                <div class="text-xs text-red-500 mt-1">
-                  Remaining: {formatCurrency(
-                    splitTransactionAmount.value - getSplitsTotal(),
-                  )}
+              {Math.abs(
+                    getSplitsTotal() - Math.abs(splitTransactionAmount.value),
+                  ) >= 0.01 && (
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-200">
+                  <span class="text-sm font-medium text-slate-600">
+                    {getSplitsTotal() < Math.abs(splitTransactionAmount.value)
+                      ? "Remaining:"
+                      : "Over by:"}
+                  </span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-lg font-semibold text-red-600">
+                      {formatCurrency(
+                        Math.abs(
+                          Math.abs(splitTransactionAmount.value) -
+                            getSplitsTotal(),
+                        ),
+                      )}
+                    </span>
+                    {getSplitsTotal() <
+                        Math.abs(splitTransactionAmount.value) && (
+                      <button
+                        type="button"
+                        class="btn btn-xs btn-success"
+                        onClick={autoDistributeRemaining}
+                        title="Add remaining amount to last split"
+                      >
+                        Auto-Fix
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+              {Math.abs(
+                    getSplitsTotal() - Math.abs(splitTransactionAmount.value),
+                  ) < 0.01 && (
+                <div class="flex items-center justify-center mt-2 pt-2 border-t border-green-200">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-green-600 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium text-green-600">
+                    Splits balanced!
+                  </span>
                 </div>
               )}
             </div>
@@ -1094,11 +1237,25 @@ export default function TransactionsManager({
               {splitRows.value.map((row, index) => (
                 <div
                   key={index}
-                  class="flex gap-2 items-start p-2 bg-slate-50 rounded"
+                  class={`flex gap-2 items-start p-2 bg-slate-50 rounded ${
+                    !row.categoryId && parseFloat(row.amount) > 0
+                      ? "border border-yellow-300"
+                      : ""
+                  }`}
                 >
                   <div class="form-control flex-1">
                     <label class="label py-0">
-                      <span class="label-text text-xs">Category</span>
+                      <span class="label-text text-xs">
+                        Category
+                        {!row.categoryId && parseFloat(row.amount) > 0 && (
+                          <span
+                            class="text-yellow-600 ml-1"
+                            title="Consider assigning a category"
+                          >
+                            ⚠️
+                          </span>
+                        )}
+                      </span>
                     </label>
                     <select
                       class="select select-bordered select-sm w-full"
@@ -1188,7 +1345,9 @@ export default function TransactionsManager({
                 class="btn btn-primary"
                 onClick={saveSplits}
                 disabled={isSubmitting.value ||
-                  Math.abs(getSplitsTotal() - splitTransactionAmount.value) >=
+                  Math.abs(
+                      getSplitsTotal() - Math.abs(splitTransactionAmount.value),
+                    ) >=
                     0.01}
               >
                 {isSubmitting.value
@@ -1204,7 +1363,6 @@ export default function TransactionsManager({
           </div>
         </div>
       )}
-
       {/* Bulk Category Modal */}
       {isBulkCategoryModalOpen.value && (
         <div class="modal modal-open">
