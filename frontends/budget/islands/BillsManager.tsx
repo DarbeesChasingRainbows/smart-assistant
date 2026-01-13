@@ -23,6 +23,9 @@ export default function BillsManager({ initialBills, categories }: Props) {
   const isModalOpen = useSignal(false);
   const editingBill = useSignal<Bill | null>(null);
   const isSubmitting = useSignal(false);
+  const markingPaidId = useSignal<number | null>(null);
+  const successMessage = useSignal<string | null>(null);
+  const errorMessage = useSignal<string | null>(null);
 
   const formName = useSignal("");
   const formAmount = useSignal("0");
@@ -126,19 +129,56 @@ export default function BillsManager({ initialBills, categories }: Props) {
   };
 
   const markPaid = async (bill: Bill) => {
+    markingPaidId.value = bill.id;
+    errorMessage.value = null;
+    successMessage.value = null;
+
     try {
-      await fetch(`${API_BASE}/bills/${bill.id}/paid`, {
+      const res = await fetch(`${API_BASE}/bills/${bill.id}/paid`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          paidDate: new Date().toISOString().split("T")[0],
+          paidDate: new Date().toISOString(),
+          actualAmount: bill.amount,
+          memo: `Bill payment: ${bill.name}`,
         }),
       });
-      // Refresh bills
-      const res = await fetch(`${API_BASE}/bills?activeOnly=false`);
-      if (res.ok) bills.value = await res.json();
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to mark bill as paid");
+      }
+
+      const result = await res.json();
+
+      // Refresh bills to show updated lastPaidDate and nextDueDate
+      const billsRes = await fetch(`${API_BASE}/bills?activeOnly=false`);
+      if (billsRes.ok) {
+        bills.value = await billsRes.json();
+      }
+
+      // Show success message
+      successMessage.value =
+        `✓ ${bill.name} marked as paid! Transaction created. Next due: ${
+          new Date(result.nextDueDate).toLocaleDateString()
+        }`;
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        successMessage.value = null;
+      }, 5000);
     } catch (error) {
       console.error("Error marking paid:", error);
+      errorMessage.value = error instanceof Error
+        ? error.message
+        : "Error marking bill as paid";
+
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        errorMessage.value = null;
+      }, 5000);
+    } finally {
+      markingPaidId.value = null;
     }
   };
 
@@ -172,6 +212,46 @@ export default function BillsManager({ initialBills, categories }: Props) {
 
   return (
     <div class="space-y-6">
+      {/* Success Message Toast */}
+      {successMessage.value && (
+        <div class="alert alert-success shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>{successMessage.value}</span>
+        </div>
+      )}
+
+      {/* Error Message Toast */}
+      {errorMessage.value && (
+        <div class="alert alert-error shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>{errorMessage.value}</span>
+        </div>
+      )}
+
       <div class="card bg-white shadow-xl">
         <div class="card-body">
           <div class="flex justify-between items-center">
@@ -195,13 +275,15 @@ export default function BillsManager({ initialBills, categories }: Props) {
       <div class="card bg-white shadow-xl">
         <div class="card-body">
           <div class="overflow-x-auto">
-            <table class="table">
+            <table class="table table-sm">
               <thead>
                 <tr>
                   <th>Bill</th>
                   <th>Amount</th>
-                  <th>Due</th>
+                  <th>Due Day</th>
                   <th>Frequency</th>
+                  <th>Last Paid</th>
+                  <th>Next Due</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
@@ -228,24 +310,40 @@ export default function BillsManager({ initialBills, categories }: Props) {
                       <td class="font-semibold">
                         {formatCurrency(bill.amount)}
                       </td>
+                      <td>Day {bill.dueDay}</td>
+                      <td>
+                        {FREQUENCIES.find((f) => f.value === bill.frequency)
+                          ?.label}
+                      </td>
+                      <td class="text-sm">
+                        {bill.lastPaidDate
+                          ? new Date(bill.lastPaidDate).toLocaleDateString()
+                          : <span class="text-slate-400 italic">Never</span>}
+                      </td>
+                      <td class="text-sm">
+                        {bill.nextDueDate
+                          ? new Date(bill.nextDueDate).toLocaleDateString()
+                          : <span class="text-slate-400 italic">-</span>}
+                      </td>
                       <td>
                         <span class={`badge ${status.class}`}>
                           {status.text}
                         </span>
                       </td>
                       <td>
-                        {FREQUENCIES.find((f) => f.value === bill.frequency)
-                          ?.label}
-                      </td>
-                      <td>Day {bill.dueDay}</td>
-                      <td>
                         <div class="flex gap-1">
                           <button
                             type="button"
                             class="btn btn-success btn-xs"
                             onClick={() => markPaid(bill)}
+                            disabled={markingPaidId.value === bill.id}
                           >
-                            Paid
+                            {markingPaidId.value === bill.id
+                              ? (
+                                <span class="loading loading-spinner loading-xs">
+                                </span>
+                              )
+                              : "✓ Paid"}
                           </button>
                           <button
                             type="button"
