@@ -32,9 +32,14 @@ export default function AccountsManager({ initialAccounts }: Props) {
   const formOnBudget = useSignal(true);
 
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
+      .format(amount);
 
-  const totalBalance = () => accounts.value.filter(a => !a.isClosed).reduce((sum, a) => sum + a.currentBalance, 0);
+  const totalBalance = () =>
+    accounts.value.filter((a) => !a.isClosed).reduce(
+      (sum, a) => sum + (a.currentBalance ?? 0),
+      0,
+    );
 
   const openAddModal = () => {
     editingAccount.value = null;
@@ -49,12 +54,12 @@ export default function AccountsManager({ initialAccounts }: Props) {
 
   const openEditModal = (account: Account) => {
     editingAccount.value = account;
-    formName.value = account.name;
-    formType.value = account.accountType;
+    formName.value = account.name ?? "";
+    formType.value = account.accountType ?? "checking";
     formInstitution.value = account.institution || "";
     formLastFour.value = account.lastFour || "";
-    formBalance.value = account.currentBalance.toString();
-    formOnBudget.value = account.isOnBudget;
+    formBalance.value = (account.currentBalance ?? 0).toString();
+    formOnBudget.value = account.isOnBudget ?? true;
     isModalOpen.value = true;
   };
 
@@ -65,18 +70,23 @@ export default function AccountsManager({ initialAccounts }: Props) {
     try {
       if (editingAccount.value) {
         // Update existing
-        const res = await fetch(`${API_BASE}/accounts/${editingAccount.value.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formName.value,
-            institution: formInstitution.value || null,
-            isOnBudget: formOnBudget.value,
-          }),
-        });
+        const res = await fetch(
+          `${API_BASE}/accounts/${editingAccount.value.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: formName.value,
+              institution: formInstitution.value || null,
+              isOnBudget: formOnBudget.value,
+            }),
+          },
+        );
         if (res.ok) {
           const updated = await res.json();
-          accounts.value = accounts.value.map(a => a.id === updated.id ? updated : a);
+          accounts.value = accounts.value.map((a) =>
+            a.id === updated.id ? updated : a
+          );
         }
       } else {
         // Create new
@@ -114,7 +124,9 @@ export default function AccountsManager({ initialAccounts }: Props) {
       });
       if (res.ok) {
         const updated = await res.json();
-        accounts.value = accounts.value.map(a => a.id === updated.id ? updated : a);
+        accounts.value = accounts.value.map((a) =>
+          a.id === updated.id ? updated : a
+        );
       }
     } catch (error) {
       console.error("Error toggling account:", error);
@@ -129,11 +141,19 @@ export default function AccountsManager({ initialAccounts }: Props) {
           <div class="flex justify-between items-center">
             <div>
               <h2 class="text-lg text-slate-500">Total Balance</h2>
-              <div class={`text-3xl font-bold ${totalBalance() >= 0 ? "text-slate-800" : "text-red-600"}`}>
+              <div
+                class={`text-3xl font-bold ${
+                  totalBalance() >= 0 ? "text-slate-800" : "text-red-600"
+                }`}
+              >
                 {formatCurrency(totalBalance())}
               </div>
             </div>
-            <button class="btn btn-primary" onClick={openAddModal}>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick={openAddModal}
+            >
               + Add Account
             </button>
           </div>
@@ -157,39 +177,63 @@ export default function AccountsManager({ initialAccounts }: Props) {
               </thead>
               <tbody>
                 {accounts.value.map((account) => (
-                  <tr key={account.id} class={account.isClosed ? "opacity-50" : ""}>
+                  <tr
+                    key={account.id}
+                    class={account.isClosed ? "opacity-50" : ""}
+                  >
                     <td>
                       <div class="font-medium">{account.name}</div>
                       <div class="text-sm text-slate-500">
-                        {account.institution} {account.lastFour && `••${account.lastFour}`}
+                        {account.institution}{" "}
+                        {account.lastFour && `••${account.lastFour}`}
                       </div>
                     </td>
                     <td>
                       <span class="badge badge-ghost">
-                        {ACCOUNT_TYPES.find(t => t.value === account.accountType)?.label || account.accountType}
+                        {ACCOUNT_TYPES.find((t) =>
+                          t.value === account.accountType
+                        )?.label || account.accountType}
                       </span>
                     </td>
-                    <td class={`text-right font-semibold ${account.currentBalance >= 0 ? "" : "text-red-600"}`}>
-                      {formatCurrency(account.currentBalance)}
+                    <td
+                      class={`text-right font-semibold ${
+                        (account.currentBalance ?? 0) >= 0 ? "" : "text-red-600"
+                      }`}
+                    >
+                      {formatCurrency(account.currentBalance ?? 0)}
                     </td>
                     <td class="text-right text-slate-500">
-                      {formatCurrency(account.clearedBalance)}
+                      {formatCurrency(account.clearedBalance ?? 0)}
                     </td>
                     <td>
-                      {account.isClosed ? (
-                        <span class="badge badge-error badge-sm">Closed</span>
-                      ) : account.isOnBudget ? (
-                        <span class="badge badge-success badge-sm">On Budget</span>
-                      ) : (
-                        <span class="badge badge-warning badge-sm">Tracking</span>
-                      )}
+                      {account.isClosed
+                        ? <span class="badge badge-error badge-sm">Closed</span>
+                        : account.isOnBudget
+                        ? (
+                          <span class="badge badge-success badge-sm">
+                            On Budget
+                          </span>
+                        )
+                        : (
+                          <span class="badge badge-warning badge-sm">
+                            Tracking
+                          </span>
+                        )}
                     </td>
                     <td>
                       <div class="flex gap-2">
-                        <button class="btn btn-ghost btn-xs" onClick={() => openEditModal(account)}>
+                        <button
+                          type="button"
+                          class="btn btn-ghost btn-xs"
+                          onClick={() => openEditModal(account)}
+                        >
                           Edit
                         </button>
-                        <button class="btn btn-ghost btn-xs" onClick={() => toggleClosed(account)}>
+                        <button
+                          type="button"
+                          class="btn btn-ghost btn-xs"
+                          onClick={() => toggleClosed(account)}
+                        >
                           {account.isClosed ? "Reopen" : "Close"}
                         </button>
                       </div>
@@ -211,7 +255,9 @@ export default function AccountsManager({ initialAccounts }: Props) {
             </h3>
             <form onSubmit={handleSubmit}>
               <div class="form-control mb-4">
-                <label class="label"><span class="label-text">Account Name</span></label>
+                <label class="label">
+                  <span class="label-text">Account Name</span>
+                </label>
                 <input
                   type="text"
                   class="input input-bordered"
@@ -224,20 +270,24 @@ export default function AccountsManager({ initialAccounts }: Props) {
               {!editingAccount.value && (
                 <>
                   <div class="form-control mb-4">
-                    <label class="label"><span class="label-text">Account Type</span></label>
+                    <label class="label">
+                      <span class="label-text">Account Type</span>
+                    </label>
                     <select
                       class="select select-bordered"
                       value={formType.value}
                       onChange={(e) => formType.value = e.currentTarget.value}
                     >
-                      {ACCOUNT_TYPES.map(t => (
+                      {ACCOUNT_TYPES.map((t) => (
                         <option key={t.value} value={t.value}>{t.label}</option>
                       ))}
                     </select>
                   </div>
 
                   <div class="form-control mb-4">
-                    <label class="label"><span class="label-text">Starting Balance</span></label>
+                    <label class="label">
+                      <span class="label-text">Starting Balance</span>
+                    </label>
                     <input
                       type="number"
                       step="0.01"
@@ -250,7 +300,9 @@ export default function AccountsManager({ initialAccounts }: Props) {
               )}
 
               <div class="form-control mb-4">
-                <label class="label"><span class="label-text">Institution</span></label>
+                <label class="label">
+                  <span class="label-text">Institution</span>
+                </label>
                 <input
                   type="text"
                   class="input input-bordered"
@@ -262,7 +314,9 @@ export default function AccountsManager({ initialAccounts }: Props) {
 
               {!editingAccount.value && (
                 <div class="form-control mb-4">
-                  <label class="label"><span class="label-text">Last 4 Digits</span></label>
+                  <label class="label">
+                    <span class="label-text">Last 4 Digits</span>
+                  </label>
                   <input
                     type="text"
                     maxLength={4}
@@ -281,22 +335,34 @@ export default function AccountsManager({ initialAccounts }: Props) {
                     type="checkbox"
                     class="checkbox checkbox-primary"
                     checked={formOnBudget.value}
-                    onChange={(e) => formOnBudget.value = e.currentTarget.checked}
+                    onChange={(e) =>
+                      formOnBudget.value = e.currentTarget.checked}
                   />
                 </label>
               </div>
 
               <div class="modal-action">
-                <button type="button" class="btn" onClick={() => isModalOpen.value = false}>
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => isModalOpen.value = false}
+                >
                   Cancel
                 </button>
-                <button type="submit" class="btn btn-primary" disabled={isSubmitting.value}>
-                  {isSubmitting.value ? <span class="loading loading-spinner loading-sm"></span> : "Save"}
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "Save"}
                 </button>
               </div>
             </form>
           </div>
-          <div class="modal-backdrop" onClick={() => isModalOpen.value = false}></div>
+          <div class="modal-backdrop" onClick={() => isModalOpen.value = false}>
+          </div>
         </div>
       )}
     </div>

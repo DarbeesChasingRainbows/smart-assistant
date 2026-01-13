@@ -4,11 +4,14 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   base: "/budget/",
-  plugins: [fresh(
-    {
-      serverEntry: "./main.tsx" // The Fix: Explicitly point to the .tsx file
-    }
-  ), tailwindcss()],
+  plugins: [
+    fresh(
+      {
+        serverEntry: "./main.tsx", // The Fix: Explicitly point to the .tsx file
+      },
+    ),
+    tailwindcss(),
+  ],
   server: {
     proxy: {
       "/api": {

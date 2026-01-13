@@ -218,7 +218,8 @@ export interface Transaction {
     fileName: string;
   };
   splits?: Array<{
-    categoryId: number;
+    categoryKey?: string | null;
+    categoryId?: number;
     amount: number;
     memo?: string;
   }>;

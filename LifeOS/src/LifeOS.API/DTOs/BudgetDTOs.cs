@@ -238,6 +238,7 @@ public record BudgetTransactionDto
     public string Payee { get; init; } = string.Empty;
     public string? Memo { get; init; }
     public decimal Amount { get; init; }
+    public List<SplitItem>? Splits { get; init; }
     public DateTime TransactionDate { get; init; }
     public bool IsCleared { get; init; }
     public bool IsReconciled { get; init; }
@@ -305,6 +306,19 @@ public record UpcomingBillDto
     public string CategoryName { get; init; } = string.Empty;
     public string AccountName { get; init; } = string.Empty;
     public bool IsAutoPay { get; init; }
+}
+
+// Split transaction DTOs
+public record SplitItem
+{
+    public string? CategoryKey { get; init; }
+    public decimal Amount { get; init; }
+    public string? Memo { get; init; }
+}
+
+public record ReplaceSplitsRequest
+{
+    public List<SplitItem> Splits { get; init; } = [];
 }
 
 // Dashboard DTO (aggregated view)
