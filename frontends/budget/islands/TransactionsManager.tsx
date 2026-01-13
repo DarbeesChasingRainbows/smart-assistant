@@ -56,6 +56,25 @@ export default function TransactionsManager({
   const isBulkCategoryModalOpen = useSignal(false);
   const bulkCategoryId = useSignal<string>("");
 
+  // Bulk edit state
+  const isBulkEditModalOpen = useSignal(false);
+  const bulkEditField = useSignal<"date" | "payee" | "memo">("payee");
+  const bulkEditValue = useSignal("");
+
+  // Progress tracking
+  const bulkProgressCurrent = useSignal(0);
+  const bulkProgressTotal = useSignal(0);
+  const bulkProgressMessage = useSignal("");
+
+  // Undo/redo history
+  interface UndoState {
+    action: string;
+    transactions: Transaction[];
+    timestamp: number;
+  }
+  const undoHistory = useSignal<UndoState[]>([]);
+  const redoHistory = useSignal<UndoState[]>([]);
+
   // Split editor state
   const isSplitModalOpen = useSignal(false);
   const splitTransactionId = useSignal<string | null>(null);
@@ -501,15 +520,30 @@ export default function TransactionsManager({
 
   const bulkClear = async () => {
     if (selectedTxIds.value.size === 0) return;
+
+    // Save undo state
+    saveUndoState("Bulk Clear");
+
     isSubmitting.value = true;
+    bulkProgressTotal.value = selectedTxIds.value.size;
+    bulkProgressCurrent.value = 0;
+    bulkProgressMessage.value = "Clearing transactions...";
+
     try {
-      for (const txId of selectedTxIds.value) {
-        await fetch(`${API_BASE}/transactions/${txId}/clear`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "cleared" }),
-        });
-      }
+      const txIds = Array.from(selectedTxIds.value);
+
+      // Batch API calls with Promise.all
+      await Promise.all(
+        txIds.map(async (txId, index) => {
+          await fetch(`${API_BASE}/transactions/${txId}/clear`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "cleared" }),
+          });
+          bulkProgressCurrent.value = index + 1;
+        }),
+      );
+
       transactions.value = transactions.value.map((t) =>
         selectedTxIds.value.has(getTxKey(t))
           ? {
@@ -521,19 +555,38 @@ export default function TransactionsManager({
       clearSelection();
     } catch (error) {
       console.error("Error bulk clearing:", error);
+      alert("Error clearing transactions. Some may not have been updated.");
     } finally {
       isSubmitting.value = false;
+      bulkProgressTotal.value = 0;
+      bulkProgressCurrent.value = 0;
+      bulkProgressMessage.value = "";
     }
   };
 
   const bulkDelete = async () => {
     if (selectedTxIds.value.size === 0) return;
     if (!confirm(`Delete ${selectedTxIds.value.size} transaction(s)?`)) return;
+
+    // Save undo state
+    saveUndoState("Bulk Delete");
+
     isSubmitting.value = true;
+    bulkProgressTotal.value = selectedTxIds.value.size;
+    bulkProgressCurrent.value = 0;
+    bulkProgressMessage.value = "Deleting transactions...";
+
     try {
-      for (const txId of selectedTxIds.value) {
-        await fetch(`${API_BASE}/transactions/${txId}`, { method: "DELETE" });
-      }
+      const txIds = Array.from(selectedTxIds.value);
+
+      // Batch API calls with Promise.all
+      await Promise.all(
+        txIds.map(async (txId, index) => {
+          await fetch(`${API_BASE}/transactions/${txId}`, { method: "DELETE" });
+          bulkProgressCurrent.value = index + 1;
+        }),
+      );
+
       transactions.value = transactions.value.filter((t) =>
         !selectedTxIds.value.has(getTxKey(t))
       );
@@ -541,8 +594,12 @@ export default function TransactionsManager({
       calculateAccountStats();
     } catch (error) {
       console.error("Error bulk deleting:", error);
+      alert("Error deleting transactions. Some may not have been deleted.");
     } finally {
       isSubmitting.value = false;
+      bulkProgressTotal.value = 0;
+      bulkProgressCurrent.value = 0;
+      bulkProgressMessage.value = "";
     }
   };
 
@@ -553,16 +610,31 @@ export default function TransactionsManager({
 
   const applyBulkCategory = async () => {
     if (selectedTxIds.value.size === 0 || !bulkCategoryId.value) return;
+
+    // Save undo state
+    saveUndoState("Bulk Categorize");
+
     isSubmitting.value = true;
+    bulkProgressTotal.value = selectedTxIds.value.size;
+    bulkProgressCurrent.value = 0;
+    bulkProgressMessage.value = "Categorizing transactions...";
+
     try {
       const categoryKey = bulkCategoryId.value;
-      for (const txId of selectedTxIds.value) {
-        await fetch(`${API_BASE}/transactions/${txId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ categoryKey }),
-        });
-      }
+      const txIds = Array.from(selectedTxIds.value);
+
+      // Batch API calls with Promise.all for parallel execution
+      await Promise.all(
+        txIds.map(async (txId, index) => {
+          await fetch(`${API_BASE}/transactions/${txId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ categoryKey }),
+          });
+          bulkProgressCurrent.value = index + 1;
+        }),
+      );
+
       transactions.value = transactions.value.map((t) =>
         selectedTxIds.value.has(getTxKey(t))
           ? {
@@ -576,8 +648,155 @@ export default function TransactionsManager({
       await refreshCategoryBalances();
     } catch (error) {
       console.error("Error applying bulk category:", error);
+      alert("Error categorizing transactions. Some may not have been updated.");
     } finally {
       isSubmitting.value = false;
+      bulkProgressTotal.value = 0;
+      bulkProgressCurrent.value = 0;
+      bulkProgressMessage.value = "";
+    }
+  };
+
+  // Undo/Redo functions
+  const saveUndoState = (action: string) => {
+    undoHistory.value = [
+      ...undoHistory.value,
+      {
+        action,
+        transactions: JSON.parse(JSON.stringify(transactions.value)),
+        timestamp: Date.now(),
+      },
+    ];
+    // Keep only last 20 undo states
+    if (undoHistory.value.length > 20) {
+      undoHistory.value = undoHistory.value.slice(-20);
+    }
+    // Clear redo history when new action is performed
+    redoHistory.value = [];
+  };
+
+  const undo = () => {
+    if (undoHistory.value.length === 0) return;
+    const lastState = undoHistory.value[undoHistory.value.length - 1];
+
+    // Save current state to redo
+    redoHistory.value = [
+      ...redoHistory.value,
+      {
+        action: `Undo ${lastState.action}`,
+        transactions: JSON.parse(JSON.stringify(transactions.value)),
+        timestamp: Date.now(),
+      },
+    ];
+
+    // Restore previous state
+    transactions.value = JSON.parse(JSON.stringify(lastState.transactions));
+    undoHistory.value = undoHistory.value.slice(0, -1);
+    calculateAccountStats();
+  };
+
+  const redo = () => {
+    if (redoHistory.value.length === 0) return;
+    const nextState = redoHistory.value[redoHistory.value.length - 1];
+
+    // Save current state to undo
+    undoHistory.value = [
+      ...undoHistory.value,
+      {
+        action: nextState.action,
+        transactions: JSON.parse(JSON.stringify(transactions.value)),
+        timestamp: Date.now(),
+      },
+    ];
+
+    // Restore next state
+    transactions.value = JSON.parse(JSON.stringify(nextState.transactions));
+    redoHistory.value = redoHistory.value.slice(0, -1);
+    calculateAccountStats();
+  };
+
+  // Bulk edit functions
+  const openBulkEditModal = (field: "date" | "payee" | "memo") => {
+    bulkEditField.value = field;
+    bulkEditValue.value = "";
+    isBulkEditModalOpen.value = true;
+  };
+
+  const applyBulkEdit = async () => {
+    if (selectedTxIds.value.size === 0 || !bulkEditValue.value.trim()) return;
+
+    // Save undo state
+    saveUndoState(`Bulk Edit ${bulkEditField.value}`);
+
+    isSubmitting.value = true;
+    bulkProgressTotal.value = selectedTxIds.value.size;
+    bulkProgressCurrent.value = 0;
+    bulkProgressMessage.value = `Updating ${bulkEditField.value}...`;
+
+    try {
+      const txIds = Array.from(selectedTxIds.value);
+      const field = bulkEditField.value;
+      const value = bulkEditValue.value.trim();
+
+      // Build update payload based on field
+      const getUpdatePayload = () => {
+        if (field === "date") {
+          return { transactionDate: value };
+        } else if (field === "payee") {
+          return { payee: value };
+        } else {
+          return { memo: value };
+        }
+      };
+
+      const updatePayload = getUpdatePayload();
+
+      // Batch API calls with Promise.all
+      await Promise.all(
+        txIds.map(async (txId, index) => {
+          await fetch(`${API_BASE}/transactions/${txId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatePayload),
+          });
+          bulkProgressCurrent.value = index + 1;
+        }),
+      );
+
+      // Update local state
+      transactions.value = transactions.value.map((t) => {
+        if (!selectedTxIds.value.has(getTxKey(t))) return t;
+
+        if (field === "date") {
+          return {
+            ...(t as unknown as Record<string, unknown>),
+            transactionDate: value,
+          } as Transaction;
+        } else if (field === "payee") {
+          return {
+            ...(t as unknown as Record<string, unknown>),
+            payee: value,
+          } as Transaction;
+        } else {
+          return {
+            ...(t as unknown as Record<string, unknown>),
+            memo: value,
+          } as Transaction;
+        }
+      });
+
+      isBulkEditModalOpen.value = false;
+      clearSelection();
+    } catch (error) {
+      console.error(`Error bulk editing ${bulkEditField.value}:`, error);
+      alert(
+        `Error updating ${bulkEditField.value}. Some transactions may not have been updated.`,
+      );
+    } finally {
+      isSubmitting.value = false;
+      bulkProgressTotal.value = 0;
+      bulkProgressCurrent.value = 0;
+      bulkProgressMessage.value = "";
     }
   };
 
@@ -645,7 +864,7 @@ export default function TransactionsManager({
 
   return (
     <div class="space-y-6">
-      {/* Filter indicator and Add button */}
+      {/* Filter indicator, Undo/Redo, and Add button */}
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
           {filterAccountId.value !== null && (
@@ -664,6 +883,62 @@ export default function TransactionsManager({
             {filteredTransactions.value.length}{" "}
             transaction{filteredTransactions.value.length !== 1 ? "s" : ""}
           </span>
+
+          {/* Undo/Redo Buttons */}
+          <div class="flex gap-1 ml-4">
+            <button
+              type="button"
+              class="btn btn-sm btn-ghost"
+              onClick={undo}
+              disabled={undoHistory.value.length === 0}
+              title={undoHistory.value.length > 0
+                ? `Undo: ${
+                  undoHistory.value[undoHistory.value.length - 1].action
+                }`
+                : "Nothing to undo"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-ghost"
+              onClick={redo}
+              disabled={redoHistory.value.length === 0}
+              title={redoHistory.value.length > 0
+                ? `Redo: ${
+                  redoHistory.value[redoHistory.value.length - 1].action
+                }`
+                : "Nothing to redo"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
         <div class="flex gap-2">
           <button
@@ -681,28 +956,72 @@ export default function TransactionsManager({
 
       {/* Bulk Actions Toolbar */}
       {selectedTxIds.value.size > 0 && (
-        <div class="flex items-center gap-4 p-3 bg-primary/10 rounded-lg">
+        <div class="flex items-center gap-2 p-3 bg-primary/10 rounded-lg flex-wrap">
           <span class="font-medium">{selectedTxIds.value.size} selected</span>
+
+          {/* Bulk Edit Dropdown */}
+          <div class="dropdown">
+            <label tabIndex={0} class="btn btn-sm btn-outline">
+              ✏️ Edit
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-3 w-3 ml-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </label>
+            <ul
+              tabIndex={0}
+              class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a onClick={() => openBulkEditModal("date")}>
+                  📅 Change Date
+                </a>
+              </li>
+              <li>
+                <a onClick={() => openBulkEditModal("payee")}>
+                  👤 Change Payee
+                </a>
+              </li>
+              <li>
+                <a onClick={() => openBulkEditModal("memo")}>
+                  📝 Change Memo
+                </a>
+              </li>
+            </ul>
+          </div>
+
           <button
             type="button"
             class="btn btn-sm btn-outline"
             onClick={openBulkCategoryModal}
           >
-            Assign Category
+            🏷️ Category
           </button>
           <button
             type="button"
             class="btn btn-sm btn-outline btn-success"
             onClick={bulkClear}
+            disabled={isSubmitting.value}
           >
-            Mark Cleared
+            ✓ Clear
           </button>
           <button
             type="button"
             class="btn btn-sm btn-outline btn-error"
             onClick={bulkDelete}
+            disabled={isSubmitting.value}
           >
-            Delete
+            🗑️ Delete
           </button>
           <button
             type="button"
@@ -1531,6 +1850,110 @@ export default function TransactionsManager({
             class="modal-backdrop"
             onClick={() => isTransferModalOpen.value = false}
           >
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Edit Modal */}
+      {isBulkEditModalOpen.value && (
+        <div class="modal modal-open">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">
+              Bulk Edit {bulkEditField.value === "date"
+                ? "📅 Date"
+                : bulkEditField.value === "payee"
+                ? "👤 Payee"
+                : "📝 Memo"} for {selectedTxIds.value.size} Transaction(s)
+            </h3>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">
+                  New {bulkEditField.value === "date"
+                    ? "Date"
+                    : bulkEditField.value === "payee"
+                    ? "Payee"
+                    : "Memo"}
+                </span>
+              </label>
+              {bulkEditField.value === "date"
+                ? (
+                  <input
+                    type="date"
+                    class="input input-bordered w-full"
+                    value={bulkEditValue.value}
+                    onInput={(e) => bulkEditValue.value = e.currentTarget.value}
+                  />
+                )
+                : (
+                  <input
+                    type="text"
+                    class="input input-bordered w-full"
+                    placeholder={`Enter new ${bulkEditField.value}...`}
+                    value={bulkEditValue.value}
+                    onInput={(e) => bulkEditValue.value = e.currentTarget.value}
+                  />
+                )}
+            </div>
+            <div class="modal-action">
+              <button
+                type="button"
+                class="btn"
+                onClick={() => isBulkEditModalOpen.value = false}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={applyBulkEdit}
+                disabled={isSubmitting.value || !bulkEditValue.value.trim()}
+              >
+                {isSubmitting.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : "Apply"}
+              </button>
+            </div>
+          </div>
+          <div
+            class="modal-backdrop"
+            onClick={() => isBulkEditModalOpen.value = false}
+          >
+          </div>
+        </div>
+      )}
+
+      {/* Progress Indicator */}
+      {bulkProgressTotal.value > 0 && (
+        <div class="toast toast-center z-50">
+          <div class="alert alert-info shadow-lg">
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="stroke-current flex-shrink-0 w-6 h-6 animate-spin"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <div>
+                <div class="font-bold">{bulkProgressMessage.value}</div>
+                <div class="text-xs">
+                  {bulkProgressCurrent.value} of {bulkProgressTotal.value}{" "}
+                  completed
+                </div>
+                <progress
+                  class="progress progress-primary w-56 mt-2"
+                  value={bulkProgressCurrent.value}
+                  max={bulkProgressTotal.value}
+                >
+                </progress>
+              </div>
+            </div>
           </div>
         </div>
       )}
