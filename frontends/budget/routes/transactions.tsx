@@ -9,6 +9,7 @@ import type {
   Transaction,
 } from "../types/api.ts";
 import TransactionsManager from "../islands/TransactionsManager.tsx";
+import TransactionImportIsland from "../islands/TransactionImportIsland.tsx";
 
 async function fetchJsonWithTimeout<T>(
   input: string,
@@ -187,7 +188,16 @@ export default define.page<typeof handler>(function TransactionsPage(props) {
       </header>
 
       <main class="max-w-6xl mx-auto p-6">
-        <h1 class="text-3xl font-bold text-slate-800 mb-6">💸 Transactions</h1>
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-3xl font-bold text-slate-800">💸 Transactions</h1>
+          {accounts.length > 0 && (
+            <TransactionImportIsland
+              accountKey={accounts[0].accountKey ||
+                accounts[0].id?.toString() || ""}
+              onImportComplete={() => globalThis.location.reload()}
+            />
+          )}
+        </div>
 
         {error && (
           <div class="alert alert-error mb-6">
