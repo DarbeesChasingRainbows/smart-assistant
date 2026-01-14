@@ -977,11 +977,127 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
     private static async Task<IResult> MarkBillPaid(
         string key,
+        MarkBillPaidRequest request,
         [FromServices] ArangoDbContext db)
     {
-        // This would typically create a transaction and mark the bill as paid for this period
-        // For now, just return success
-        return Results.Ok(new { message = "Bill marked as paid", billKey = key });
+        try
+        {
+            // Fetch the bill
+            var bill = await db.Client.Document.GetDocumentAsync<dynamic>(BillCollection, key);
+            if (bill == null)
+            {
+                return Results.NotFound(new { error = "Bill not found" });
+            }
+
+            string? accountKey = bill.accountKey?.ToString();
+            string? categoryKey = bill.categoryKey?.ToString();
+            string billName = bill.name?.ToString() ?? "Unknown Bill";
+            decimal billAmount = Convert.ToDecimal(bill.amount ?? 0);
+            string frequency = bill.frequency?.ToString() ?? "monthly";
+            int dueDay = Convert.ToInt32(bill.dueDay ?? 1);
+
+            if (string.IsNullOrWhiteSpace(accountKey))
+            {
+                return Results.BadRequest(new { error = "Bill must have an account assigned" });
+            }
+
+            // Use actual amount if provided, otherwise use bill amount
+            decimal transactionAmount = request.ActualAmount ?? billAmount;
+
+            // Create transaction for bill payment (negative for expense)
+            var transactionDoc = new
+            {
+                _key = Guid.NewGuid().ToString("N")[..12],
+                accountKey = accountKey,
+                categoryKey = categoryKey,
+                payPeriodKey = (string?)null, // Will be determined based on transaction date
+                payee = billName,
+                memo = request.Memo ?? $"Bill payment: {billName}",
+                amount = -Math.Abs(transactionAmount), // Ensure negative (expense)
+                transactionDate = request.PaidDate,
+                isCleared = true, // Mark as cleared since it's a confirmed bill payment
+                isReconciled = false,
+                billKey = key, // Link transaction to bill
+                createdAt = DateTime.UtcNow
+            };
+
+            var transactionResult = await db.Client.Document.PostDocumentAsync(TransactionCollection, transactionDoc);
+
+            // Update account balance
+            await UpdateAccountBalance(db, accountKey);
+
+            // Calculate next due date based on frequency
+            DateTime nextDueDate = CalculateNextDueDate(request.PaidDate, frequency, dueDay);
+
+            // Update bill's lastPaidDate and nextDueDate
+            var billUpdates = new Dictionary<string, object>
+            {
+                ["lastPaidDate"] = request.PaidDate,
+                ["nextDueDate"] = nextDueDate
+            };
+
+            await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(BillCollection, key, billUpdates);
+
+            // Return the created transaction
+            return Results.Ok(new
+            {
+                transactionKey = transactionResult._key,
+                billKey = key,
+                amount = transactionAmount,
+                paidDate = request.PaidDate,
+                nextDueDate = nextDueDate,
+                message = "Bill marked as paid and transaction created"
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error marking bill paid: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+            return Results.Problem(
+                title: "Error marking bill paid",
+                detail: ex.Message,
+                statusCode: 500);
+        }
+    }
+
+    private static DateTime CalculateNextDueDate(DateTime lastPaidDate, string frequency, int dueDay)
+    {
+        DateTime nextDate = lastPaidDate;
+
+        switch (frequency.ToLower())
+        {
+            case "weekly":
+                nextDate = lastPaidDate.AddDays(7);
+                break;
+
+            case "biweekly":
+                nextDate = lastPaidDate.AddDays(14);
+                break;
+
+            case "monthly":
+                nextDate = lastPaidDate.AddMonths(1);
+                // Adjust to the correct due day
+                nextDate = new DateTime(nextDate.Year, nextDate.Month, Math.Min(dueDay, DateTime.DaysInMonth(nextDate.Year, nextDate.Month)));
+                break;
+
+            case "quarterly":
+                nextDate = lastPaidDate.AddMonths(3);
+                nextDate = new DateTime(nextDate.Year, nextDate.Month, Math.Min(dueDay, DateTime.DaysInMonth(nextDate.Year, nextDate.Month)));
+                break;
+
+            case "yearly":
+                nextDate = lastPaidDate.AddYears(1);
+                nextDate = new DateTime(nextDate.Year, nextDate.Month, Math.Min(dueDay, DateTime.DaysInMonth(nextDate.Year, nextDate.Month)));
+                break;
+
+            default:
+                // Default to monthly if frequency is unknown
+                nextDate = lastPaidDate.AddMonths(1);
+                nextDate = new DateTime(nextDate.Year, nextDate.Month, Math.Min(dueDay, DateTime.DaysInMonth(nextDate.Year, nextDate.Month)));
+                break;
+        }
+
+        return nextDate;
     }
 
     // ==================== GOALS ====================

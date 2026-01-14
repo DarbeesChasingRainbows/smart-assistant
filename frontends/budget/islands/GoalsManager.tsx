@@ -22,6 +22,9 @@ export default function GoalsManager({ initialGoals }: Props) {
   const isSubmitting = useSignal(false);
   const contributionGoalId = useSignal<number | null>(null);
   const contributionAmount = useSignal("");
+  const isContributionModalOpen = useSignal(false);
+  const contributionModalGoal = useSignal<Goal | null>(null);
+  const celebratingGoalId = useSignal<number | null>(null);
 
   const formName = useSignal("");
   const formTargetAmount = useSignal("");
@@ -105,6 +108,51 @@ export default function GoalsManager({ initialGoals }: Props) {
     }
   };
 
+  const openContributionModal = (goal: Goal) => {
+    contributionModalGoal.value = goal;
+    contributionAmount.value = "";
+    isContributionModalOpen.value = true;
+  };
+
+  const closeContributionModal = () => {
+    isContributionModalOpen.value = false;
+    contributionModalGoal.value = null;
+    contributionAmount.value = "";
+  };
+
+  const calculateFundingSchedule = (goal: Goal) => {
+    const remaining = goal.targetAmount - goal.currentAmount;
+    if (remaining <= 0) return null;
+
+    if (!goal.targetDate) {
+      return {
+        periodsNeeded: null,
+        perPeriodAmount: null,
+        suggestion: "Set a target date to see funding schedule",
+      };
+    }
+
+    const now = new Date();
+    const target = new Date(goal.targetDate);
+    const weeksRemaining = Math.max(
+      1,
+      Math.ceil((target.getTime() - now.getTime()) / (7 * 24 * 60 * 60 * 1000)),
+    );
+    const monthsRemaining = Math.max(1, Math.ceil(weeksRemaining / 4.33));
+
+    const perWeek = remaining / weeksRemaining;
+    const perMonth = remaining / monthsRemaining;
+
+    return {
+      periodsNeeded: weeksRemaining,
+      perWeekAmount: perWeek,
+      perMonthAmount: perMonth,
+      suggestion: `Save ${formatCurrency(perWeek)}/week or ${
+        formatCurrency(perMonth)
+      }/month to reach goal`,
+    };
+  };
+
   const addContribution = async (goalId: number) => {
     const amount = parseFloat(contributionAmount.value) || 0;
     if (amount <= 0) return;
@@ -112,19 +160,37 @@ export default function GoalsManager({ initialGoals }: Props) {
     const goal = goals.value.find((g) => g.id === goalId);
     if (!goal) return;
 
+    isSubmitting.value = true;
+
     try {
+      const newAmount = goal.currentAmount + amount;
+      const isNowComplete = newAmount >= goal.targetAmount;
+
       await fetch(`${API_BASE}/goals/${goalId}/progress`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentAmount: goal.currentAmount + amount }),
+        body: JSON.stringify({ currentAmount: newAmount }),
       });
+
       goals.value = goals.value.map((g) =>
-        g.id === goalId ? { ...g, currentAmount: g.currentAmount + amount } : g
+        g.id === goalId
+          ? { ...g, currentAmount: newAmount, isCompleted: isNowComplete }
+          : g
       );
-      contributionGoalId.value = null;
-      contributionAmount.value = "";
+
+      // Show celebration if goal completed
+      if (isNowComplete && !goal.isCompleted) {
+        celebratingGoalId.value = goalId;
+        setTimeout(() => {
+          celebratingGoalId.value = null;
+        }, 5000);
+      }
+
+      closeContributionModal();
     } catch (error) {
       console.error("Error adding contribution:", error);
+    } finally {
+      isSubmitting.value = false;
     }
   };
 
@@ -204,73 +270,115 @@ export default function GoalsManager({ initialGoals }: Props) {
                 </div>
 
                 <div class="mt-4">
-                  <div class="flex justify-between text-sm mb-1">
-                    <span>{formatCurrency(goal.currentAmount)}</span>
-                    <span class="text-slate-500">
-                      {formatCurrency(goal.targetAmount)}
-                    </span>
-                  </div>
-                  <div class="w-full bg-slate-200 rounded-full h-3">
+                  {/* Radial Progress for Visual Impact */}
+                  <div class="flex items-center gap-6 mb-4">
                     <div
-                      class={`h-3 rounded-full transition-all ${
-                        percent >= 100 ? "bg-emerald-500" : "bg-blue-500"
+                      class={`radial-progress ${
+                        percent >= 100
+                          ? "text-success"
+                          : percent >= 75
+                          ? "text-info"
+                          : "text-primary"
                       }`}
-                      style={{ width: `${percent}%` }}
-                    />
+                      style={{
+                        "--value": Math.min(100, percent),
+                        "--size": "5rem",
+                        "--thickness": "4px",
+                      }}
+                      role="progressbar"
+                      aria-valuenow={Math.min(100, percent)}
+                    >
+                      {percent.toFixed(0)}%
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium">
+                          {formatCurrency(goal.currentAmount)}
+                        </span>
+                        <span class="text-slate-500">
+                          {formatCurrency(goal.targetAmount)}
+                        </span>
+                      </div>
+                      <progress
+                        class={`progress w-full ${
+                          percent >= 100
+                            ? "progress-success"
+                            : percent >= 75
+                            ? "progress-info"
+                            : "progress-primary"
+                        }`}
+                        value={Math.min(100, percent)}
+                        max="100"
+                      >
+                      </progress>
+                      <div class="flex justify-between text-xs mt-1 text-slate-500">
+                        <span>{formatCurrency(remaining)} remaining</span>
+                        {goal.targetDate && (
+                          <span>
+                            Due {new Date(goal.targetDate).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div class="flex justify-between text-sm mt-1">
-                    <span class="text-slate-500">{percent.toFixed(0)}%</span>
-                    <span class="text-slate-500">
-                      {formatCurrency(remaining)} to go
-                    </span>
-                  </div>
+
+                  {/* Funding Schedule Display */}
+                  {(() => {
+                    const schedule = calculateFundingSchedule(goal);
+                    if (schedule && schedule.perWeekAmount) {
+                      return (
+                        <div class="alert alert-info py-2 text-sm">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            class="stroke-current shrink-0 w-4 h-4"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          <span>{schedule.suggestion}</span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
 
-                {goal.targetDate && (
-                  <div class="text-sm text-slate-500 mt-2">
-                    Target: {new Date(goal.targetDate).toLocaleDateString()}
+                {/* Celebration Banner */}
+                {celebratingGoalId.value === goal.id && (
+                  <div class="alert alert-success mt-4 animate-pulse">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="stroke-current shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span class="font-bold">
+                      🎉 Congratulations! Goal completed!
+                    </span>
                   </div>
                 )}
 
-                {/* Contribution Input */}
-                {contributionGoalId.value === goal.id
-                  ? (
-                    <div class="flex gap-2 mt-4">
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        class="input input-bordered input-sm flex-1"
-                        placeholder="Amount"
-                        value={contributionAmount.value}
-                        onInput={(e) =>
-                          contributionAmount.value = e.currentTarget.value}
-                      />
-                      <button
-                        type="button"
-                        class="btn btn-success btn-sm"
-                        onClick={() => addContribution(goal.id)}
-                      >
-                        Add
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-ghost btn-sm"
-                        onClick={() => contributionGoalId.value = null}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )
-                  : (
-                    <button
-                      type="button"
-                      class="btn btn-outline btn-sm mt-4"
-                      onClick={() => contributionGoalId.value = goal.id}
-                    >
-                      + Add Contribution
-                    </button>
-                  )}
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mt-4 w-full"
+                  onClick={() => openContributionModal(goal)}
+                  disabled={percent >= 100}
+                >
+                  {percent >= 100 ? "✓ Goal Reached!" : "💰 Contribute to Goal"}
+                </button>
               </div>
             </div>
           );
@@ -428,6 +536,180 @@ export default function GoalsManager({ initialGoals }: Props) {
             </form>
           </div>
           <div class="modal-backdrop" onClick={() => isModalOpen.value = false}>
+          </div>
+        </div>
+      )}
+
+      {/* Contribution Modal */}
+      {isContributionModalOpen.value && contributionModalGoal.value && (
+        <div class="modal modal-open">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">
+              💰 Contribute to {contributionModalGoal.value.name}
+            </h3>
+
+            {/* Goal Progress Summary */}
+            <div class="bg-slate-50 p-4 rounded-lg mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-slate-600">Current Progress</span>
+                <span class="font-bold text-lg">
+                  {(
+                    (contributionModalGoal.value.currentAmount /
+                      contributionModalGoal.value.targetAmount) * 100
+                  ).toFixed(0)}%
+                </span>
+              </div>
+              <progress
+                class="progress progress-primary w-full mb-2"
+                value={Math.min(
+                  100,
+                  (contributionModalGoal.value.currentAmount /
+                    contributionModalGoal.value.targetAmount) * 100,
+                )}
+                max="100"
+              >
+              </progress>
+              <div class="flex justify-between text-xs text-slate-500">
+                <span>
+                  {formatCurrency(contributionModalGoal.value.currentAmount)}
+                </span>
+                <span>
+                  {formatCurrency(contributionModalGoal.value.targetAmount)}
+                </span>
+              </div>
+            </div>
+
+            {/* Funding Schedule Info */}
+            {(() => {
+              const schedule = calculateFundingSchedule(
+                contributionModalGoal.value,
+              );
+              if (schedule && schedule.perWeekAmount) {
+                return (
+                  <div class="alert alert-info mb-4 py-2 text-sm">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      class="stroke-current shrink-0 w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <div>
+                      <div class="font-medium">Suggested Schedule:</div>
+                      <div>{schedule.suggestion}</div>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
+            {/* Contribution Input */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Contribution Amount</span>
+              </label>
+              <div class="join w-full">
+                <span class="join-item bg-slate-100 flex items-center px-4">
+                  $
+                </span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="input input-bordered join-item flex-1"
+                  placeholder="0.00"
+                  value={contributionAmount.value}
+                  onInput={(e) =>
+                    contributionAmount.value = e.currentTarget.value}
+                  autofocus
+                />
+              </div>
+            </div>
+
+            {/* Quick Amount Buttons */}
+            <div class="flex gap-2 mt-3">
+              {(() => {
+                const schedule = calculateFundingSchedule(
+                  contributionModalGoal.value,
+                );
+                const remaining = contributionModalGoal.value.targetAmount -
+                  contributionModalGoal.value.currentAmount;
+                const buttons = [];
+
+                if (schedule?.perWeekAmount) {
+                  buttons.push(
+                    <button
+                      key="week"
+                      type="button"
+                      class="btn btn-sm btn-outline flex-1"
+                      onClick={() =>
+                        contributionAmount.value = schedule.perWeekAmount!
+                          .toFixed(2)}
+                    >
+                      Weekly ({formatCurrency(schedule.perWeekAmount)})
+                    </button>,
+                  );
+                }
+                if (schedule?.perMonthAmount) {
+                  buttons.push(
+                    <button
+                      key="month"
+                      type="button"
+                      class="btn btn-sm btn-outline flex-1"
+                      onClick={() =>
+                        contributionAmount.value = schedule.perMonthAmount!
+                          .toFixed(2)}
+                    >
+                      Monthly ({formatCurrency(schedule.perMonthAmount)})
+                    </button>,
+                  );
+                }
+                buttons.push(
+                  <button
+                    key="full"
+                    type="button"
+                    class="btn btn-sm btn-outline flex-1"
+                    onClick={() =>
+                      contributionAmount.value = remaining.toFixed(2)}
+                  >
+                    Full ({formatCurrency(remaining)})
+                  </button>,
+                );
+
+                return buttons;
+              })()}
+            </div>
+
+            <div class="modal-action">
+              <button
+                type="button"
+                class="btn"
+                onClick={closeContributionModal}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => addContribution(contributionModalGoal.value!.id)}
+                disabled={isSubmitting.value ||
+                  !contributionAmount.value ||
+                  parseFloat(contributionAmount.value) <= 0}
+              >
+                {isSubmitting.value
+                  ? <span class="loading loading-spinner loading-sm"></span>
+                  : "Add Contribution"}
+              </button>
+            </div>
+          </div>
+          <div class="modal-backdrop" onClick={closeContributionModal}>
           </div>
         </div>
       )}

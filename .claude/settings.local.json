@@ -32,7 +32,9 @@
       "Bash(podman restart:*)",
       "Bash(podman stop:*)",
       "Bash(podman start smart-assistant_api_1)",
-      "Bash(podman exec smart-assistant_api_1 ls /app)"
+      "Bash(podman exec smart-assistant_api_1 ls /app)",
+      "Bash(git push:*)",
+      "Bash(deno check:*)"
     ]
   }
 }

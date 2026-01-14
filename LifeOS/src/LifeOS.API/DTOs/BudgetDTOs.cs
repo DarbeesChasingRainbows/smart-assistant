@@ -199,6 +199,13 @@ public record UpdateBudgetBillRequest
     public bool? IsActive { get; init; }
 }
 
+public record MarkBillPaidRequest
+{
+    public DateTime PaidDate { get; init; }
+    public decimal? ActualAmount { get; init; } // Optional: if paid amount differs from bill amount
+    public string? Memo { get; init; } // Optional: additional notes for this payment
+}
+
 // Budget Goal DTOs
 public record BudgetGoalDto
 {
