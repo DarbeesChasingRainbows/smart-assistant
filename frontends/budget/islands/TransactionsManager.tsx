@@ -863,32 +863,33 @@ export default function TransactionsManager({
   };
 
   return (
-    <div class="space-y-6">
+    <div class="space-y-4 md:space-y-6">
       {/* Filter indicator, Undo/Redo, and Add button */}
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <div class="flex flex-wrap items-center gap-2">
           {filterAccountId.value !== null && (
-            <div class="badge badge-primary gap-2">
-              Showing: {getAccountNameByKey(filterAccountId.value)}
+            <div class="badge bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff] gap-2 font-mono min-h-[32px]">
+              {getAccountNameByKey(filterAccountId.value)}
               <button
                 type="button"
-                class="btn btn-ghost btn-xs"
+                class="btn btn-ghost btn-xs min-h-[24px] min-w-[24px]"
                 onClick={() => filterAccountId.value = null}
+                aria-label="Clear filter"
               >
                 ×
               </button>
             </div>
           )}
-          <span class="text-sm text-slate-500">
+          <span class="text-sm text-[#888] font-mono">
             {filteredTransactions.value.length}{" "}
             transaction{filteredTransactions.value.length !== 1 ? "s" : ""}
           </span>
 
           {/* Undo/Redo Buttons */}
-          <div class="flex gap-1 ml-4">
+          <div class="flex gap-1">
             <button
               type="button"
-              class="btn btn-sm btn-ghost"
+              class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff]"
               onClick={undo}
               disabled={undoHistory.value.length === 0}
               title={undoHistory.value.length > 0
@@ -896,6 +897,7 @@ export default function TransactionsManager({
                   undoHistory.value[undoHistory.value.length - 1].action
                 }`
                 : "Nothing to undo"}
+              aria-label="Undo last action"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -914,7 +916,7 @@ export default function TransactionsManager({
             </button>
             <button
               type="button"
-              class="btn btn-sm btn-ghost"
+              class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff]"
               onClick={redo}
               disabled={redoHistory.value.length === 0}
               title={redoHistory.value.length > 0
@@ -922,6 +924,7 @@ export default function TransactionsManager({
                   redoHistory.value[redoHistory.value.length - 1].action
                 }`
                 : "Nothing to redo"}
+              aria-label="Redo last action"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -940,24 +943,30 @@ export default function TransactionsManager({
             </button>
           </div>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
           <button
             type="button"
-            class="btn btn-outline"
+            class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
             onClick={openTransferModal}
           >
-            ↔️ Transfer
+            <span class="mr-2">⇄</span>Transfer
           </button>
-          <button type="button" class="btn btn-primary" onClick={openAddModal}>
-            + Add Transaction
+          <button
+            type="button"
+            class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            onClick={openAddModal}
+          >
+            <span class="mr-2">+</span>Add Transaction
           </button>
         </div>
       </div>
 
       {/* Bulk Actions Toolbar */}
       {selectedTxIds.value.size > 0 && (
-        <div class="flex items-center gap-2 p-3 bg-primary/10 rounded-lg flex-wrap">
-          <span class="font-medium">{selectedTxIds.value.size} selected</span>
+        <div class="flex items-center gap-2 p-3 bg-[#00d9ff]/10 border border-[#00d9ff]/30 rounded flex-wrap">
+          <span class="font-medium text-[#00d9ff] font-mono">
+            {selectedTxIds.value.size} selected
+          </span>
 
           {/* Bulk Edit Dropdown */}
           <div class="dropdown">
@@ -1034,16 +1043,17 @@ export default function TransactionsManager({
       )}
 
       {/* Transactions List */}
-      <div class="card bg-white shadow-xl">
+      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
         <div class="card-body p-0">
+          {/* Mobile: Horizontal scroll wrapper */}
           <div class="overflow-x-auto">
-            <table class="table table-sm">
+            <table class="table table-sm w-full">
               <thead>
-                <tr class="bg-slate-50">
-                  <th class="w-10">
+                <tr class="bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
+                  <th class="w-10 text-[#888] font-mono text-xs">
                     <input
                       type="checkbox"
-                      class="checkbox checkbox-sm"
+                      class="checkbox checkbox-sm checkbox-primary"
                       checked={selectedTxIds.value.size > 0 &&
                         selectedTxIds.value.size ===
                           filteredTransactions.value.length}
@@ -1051,16 +1061,23 @@ export default function TransactionsManager({
                         e.currentTarget.checked
                           ? selectAllVisible()
                           : clearSelection()}
+                      aria-label="Select all transactions"
                     />
                   </th>
-                  <th class="w-10">✓</th>
-                  <th>Date</th>
-                  <th>Account</th>
-                  <th>Payee</th>
-                  <th>Category</th>
-                  <th>Memo</th>
-                  <th class="text-right">Amount</th>
-                  <th class="w-10">🧾</th>
+                  <th class="w-10 text-[#888] font-mono text-xs">CLR</th>
+                  <th class="text-[#888] font-mono text-xs">DATE</th>
+                  <th class="text-[#888] font-mono text-xs">ACCOUNT</th>
+                  <th class="text-[#888] font-mono text-xs">PAYEE</th>
+                  <th class="text-[#888] font-mono text-xs">CATEGORY</th>
+                  <th class="text-[#888] font-mono text-xs hidden sm:table-cell">
+                    MEMO
+                  </th>
+                  <th class="text-right text-[#888] font-mono text-xs">
+                    AMOUNT
+                  </th>
+                  <th class="w-10 text-[#888] font-mono text-xs hidden md:table-cell">
+                    RCP
+                  </th>
                   <th class="w-10"></th>
                 </tr>
               </thead>
@@ -1068,7 +1085,10 @@ export default function TransactionsManager({
                 {filteredTransactions.value.length === 0
                   ? (
                     <tr>
-                      <td colSpan={10} class="text-center text-slate-500 py-8">
+                      <td
+                        colSpan={10}
+                        class="text-center text-[#888] py-8 font-mono"
+                      >
                         No transactions yet
                       </td>
                     </tr>
@@ -1076,7 +1096,7 @@ export default function TransactionsManager({
                   : filteredTransactions.value.map((tx) => (
                     <tr
                       key={getTxKey(tx)}
-                      class={`hover ${
+                      class={`border-b border-[#333] hover:bg-[#1a1a1a] ${
                         ((tx as unknown as { isReconciled?: boolean })
                             .isReconciled ??
                             ((tx as unknown as { clearedStatus?: string })
@@ -1085,30 +1105,34 @@ export default function TransactionsManager({
                           : ""
                       } ${
                         selectedTxIds.value.has(getTxKey(tx))
-                          ? "bg-primary/5"
+                          ? "bg-[#00d9ff]/10"
                           : ""
                       }`}
                     >
                       <td>
                         <input
                           type="checkbox"
-                          class="checkbox checkbox-sm"
+                          class="checkbox checkbox-sm checkbox-primary"
                           checked={selectedTxIds.value.has(getTxKey(tx))}
                           onChange={() => toggleSelectTx(getTxKey(tx))}
+                          aria-label={`Select transaction ${
+                            tx.payee || "untitled"
+                          }`}
                         />
                       </td>
                       <td>
                         <button
                           type="button"
-                          class={`btn btn-xs btn-circle ${
+                          class={`btn btn-xs btn-circle min-h-[32px] min-w-[32px] ${
                             ((tx as unknown as { isCleared?: boolean })
                                 .isCleared ??
                                 ((tx as unknown as { clearedStatus?: string })
                                   .clearedStatus !== "uncleared"))
-                              ? "btn-success"
-                              : "btn-ghost border"
+                              ? "bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88]"
+                              : "btn-ghost border border-[#333] text-[#888]"
                           }`}
                           onClick={() => toggleCleared(tx)}
+                          aria-label="Toggle cleared status"
                         >
                           {((tx as unknown as { isCleared?: boolean })
                               .isCleared ??
@@ -1118,84 +1142,90 @@ export default function TransactionsManager({
                             : ""}
                         </button>
                       </td>
-                      <td class="text-sm whitespace-nowrap">
+                      <td class="text-sm whitespace-nowrap text-white font-mono">
                         {formatDate(tx.transactionDate)}
                       </td>
                       <td class="text-sm">
-                        <span class="badge badge-ghost badge-sm">
+                        <span class="badge bg-[#333] text-[#888] border-[#444] badge-sm font-mono">
                           {getAccountName(tx)}
                         </span>
                       </td>
-                      <td class="font-medium">{tx.payee || "—"}</td>
-                      <td class="text-sm text-slate-500">
+                      <td class="font-medium text-white">{tx.payee || "—"}</td>
+                      <td class="text-sm text-[#888]">
                         <div class="flex items-center gap-1">
                           {tx.splits && tx.splits.length > 1
                             ? (
-                              <span class="badge badge-info badge-xs">
-                                Split ({tx.splits.length})
+                              <span class="badge bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff]/40 badge-xs font-mono">
+                                SPLIT ({tx.splits.length})
                               </span>
                             )
                             : (
-                              categories.find((c) => c.id === tx.categoryId)
-                                ?.name ||
-                              (
-                                <span class="text-slate-400 italic">
-                                  Uncategorized
-                                </span>
-                              )
+                              <span class="font-mono text-xs">
+                                {categories.find((c) => c.id === tx.categoryId)
+                                  ?.name ||
+                                  (
+                                    <span class="text-[#888] italic">
+                                      Uncategorized
+                                    </span>
+                                  )}
+                              </span>
                             )}
                           <button
                             type="button"
-                            class="btn btn-ghost btn-xs opacity-50 hover:opacity-100"
+                            class="btn btn-ghost btn-xs min-h-[28px] min-w-[28px] opacity-50 hover:opacity-100 text-[#888] hover:text-[#00d9ff]"
                             onClick={(e) => {
                               e.stopPropagation();
                               openSplitEditor(tx);
                             }}
                             title="Split transaction"
+                            aria-label="Split transaction"
                           >
-                            ✂️
+                            <span class="text-base">✂</span>
                           </button>
                         </div>
                       </td>
-                      <td class="text-sm text-slate-400 max-w-xs truncate">
+                      <td class="text-sm text-[#888] max-w-xs truncate font-mono hidden sm:table-cell">
                         {tx.memo || ""}
                       </td>
                       <td
-                        class={`text-right font-semibold whitespace-nowrap ${
-                          tx.amount >= 0 ? "text-green-600" : "text-slate-800"
+                        class={`text-right font-semibold whitespace-nowrap font-mono ${
+                          tx.amount >= 0 ? "text-[#00ff88]" : "text-white"
                         }`}
                       >
                         {tx.amount >= 0 ? "+" : ""}
                         {formatCurrency(tx.amount)}
                       </td>
-                      <td>
+                      <td class="hidden md:table-cell">
                         {tx.receipt
                           ? (
                             <a
                               href={`${UI_BASE}/receipts?view=${tx.receipt.id}`}
-                              class="btn btn-ghost btn-xs text-success"
+                              class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-[#00ff88] hover:text-[#00ff88]/80"
                               title="View Receipt"
+                              aria-label="View receipt"
                             >
-                              🧾
+                              <span class="text-base">🧾</span>
                             </a>
                           )
                           : (
                             <a
                               href={`${UI_BASE}/receipts?link=${tx.id}`}
-                              class="btn btn-ghost btn-xs text-slate-300 hover:text-slate-500"
+                              class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-[#888] hover:text-[#00d9ff]"
                               title="Add Receipt"
+                              aria-label="Add receipt"
                             >
-                              +
+                              <span class="text-base">+</span>
                             </a>
                           )}
                       </td>
                       <td>
                         <button
                           type="button"
-                          class="btn btn-ghost btn-xs text-error"
+                          class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-red-400 hover:text-red-300"
                           onClick={() => deleteTransaction(tx)}
+                          aria-label="Delete transaction"
                         >
-                          ×
+                          <span class="text-lg">×</span>
                         </button>
                       </td>
                     </tr>

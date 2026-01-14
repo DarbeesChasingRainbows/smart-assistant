@@ -223,15 +223,19 @@ export default function GoalsManager({ initialGoals }: Props) {
   const completedGoals = goals.value.filter((g) => g.isCompleted);
 
   return (
-    <div class="space-y-6">
+    <div class="space-y-4 md:space-y-6">
       <div class="flex justify-end">
-        <button type="button" class="btn btn-primary" onClick={openAddModal}>
-          + Add Goal
+        <button
+          type="button"
+          class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+          onClick={openAddModal}
+        >
+          <span class="mr-2">+</span>Add Goal
         </button>
       </div>
 
       {/* Active Goals */}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {activeGoals.map((goal) => {
           const percent = goal.targetAmount > 0
             ? Math.min(100, (goal.currentAmount / goal.targetAmount) * 100)
@@ -239,29 +243,53 @@ export default function GoalsManager({ initialGoals }: Props) {
           const remaining = goal.targetAmount - goal.currentAmount;
 
           return (
-            <div key={goal.id} class="card bg-white shadow-xl">
-              <div class="card-body">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <h3 class="card-title text-lg">{goal.name}</h3>
-                    <span class="badge badge-ghost badge-sm">
+            <div
+              key={goal.id}
+              class="card bg-[#1a1a1a] shadow-xl border border-[#333]"
+            >
+              <div class="card-body p-4 md:p-6">
+                <div class="flex justify-between items-start gap-2">
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-white font-mono truncate">
+                      {goal.name}
+                    </h3>
+                    <span class="badge bg-[#333] text-[#888] border-[#444] badge-sm font-mono mt-1">
                       {GOAL_TYPES.find((t) => t.value === goal.goalType)?.label}
                     </span>
                   </div>
                   <div class="dropdown dropdown-end">
-                    <label tabIndex={0} class="btn btn-ghost btn-xs">⋮</label>
+                    <label
+                      tabIndex={0}
+                      class="btn btn-ghost btn-xs min-h-[36px] min-w-[36px] text-[#888] hover:text-[#00d9ff]"
+                      aria-label="Goal options"
+                    >
+                      <span class="text-xl">⋮</span>
+                    </label>
                     <ul
                       tabIndex={0}
-                      class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32"
+                      class="dropdown-content menu p-2 shadow bg-[#1a1a1a] border border-[#333] rounded w-32 z-10"
                     >
                       <li>
-                        <a onClick={() => openEditModal(goal)}>Edit</a>
+                        <a
+                          onClick={() => openEditModal(goal)}
+                          class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10 font-mono min-h-[36px]"
+                        >
+                          Edit
+                        </a>
                       </li>
                       <li>
-                        <a onClick={() => markComplete(goal)}>Complete</a>
+                        <a
+                          onClick={() => markComplete(goal)}
+                          class="text-[#888] hover:text-[#00ff88] hover:bg-[#00ff88]/10 font-mono min-h-[36px]"
+                        >
+                          Complete
+                        </a>
                       </li>
                       <li>
-                        <a class="text-error" onClick={() => deleteGoal(goal)}>
+                        <a
+                          class="text-red-400 hover:text-red-300 hover:bg-red-400/10 font-mono min-h-[36px]"
+                          onClick={() => deleteGoal(goal)}
+                        >
                           Delete
                         </a>
                       </li>
@@ -270,52 +298,59 @@ export default function GoalsManager({ initialGoals }: Props) {
                 </div>
 
                 <div class="mt-4">
-                  {/* Radial Progress for Visual Impact */}
-                  <div class="flex items-center gap-6 mb-4">
-                    <div
-                      class={`radial-progress ${
-                        percent >= 100
-                          ? "text-success"
-                          : percent >= 75
-                          ? "text-info"
-                          : "text-primary"
-                      }`}
-                      style={{
-                        "--value": Math.min(100, percent),
-                        "--size": "5rem",
-                        "--thickness": "4px",
-                      }}
-                      role="progressbar"
-                      aria-valuenow={Math.min(100, percent)}
-                    >
-                      {percent.toFixed(0)}%
+                  {/* Progress Display */}
+                  <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+                    <div class="flex-shrink-0">
+                      <div
+                        class={`radial-progress ${
+                          percent >= 100
+                            ? "text-[#00ff88]"
+                            : percent >= 75
+                            ? "text-[#00d9ff]"
+                            : "text-[#ffb000]"
+                        } border-4 border-[#333]`}
+                        style={{
+                          "--value": Math.min(100, percent),
+                          "--size": "5rem",
+                          "--thickness": "4px",
+                        }}
+                        role="progressbar"
+                        aria-valuenow={Math.min(100, percent)}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      >
+                        <span class="text-white font-mono text-sm">
+                          {percent.toFixed(0)}%
+                        </span>
+                      </div>
                     </div>
-                    <div class="flex-1">
-                      <div class="flex justify-between text-sm mb-1">
-                        <span class="font-medium">
+                    <div class="flex-1 min-w-0">
+                      <div class="flex justify-between text-sm mb-2">
+                        <span class="font-medium text-white font-mono">
                           {formatCurrency(goal.currentAmount)}
                         </span>
-                        <span class="text-slate-500">
+                        <span class="text-[#888] font-mono">
                           {formatCurrency(goal.targetAmount)}
                         </span>
                       </div>
-                      <progress
-                        class={`progress w-full ${
-                          percent >= 100
-                            ? "progress-success"
-                            : percent >= 75
-                            ? "progress-info"
-                            : "progress-primary"
-                        }`}
-                        value={Math.min(100, percent)}
-                        max="100"
-                      >
-                      </progress>
-                      <div class="flex justify-between text-xs mt-1 text-slate-500">
+                      <div class="w-full bg-[#333] h-2 border border-[#444]">
+                        <div
+                          class={`h-full ${
+                            percent >= 100
+                              ? "bg-[#00ff88]"
+                              : percent >= 75
+                              ? "bg-[#00d9ff]"
+                              : "bg-[#ffb000]"
+                          } transition-all`}
+                          style={{ width: `${Math.min(100, percent)}%` }}
+                        />
+                      </div>
+                      <div class="flex flex-col sm:flex-row sm:justify-between text-xs mt-2 text-[#888] font-mono gap-1">
                         <span>{formatCurrency(remaining)} remaining</span>
                         {goal.targetDate && (
                           <span>
-                            Due {new Date(goal.targetDate).toLocaleDateString()}
+                            DUE:{" "}
+                            {new Date(goal.targetDate).toLocaleDateString()}
                           </span>
                         )}
                       </div>
@@ -327,12 +362,12 @@ export default function GoalsManager({ initialGoals }: Props) {
                     const schedule = calculateFundingSchedule(goal);
                     if (schedule && schedule.perWeekAmount) {
                       return (
-                        <div class="alert alert-info py-2 text-sm">
+                        <div class="alert bg-[#00d9ff]/10 border border-[#00d9ff]/30 py-2 text-sm">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            class="stroke-current shrink-0 w-4 h-4"
+                            class="stroke-current shrink-0 w-4 h-4 text-[#00d9ff]"
                           >
                             <path
                               stroke-linecap="round"
@@ -341,7 +376,9 @@ export default function GoalsManager({ initialGoals }: Props) {
                               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                           </svg>
-                          <span>{schedule.suggestion}</span>
+                          <span class="text-[#00d9ff] font-mono text-xs">
+                            {schedule.suggestion}
+                          </span>
                         </div>
                       );
                     }
@@ -351,10 +388,10 @@ export default function GoalsManager({ initialGoals }: Props) {
 
                 {/* Celebration Banner */}
                 {celebratingGoalId.value === goal.id && (
-                  <div class="alert alert-success mt-4 animate-pulse">
+                  <div class="alert bg-[#00ff88]/10 border border-[#00ff88]/30 mt-4 animate-pulse">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      class="stroke-current shrink-0 h-6 w-6"
+                      class="stroke-current shrink-0 h-6 w-6 text-[#00ff88]"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -365,19 +402,36 @@ export default function GoalsManager({ initialGoals }: Props) {
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <span class="font-bold">
-                      🎉 Congratulations! Goal completed!
+                    <span class="font-bold text-[#00ff88] font-mono">
+                      🎉 GOAL COMPLETED!
                     </span>
                   </div>
                 )}
 
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm mt-4 w-full"
+                  class={`btn btn-sm min-h-[44px] mt-4 w-full font-mono ${
+                    percent >= 100
+                      ? "bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] cursor-not-allowed"
+                      : "bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border-[#00d9ff] text-[#00d9ff]"
+                  }`}
                   onClick={() => openContributionModal(goal)}
                   disabled={percent >= 100}
+                  aria-label={percent >= 100
+                    ? "Goal reached"
+                    : `Contribute to ${goal.name}`}
                 >
-                  {percent >= 100 ? "✓ Goal Reached!" : "💰 Contribute to Goal"}
+                  {percent >= 100
+                    ? (
+                      <>
+                        <span class="mr-2">✓</span>Goal Reached!
+                      </>
+                    )
+                    : (
+                      <>
+                        <span class="mr-2">$</span>Contribute to Goal
+                      </>
+                    )}
                 </button>
               </div>
             </div>
@@ -386,9 +440,9 @@ export default function GoalsManager({ initialGoals }: Props) {
       </div>
 
       {activeGoals.length === 0 && (
-        <div class="card bg-white shadow-xl">
+        <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
           <div class="card-body text-center py-12">
-            <p class="text-slate-500">
+            <p class="text-[#888] font-mono">
               No active goals. Create one to start tracking!
             </p>
           </div>
@@ -398,15 +452,21 @@ export default function GoalsManager({ initialGoals }: Props) {
       {/* Completed Goals */}
       {completedGoals.length > 0 && (
         <div class="mt-8">
-          <h2 class="text-xl font-semibold text-slate-600 mb-4">
-            ✓ Completed Goals
+          <h2 class="text-xl font-semibold text-white font-mono mb-4 flex items-center gap-2">
+            <span class="text-[#00ff88]">✓</span>
+            <span>COMPLETED GOALS</span>
           </h2>
           <div class="space-y-2">
             {completedGoals.map((goal) => (
-              <div key={goal.id} class="card bg-slate-50 shadow">
-                <div class="card-body py-3 flex-row justify-between items-center">
-                  <span class="font-medium text-slate-600">{goal.name}</span>
-                  <span class="text-emerald-600">
+              <div
+                key={goal.id}
+                class="card bg-[#1a1a1a] shadow border border-[#00ff88]/20"
+              >
+                <div class="card-body py-3 px-4 flex flex-row justify-between items-center">
+                  <span class="font-medium text-white font-mono">
+                    {goal.name}
+                  </span>
+                  <span class="text-[#00ff88] font-mono">
                     {formatCurrency(goal.targetAmount)}
                   </span>
                 </div>
