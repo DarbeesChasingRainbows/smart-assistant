@@ -1,4 +1,6 @@
 import type { ComponentChildren } from "preact";
+import { isOnline } from "../lib/api.ts";
+import ToastContainer from "../islands/Toast.tsx";
 
 interface NavigationProps {
   children: ComponentChildren;
@@ -12,6 +14,19 @@ export function Navigation({ children, currentPath = "" }: NavigationProps) {
     <div class="drawer">
       <input id="mobile-nav-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col">
+        {/* Offline Banner - Shows when user is offline */}
+        {!isOnline.value && (
+          <div class="bg-[#ffb000]/20 border-b-2 border-[#ffb000]">
+            <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3">
+              <span class="text-xl">📡</span>
+              <p class="font-mono text-sm text-[#ffb000]">
+                <strong>[OFFLINE MODE]</strong>{" "}
+                - Some features may be unavailable
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Header - Always visible */}
         <header class="bg-[#0a0a0a] text-white shadow-lg border-b border-[#00d9ff]/20">
           <div class="max-w-7xl mx-auto px-4 py-3">
@@ -133,7 +148,7 @@ export function Navigation({ children, currentPath = "" }: NavigationProps) {
         <footer class="bg-[#0a0a0a] text-[#888] border-t border-[#333] p-4 mt-12">
           <div class="max-w-7xl mx-auto text-center text-sm font-mono">
             <span class="text-[#00d9ff]">[</span>
-            Phase 4: Mobile Optimization
+            Phase 4.2: Loading & Error Handling
             <span class="text-[#00d9ff]">]</span>
           </div>
         </footer>
@@ -276,6 +291,9 @@ export function Navigation({ children, currentPath = "" }: NavigationProps) {
           </ul>
         </nav>
       </div>
+
+      {/* Toast Container - Global notification system */}
+      <ToastContainer />
     </div>
   );
 }
