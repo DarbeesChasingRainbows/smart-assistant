@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 FROM denoland/deno:latest AS base
 
 ARG GIT_REVISION
@@ -6,32 +7,33 @@ ENV DENO_NODE_MODULES_DIR=auto
 
 WORKDIR /app
 
-# Copy package files first for better caching
 COPY deno.json deno.lock ./
-
-# Copy entry points used by deno cache (must exist before caching)
 COPY vite.config.ts main.tsx utils.ts ./
 
-# Create a temporary cache directory
-RUN mkdir -p /tmp/deno_cache
+# Install locally
+RUN deno install --allow-scripts
 
-# Cache dependencies with persistent cache
-RUN --mount=type=cache,target=/tmp/deno_cache \
-    DENO_DIR=/tmp/deno_cache \
-    deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts main.tsx
-
-# Install npm dependencies (cached)
-RUN --mount=type=cache,target=/tmp/deno_cache \
-    DENO_DIR=/tmp/deno_cache \
-    deno install --allow-scripts
-
-# Copy source code (changes frequently)
 COPY . .
 
-# Build with cache mount
-RUN --mount=type=cache,target=/tmp/deno_cache \
-    DENO_DIR=/tmp/deno_cache \
-    deno task build
+# Build locally
+RUN deno task build
+
+FROM denoland/deno:latest AS runtime
+
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+ARG GIT_REVISION
+ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
+ENV DENO_NODE_MODULES_DIR=auto
+
+WORKDIR /app
+
+COPY --from=base /app/_fresh ./_fresh
+COPY --from=base /app/deno.json ./
+COPY --from=base /app/deno.lock ./
+COPY --from=base /app/static ./static
+COPY --from=base /app/main.tsx ./
+COPY --from=base /app/node_modules ./node_modules
 
 EXPOSE 8000
 

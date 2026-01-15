@@ -7,35 +7,28 @@ ENV DENO_NODE_MODULES_DIR=auto
 
 WORKDIR /app
 
-# Copy dependency files first (least likely to change)
+# Copy dependency files first
 COPY deno.json deno.lock ./
-
-# Copy only essential config files
 COPY vite.config.ts main.tsx utils.ts ./
 
-# Use BuildKit cache for dependencies (persists across builds)
-RUN --mount=type=cache,target=/deno-dir/cache,sharing=shared \
-    --mount=type=cache,target=/deno-dir/node_modules,sharing=shared \
-    DENO_DIR=/deno-dir/cache \
-    deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts main.tsx
+# Install dependencies WITHOUT cache mount to avoid symlinking to ephemeral cache
+# This ensures node_modules contains actual files that can be copied to the runtime stage
+RUN deno install --allow-scripts
 
-# Install npm scripts with cache
-RUN --mount=type=cache,target=/deno-dir/cache,sharing=shared \
-    --mount=type=cache,target=/deno-dir/node_modules,sharing=shared \
-    DENO_DIR=/deno-dir/cache \
-    deno install --allow-scripts
-
-# Copy source code (most likely to change)
+# Copy source code
 COPY . .
 
-# Build with optimized cache
+# Build the application
+# We can use cache here for the build process itself, as we don't copy the cache later
 RUN --mount=type=cache,target=/deno-dir/cache,sharing=shared \
-    --mount=type=cache,target=/deno-dir/node_modules,sharing=shared \
     DENO_DIR=/deno-dir/cache \
     deno task build
 
-# Production stage - copy only what's needed
+# Production stage
 FROM denoland/deno:latest AS runtime
+
+# Install curl for healthcheck defined in docker-compose.yml
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 ARG GIT_REVISION
 ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
@@ -43,7 +36,7 @@ ENV DENO_NODE_MODULES_DIR=auto
 
 WORKDIR /app
 
-# Copy only built artifacts and runtime files
+# Copy built artifacts and runtime files
 COPY --from=base /app/_fresh ./_fresh
 COPY --from=base /app/deno.json ./
 COPY --from=base /app/deno.lock ./
