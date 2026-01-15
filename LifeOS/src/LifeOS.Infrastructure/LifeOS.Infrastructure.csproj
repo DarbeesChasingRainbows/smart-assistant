@@ -16,7 +16,7 @@
     />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
     <PackageReference Include="MediatR" Version="13.0.0" />
-    <PackageReference Include="FSharp.Core" Version="10.0.101" />
+    <PackageReference Include="FSharp.Core" Version="10.0.102" />
   </ItemGroup>
 
   <PropertyGroup>

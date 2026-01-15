@@ -19,11 +19,19 @@ RUN mkdir -p /tmp/deno_cache
 
 # Cache dependencies with persistent cache
 RUN --mount=type=cache,target=/tmp/deno_cache \
+    --mount=type=cache,target=/app/node_modules,sharing=shared \
     DENO_DIR=/tmp/deno_cache \
     deno cache --lock=deno.lock --node-modules-dir=auto vite.config.ts main.tsx
 
+# Ensure Fresh core/plugin are cached for Vite build resolution
+RUN --mount=type=cache,target=/tmp/deno_cache \
+    --mount=type=cache,target=/app/node_modules,sharing=shared \
+    DENO_DIR=/tmp/deno_cache \
+    deno cache --lock=deno.lock --node-modules-dir=auto jsr:@fresh/core jsr:@fresh/plugin-vite
+
 # Install npm dependencies (cached)
 RUN --mount=type=cache,target=/tmp/deno_cache \
+    --mount=type=cache,target=/app/node_modules,sharing=shared \
     DENO_DIR=/tmp/deno_cache \
     deno install --allow-scripts
 
@@ -32,6 +40,7 @@ COPY . .
 
 # Build with cache mount
 RUN --mount=type=cache,target=/tmp/deno_cache \
+    --mount=type=cache,target=/app/node_modules,sharing=shared \
     DENO_DIR=/tmp/deno_cache \
     deno task build
 
