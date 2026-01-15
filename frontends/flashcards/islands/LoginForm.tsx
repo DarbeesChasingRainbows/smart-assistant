@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useSignal } from "@preact/signals";
 import { RetentionApiClient, User } from "../utils/api.ts";
 
 interface LoginFormProps {
@@ -7,24 +7,24 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const email = useSignal("");
+  const password = useSignal("");
+  const isLoading = useSignal(false);
+  const error = useSignal("");
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
+    isLoading.value = true;
+    error.value = "";
 
     try {
       const client = new RetentionApiClient();
-      const response = await client.login(email, password);
+      const response = await client.login(email.value, password.value);
       onSuccess(response.user);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      error.value = err instanceof Error ? err.message : "Login failed";
     } finally {
-      setIsLoading(false);
+      isLoading.value = false;
     }
   };
 
@@ -66,7 +66,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 value={email}
-                onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
+                onInput={(e) => email.value = (e.target as HTMLInputElement).value}
               />
             </div>
             <div>
@@ -82,7 +82,7 @@ export default function LoginForm({ onSuccess, onRegisterClick }: LoginFormProps
                 class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={password}
-                onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+                onInput={(e) => password.value = (e.target as HTMLInputElement).value}
               />
             </div>
           </div>

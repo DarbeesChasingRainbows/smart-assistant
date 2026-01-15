@@ -1,6 +1,8 @@
 import { useSignal } from "@preact/signals";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import MarkdownEditor from "./MarkdownEditor.tsx";
+import Modal from "../components/ui/Modal.tsx";
+import Alert from "../components/ui/Alert.tsx";
 import { RetentionApiClient } from "../utils/api.ts";
 import type { Deck } from "../utils/contracts.ts";
 
@@ -32,11 +34,11 @@ export default function FlashcardManager() {
   const question = useSignal("");
   const answer = useSignal("");
 
-  // Edit signals
+  // Edit modal state
+  const editModalOpen = useSignal(false);
   const editingId = useSignal<string | null>(null);
   const editQuestion = useSignal("");
   const editAnswer = useSignal("");
-  const editDialogRef = useRef<HTMLDialogElement>(null);
 
   // API client
   const api = new RetentionApiClient();
@@ -77,12 +79,12 @@ export default function FlashcardManager() {
     editingId.value = card.id;
     editQuestion.value = card.question;
     editAnswer.value = card.answer;
-    editDialogRef.current?.showModal();
+    editModalOpen.value = true;
   };
 
   // Close edit modal
   const closeEditModal = () => {
-    editDialogRef.current?.close();
+    editModalOpen.value = false;
     editingId.value = null;
     editQuestion.value = "";
     editAnswer.value = "";
@@ -322,15 +324,23 @@ export default function FlashcardManager() {
         
         {/* Error and Success Messages */}
         {error.value && (
-          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <Alert
+            variant="error"
+            onDismiss={() => error.value = ""}
+            class="mb-4"
+          >
             {error.value}
-          </div>
+          </Alert>
         )}
-        
+
         {success.value && (
-          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          <Alert
+            variant="success"
+            onDismiss={() => success.value = ""}
+            class="mb-4"
+          >
             {success.value}
-          </div>
+          </Alert>
         )}
 
         {/* Deck Selection */}
@@ -442,25 +452,25 @@ export default function FlashcardManager() {
             {flashcards.value.map((card) => (
               <div key={card.id} class="border border-gray-200 rounded-lg p-4 relative group">
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                  <button 
+                  <button
                     type="button"
                     onClick={() => openEditModal(card)}
-                    class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50"
-                    title="Edit Flashcard"
+                    class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50 min-h-[44px] flex items-center gap-2"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
+                    <span class="text-sm">Edit</span>
                   </button>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => deleteFlashcard(card.id)}
-                    class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50"
-                    title="Delete Flashcard"
+                    class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50 min-h-[44px] flex items-center gap-2"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
+                    <span class="text-sm">Delete</span>
                   </button>
                 </div>
                 <div class="font-medium text-gray-800 mb-2 pr-10">{card.question}</div>
@@ -480,52 +490,58 @@ export default function FlashcardManager() {
       </div>
 
       {/* Edit Modal */}
-      <dialog ref={editDialogRef} class="modal">
-        <div class="modal-box">
-          <h3 class="font-bold text-lg mb-4">Edit Flashcard</h3>
-          <form onSubmit={updateFlashcard} class="space-y-4">
-            <div class="form-control">
-              <MarkdownEditor
-                label="Question"
-                value={editQuestion.value}
-                onInput={(val) => editQuestion.value = val}
-                placeholder="Enter your question..."
-                required
-                rows={3}
-              />
-            </div>
-            <div class="form-control">
-              <MarkdownEditor
-                label="Answer"
-                value={editAnswer.value}
-                onInput={(val) => editAnswer.value = val}
-                placeholder="Enter the answer..."
-                required
-                rows={5}
-              />
-            </div>
-            <div class="modal-action">
-              <button 
-                type="button" 
-                class="btn" 
-                onClick={closeEditModal}
-              >
-                Cancel
-              </button>
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                disabled={loading.value}
-              >
-                {loading.value ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-          <button type="button" onClick={closeEditModal}>close</button>
+      <Modal
+        open={editModalOpen.value}
+        onClose={closeEditModal}
+        title="Edit Flashcard"
+        subtitle="Update the question and answer for this flashcard"
+        variant="accent"
+        maxWidth="large"
+        footer={
+          <>
+            <button
+              type="button"
+              class="min-h-[44px] px-6 py-2 border-2 border-[#444] text-[#ddd] hover:border-[#00d9ff] hover:text-[#00d9ff] transition-colors font-mono"
+              onClick={closeEditModal}
+              style="border-radius: 0;"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="edit-flashcard-form"
+              class="min-h-[44px] px-6 py-2 bg-[#00d9ff] border-2 border-[#00d9ff] text-[#0a0a0a] hover:bg-[#00b8d4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-mono font-semibold"
+              disabled={loading.value}
+              style="border-radius: 0;"
+            >
+              {loading.value ? "Saving..." : "Save Changes"}
+            </button>
+          </>
+        }
+      >
+        <form id="edit-flashcard-form" onSubmit={updateFlashcard} class="space-y-4">
+          <div class="form-control">
+            <MarkdownEditor
+              label="Question"
+              value={editQuestion.value}
+              onInput={(val) => editQuestion.value = val}
+              placeholder="Enter your question..."
+              required
+              rows={3}
+            />
+          </div>
+          <div class="form-control">
+            <MarkdownEditor
+              label="Answer"
+              value={editAnswer.value}
+              onInput={(val) => editAnswer.value = val}
+              placeholder="Enter the answer..."
+              required
+              rows={5}
+            />
+          </div>
         </form>
-      </dialog>
+      </Modal>
     </div>
   );
 }

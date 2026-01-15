@@ -1,5 +1,5 @@
 /** @jsxImportSource preact */
-import { useSignal } from "@preact/signals";
+import { useSignal, useComputed } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 import type { Tag } from "../utils/api.ts";
 
@@ -94,9 +94,11 @@ export default function TagManager({ flashcardId, onTagsUpdated }: TagManagerPro
     }
   };
 
-  const availableTags = allTags.value.filter(
-    tag => !flashcardTags.value.some(ft => ft.id === tag.id)
-  );
+  // Compute available tags efficiently using Set lookup (O(n) instead of O(n²))
+  const availableTags = useComputed(() => {
+    const flashcardTagIds = new Set(flashcardTags.value.map(t => t.id));
+    return allTags.value.filter(tag => !flashcardTagIds.has(tag.id));
+  });
 
   if (loading.value) {
     return <span class="loading loading-spinner loading-sm"></span>;
@@ -135,11 +137,11 @@ export default function TagManager({ flashcardId, onTagsUpdated }: TagManagerPro
           </button>
           <div tabIndex={0} class="dropdown-content z-50 menu p-3 shadow-lg bg-white rounded-box w-64">
             {/* Existing tags */}
-            {availableTags.length > 0 && (
+            {availableTags.value.length > 0 && (
               <div class="mb-2">
                 <div class="text-xs font-medium text-gray-500 mb-1">Existing Tags</div>
                 <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto">
-                  {availableTags.map(tag => (
+                  {availableTags.value.map(tag => (
                     <button
                       key={tag.id}
                       type="button"
