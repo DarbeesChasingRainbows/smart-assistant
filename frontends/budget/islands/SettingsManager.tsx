@@ -10,6 +10,7 @@ interface Props {
 const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget/api/v1/budget"
   : "/api/v1/budget";
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export default function SettingsManager(
   { currentPeriod, allPeriods, categories: initialCategories }: Props,
@@ -46,12 +47,49 @@ export default function SettingsManager(
       date,
     );
 
+  const toUtcMidnight = (date: Date) =>
+    new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+
+  const getPeriodLengthDays = (period?: PayPeriod | null) => {
+    if (!period?.startDate || !period?.endDate) return 14;
+    const start = toUtcMidnight(new Date(period.startDate));
+    const end = toUtcMidnight(new Date(period.endDate));
+    const diffDays = Math.round((end.getTime() - start.getTime()) / MS_PER_DAY);
+    return Math.max(1, diffDays + 1);
+  };
+
+  const getLatestPeriod = () => {
+    let latest: PayPeriod | null = null;
+    for (const period of periods.value) {
+      if (!period.endDate) continue;
+      if (!latest) {
+        latest = period;
+        continue;
+      }
+      if (new Date(period.endDate) > new Date(latest.endDate)) {
+        latest = period;
+      }
+    }
+    return latest;
+  };
+
   const openPeriodModal = () => {
-    const today = new Date();
-    const twoWeeksLater = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
-    periodName.value = formatMonthYear(today);
-    periodStart.value = today.toISOString().split("T")[0];
-    periodEnd.value = twoWeeksLater.toISOString().split("T")[0];
+    const latestPeriod = getLatestPeriod();
+    const periodLengthDays = getPeriodLengthDays(currentPeriod ?? latestPeriod);
+    const baseDate = latestPeriod?.endDate
+      ? new Date(latestPeriod.endDate)
+      : new Date();
+    const startDate = toUtcMidnight(baseDate);
+    startDate.setUTCDate(startDate.getUTCDate() + 1);
+    const endDate = new Date(startDate);
+    endDate.setUTCDate(endDate.getUTCDate() + periodLengthDays - 1);
+    periodName.value = formatMonthYear(new Date(
+      startDate.getUTCFullYear(),
+      startDate.getUTCMonth(),
+      startDate.getUTCDate(),
+    ));
+    periodStart.value = startDate.toISOString().split("T")[0];
+    periodEnd.value = endDate.toISOString().split("T")[0];
     periodExpectedIncome.value = "";
     isPeriodModalOpen.value = true;
   };
