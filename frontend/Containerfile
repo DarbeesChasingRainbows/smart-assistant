@@ -1,18 +1,48 @@
-# Deno Fresh Frontend Dockerfile
-FROM denoland/deno:2.2.0
+# syntax=docker/dockerfile:1.4
+FROM denoland/deno:latest AS base
+
+ARG GIT_REVISION
+ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
+ENV DENO_NODE_MODULES_DIR=auto
 
 WORKDIR /app
 
-# Cache dependencies (best-effort warmup)
-COPY deno.json ./
+# Copy config
+COPY deno.json deno.lock ./
+COPY vite.config.ts main.tsx utils.ts ./
 
-# Copy source code
+# Install dependencies LOCALLY (no cache mount)
+RUN deno install --allow-scripts
+
+# Copy source
 COPY . .
 
-# Build the application
+# Build (no cache mount)
 RUN deno task build
+
+# Runtime Stage
+FROM denoland/deno:latest AS runtime
+
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+ARG GIT_REVISION
+ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
+ENV DENO_NODE_MODULES_DIR=auto
+
+WORKDIR /app
+
+COPY --from=base /app/_fresh ./_fresh
+COPY --from=base /app/deno.json ./
+COPY --from=base /app/deno.lock ./
+COPY --from=base /app/routes ./routes
+COPY --from=base /app/static ./static
+COPY --from=base /app/main.tsx ./
+COPY --from=base /app/components ./components
+COPY --from=base /app/islands ./islands
+COPY --from=base /app/lib ./lib
+COPY --from=base /app/node_modules ./node_modules
 
 EXPOSE 8000
 
-# Run the production server
-CMD ["deno", "task", "start"]
+CMD ["deno", "serve", "-A", "_fresh/server.js"]

@@ -31,7 +31,19 @@ export class RetentionApiClient {
   public baseUrl: string;
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl || Deno.env.get("VITE_API_URL") || "http://localhost:8080";
+    if (baseUrl) {
+      this.baseUrl = baseUrl;
+    } else if (typeof document !== "undefined") {
+      // Browser: Relative path for Caddy
+      this.baseUrl = "/api";
+    } else {
+      // Server: Internal Docker DNS
+      // Ignore env var if it's relative
+      const envUrl = Deno.env.get("VITE_API_URL");
+      this.baseUrl = (envUrl && envUrl.startsWith("http")) 
+        ? envUrl 
+        : "http://api:5120/api";
+    }
   }
 
   // ============================================================================

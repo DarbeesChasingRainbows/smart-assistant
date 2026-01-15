@@ -16,7 +16,24 @@ import type {
 } from "../types/api.ts";
 import { signal } from "@preact/signals";
 
-const API_BASE = Deno.env.get("VITE_API_URL") || "http://localhost:5120/api";
+// DYNAMIC BASE URL LOGIC
+function getApiBase(): string {
+  // Browser: Use relative path for Caddy proxy
+  if (typeof document !== "undefined") {
+    return "/api";
+  }
+  
+  // Server (Deno): Use internal Docker DNS
+  // We ignore VITE_API_URL here if it is relative (starts with /) 
+  // because Deno fetch requires an absolute URL.
+  const envUrl = Deno.env.get("VITE_API_URL");
+  if (envUrl && envUrl.startsWith("http")) {
+    return envUrl;
+  }
+  return "http://api:5120/api";
+}
+
+const API_BASE = getApiBase();
 
 // ============================================
 // Offline Detection & Request Queue

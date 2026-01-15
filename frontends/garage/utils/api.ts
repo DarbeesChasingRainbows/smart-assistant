@@ -21,8 +21,18 @@ export class GarageApiClient {
   public baseUrl: string;
 
   constructor(baseUrl?: string) {
-    const envUrl = typeof Deno !== "undefined" ? Deno.env.get("VITE_API_URL") : undefined;
-    this.baseUrl = baseUrl || envUrl || "http://localhost:5120";
+    if (baseUrl) {
+      this.baseUrl = baseUrl;
+    } else if (typeof document !== "undefined") {
+      // Browser: Relative path
+      this.baseUrl = "/api";
+    } else {
+      // Server: Internal Docker DNS
+      const envUrl = Deno.env.get("VITE_API_URL");
+      this.baseUrl = (envUrl && envUrl.startsWith("http")) 
+        ? envUrl 
+        : "http://api:5120/api";
+    }
   }
 
   // ============================================================================

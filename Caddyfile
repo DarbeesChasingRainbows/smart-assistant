@@ -1,16 +1,21 @@
 :8000 {
-	# 1. Garage App (Standard Routes)
+	# 1. Global API Route (Missing Piece)
+	# This allows the frontends to reach the backend via http://localhost:8000/api
+	handle /api* {
+		reverse_proxy api:5120
+	}
+
+	# 2. Garage App
 	handle /garage* {
 		reverse_proxy garage-frontend:8000
 	}
 
-	# 2. Flashcards App (Standard Routes)
+	# 3. Flashcards App
 	handle /flashcards* {
 		reverse_proxy flashcards-frontend:8000
 	}
 
-	# 3. Budget App (Pay-Period Zero-Based Budgeting)
-	# API for Budget UI
+	# 4. Budget App
 	handle_path /budget/api/* {
 		rewrite * /api{path}
 		reverse_proxy api:5120
@@ -20,36 +25,30 @@
 		reverse_proxy budget-frontend:8000
 	}
 
-	# 4. THE FIX: Asset "Catch & Rewrite"
-	# Catches broken /assets/ links, prepends the prefix, and forwards them.
+	# 5. Asset Catch & Rewrite
 	handle /assets/* {
-		
-		# Fix for Garage Assets
 		@from_garage header_regexp Referer /garage
 		handle @from_garage {
-			rewrite * /garage{path}  # <--- MAGIC LINE: Adds /garage prefix
+			rewrite * /garage{path}
 			reverse_proxy garage-frontend:8000
 		}
 
-		# Fix for Flashcards Assets
 		@from_flashcards header_regexp Referer /flashcards
 		handle @from_flashcards {
-			rewrite * /flashcards{path} # <--- MAGIC LINE: Adds /flashcards prefix
+			rewrite * /flashcards{path}
 			reverse_proxy flashcards-frontend:8000
 		}
 
-		# Fix for Budget Assets
 		@from_budget header_regexp Referer /budget
 		handle @from_budget {
-			rewrite * /budget{path} # <--- MAGIC LINE: Adds /budget prefix
+			rewrite * /budget{path}
 			reverse_proxy budget-frontend:8000
 		}
 
-		# Default to main frontend (no rewrite needed)
 		reverse_proxy frontend:8000
 	}
 
-	# 5. Default Root
+	# 6. Default Root
 	handle {
 		reverse_proxy frontend:8000
 	}

@@ -55,7 +55,7 @@ export default function SettingsManager(
     const start = toUtcMidnight(new Date(period.startDate));
     const end = toUtcMidnight(new Date(period.endDate));
     const diffDays = Math.round((end.getTime() - start.getTime()) / MS_PER_DAY);
-    return Math.max(1, diffDays);
+    return Math.max(1, diffDays + 1);
   };
 
   const getLatestPeriod = () => {
