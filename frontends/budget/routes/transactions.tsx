@@ -8,6 +8,7 @@ import type {
   PayPeriod,
   Transaction,
 } from "../types/api.ts";
+import { Navigation } from "../components/Navigation.tsx";
 import TransactionsManager from "../islands/TransactionsManager.tsx";
 import TransactionImportIsland from "../islands/TransactionImportIsland.tsx";
 import TransactionExportIsland from "../islands/TransactionExportIsland.tsx";
@@ -154,7 +155,7 @@ export default define.page<typeof handler>(function TransactionsPage(props) {
   } = props.data as TransactionsData;
 
   return (
-    <div class="min-h-screen bg-slate-100">
+    <>
       <Head>
         <title>Budget - Transactions</title>
         <link
@@ -164,65 +165,61 @@ export default define.page<typeof handler>(function TransactionsPage(props) {
         />
       </Head>
 
-      <header class="bg-slate-800 text-white p-4 shadow-lg">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-          <a
-            href={url("/dashboard")}
-            class="text-2xl font-bold hover:text-slate-300"
-          >
-            💰 Budget
-          </a>
-          <nav class="flex items-center gap-2">
-            <a href={url("/dashboard")} class="btn btn-ghost btn-sm">
-              Dashboard
-            </a>
-            <a href={url("/accounts")} class="btn btn-ghost btn-sm">Accounts</a>
-            <a href={url("/transactions")} class="btn btn-primary btn-sm">
-              Transactions
-            </a>
-            <a href={url("/receipts")} class="btn btn-ghost btn-sm">Receipts</a>
-            <a href={url("/bills")} class="btn btn-ghost btn-sm">Bills</a>
-            <a href={url("/goals")} class="btn btn-ghost btn-sm">Goals</a>
-            <a href={url("/settings")} class="btn btn-ghost btn-sm">Settings</a>
-          </nav>
-        </div>
-      </header>
+      <Navigation currentPath="/transactions">
+        <div class="min-h-screen bg-[#0a0a0a]">
+          <main class="max-w-7xl mx-auto p-4 md:p-6">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+              <h1 class="text-2xl md:text-3xl font-bold text-white font-mono flex items-center gap-2">
+                <span class="text-[#00d9ff]">⚡</span>
+                <span>TRANSACTIONS</span>
+              </h1>
+              <div class="flex gap-2 flex-wrap">
+                <TransactionExportIsland
+                  transactions={transactions}
+                  accounts={accounts}
+                  categories={categories}
+                  categoryGroups={categoryGroups}
+                />
+                {accounts.length > 0 && (
+                  <TransactionImportIsland
+                    accountKey={accounts[0].accountKey ||
+                      accounts[0].id?.toString() || ""}
+                    onImportComplete={() => globalThis.location.reload()}
+                  />
+                )}
+              </div>
+            </div>
 
-      <main class="max-w-6xl mx-auto p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h1 class="text-3xl font-bold text-slate-800">💸 Transactions</h1>
-          <div class="flex gap-2">
-            <TransactionExportIsland
-              transactions={transactions}
+            {error && (
+              <div class="alert alert-error mb-6 font-mono">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <TransactionsManager
+              initialTransactions={transactions}
               accounts={accounts}
               categories={categories}
               categoryGroups={categoryGroups}
+              categoryBalances={categoryBalances}
+              currentPeriodId={currentPeriod?.id || null}
             />
-            {accounts.length > 0 && (
-              <TransactionImportIsland
-                accountKey={accounts[0].accountKey ||
-                  accounts[0].id?.toString() || ""}
-                onImportComplete={() => globalThis.location.reload()}
-              />
-            )}
-          </div>
+          </main>
         </div>
-
-        {error && (
-          <div class="alert alert-error mb-6">
-            <span>{error}</span>
-          </div>
-        )}
-
-        <TransactionsManager
-          initialTransactions={transactions}
-          accounts={accounts}
-          categories={categories}
-          categoryGroups={categoryGroups}
-          categoryBalances={categoryBalances}
-          currentPeriodId={currentPeriod?.id || null}
-        />
-      </main>
-    </div>
+      </Navigation>
+    </>
   );
 });

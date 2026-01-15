@@ -211,10 +211,10 @@ export default function BillsManager({ initialBills, categories }: Props) {
   };
 
   return (
-    <div class="space-y-6">
+    <div class="space-y-4 md:space-y-6">
       {/* Success Message Toast */}
       {successMessage.value && (
-        <div class="alert alert-success shadow-lg">
+        <div class="alert alert-success shadow-lg font-mono">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="stroke-current shrink-0 h-6 w-6"
@@ -234,7 +234,7 @@ export default function BillsManager({ initialBills, categories }: Props) {
 
       {/* Error Message Toast */}
       {errorMessage.value && (
-        <div class="alert alert-error shadow-lg">
+        <div class="alert alert-error shadow-lg font-mono">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="stroke-current shrink-0 h-6 w-6"
@@ -252,39 +252,49 @@ export default function BillsManager({ initialBills, categories }: Props) {
         </div>
       )}
 
-      <div class="card bg-white shadow-xl">
-        <div class="card-body">
-          <div class="flex justify-between items-center">
+      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card-body p-4 md:p-6">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div>
-              <h2 class="text-lg text-slate-500">Monthly Bills Total</h2>
-              <div class="text-3xl font-bold text-slate-800">
+              <h2 class="text-sm md:text-lg text-[#888] font-mono">
+                MONTHLY BILLS TOTAL
+              </h2>
+              <div class="text-2xl md:text-3xl font-bold text-white font-mono">
                 {formatCurrency(totalMonthly())}
               </div>
             </div>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
               onClick={openAddModal}
             >
-              + Add Bill
+              <span class="mr-2">+</span>Add Bill
             </button>
           </div>
         </div>
       </div>
 
-      <div class="card bg-white shadow-xl">
-        <div class="card-body">
+      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card-body p-0">
           <div class="overflow-x-auto">
-            <table class="table table-sm">
+            <table class="table table-sm w-full">
               <thead>
-                <tr>
-                  <th>Bill</th>
-                  <th>Amount</th>
-                  <th>Due Day</th>
-                  <th>Frequency</th>
-                  <th>Last Paid</th>
-                  <th>Next Due</th>
-                  <th>Status</th>
+                <tr class="bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
+                  <th class="text-[#888] font-mono text-xs">BILL</th>
+                  <th class="text-[#888] font-mono text-xs">AMOUNT</th>
+                  <th class="text-[#888] font-mono text-xs hidden sm:table-cell">
+                    DUE DAY
+                  </th>
+                  <th class="text-[#888] font-mono text-xs hidden md:table-cell">
+                    FREQUENCY
+                  </th>
+                  <th class="text-[#888] font-mono text-xs hidden lg:table-cell">
+                    LAST PAID
+                  </th>
+                  <th class="text-[#888] font-mono text-xs">NEXT DUE</th>
+                  <th class="text-[#888] font-mono text-xs hidden sm:table-cell">
+                    STATUS
+                  </th>
                   <th></th>
                 </tr>
               </thead>
@@ -292,72 +302,94 @@ export default function BillsManager({ initialBills, categories }: Props) {
                 {bills.value.filter((b) => b.isActive).map((bill) => {
                   const status = getDueStatus(bill);
                   return (
-                    <tr key={bill.id}>
+                    <tr
+                      key={bill.id}
+                      class="border-b border-[#333] hover:bg-[#1a1a1a]"
+                    >
                       <td>
-                        <div class="font-medium flex items-center gap-2">
-                          {bill.name}
+                        <div class="font-medium flex items-center gap-2 flex-wrap text-white">
+                          <span>{bill.name}</span>
                           {bill.isAutoPay && (
-                            <span class="badge badge-success badge-xs">
-                              Auto
+                            <span class="badge bg-[#00ff88]/20 text-[#00ff88] border-[#00ff88]/40 badge-xs font-mono">
+                              AUTO
                             </span>
                           )}
                         </div>
-                        <div class="text-sm text-slate-500">
+                        <div class="text-sm text-[#888] font-mono">
                           {categories.find((c) => c.id === bill.categoryId)
                             ?.name || "Uncategorized"}
                         </div>
                       </td>
-                      <td class="font-semibold">
+                      <td class="font-semibold text-white font-mono">
                         {formatCurrency(bill.amount)}
                       </td>
-                      <td>Day {bill.dueDay}</td>
-                      <td>
+                      <td class="hidden sm:table-cell text-[#888] font-mono">
+                        Day {bill.dueDay}
+                      </td>
+                      <td class="hidden md:table-cell text-[#888] font-mono">
                         {FREQUENCIES.find((f) => f.value === bill.frequency)
                           ?.label}
                       </td>
-                      <td class="text-sm">
+                      <td class="text-sm hidden lg:table-cell text-[#888] font-mono">
                         {bill.lastPaidDate
                           ? new Date(bill.lastPaidDate).toLocaleDateString()
-                          : <span class="text-slate-400 italic">Never</span>}
+                          : <span class="text-[#888] italic">Never</span>}
                       </td>
-                      <td class="text-sm">
+                      <td class="text-sm text-[#888] font-mono">
                         {bill.nextDueDate
                           ? new Date(bill.nextDueDate).toLocaleDateString()
-                          : <span class="text-slate-400 italic">-</span>}
+                          : <span class="text-[#888] italic">-</span>}
                       </td>
-                      <td>
-                        <span class={`badge ${status.class}`}>
+                      <td class="hidden sm:table-cell">
+                        <span
+                          class={`badge ${
+                            status.class === "badge-error"
+                              ? "badge-error"
+                              : status.class === "badge-warning"
+                              ? "bg-[#ffb000]/20 text-[#ffb000] border-[#ffb000]/40"
+                              : status.class === "badge-info"
+                              ? "bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff]/40"
+                              : "bg-[#333] text-[#888] border-[#444]"
+                          } font-mono badge-xs`}
+                        >
                           {status.text}
                         </span>
                       </td>
                       <td>
-                        <div class="flex gap-1">
+                        <div class="flex gap-1 flex-wrap">
                           <button
                             type="button"
-                            class="btn btn-success btn-xs"
+                            class="btn bg-[#00ff88]/20 hover:bg-[#00ff88]/30 border-[#00ff88] text-[#00ff88] btn-xs min-h-[36px] font-mono"
                             onClick={() => markPaid(bill)}
                             disabled={markingPaidId.value === bill.id}
+                            aria-label={`Mark ${bill.name} as paid`}
                           >
                             {markingPaidId.value === bill.id
                               ? (
                                 <span class="loading loading-spinner loading-xs">
                                 </span>
                               )
-                              : "✓ Paid"}
+                              : (
+                                <>
+                                  <span class="mr-1">✓</span>Paid
+                                </>
+                              )}
                           </button>
                           <button
                             type="button"
-                            class="btn btn-ghost btn-xs"
+                            class="btn btn-ghost btn-xs min-h-[36px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff] font-mono"
                             onClick={() => openEditModal(bill)}
+                            aria-label={`Edit ${bill.name}`}
                           >
                             Edit
                           </button>
                           <button
                             type="button"
-                            class="btn btn-ghost btn-xs text-error"
+                            class="btn btn-ghost btn-xs min-h-[36px] min-w-[36px] text-red-400 hover:text-red-300"
                             onClick={() => deleteBill(bill)}
+                            aria-label={`Delete ${bill.name}`}
                           >
-                            ×
+                            <span class="text-lg">×</span>
                           </button>
                         </div>
                       </td>
