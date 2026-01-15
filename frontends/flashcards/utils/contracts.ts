@@ -367,3 +367,206 @@ export function isDeck(obj: unknown): obj is Deck {
     "cardCount" in obj
   );
 }
+
+export function isQuizResult(obj: unknown): obj is QuizResult {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&
+    "userId" in obj &&
+    "flashcardId" in obj &&
+    "isCorrect" in obj
+  );
+}
+
+export function isGlossaryTerm(obj: unknown): obj is GlossaryTerm {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&
+    "term" in obj &&
+    "definition" in obj
+  );
+}
+
+export function isCrossReference(obj: unknown): obj is CrossReference {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&
+    "sourceType" in obj &&
+    "targetType" in obj
+  );
+}
+
+export function isMediaAsset(obj: unknown): obj is MediaAsset {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&
+    "flashcardId" in obj &&
+    "assetType" in obj &&
+    "fileName" in obj
+  );
+}
+
+export function isQuizSession(obj: unknown): obj is QuizSession {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "id" in obj &&
+    "cardIds" in obj &&
+    Array.isArray((obj as QuizSession).cardIds)
+  );
+}
+
+export function isSchedulingData(obj: unknown): obj is SchedulingData {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "nextReviewDate" in obj &&
+    "interval" in obj &&
+    "easeFactor" in obj
+  );
+}
+
+export function isQuestionMetadata(obj: unknown): obj is QuestionMetadata {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    ("questionType" in obj || "tags" in obj || "difficulty" in obj)
+  );
+}
+
+// ============================================================================
+// Computed/Extended Types
+// ============================================================================
+
+/**
+ * Deck with computed statistics
+ */
+export interface DeckWithStats extends Deck {
+  dueCount: number;
+  newCount: number;
+  averageEase: number;
+  masteredCount: number;
+  learningCount: number;
+}
+
+/**
+ * Flashcard with review progress
+ */
+export interface FlashcardWithProgress extends Flashcard {
+  isDue: boolean;
+  isNew: boolean;
+  isMastered: boolean;
+  daysSinceLastReview: number;
+  nextReviewIn: number; // days
+}
+
+/**
+ * User with computed stats
+ */
+export interface UserWithStats extends User {
+  reviewedToday: number;
+  dueToday: number;
+  studyStreak: number;
+  averageAccuracy: number;
+  totalDecks: number;
+  totalCards: number;
+}
+
+/**
+ * Quiz session with results
+ */
+export interface QuizSessionWithResults extends QuizSession {
+  results: QuizResult[];
+  correctCount: number;
+  incorrectCount: number;
+  accuracy: number;
+  completedAt: string | null;
+}
+
+/**
+ * Deck with cards included
+ */
+export interface DeckWithCards extends Deck {
+  cards: Flashcard[];
+}
+
+/**
+ * Flashcard with media assets
+ */
+export interface FlashcardWithMedia extends Flashcard {
+  mediaAssets: MediaAsset[];
+}
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Get a consistent key for any object that might have id or key
+ */
+export function getKey(obj: { id?: string; key?: string }): string {
+  return obj.key ?? obj.id ?? "";
+}
+
+/**
+ * Get deck ID from various formats
+ */
+export function getDeckId(deck: Deck | string): string {
+  return typeof deck === "string" ? deck : deck.id;
+}
+
+/**
+ * Get flashcard ID from various formats
+ */
+export function getFlashcardId(card: Flashcard | string): string {
+  return typeof card === "string" ? card : card.id;
+}
+
+/**
+ * Check if a card is due for review
+ */
+export function isCardDue(card: Flashcard): boolean {
+  const nextReview = new Date(card.scheduling.nextReviewDate);
+  return nextReview <= new Date();
+}
+
+/**
+ * Check if a card is new (never reviewed)
+ */
+export function isCardNew(card: Flashcard): boolean {
+  return card.scheduling.repetitions === 0;
+}
+
+/**
+ * Check if a card is mastered (ease factor above threshold)
+ */
+export function isCardMastered(card: Flashcard): boolean {
+  return card.scheduling.easeFactor >= 2.5 && card.scheduling.repetitions >= 5;
+}
+
+/**
+ * Calculate days until next review
+ */
+export function daysUntilReview(card: Flashcard): number {
+  const nextReview = new Date(card.scheduling.nextReviewDate);
+  const now = new Date();
+  const diff = nextReview.getTime() - now.getTime();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Calculate days since last review
+ */
+export function daysSinceReview(card: Flashcard): number {
+  if (card.scheduling.repetitions === 0) return 0;
+  const nextReview = new Date(card.scheduling.nextReviewDate);
+  const interval = card.scheduling.interval;
+  const lastReview = new Date(nextReview.getTime() - interval * 24 * 60 * 60 * 1000);
+  const now = new Date();
+  const diff = now.getTime() - lastReview.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
