@@ -9,7 +9,9 @@ interface CloneDeckButtonProps {
 /**
  * Button component to clone a shared deck into the user's collection.
  */
-export default function CloneDeckButton({ shareToken, deckName }: CloneDeckButtonProps) {
+export default function CloneDeckButton(
+  { shareToken, deckName }: CloneDeckButtonProps,
+) {
   const isCloning = useSignal(false);
   const showModal = useSignal(false);
   const newName = useSignal(`${deckName} (Copy)`);
@@ -47,8 +49,18 @@ export default function CloneDeckButton({ shareToken, deckName }: CloneDeckButto
     return (
       <div class="flex flex-col items-center gap-3">
         <div class="alert alert-success">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span>Deck cloned successfully!</span>
         </div>
@@ -66,8 +78,19 @@ export default function CloneDeckButton({ shareToken, deckName }: CloneDeckButto
         class="btn btn-secondary btn-lg"
         onClick={() => showModal.value = true}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+          />
         </svg>
         Clone to My Collection
       </button>
@@ -78,7 +101,8 @@ export default function CloneDeckButton({ shareToken, deckName }: CloneDeckButto
           <div class="modal-box">
             <h3 class="font-bold text-lg">Clone Deck</h3>
             <p class="py-4">
-              Create your own copy of "{deckName}" that you can edit and customize.
+              Create your own copy of "{deckName}" that you can edit and
+              customize.
             </p>
 
             <div class="form-control">
@@ -89,7 +113,8 @@ export default function CloneDeckButton({ shareToken, deckName }: CloneDeckButto
                 type="text"
                 class="input input-bordered"
                 value={newName.value}
-                onInput={(e) => newName.value = (e.target as HTMLInputElement).value}
+                onInput={(e) =>
+                  newName.value = (e.target as HTMLInputElement).value}
               />
             </div>
 
@@ -114,18 +139,21 @@ export default function CloneDeckButton({ shareToken, deckName }: CloneDeckButto
                 onClick={handleClone}
                 disabled={isCloning.value || !newName.value.trim()}
               >
-                {isCloning.value ? (
-                  <>
-                    <span class="loading loading-spinner loading-sm"></span>
-                    Cloning...
-                  </>
-                ) : (
-                  "Clone Deck"
-                )}
+                {isCloning.value
+                  ? (
+                    <>
+                      <span class="loading loading-spinner loading-sm"></span>
+                      Cloning...
+                    </>
+                  )
+                  : (
+                    "Clone Deck"
+                  )}
               </button>
             </div>
           </div>
-          <div class="modal-backdrop" onClick={() => showModal.value = false}></div>
+          <div class="modal-backdrop" onClick={() => showModal.value = false}>
+          </div>
         </div>
       )}
     </>

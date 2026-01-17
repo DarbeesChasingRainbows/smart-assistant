@@ -14,7 +14,7 @@ export const vinSchema = z
   .length(17, "VIN must be exactly 17 characters")
   .regex(
     /^[A-HJ-NPR-Z0-9]{17}$/i,
-    "VIN contains invalid characters (I, O, Q not allowed)"
+    "VIN contains invalid characters (I, O, Q not allowed)",
   )
   .transform((val) => val.toUpperCase())
   .optional()
@@ -49,7 +49,9 @@ export const currencySchema = z.coerce
 /** Optional currency */
 export const optionalCurrencySchema = z
   .union([z.literal(""), z.coerce.number().nonnegative().max(999999.99)])
-  .transform((val) => (val === "" ? undefined : Math.round(Number(val) * 100) / 100));
+  .transform((
+    val,
+  ) => (val === "" ? undefined : Math.round(Number(val) * 100) / 100));
 
 /** Positive hours value */
 export const hoursSchema = z.coerce
@@ -132,7 +134,7 @@ export const updateVehicleSchema = z.object({
   color: optionalStringSchema.pipe(z.string().max(50).optional()),
 }).refine(
   (data) => Object.values(data).some((v) => v !== undefined),
-  "At least one field must be provided for update"
+  "At least one field must be provided for update",
 );
 
 // ============================================================================
@@ -140,7 +142,9 @@ export const updateVehicleSchema = z.object({
 // ============================================================================
 
 export const intervalTypeSchema = z.enum(["mileage", "time", "both"], {
-  errorMap: () => ({ message: "Interval type must be 'mileage', 'time', or 'both'" }),
+  errorMap: () => ({
+    message: "Interval type must be 'mileage', 'time', or 'both'",
+  }),
 });
 
 export const prioritySchema = z.coerce
@@ -199,23 +203,36 @@ export const createMaintenanceScheduleSchema = z.object({
     }
     return true;
   },
-  { message: "Mileage interval required for mileage-based schedules", path: ["mileageInterval"] }
+  {
+    message: "Mileage interval required for mileage-based schedules",
+    path: ["mileageInterval"],
+  },
 ).refine(
   (data) => {
     if (data.intervalType === "time" || data.intervalType === "both") {
-      return data.timeIntervalMonths !== undefined && data.timeIntervalMonths > 0;
+      return data.timeIntervalMonths !== undefined &&
+        data.timeIntervalMonths > 0;
     }
     return true;
   },
-  { message: "Time interval required for time-based schedules", path: ["timeIntervalMonths"] }
+  {
+    message: "Time interval required for time-based schedules",
+    path: ["timeIntervalMonths"],
+  },
 );
 
 // ============================================================================
 // Maintenance Record Schemas
 // ============================================================================
 
-export const maintenanceStatusSchema = z.enum(["pending", "completed", "overdue"], {
-  errorMap: () => ({ message: "Status must be 'pending', 'completed', or 'overdue'" }),
+export const maintenanceStatusSchema = z.enum([
+  "pending",
+  "completed",
+  "overdue",
+], {
+  errorMap: () => ({
+    message: "Status must be 'pending', 'completed', or 'overdue'",
+  }),
 });
 
 export const createMaintenanceRecordSchema = z.object({
@@ -283,7 +300,7 @@ export const vinLookupSchema = z.object({
     .length(17, "VIN must be exactly 17 characters")
     .regex(
       /^[A-HJ-NPR-Z0-9]{17}$/i,
-      "VIN contains invalid characters (I, O, Q not allowed)"
+      "VIN contains invalid characters (I, O, Q not allowed)",
     )
     .transform((val) => val.toUpperCase()),
 });
@@ -294,11 +311,19 @@ export const vinLookupSchema = z.object({
 
 export type CreateVehicleInput = z.infer<typeof createVehicleSchema>;
 export type UpdateVehicleInput = z.infer<typeof updateVehicleSchema>;
-export type CreateMaintenanceScheduleInput = z.infer<typeof createMaintenanceScheduleSchema>;
-export type CreateMaintenanceRecordInput = z.infer<typeof createMaintenanceRecordSchema>;
-export type UpdateMaintenanceRecordInput = z.infer<typeof updateMaintenanceRecordSchema>;
+export type CreateMaintenanceScheduleInput = z.infer<
+  typeof createMaintenanceScheduleSchema
+>;
+export type CreateMaintenanceRecordInput = z.infer<
+  typeof createMaintenanceRecordSchema
+>;
+export type UpdateMaintenanceRecordInput = z.infer<
+  typeof updateMaintenanceRecordSchema
+>;
 export type PaginationInput = z.infer<typeof paginationSchema>;
-export type MaintenanceRecordsQuery = z.infer<typeof maintenanceRecordsQuerySchema>;
+export type MaintenanceRecordsQuery = z.infer<
+  typeof maintenanceRecordsQuerySchema
+>;
 export type CostAnalyticsQuery = z.infer<typeof costAnalyticsQuerySchema>;
 export type VinLookupInput = z.infer<typeof vinLookupSchema>;
 export type VehicleType = z.infer<typeof vehicleTypeSchema>;
@@ -315,7 +340,7 @@ export type RvMaintenanceCategory = z.infer<typeof rvMaintenanceCategorySchema>;
  */
 export function safeValidate<T>(
   schema: z.ZodSchema<T>,
-  data: unknown
+  data: unknown,
 ): { success: true; data: T } | { success: false; errors: z.ZodError } {
   const result = schema.safeParse(data);
   if (result.success) {

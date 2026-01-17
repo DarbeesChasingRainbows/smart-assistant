@@ -17,11 +17,17 @@ interface QuizSession {
 
 type ReviewRating = "Again" | "Hard" | "Good" | "Easy";
 
-const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+const wait = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
 const flipAnimationMs = 700;
 
 // SM-2 Algorithm calculation
-const _calculateSM2 = (repetitions: number, interval: number, easeFactor: number, quality: number) => {
+const _calculateSM2 = (
+  repetitions: number,
+  interval: number,
+  easeFactor: number,
+  quality: number,
+) => {
   let newRepetitions = repetitions;
   let newInterval = interval;
   let newEaseFactor = easeFactor;
@@ -40,7 +46,8 @@ const _calculateSM2 = (repetitions: number, interval: number, easeFactor: number
     newInterval = 1;
   }
 
-  newEaseFactor = newEaseFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+  newEaseFactor = newEaseFactor +
+    (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
   if (newEaseFactor < 1.3) newEaseFactor = 1.3;
 
   const nextReview = new Date();
@@ -61,14 +68,17 @@ export default function FlashcardQuiz({ deckId }: { deckId: string }) {
   const loadQuiz = async () => {
     loading.value = true;
     try {
-      const response = await fetch(`/api/quiz?difficulty=Medium&count=10&deckId=${deckId}`, {
-        method: "POST",
-      });
+      const response = await fetch(
+        `/api/quiz?difficulty=Medium&count=10&deckId=${deckId}`,
+        {
+          method: "POST",
+        },
+      );
       if (!response.ok) throw new Error("Failed to create quiz session");
       const quizSession: QuizSession = await response.json();
       session.value = quizSession;
       cardIds.value = quizSession.cardIds;
-      
+
       if (quizSession.cardIds.length > 0) {
         await loadCard(quizSession.cardIds[0]);
       } else {
@@ -101,18 +111,21 @@ export default function FlashcardQuiz({ deckId }: { deckId: string }) {
 
   const processContent = (content: string) => {
     let html = marked.parse(content) as string;
-    console.log('[FlashcardQuiz] After marked.parse:', html);
-    
+    console.log("[FlashcardQuiz] After marked.parse:", html);
+
     // Hide the spelling word while preserving audio tags
     // Match everything between "Spell the word:" and the audio tag or end of string
     // This handles words with hyphens, apostrophes, numbers, and multiple words
-    html = html.replace(/Spell the word:\s*[^\<]+(?=\<|$)/, 'Spell the word:');
-    console.log('[FlashcardQuiz] After word hiding regex:', html);
-    
+    html = html.replace(/Spell the word:\s*[^\<]+(?=\<|$)/, "Spell the word:");
+    console.log("[FlashcardQuiz] After word hiding regex:", html);
+
     // Ensure media loads from backend if proxy isn't active
     // Handle both single and double quotes
-    const finalHtml = html.replace(/src=(["'])\/uploads\//g, 'src=$1http://localhost:5137/uploads/');
-    console.log('[FlashcardQuiz] Final HTML with rewritten src:', finalHtml);
+    const finalHtml = html.replace(
+      /src=(["'])\/uploads\//g,
+      "src=$1http://localhost:5137/uploads/",
+    );
+    console.log("[FlashcardQuiz] Final HTML with rewritten src:", finalHtml);
     return finalHtml;
   };
 
@@ -121,11 +134,14 @@ export default function FlashcardQuiz({ deckId }: { deckId: string }) {
 
     try {
       // Update card scheduling first (critical for spaced repetition)
-      const schedulingResponse = await fetch(`/api/v1/flashcards/${currentCard.value.id}/review`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating }),
-      });
+      const schedulingResponse = await fetch(
+        `/api/v1/flashcards/${currentCard.value.id}/review`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rating }),
+        },
+      );
 
       if (!schedulingResponse.ok) {
         throw new Error("Failed to update card scheduling");
@@ -222,8 +238,11 @@ export default function FlashcardQuiz({ deckId }: { deckId: string }) {
           <div class="progress progress-primary w-full">
             <div
               class="progress-bar"
-              style={`width: ${((currentIndex.value + 1) / cardIds.value.length) * 100}%`}
-            ></div>
+              style={`width: ${
+                ((currentIndex.value + 1) / cardIds.value.length) * 100
+              }%`}
+            >
+            </div>
           </div>
         </div>
 
@@ -242,9 +261,11 @@ export default function FlashcardQuiz({ deckId }: { deckId: string }) {
                   <div class="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full mb-4">
                     Question
                   </div>
-                  <div 
+                  <div
                     class="text-2xl font-semibold text-foreground leading-relaxed prose dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: processContent(currentCard.value.question) }}
+                    dangerouslySetInnerHTML={{
+                      __html: processContent(currentCard.value.question),
+                    }}
                   />
                   <p class="text-sm text-muted-foreground mt-8">
                     Click to reveal answer →
@@ -260,9 +281,11 @@ export default function FlashcardQuiz({ deckId }: { deckId: string }) {
                   <div class="inline-block px-3 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-full mb-4">
                     Answer
                   </div>
-                  <div 
+                  <div
                     class="text-xl font-medium text-foreground leading-relaxed prose dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: processContent(currentCard.value.answer) }}
+                    dangerouslySetInnerHTML={{
+                      __html: processContent(currentCard.value.answer),
+                    }}
                   />
                   <p class="text-sm text-muted-foreground mt-8">
                     ← Click to show question

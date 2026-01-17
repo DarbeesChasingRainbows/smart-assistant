@@ -60,7 +60,7 @@ export default function FlashcardManager() {
   // Load existing flashcards
   const loadFlashcards = async () => {
     if (!selectedDeck.value) return;
-    
+
     try {
       loading.value = true;
       const data = await api.getFlashcards(selectedDeck.value);
@@ -91,8 +91,10 @@ export default function FlashcardManager() {
   // Update flashcard
   const updateFlashcard = async (e: Event) => {
     e.preventDefault();
-    
-    if (!editingId.value || !editQuestion.value.trim() || !editAnswer.value.trim()) {
+
+    if (
+      !editingId.value || !editQuestion.value.trim() || !editAnswer.value.trim()
+    ) {
       error.value = "Please fill in both question and answer";
       return;
     }
@@ -100,9 +102,9 @@ export default function FlashcardManager() {
     try {
       loading.value = true;
       error.value = "";
-      
+
       // Find the card to update
-      const card = flashcards.value.find(c => c.id === editingId.value);
+      const card = flashcards.value.find((c) => c.id === editingId.value);
       if (!card) {
         error.value = "Flashcard not found";
         return;
@@ -120,12 +122,12 @@ export default function FlashcardManager() {
           nextReviewDate: new Date().toISOString(),
         },
       });
-      
+
       // Update local state
-      flashcards.value = flashcards.value.map(c => 
+      flashcards.value = flashcards.value.map((c) =>
         c.id === editingId.value ? updatedCard : c
       );
-      
+
       success.value = "Flashcard updated successfully!";
       closeEditModal();
     } catch (err) {
@@ -138,7 +140,7 @@ export default function FlashcardManager() {
   // Create single flashcard
   const createFlashcard = async (e: Event) => {
     e.preventDefault();
-    
+
     if (!question.value.trim() || !answer.value.trim()) {
       error.value = "Please fill in both question and answer";
       return;
@@ -152,19 +154,19 @@ export default function FlashcardManager() {
     try {
       loading.value = true;
       error.value = "";
-      
+
       const newCard = await api.createFlashcard({
         deckId: selectedDeck.value,
         question: question.value,
         answer: answer.value,
       });
-      
+
       flashcards.value = [...flashcards.value, newCard];
-      
+
       // Clear form
       question.value = "";
       answer.value = "";
-      
+
       success.value = "Flashcard created successfully!";
       setTimeout(() => success.value = "", 3000);
     } catch (err) {
@@ -183,12 +185,12 @@ export default function FlashcardManager() {
     try {
       loading.value = true;
       error.value = "";
-      
+
       await api.deleteFlashcard(cardId);
-      
+
       // Remove from local state
-      flashcards.value = flashcards.value.filter(c => c.id !== cardId);
-      
+      flashcards.value = flashcards.value.filter((c) => c.id !== cardId);
+
       success.value = "Flashcard deleted successfully!";
       setTimeout(() => success.value = "", 3000);
     } catch (err) {
@@ -201,10 +203,10 @@ export default function FlashcardManager() {
   // Import Anki deck
   const importAnkiDeck = async (e: Event) => {
     e.preventDefault();
-    
+
     const fileInput = e.target as HTMLInputElement;
     const file = fileInput.files?.[0];
-    
+
     if (!file) {
       error.value = "Please select a file";
       return;
@@ -218,10 +220,10 @@ export default function FlashcardManager() {
     try {
       loading.value = true;
       error.value = "";
-      
+
       const formData = new FormData();
       formData.append("file", file);
-      
+
       const response = await fetch("/api/cards/import", {
         method: "POST",
         body: formData,
@@ -229,12 +231,15 @@ export default function FlashcardManager() {
 
       if (response.ok) {
         const result: ImportResult = await response.json();
-        success.value = `Imported ${result.importedCards} out of ${result.totalCards} cards from "${result.deckName}"`;
-        
+        success.value =
+          `Imported ${result.importedCards} out of ${result.totalCards} cards from "${result.deckName}"`;
+
         if (result.errors.length > 0) {
-          error.value = `Import warnings: ${result.errors.slice(0, 3).join(", ")}`;
+          error.value = `Import warnings: ${
+            result.errors.slice(0, 3).join(", ")
+          }`;
         }
-        
+
         await loadFlashcards();
       } else {
         const err = await response.text();
@@ -250,10 +255,10 @@ export default function FlashcardManager() {
   // Bulk create from text
   const bulkCreateFromText = async (e: Event) => {
     e.preventDefault();
-    
+
     const textInput = e.target as HTMLTextAreaElement;
     const text = textInput.value;
-    
+
     if (!text.trim()) {
       error.value = "Please enter flashcard content";
       return;
@@ -262,16 +267,16 @@ export default function FlashcardManager() {
     try {
       loading.value = true;
       error.value = "";
-      
+
       // Parse simple format: Question on one line, Answer on next line, separated by blank line
-      const lines = text.trim().split('\n');
+      const lines = text.trim().split("\n");
       const cards = [];
-      
+
       for (let i = 0; i < lines.length; i += 2) {
         if (i + 1 < lines.length) {
           const question = lines[i].trim();
           const answer = lines[i + 1].trim();
-          
+
           if (question && answer) {
             cards.push({ question, answer });
           }
@@ -291,7 +296,8 @@ export default function FlashcardManager() {
 
       if (response.ok) {
         const result = await response.json();
-        success.value = `Created ${result.created} out of ${result.totalRequested} flashcards`;
+        success.value =
+          `Created ${result.created} out of ${result.totalRequested} flashcards`;
         textInput.value = "";
         await loadFlashcards();
       } else {
@@ -319,14 +325,14 @@ export default function FlashcardManager() {
     <div class="max-w-4xl mx-auto p-6 space-y-8">
       <div class="bg-white rounded-lg shadow-md p-6">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">Flashcard Manager</h1>
-        
+
         {/* Error and Success Messages */}
         {error.value && (
           <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error.value}
           </div>
         )}
-        
+
         {success.value && (
           <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
             {success.value}
@@ -336,13 +342,13 @@ export default function FlashcardManager() {
         {/* Deck Selection */}
         <div class="mb-8">
           <h2 class="text-xl font-semibold text-gray-700 mb-4">Select Deck</h2>
-          <select 
+          <select
             class="select select-bordered w-full max-w-xs"
             value={selectedDeck.value}
             onChange={(e) => selectedDeck.value = e.currentTarget.value}
           >
             <option value="">Choose a deck...</option>
-            {decks.value.map(deck => (
+            {decks.value.map((deck) => (
               <option key={deck.id} value={deck.id}>
                 {deck.name} ({deck.cardCount} cards)
               </option>
@@ -352,7 +358,9 @@ export default function FlashcardManager() {
 
         {/* Single Flashcard Creation */}
         <div class="mb-8">
-          <h2 class="text-xl font-semibold text-gray-700 mb-4">Create Single Flashcard</h2>
+          <h2 class="text-xl font-semibold text-gray-700 mb-4">
+            Create Single Flashcard
+          </h2>
           <form onSubmit={createFlashcard} class="space-y-4">
             <div class="form-control">
               <MarkdownEditor
@@ -386,10 +394,14 @@ export default function FlashcardManager() {
 
         {/* Anki Import */}
         <div class="mb-8">
-          <h2 class="text-xl font-semibold text-gray-700 mb-4">Import Anki Deck (.apkg)</h2>
+          <h2 class="text-xl font-semibold text-gray-700 mb-4">
+            Import Anki Deck (.apkg)
+          </h2>
           <form onSubmit={importAnkiDeck} class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Select .apkg file</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Select .apkg file
+              </label>
               <input
                 type="file"
                 accept=".apkg"
@@ -410,7 +422,9 @@ export default function FlashcardManager() {
 
         {/* Bulk Text Import */}
         <div class="mb-8">
-          <h2 class="text-xl font-semibold text-gray-700 mb-4">Bulk Create from Text</h2>
+          <h2 class="text-xl font-semibold text-gray-700 mb-4">
+            Bulk Create from Text
+          </h2>
           <form onSubmit={bulkCreateFromText} class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -440,30 +454,57 @@ export default function FlashcardManager() {
           </h2>
           <div class="space-y-3">
             {flashcards.value.map((card) => (
-              <div key={card.id} class="border border-gray-200 rounded-lg p-4 relative group">
+              <div
+                key={card.id}
+                class="border border-gray-200 rounded-lg p-4 relative group"
+              >
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                  <button 
+                  <button
                     type="button"
                     onClick={() => openEditModal(card)}
                     class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50"
                     title="Edit Flashcard"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
                     </svg>
                   </button>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => deleteFlashcard(card.id)}
                     class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50"
                     title="Delete Flashcard"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </div>
-                <div class="font-medium text-gray-800 mb-2 pr-10">{card.question}</div>
+                <div class="font-medium text-gray-800 mb-2 pr-10">
+                  {card.question}
+                </div>
                 <div class="text-gray-600">{card.answer}</div>
                 <div class="text-sm text-gray-400 mt-2">
                   Created: {new Date(card.createdAt).toLocaleDateString()}
@@ -505,15 +546,15 @@ export default function FlashcardManager() {
               />
             </div>
             <div class="modal-action">
-              <button 
-                type="button" 
-                class="btn" 
+              <button
+                type="button"
+                class="btn"
                 onClick={closeEditModal}
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 class="btn btn-primary"
                 disabled={loading.value}
               >

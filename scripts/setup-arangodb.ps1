@@ -1,57 +1,59 @@
-# PowerShell script to setup ArangoDB with Podman
+# PowerShell script to setup ArangoDB with Docker
 # Run this script to start ArangoDB locally for development
 
 param(
-    [string]$Password = "lifeos123",
+    [SecureString]$Password = (ConvertTo-SecureString "lifeos123" -AsPlainText -Force),
     [switch]$Reset
 )
 
+# Convert SecureString back to plain text for Docker environment variable
+$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password))
 $containerName = "lifeos-arangodb"
 $volumeName = "lifeos-arangodb-data"
 
 Write-Host "LifeOS ArangoDB Setup" -ForegroundColor Cyan
 Write-Host "=====================" -ForegroundColor Cyan
 
-# Check if Podman is available
-if (-not (Get-Command podman -ErrorAction SilentlyContinue)) {
-    Write-Host "Error: Podman is not installed or not in PATH" -ForegroundColor Red
+# Check if Docker is available
+if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+    Write-Host "Error: Docker is not installed or not in PATH" -ForegroundColor Red
     exit 1
 }
 
 # Reset if requested
 if ($Reset) {
     Write-Host "Resetting ArangoDB container and volume..." -ForegroundColor Yellow
-    podman stop $containerName 2>$null
-    podman rm $containerName 2>$null
-    podman volume rm $volumeName 2>$null
+    docker stop $containerName 2>$null
+    docker rm $containerName 2>$null
+    docker volume rm $volumeName 2>$null
 }
 
 # Check if container already exists
-$existingContainer = podman ps -a --filter "name=$containerName" --format "{{.Names}}" 2>$null
+$existingContainer = docker ps -a --filter "name=$containerName" --format "{{.Names}}" 2>$null
 if ($existingContainer -eq $containerName) {
     Write-Host "Container '$containerName' already exists" -ForegroundColor Yellow
     
     # Check if it's running
-    $runningContainer = podman ps --filter "name=$containerName" --format "{{.Names}}" 2>$null
+    $runningContainer = docker ps --filter "name=$containerName" --format "{{.Names}}" 2>$null
     if ($runningContainer -eq $containerName) {
         Write-Host "Container is already running" -ForegroundColor Green
     } else {
         Write-Host "Starting existing container..." -ForegroundColor Yellow
-        podman start $containerName
+        docker start $containerName
     }
 } else {
     # Create volume if it doesn't exist
-    $existingVolume = podman volume ls --filter "name=$volumeName" --format "{{.Name}}" 2>$null
+    $existingVolume = docker volume ls --filter "name=$volumeName" --format "{{.Name}}" 2>$null
     if ($existingVolume -ne $volumeName) {
         Write-Host "Creating volume '$volumeName'..." -ForegroundColor Yellow
-        podman volume create $volumeName
+        docker volume create $volumeName
     }
 
     # Run ArangoDB container
     Write-Host "Starting ArangoDB container..." -ForegroundColor Yellow
-    podman run -d `
+    docker run -d `
         --name $containerName `
-        -e ARANGO_ROOT_PASSWORD=$Password `
+        -e ARANGO_ROOT_PASSWORD=$plainPassword `
         -p 8529:8529 `
         -v "${volumeName}:/var/lib/arangodb3" `
         arangodb:latest
@@ -92,7 +94,7 @@ Write-Host ""
 Write-Host "ArangoDB Connection Info:" -ForegroundColor Cyan
 Write-Host "  Web UI:    http://localhost:8529" -ForegroundColor White
 Write-Host "  Username:  root" -ForegroundColor White
-Write-Host "  Password:  $Password" -ForegroundColor White
+Write-Host "  Password:  $plainPassword" -ForegroundColor White
 Write-Host ""
 Write-Host "To initialize the database, run the init script in ArangoDB shell:" -ForegroundColor Yellow
-Write-Host "  arangosh --server.endpoint tcp://127.0.0.1:8529 --server.password $Password < scripts/init-arangodb.js" -ForegroundColor Gray
+Write-Host "  docker exec -it $containerName arangosh --server.password $plainPassword --javascript.execute /scripts/init-arangodb.js" -ForegroundColor Gray

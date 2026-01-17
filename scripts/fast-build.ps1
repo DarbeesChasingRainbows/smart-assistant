@@ -18,7 +18,7 @@ if ($Clean) {
 Write-Host "Checking frontend build optimizations..." -ForegroundColor Yellow
 
 # Function to apply optimizations
-function Apply-FrontendOptimizations($frontendName) {
+function Set-FrontendOptimizations($frontendName) {
     $containerfile = "frontends\$frontendName\Containerfile"
     $containerfileOpt = "frontends\$frontendName\Containerfile.optimized"
     $viteConfig = "frontends\$frontendName\vite.config.ts"
@@ -53,22 +53,22 @@ function Apply-FrontendOptimizations($frontendName) {
 }
 
 # Apply optimizations to all frontends
-Apply-FrontendOptimizations "flashcards"
-Apply-FrontendOptimizations "garage"
-Apply-FrontendOptimizations "budget"
+Set-FrontendOptimizations "flashcards"
+Set-FrontendOptimizations "garage"
+Set-FrontendOptimizations "budget"
 
 # Pull latest base images to avoid download delays
 Write-Host "Pulling latest base images..." -ForegroundColor Blue
-podman pull mcr.microsoft.com/dotnet/sdk:10.0
-podman pull mcr.microsoft.com/dotnet/aspnet:10.0
-podman pull denoland/deno:latest
+docker pull mcr.microsoft.com/dotnet/sdk:10.0
+docker pull mcr.microsoft.com/dotnet/aspnet:10.0
+docker pull denoland/deno:latest
 
 if ($Clean) {
     Write-Host "Building all services (no cache)..." -ForegroundColor Blue
-    python -m podman_compose --parallel 6 build --no-cache
+    docker compose build --no-cache
 } else {
     Write-Host "Building all services (cached)..." -ForegroundColor Blue
-    python -m podman_compose --parallel 6 build
+    docker compose build
 }
 
 Write-Host "Build complete!" -ForegroundColor Green

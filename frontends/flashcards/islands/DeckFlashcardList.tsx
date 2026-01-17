@@ -15,7 +15,9 @@ interface Props {
   initialFlashcards: Flashcard[];
 }
 
-export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) {
+export default function DeckFlashcardList(
+  { deckId, initialFlashcards }: Props,
+) {
   const flashcards = useSignal<Flashcard[]>(initialFlashcards);
   const loading = useSignal(false);
   const error = useSignal("");
@@ -56,7 +58,7 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
 
   const handleSave = async (e: Event) => {
     e.preventDefault();
-    
+
     if (!editQuestion.value.trim() || !editAnswer.value.trim()) {
       error.value = "Please fill in both question and answer";
       return;
@@ -65,16 +67,18 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
     try {
       loading.value = true;
       error.value = "";
-      
+
       const isNew = !editingId.value;
-      const url = isNew ? "/api/v1/flashcards" : `/api/v1/flashcards/${editingId.value}`;
+      const url = isNew
+        ? "/api/v1/flashcards"
+        : `/api/v1/flashcards/${editingId.value}`;
       const method = isNew ? "POST" : "PUT";
-      
+
       const body: { question: string; answer: string; deckId?: string } = {
         question: editQuestion.value,
         answer: editAnswer.value,
       };
-      
+
       if (isNew) {
         body.deckId = deckId;
       }
@@ -96,12 +100,12 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
         flashcards.value = [...flashcards.value, savedCard];
         success.value = "Flashcard created successfully";
       } else {
-        flashcards.value = flashcards.value.map(c => 
+        flashcards.value = flashcards.value.map((c) =>
           c.id === editingId.value ? savedCard : c
         );
         success.value = "Flashcard updated successfully";
       }
-      
+
       closeEditModal();
     } catch (err: unknown) {
       error.value = err instanceof Error ? err.message : String(err);
@@ -133,7 +137,9 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
         throw new Error("Failed to delete flashcard");
       }
 
-      flashcards.value = flashcards.value.filter(c => c.id !== deleteId.value);
+      flashcards.value = flashcards.value.filter((c) =>
+        c.id !== deleteId.value
+      );
       success.value = "Flashcard deleted successfully";
       closeDeleteModal();
     } catch (err: unknown) {
@@ -147,13 +153,24 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
     <div class="space-y-6">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl font-bold">Cards ({flashcards.value.length})</h2>
-        <button 
+        <button
           type="button"
-          onClick={() => openEditModal()} 
+          onClick={() => openEditModal()}
           class="btn btn-primary btn-sm"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Add Card
         </button>
@@ -173,12 +190,17 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
 
       <div class="grid gap-4">
         {flashcards.value.map((card) => (
-          <div key={card.id} class="card bg-base-100 shadow-sm border border-base-200">
+          <div
+            key={card.id}
+            class="card bg-base-100 shadow-sm border border-base-200"
+          >
             <div class="card-body p-4">
               <div class="flex justify-between items-start gap-4">
                 <div class="flex-1 space-y-2">
                   <div>
-                    <span class="badge badge-ghost badge-sm mb-1">Question</span>
+                    <span class="badge badge-ghost badge-sm mb-1">
+                      Question
+                    </span>
                     <p class="font-medium">{card.question}</p>
                   </div>
                   <div class="pt-2 border-t border-base-200">
@@ -187,24 +209,46 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
                   </div>
                 </div>
                 <div class="flex flex-col gap-2">
-                  <button 
+                  <button
                     type="button"
-                    onClick={() => openEditModal(card)} 
+                    onClick={() => openEditModal(card)}
                     class="btn btn-ghost btn-xs"
                     title="Edit"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
                     </svg>
                   </button>
-                  <button 
+                  <button
                     type="button"
-                    onClick={() => openDeleteModal(card.id)} 
+                    onClick={() => openDeleteModal(card.id)}
                     class="btn btn-ghost btn-xs text-error"
                     title="Delete"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -212,7 +256,7 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
             </div>
           </div>
         ))}
-        
+
         {flashcards.value.length === 0 && (
           <div class="text-center py-8 text-gray-500 bg-base-100 rounded-lg border border-dashed border-base-300">
             No cards in this deck yet. Add one to get started!
@@ -223,7 +267,9 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
       {/* Edit Modal */}
       <dialog ref={editDialogRef} class="modal">
         <div class="modal-box">
-          <h3 class="font-bold text-lg mb-4">{editingId.value ? 'Edit Card' : 'New Card'}</h3>
+          <h3 class="font-bold text-lg mb-4">
+            {editingId.value ? "Edit Card" : "New Card"}
+          </h3>
           <form onSubmit={handleSave} class="space-y-4">
             <div class="form-control">
               <MarkdownEditor
@@ -250,9 +296,15 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
               />
             </div>
             <div class="modal-action">
-              <button type="button" class="btn" onClick={closeEditModal}>Cancel</button>
-              <button type="submit" class="btn btn-primary" disabled={loading.value}>
-                {loading.value ? 'Saving...' : 'Save'}
+              <button type="button" class="btn" onClick={closeEditModal}>
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                disabled={loading.value}
+              >
+                {loading.value ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
@@ -266,16 +318,21 @@ export default function DeckFlashcardList({ deckId, initialFlashcards }: Props) 
       <dialog ref={deleteDialogRef} class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg text-error">Delete Card?</h3>
-          <p class="py-4">Are you sure you want to delete this card? This action cannot be undone.</p>
+          <p class="py-4">
+            Are you sure you want to delete this card? This action cannot be
+            undone.
+          </p>
           <div class="modal-action">
-            <button type="button" class="btn" onClick={closeDeleteModal}>Cancel</button>
-            <button 
-              type="button" 
-              class="btn btn-error" 
+            <button type="button" class="btn" onClick={closeDeleteModal}>
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-error"
               onClick={handleDelete}
               disabled={loading.value}
             >
-              {loading.value ? 'Deleting...' : 'Delete'}
+              {loading.value ? "Deleting..." : "Delete"}
             </button>
           </div>
         </div>

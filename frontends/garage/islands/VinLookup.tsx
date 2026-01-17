@@ -36,14 +36,15 @@ export default function VinLookup({
 
   const lookupVin = async () => {
     const vinValue = vin.value.trim().toUpperCase();
-    
+
     if (!vinValue) {
       error.value = "Please enter a VIN";
       return;
     }
 
     if (!/^[A-HJ-NPR-Z0-9]{17}$/.test(vinValue)) {
-      error.value = "VIN must be 17 characters (letters and numbers, excluding I, O, Q)";
+      error.value =
+        "VIN must be 17 characters (letters and numbers, excluding I, O, Q)";
       return;
     }
 
@@ -53,7 +54,7 @@ export default function VinLookup({
 
     try {
       const response = await api.lookupVin(vinValue);
-      
+
       if (response.error) {
         error.value = response.error;
         return;
@@ -103,7 +104,7 @@ export default function VinLookup({
       <h2 class="text-lg font-semibold text-gray-900 mb-4">
         VIN Lookup (Optional)
       </h2>
-      
+
       <div class="flex gap-3">
         <div class="flex-1 relative">
           <input
@@ -131,14 +132,16 @@ export default function VinLookup({
           disabled={loading.value || vin.value.length !== 17}
           class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded transition-colors flex items-center gap-2"
         >
-          {loading.value ? (
-            <>
-              <Spinner size="sm" color="white" />
-              Looking up...
-            </>
-          ) : (
-            "Lookup VIN"
-          )}
+          {loading.value
+            ? (
+              <>
+                <Spinner size="sm" color="white" />
+                Looking up...
+              </>
+            )
+            : (
+              "Lookup VIN"
+            )}
         </button>
       </div>
 
@@ -149,8 +152,16 @@ export default function VinLookup({
       {/* Error Message */}
       {error.value && (
         <div class="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded flex items-start gap-2">
-          <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <svg
+            class="w-5 h-5 shrink-0 mt-0.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
           </svg>
           <span>{error.value}</span>
         </div>
@@ -160,17 +171,29 @@ export default function VinLookup({
       {vinData.value && (
         <div class="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
           <div class="flex items-center gap-2 mb-3">
-            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            <svg
+              class="w-5 h-5 text-green-600"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
             </svg>
             <span class="font-medium text-green-800">Vehicle Found!</span>
-            <span class={`ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              vinData.value.isRv ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
-            }`}>
+            <span
+              class={`ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                vinData.value.isRv
+                  ? "bg-purple-100 text-purple-800"
+                  : "bg-blue-100 text-blue-800"
+              }`}
+            >
               {vinData.value.isRv ? "🏕️ RV" : "🚗 Car"}
             </span>
           </div>
-          
+
           <div class="grid grid-cols-2 gap-3 text-sm">
             <div>
               <span class="text-gray-600">Year:</span>
@@ -199,7 +222,9 @@ export default function VinLookup({
             {vinData.value.transmission && (
               <div>
                 <span class="text-gray-600">Transmission:</span>
-                <span class="ml-2 font-medium">{vinData.value.transmission}</span>
+                <span class="ml-2 font-medium">
+                  {vinData.value.transmission}
+                </span>
               </div>
             )}
             <div class="col-span-2">

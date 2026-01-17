@@ -1,6 +1,6 @@
 import { createDefine } from "fresh";
 import { asset as freshAsset } from "fresh/runtime";
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export interface State {

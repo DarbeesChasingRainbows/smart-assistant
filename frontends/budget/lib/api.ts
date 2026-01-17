@@ -4,6 +4,9 @@
  * Includes retry logic, offline detection, and request queuing
  */
 
+/**
+ * Budget API Client
+ */
 import type {
   AddIncomeRequest,
   AssignMoneyRequest,
@@ -16,29 +19,26 @@ import type {
 } from "../types/api.ts";
 import { signal } from "@preact/signals";
 
-// DYNAMIC BASE URL LOGIC
-function getApiBase(): string {
-  // Browser: Use relative path for Caddy proxy
+function getApiBaseUrl(): string {
+  // Browser: Use relative path for Caddy
   if (typeof document !== "undefined") {
     return "/api";
   }
   
   // Server (Deno): Use internal Docker DNS
-  // We ignore VITE_API_URL here if it is relative (starts with /) 
-  // because Deno fetch requires an absolute URL.
-  const envUrl = Deno.env.get("VITE_API_URL");
-  if (envUrl && envUrl.startsWith("http")) {
-    return envUrl;
+  if (typeof Deno !== "undefined" && Deno.env?.get) {
+    const envUrl = Deno.env.get("VITE_API_URL");
+    if (envUrl && envUrl.startsWith("http")) {
+      return envUrl;
+    }
+    return "http://api:5120/api";
   }
   return "http://api:5120/api";
 }
 
-const API_BASE = getApiBase();
+const API_BASE = getApiBaseUrl();
 
-// ============================================
-// Offline Detection & Request Queue
-// ============================================
-
+// ... (Keep the rest of your file exactly as is)
 export const isOnline = signal(
   typeof navigator !== "undefined" ? navigator.onLine : true,
 );
@@ -54,14 +54,14 @@ interface QueuedRequest {
 const requestQueue = signal<QueuedRequest[]>([]);
 
 // Set up online/offline listeners (client-side only)
-if (typeof window !== "undefined") {
-  window.addEventListener("online", () => {
+if (typeof globalThis !== "undefined" && "addEventListener" in globalThis) {
+  globalThis.addEventListener("online", () => {
     isOnline.value = true;
     console.log("[API] Back online - processing queued requests");
     processRequestQueue();
   });
 
-  window.addEventListener("offline", () => {
+  globalThis.addEventListener("offline", () => {
     isOnline.value = false;
     console.log("[API] Went offline");
   });

@@ -1,0 +1,49 @@
+# Docker Compose override for local development
+# This file extends compose.yaml with development-specific settings
+# Usage: docker compose -f compose.yaml -f compose.override.yaml up
+
+services:
+  # Enable development mode for API with hot reload
+  api:
+    build:
+      target: build
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:5120
+    volumes:
+      - ./LifeOS:/app
+    command: ["dotnet", "watch", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:5120"]
+
+  # Mount source for frontend development
+  frontend:
+    volumes:
+      - ./frontend:/app
+      - /app/_fresh
+      - /app/node_modules
+    environment:
+      - DENO_ENV=development
+
+  garage-frontend:
+    volumes:
+      - ./frontends/garage:/app
+      - /app/_fresh
+      - /app/node_modules
+    environment:
+      - DENO_ENV=development
+
+  flashcards-frontend:
+    volumes:
+      - ./frontends/flashcards:/app
+      - /app/_fresh
+      - /app/node_modules
+    environment:
+      - DENO_ENV=development
+
+  budget-frontend:
+    volumes:
+      - ./frontends/budget:/app
+      - /app/_fresh
+      - /app/node_modules
+    environment:
+      - DENO_ENV=development
+      - VITE_API_URL=http://api:5120/api

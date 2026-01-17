@@ -1,4 +1,4 @@
-import type { JSX, ComponentChildren } from "preact";
+import type { ComponentChildren, JSX } from "preact";
 import type { Signal } from "@preact/signals";
 
 export interface InputProps {
@@ -42,12 +42,14 @@ export function Input({
   max,
   name,
 }: InputProps) {
-  const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
-  
+  const inputId = id ||
+    (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+
   // Handle both Signal and regular string values
-  const inputValue = typeof value === "object" && value !== null && "value" in value 
-    ? (value as Signal<string>).value 
-    : value;
+  const inputValue =
+    typeof value === "object" && value !== null && "value" in value
+      ? (value as Signal<string>).value
+      : value;
 
   const handleInput = (e: JSX.TargetedEvent<HTMLInputElement>) => {
     const newValue = e.currentTarget.value;
@@ -72,7 +74,10 @@ export function Input({
   return (
     <div class={containerClass}>
       {label && (
-        <label htmlFor={inputId} class="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor={inputId}
+          class="block text-sm font-medium text-gray-700 mb-1"
+        >
           {label}
           {required && <span class="text-red-500 ml-1">*</span>}
         </label>
@@ -97,7 +102,11 @@ export function Input({
           max={max}
           class={baseInputClasses}
           aria-invalid={error ? "true" : undefined}
-          aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+          aria-describedby={error
+            ? `${inputId}-error`
+            : hint
+            ? `${inputId}-hint`
+            : undefined}
         />
         {rightIcon && (
           <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
@@ -150,11 +159,13 @@ export function Select({
   disabled,
   name,
 }: SelectProps) {
-  const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
-  
-  const selectValue = typeof value === "object" && value !== null && "value" in value 
-    ? (value as Signal<string>).value 
-    : value;
+  const selectId = id ||
+    (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+
+  const selectValue =
+    typeof value === "object" && value !== null && "value" in value
+      ? (value as Signal<string>).value
+      : value;
 
   const handleInput = (e: JSX.TargetedEvent<HTMLSelectElement>) => {
     const newValue = e.currentTarget.value;
@@ -177,7 +188,10 @@ export function Select({
   return (
     <div class={containerClass}>
       {label && (
-        <label htmlFor={selectId} class="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor={selectId}
+          class="block text-sm font-medium text-gray-700 mb-1"
+        >
           {label}
           {required && <span class="text-red-500 ml-1">*</span>}
         </label>
@@ -240,11 +254,13 @@ export function Textarea({
   name,
   placeholder,
 }: TextareaProps) {
-  const textareaId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
-  
-  const textareaValue = typeof value === "object" && value !== null && "value" in value 
-    ? (value as Signal<string>).value 
-    : value;
+  const textareaId = id ||
+    (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+
+  const textareaValue =
+    typeof value === "object" && value !== null && "value" in value
+      ? (value as Signal<string>).value
+      : value;
 
   const handleInput = (e: JSX.TargetedEvent<HTMLTextAreaElement>) => {
     const newValue = e.currentTarget.value;
@@ -267,7 +283,10 @@ export function Textarea({
   return (
     <div class={containerClass}>
       {label && (
-        <label htmlFor={textareaId} class="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor={textareaId}
+          class="block text-sm font-medium text-gray-700 mb-1"
+        >
           {label}
           {required && <span class="text-red-500 ml-1">*</span>}
         </label>

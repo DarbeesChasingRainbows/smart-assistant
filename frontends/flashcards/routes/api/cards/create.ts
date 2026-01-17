@@ -4,7 +4,7 @@ export const handler = define.handlers({
   async POST(ctx) {
     try {
       const { question, answer } = await ctx.req.json();
-      
+
       const response = await fetch("http://localhost:5000/api/v1/flashcards", {
         method: "POST",
         headers: {
@@ -21,10 +21,15 @@ export const handler = define.handlers({
       const flashcard = await response.json();
       return Response.json(flashcard);
     } catch (error) {
-      return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: error instanceof Error ? error.message : "Unknown error",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
   },
 });

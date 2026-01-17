@@ -1,6 +1,6 @@
 // main.tsx
 import { App, staticFiles } from "fresh";
-import { type State, asset, url } from "./utils.ts"; // <-- Added 'asset' import
+import { asset, type State, url } from "./utils.ts"; // <-- Added 'asset' import
 
 export const app = new App<State>({ basePath: "/flashcards" });
 
@@ -14,9 +14,11 @@ app.appWrapper(({ Component }) => {
       <head>
         <meta charset="utf-8" />
         <title>Flashcards | LifeOS</title>
-        {/* MANUAL FIX: Use the asset helper to force the prefix.
+        {
+          /* MANUAL FIX: Use the asset helper to force the prefix.
           This solves the Fresh 2.x 'basePath' asset bug.
-        */}
+        */
+        }
         <link rel="stylesheet" href={asset("/static/styles.css")} />
       </head>
       <body>
@@ -37,34 +39,43 @@ app.layout("/*", (ctx) => {
         <div class="flex-1">
           {/* EXTERNAL LINK: Goes to Root LifeOS App (No helper needed) */}
           <a class="btn btn-ghost text-xl" href="/">LifeOS</a>
-          
+
           {/* Badge distinct from Garage (using badge-secondary for pink/purple vs accent) */}
           <span class="badge badge-secondary ml-2">Flashcards</span>
         </div>
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1">
-            
             {/* INTERNAL LINK: Dashboard */}
             <li>
-              <a href={url("/dashboard")} class={currentPath.startsWith(url("/dashboard")) ? "active" : ""}>
+              <a
+                href={url("/dashboard")}
+                class={currentPath.startsWith(url("/dashboard"))
+                  ? "active"
+                  : ""}
+              >
                 Dashboard
               </a>
             </li>
 
             {/* INTERNAL LINK: Decks List */}
             <li>
-              <a href={url("/decks")} class={currentPath.startsWith(url("/decks")) ? "active" : ""}>
+              <a
+                href={url("/decks")}
+                class={currentPath.startsWith(url("/decks")) ? "active" : ""}
+              >
                 My Decks
               </a>
             </li>
 
             {/* INTERNAL LINK: Study Mode */}
             <li>
-              <a href={url("/quiz/interleaved")} class={currentPath.startsWith(url("/quiz")) ? "active" : ""}>
+              <a
+                href={url("/quiz/interleaved")}
+                class={currentPath.startsWith(url("/quiz")) ? "active" : ""}
+              >
                 Study
               </a>
             </li>
-
           </ul>
         </div>
       </nav>

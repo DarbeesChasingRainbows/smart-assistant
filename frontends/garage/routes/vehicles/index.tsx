@@ -1,4 +1,4 @@
-import { PageProps, page } from "fresh";
+import { page, PageProps } from "fresh";
 import { Head } from "fresh/runtime";
 import { define, url } from "../../utils.ts";
 import { GarageApiClient } from "../../utils/api.ts";

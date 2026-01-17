@@ -1,11 +1,21 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "preact/compat";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "preact/compat";
 import { RetentionApiClient, User } from "./api.ts";
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (displayName: string, email: string, password: string) => Promise<void>;
+  register: (
+    displayName: string,
+    email: string,
+    password: string,
+  ) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => void;
 }
@@ -34,11 +44,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const initializeAuth = () => {
       try {
         apiClient.loadTokensFromStorage();
-        
+
         // Try to get current user info by making a test request
         // For now, we'll just check if tokens exist
         // In a real app, you might want a /me endpoint
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
           // Token exists, user is considered logged in
           // You could decode the JWT to get user info or call a /me endpoint
@@ -66,7 +76,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const register = async (displayName: string, email: string, password: string) => {
+  const register = async (
+    displayName: string,
+    email: string,
+    password: string,
+  ) => {
     setIsLoading(true);
     try {
       const response = await apiClient.register(displayName, email, password);

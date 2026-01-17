@@ -1,4 +1,4 @@
-import { PageProps, page } from "fresh";
+import { page, PageProps } from "fresh";
 import { Head } from "fresh/runtime";
 import { define, url } from "../../../utils.ts";
 import { db } from "../../../services/database.ts";
@@ -95,13 +95,13 @@ export const handler = define.handlers<MaintenancePageData>({
       const maintenanceDate = Validator.validateRequiredDate(
         formData.get("maintenanceDate") as string,
       );
-      
+
       // Mileage is now optional - useful for historical records
       const mileageRaw = formData.get("mileageAtService") as string;
-      const mileageAtService = mileageRaw && mileageRaw.trim() !== "" 
+      const mileageAtService = mileageRaw && mileageRaw.trim() !== ""
         ? Validator.validateMileage(mileageRaw)
         : undefined;
-      
+
       const actualCost = Validator.validateCost(
         formData.get("actualCost") as string,
       );
@@ -157,8 +157,14 @@ export const handler = define.handlers<MaintenancePageData>({
 
 export default define.page(
   function MaintenancePage(ctx: PageProps<MaintenancePageData>) {
-    const { vehicle, schedules, records, error, preselectedSchedule, isPastMaintenance } =
-      ctx.data;
+    const {
+      vehicle,
+      schedules,
+      records,
+      error,
+      preselectedSchedule,
+      isPastMaintenance,
+    } = ctx.data;
 
     if (error) {
       return (
@@ -205,11 +211,13 @@ export default define.page(
                   </a>
                 </div>
                 <h1 class="text-3xl font-bold text-gray-900">
-                  {isPastMaintenance ? "Add Past Maintenance" : "Add Maintenance Record"}
+                  {isPastMaintenance
+                    ? "Add Past Maintenance"
+                    : "Add Maintenance Record"}
                 </h1>
                 <p class="text-gray-600 mt-1">
-                  {isPastMaintenance 
-                    ? "Record previously completed maintenance service" 
+                  {isPastMaintenance
+                    ? "Record previously completed maintenance service"
                     : "Record completed maintenance service"}
                 </p>
               </div>
@@ -244,12 +252,15 @@ export default define.page(
               <div>
                 <form method="POST" class="bg-white rounded-lg shadow-sm p-6">
                   <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                    {isPastMaintenance ? "Past Service Details" : "Service Details"}
+                    {isPastMaintenance
+                      ? "Past Service Details"
+                      : "Service Details"}
                   </h2>
-                  
+
                   {isPastMaintenance && (
                     <div class="mb-4 bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2 rounded text-sm">
-                      💡 Adding historical maintenance? Mileage is optional if you don't remember it.
+                      💡 Adding historical maintenance? Mileage is optional if
+                      you don't remember it.
                     </div>
                   )}
 
@@ -300,17 +311,20 @@ export default define.page(
                     {/* Mileage at Service */}
                     <div>
                       <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Mileage at Service {isPastMaintenance ? "(optional)" : ""}
+                        Mileage at Service{" "}
+                        {isPastMaintenance ? "(optional)" : ""}
                       </label>
                       <input
                         type="number"
                         name="mileageAtService"
                         min="0"
-                        placeholder={isPastMaintenance ? "Leave blank if unknown" : vehicle.currentMileage.toString()}
+                        placeholder={isPastMaintenance
+                          ? "Leave blank if unknown"
+                          : vehicle.currentMileage.toString()}
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       <p class="text-xs text-gray-500 mt-1">
-                        {isPastMaintenance 
+                        {isPastMaintenance
                           ? "Enter the mileage at time of service if you remember it"
                           : `Current odometer: ${vehicle.currentMileage.toLocaleString()} miles`}
                       </p>
@@ -415,7 +429,12 @@ export default define.page(
                                   {new Date(record.maintenanceDate)
                                     .toLocaleDateString()}
                                   {record.mileageAtService && (
-                                    <span> • {record.mileageAtService.toLocaleString()} miles</span>
+                                    <span>
+                                      •{" "}
+                                      {record.mileageAtService.toLocaleString()}
+                                      {" "}
+                                      miles
+                                    </span>
                                   )}
                                 </p>
                                 {record.serviceProvider && (

@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Copy config
 COPY deno.json deno.lock ./
-COPY vite.config.ts main.tsx utils.ts ./
+COPY vite.config.ts main.ts utils.ts ./
 
 # Install dependencies LOCALLY (no cache mount)
 RUN deno install --allow-scripts
@@ -37,7 +37,7 @@ COPY --from=base /app/deno.json ./
 COPY --from=base /app/deno.lock ./
 COPY --from=base /app/routes ./routes
 COPY --from=base /app/static ./static
-COPY --from=base /app/main.tsx ./
+COPY --from=base /app/main.ts ./
 COPY --from=base /app/components ./components
 COPY --from=base /app/islands ./islands
 COPY --from=base /app/lib ./lib

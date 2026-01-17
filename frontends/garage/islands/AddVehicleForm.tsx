@@ -4,19 +4,25 @@ import VinLookup, { type VinData } from "./VinLookup.tsx";
 import { Spinner } from "../components/Spinner.tsx";
 import { GarageApiClient } from "../utils/api.ts";
 import { url } from "../utils.ts";
-import type { CreateVehicleRequest, VehicleType, Vehicle } from "../utils/contracts.ts";
+import type {
+  CreateVehicleRequest,
+  Vehicle,
+  VehicleType,
+} from "../utils/contracts.ts";
 
 interface AddVehicleFormProps {
   initialVinData?: VinData;
   onVehicleAdded?: (vehicle: Vehicle) => void;
 }
 
-export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVehicleFormProps) {
+export default function AddVehicleForm(
+  { initialVinData, onVehicleAdded }: AddVehicleFormProps,
+) {
   // Check for VIN data in sessionStorage (client-side persistence)
-  const storedVinData = IS_BROWSER 
-    ? globalThis.sessionStorage?.getItem("vinData") 
+  const storedVinData = IS_BROWSER
+    ? globalThis.sessionStorage?.getItem("vinData")
     : null;
-  
+
   let vinDataFromStorage: VinData | null = null;
   if (storedVinData) {
     try {
@@ -28,12 +34,14 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
       vinDataFromStorage = null;
     }
   }
-  
+
   // Use stored data if no initial data provided
   const effectiveVinData = initialVinData || vinDataFromStorage;
-  
+
   // Form state
-  const vehicleType = useSignal<VehicleType>(effectiveVinData?.isRv ? "rv" : "car");
+  const vehicleType = useSignal<VehicleType>(
+    effectiveVinData?.isRv ? "rv" : "car",
+  );
   const vin = useSignal(effectiveVinData?.vin || "");
   const make = useSignal(effectiveVinData?.make || "");
   const model = useSignal(effectiveVinData?.model || "");
@@ -46,7 +54,7 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
   const purchaseDate = useSignal("");
   const purchaseMileage = useSignal("");
   const currentMileage = useSignal("");
-  
+
   const submitting = useSignal(false);
   const error = useSignal<string | null>(null);
   const success = useSignal<string | null>(null);
@@ -99,14 +107,16 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
         licensePlate: licensePlate.value || undefined,
         color: color.value || undefined,
         purchaseDate: purchaseDate.value || undefined,
-        purchaseMileage: purchaseMileage.value ? parseInt(purchaseMileage.value) : undefined,
+        purchaseMileage: purchaseMileage.value
+          ? parseInt(purchaseMileage.value)
+          : undefined,
         currentMileage: parseInt(currentMileage.value),
       };
 
       const newVehicle = await api.createVehicle(vehicleRequest);
-      
+
       success.value = "Vehicle added successfully!";
-      
+
       // Clear form
       vin.value = "";
       make.value = "";
@@ -120,16 +130,18 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
       purchaseDate.value = "";
       purchaseMileage.value = "";
       currentMileage.value = "";
-      
+
       // Notify parent component
       if (onVehicleAdded) {
         onVehicleAdded(newVehicle);
       }
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => success.value = null, 3000);
     } catch (err) {
-      error.value = err instanceof Error ? err.message : "Failed to create vehicle. Please try again.";
+      error.value = err instanceof Error
+        ? err.message
+        : "Failed to create vehicle. Please try again.";
       console.error("Submit error:", err);
     } finally {
       submitting.value = false;
@@ -162,7 +174,10 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             </label>
             <select
               value={vehicleType.value}
-              onChange={(e) => vehicleType.value = (e.target as HTMLSelectElement).value as "car" | "rv"}
+              onChange={(e) =>
+                vehicleType.value = (e.target as HTMLSelectElement).value as
+                  | "car"
+                  | "rv"}
               required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -180,7 +195,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="text"
               value={vin.value}
-              onInput={(e) => vin.value = (e.target as HTMLInputElement).value.toUpperCase()}
+              onInput={(e) =>
+                vin.value = (e.target as HTMLInputElement).value.toUpperCase()}
               placeholder="Optional"
               maxLength={17}
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase font-mono"
@@ -210,7 +226,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="text"
               value={model.value}
-              onInput={(e) => model.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                model.value = (e.target as HTMLInputElement).value}
               required
               placeholder="e.g., Camry, F-150, Adventurer"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -256,7 +273,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="text"
               value={engine.value}
-              onInput={(e) => engine.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                engine.value = (e.target as HTMLInputElement).value}
               placeholder="e.g., 2.5L V6, 6.7L V8"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -270,7 +288,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="text"
               value={transmission.value}
-              onInput={(e) => transmission.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                transmission.value = (e.target as HTMLInputElement).value}
               placeholder="e.g., Automatic, Manual"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -284,7 +303,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="text"
               value={licensePlate.value}
-              onInput={(e) => licensePlate.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                licensePlate.value = (e.target as HTMLInputElement).value}
               placeholder="Optional"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -298,7 +318,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="text"
               value={color.value}
-              onInput={(e) => color.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                color.value = (e.target as HTMLInputElement).value}
               placeholder="Optional"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -312,7 +333,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="date"
               value={purchaseDate.value}
-              onInput={(e) => purchaseDate.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                purchaseDate.value = (e.target as HTMLInputElement).value}
               max={new Date().toISOString().split("T")[0]}
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -326,7 +348,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="number"
               value={purchaseMileage.value}
-              onInput={(e) => purchaseMileage.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                purchaseMileage.value = (e.target as HTMLInputElement).value}
               min="0"
               placeholder="Optional"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -341,7 +364,8 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             <input
               type="number"
               value={currentMileage.value}
-              onInput={(e) => currentMileage.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                currentMileage.value = (e.target as HTMLInputElement).value}
               required
               min="0"
               placeholder="Current odometer reading"
@@ -363,14 +387,16 @@ export default function AddVehicleForm({ initialVinData, onVehicleAdded }: AddVe
             disabled={submitting.value}
             class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2"
           >
-            {submitting.value ? (
-              <>
-                <Spinner size="sm" color="white" />
-                Adding Vehicle...
-              </>
-            ) : (
-              "Add Vehicle"
-            )}
+            {submitting.value
+              ? (
+                <>
+                  <Spinner size="sm" color="white" />
+                  Adding Vehicle...
+                </>
+              )
+              : (
+                "Add Vehicle"
+              )}
           </button>
         </div>
       </form>

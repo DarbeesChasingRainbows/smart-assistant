@@ -1,4 +1,4 @@
-import { PageProps, page } from "fresh";
+import { page, PageProps } from "fresh";
 import { Head } from "fresh/runtime";
 import { define, url } from "../../utils.ts";
 import { GarageApiClient } from "../../utils/api.ts";
@@ -28,7 +28,7 @@ export const handler = define.handlers<HistoryData>({
       const endDate = url.searchParams.get("end") || undefined;
 
       const api = new GarageApiClient();
-      
+
       const [records, vehicles] = await Promise.all([
         api.getMaintenanceRecords(vehicleId),
         api.getVehicles(),
@@ -60,11 +60,19 @@ export const handler = define.handlers<HistoryData>({
 });
 
 export default define.page(function HistoryPage(ctx: PageProps<HistoryData>) {
-  const { records, vehicles, total, page: currentPage, totalPages, filters, error } = ctx.data;
+  const {
+    records,
+    vehicles,
+    total,
+    page: currentPage,
+    totalPages,
+    filters,
+    error,
+  } = ctx.data;
 
   // Helper function to get vehicle name
   const getVehicleName = (vehicleId: string) => {
-    const vehicle = vehicles.find(v => v.id === vehicleId);
+    const vehicle = vehicles.find((v) => v.id === vehicleId);
     if (vehicle) {
       return `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
     }
@@ -92,10 +100,15 @@ export default define.page(function HistoryPage(ctx: PageProps<HistoryData>) {
           {/* Header */}
           <div class="flex justify-between items-center mb-8">
             <div>
-              <a href={url("/")} class="text-blue-600 hover:text-blue-700 text-sm">
+              <a
+                href={url("/")}
+                class="text-blue-600 hover:text-blue-700 text-sm"
+              >
                 ← Back to Dashboard
               </a>
-              <h1 class="text-3xl font-bold text-gray-900 mt-2">Maintenance History</h1>
+              <h1 class="text-3xl font-bold text-gray-900 mt-2">
+                Maintenance History
+              </h1>
               <p class="text-gray-600 mt-1">
                 {total} total records
               </p>
@@ -124,7 +137,11 @@ export default define.page(function HistoryPage(ctx: PageProps<HistoryData>) {
                 >
                   <option value="">All Vehicles</option>
                   {vehicles.map((v) => (
-                    <option key={v.id} value={v.id} selected={filters.vehicleId === v.id}>
+                    <option
+                      key={v.id}
+                      value={v.id}
+                      selected={filters.vehicleId === v.id}
+                    >
                       {`${v.year} ${v.make} ${v.model}`}
                     </option>
                   ))}
@@ -178,125 +195,145 @@ export default define.page(function HistoryPage(ctx: PageProps<HistoryData>) {
 
           {/* Records Table */}
           <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            {records.length > 0 ? (
-              <>
-                <div class="overflow-x-auto">
-                  <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Vehicle
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Service
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Mileage
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Cost
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                      {records.map((record) => (
-                        <tr key={record.id} class="hover:bg-gray-50">
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {new Date(record.maintenanceDate).toLocaleDateString()}
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap">
-                            <a
-                              href={url(`/vehicles/${record.vehicleId}`)}
-                              class="text-sm text-blue-600 hover:text-blue-700"
-                            >
-                              {getVehicleName(record.vehicleId)}
-                            </a>
-                          </td>
-                          <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-gray-900">
-                              {record.itemName}
-                            </div>
-                            {record.notes && (
-                              <div class="text-xs text-gray-500 truncate max-w-xs">
-                                {record.notes}
-                              </div>
-                            )}
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <span class={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              record.status === 'completed' ? 'bg-green-100 text-green-800' :
-                              record.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
-                              record.status === 'overdue' ? 'bg-red-100 text-red-800' :
-                              'bg-gray-100 text-gray-800'
-                            }`}>
-                              {record.status}
-                            </span>
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {record.mileage ? `${record.mileage.toLocaleString()} mi` : "—"}
-                          </td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            {record.actualCost ? (
-                              <span class="font-medium text-green-600">
-                                ${record.actualCost.toFixed(2)}
-                              </span>
-                            ) : (
-                              <span class="text-gray-400">—</span>
-                            )}
-                          </td>
+            {records.length > 0
+              ? (
+                <>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-50">
+                        <tr>
+                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                          </th>
+                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Vehicle
+                          </th>
+                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Service
+                          </th>
+                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                          </th>
+                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Mileage
+                          </th>
+                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Cost
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
-                    <div class="text-sm text-gray-600">
-                      Page {currentPage} of {totalPages} ({total} records)
-                    </div>
-                    <div class="flex gap-2">
-                      {currentPage > 1 && (
-                        <a
-                          href={buildUrl({ ...filters, page: currentPage - 1 })}
-                          class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors"
-                        >
-                          Previous
-                        </a>
-                      )}
-                      {currentPage < totalPages && (
-                        <a
-                          href={buildUrl({ ...filters, page: currentPage + 1 })}
-                          class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors"
-                        >
-                          Next
-                        </a>
-                      )}
-                    </div>
+                      </thead>
+                      <tbody class="bg-white divide-y divide-gray-200">
+                        {records.map((record) => (
+                          <tr key={record.id} class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              {new Date(record.maintenanceDate)
+                                .toLocaleDateString()}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <a
+                                href={url(`/vehicles/${record.vehicleId}`)}
+                                class="text-sm text-blue-600 hover:text-blue-700"
+                              >
+                                {getVehicleName(record.vehicleId)}
+                              </a>
+                            </td>
+                            <td class="px-6 py-4">
+                              <div class="text-sm font-medium text-gray-900">
+                                {record.itemName}
+                              </div>
+                              {record.notes && (
+                                <div class="text-xs text-gray-500 truncate max-w-xs">
+                                  {record.notes}
+                                </div>
+                              )}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                              <span
+                                class={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                  record.status === "completed"
+                                    ? "bg-green-100 text-green-800"
+                                    : record.status === "scheduled"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : record.status === "overdue"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-100 text-gray-800"
+                                }`}
+                              >
+                                {record.status}
+                              </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                              {record.mileage
+                                ? `${record.mileage.toLocaleString()} mi`
+                                : "—"}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                              {record.actualCost
+                                ? (
+                                  <span class="font-medium text-green-600">
+                                    ${record.actualCost.toFixed(2)}
+                                  </span>
+                                )
+                                : <span class="text-gray-400">—</span>}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                )}
-              </>
-            ) : (
-              <div class="text-center py-12 text-gray-500">
-                <div class="text-4xl mb-2">📋</div>
-                <p class="text-lg">No maintenance records found</p>
-                {(filters.vehicleId || filters.startDate || filters.endDate) && (
-                  <p class="text-sm mt-2">
-                    Try adjusting your filters or{" "}
-                    <a href="/maintenance/history" class="text-blue-600 hover:text-blue-700">
-                      clear all filters
-                    </a>
-                  </p>
-                )}
-              </div>
-            )}
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
+                      <div class="text-sm text-gray-600">
+                        Page {currentPage} of {totalPages} ({total} records)
+                      </div>
+                      <div class="flex gap-2">
+                        {currentPage > 1 && (
+                          <a
+                            href={buildUrl({
+                              ...filters,
+                              page: currentPage - 1,
+                            })}
+                            class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors"
+                          >
+                            Previous
+                          </a>
+                        )}
+                        {currentPage < totalPages && (
+                          <a
+                            href={buildUrl({
+                              ...filters,
+                              page: currentPage + 1,
+                            })}
+                            class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 transition-colors"
+                          >
+                            Next
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )
+              : (
+                <div class="text-center py-12 text-gray-500">
+                  <div class="text-4xl mb-2">📋</div>
+                  <p class="text-lg">No maintenance records found</p>
+                  {(filters.vehicleId || filters.startDate ||
+                    filters.endDate) && (
+                    <p class="text-sm mt-2">
+                      Try adjusting your filters or{" "}
+                      <a
+                        href="/maintenance/history"
+                        class="text-blue-600 hover:text-blue-700"
+                      >
+                        clear all filters
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
           </div>
         </div>
       </div>

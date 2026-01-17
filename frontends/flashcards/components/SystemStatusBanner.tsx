@@ -19,18 +19,20 @@ interface SystemStatusBannerProps {
  * Displays a banner when the system is in a degraded state (circuit breaker open).
  * Shows retry countdown when available.
  */
-export default function SystemStatusBanner({ status, onRefresh }: SystemStatusBannerProps) {
+export default function SystemStatusBanner(
+  { status, onRefresh }: SystemStatusBannerProps,
+) {
   if (!status) return null;
 
   // Check if any circuit breaker is open
   const openCircuits = Object.entries(status.circuitBreakers).filter(
-    ([_, cb]) => cb.state === "Open" || cb.state === "HalfOpen"
+    ([_, cb]) => cb.state === "Open" || cb.state === "HalfOpen",
   );
 
   if (openCircuits.length === 0) return null;
 
   const maxRetryAfter = Math.max(
-    ...openCircuits.map(([_, cb]) => cb.retryAfterSeconds ?? 0)
+    ...openCircuits.map(([_, cb]) => cb.retryAfterSeconds ?? 0),
   );
 
   return (

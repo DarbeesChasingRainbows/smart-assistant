@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bash script to setup ArangoDB with Podman
+# Bash script to setup ArangoDB with Docker
 # Run this script to start ArangoDB locally for development
 
 PASSWORD="${1:-lifeos123}"
@@ -9,33 +9,33 @@ VOLUME_NAME="lifeos-arangodb-data"
 echo "LifeOS ArangoDB Setup"
 echo "====================="
 
-# Check if Podman is available
-if ! command -v podman &> /dev/null; then
-    echo "Error: Podman is not installed or not in PATH"
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    echo "Error: Docker is not installed or not in PATH"
     exit 1
 fi
 
 # Check if container already exists
-if podman ps -a --filter "name=$CONTAINER_NAME" --format "{{.Names}}" | grep -q "$CONTAINER_NAME"; then
+if docker ps -a --filter "name=$CONTAINER_NAME" --format "{{.Names}}" | grep -q "$CONTAINER_NAME"; then
     echo "Container '$CONTAINER_NAME' already exists"
     
     # Check if it's running
-    if podman ps --filter "name=$CONTAINER_NAME" --format "{{.Names}}" | grep -q "$CONTAINER_NAME"; then
+    if docker ps --filter "name=$CONTAINER_NAME" --format "{{.Names}}" | grep -q "$CONTAINER_NAME"; then
         echo "Container is already running"
     else
         echo "Starting existing container..."
-        podman start "$CONTAINER_NAME"
+        docker start "$CONTAINER_NAME"
     fi
 else
     # Create volume if it doesn't exist
-    if ! podman volume ls --filter "name=$VOLUME_NAME" --format "{{.Name}}" | grep -q "$VOLUME_NAME"; then
+    if ! docker volume ls --filter "name=$VOLUME_NAME" --format "{{.Name}}" | grep -q "$VOLUME_NAME"; then
         echo "Creating volume '$VOLUME_NAME'..."
-        podman volume create "$VOLUME_NAME"
+        docker volume create "$VOLUME_NAME"
     fi
 
     # Run ArangoDB container
     echo "Starting ArangoDB container..."
-    podman run -d \
+    docker run -d \
         --name "$CONTAINER_NAME" \
         -e ARANGO_ROOT_PASSWORD="$PASSWORD" \
         -p 8529:8529 \
@@ -77,4 +77,4 @@ echo "  Username:  root"
 echo "  Password:  $PASSWORD"
 echo ""
 echo "To initialize the database, run:"
-echo "  podman exec -it $CONTAINER_NAME arangosh --server.password $PASSWORD --javascript.execute /scripts/init-arangodb.js"
+echo "  docker exec -it $CONTAINER_NAME arangosh --server.password $PASSWORD --javascript.execute /scripts/init-arangodb.js"
