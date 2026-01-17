@@ -62,7 +62,9 @@ export interface CardHeaderProps {
   action?: ComponentChildren;
 }
 
-export function CardHeader({ children, class: className = "", action }: CardHeaderProps) {
+export function CardHeader(
+  { children, class: className = "", action }: CardHeaderProps,
+) {
   return (
     <div class={`flex justify-between items-center mb-4 ${className}`}>
       <div class="text-lg font-semibold text-gray-900">{children}</div>
@@ -76,7 +78,9 @@ export interface CardContentProps {
   class?: string;
 }
 
-export function CardContent({ children, class: className = "" }: CardContentProps) {
+export function CardContent(
+  { children, class: className = "" }: CardContentProps,
+) {
   return <div class={className}>{children}</div>;
 }
 
@@ -93,9 +97,15 @@ const alignClasses = {
   between: "justify-between",
 };
 
-export function CardFooter({ children, class: className = "", align = "right" }: CardFooterProps) {
+export function CardFooter(
+  { children, class: className = "", align = "right" }: CardFooterProps,
+) {
   return (
-    <div class={`flex items-center gap-3 mt-4 pt-4 border-t border-gray-100 ${alignClasses[align]} ${className}`}>
+    <div
+      class={`flex items-center gap-3 mt-4 pt-4 border-t border-gray-100 ${
+        alignClasses[align]
+      } ${className}`}
+    >
       {children}
     </div>
   );
@@ -147,7 +157,11 @@ export function StatCard({
       </div>
       {subtitle && <div class="mt-2 text-sm text-gray-500">{subtitle}</div>}
       {trend && (
-        <div class={`mt-2 text-sm ${trend.value >= 0 ? "text-green-600" : "text-red-600"}`}>
+        <div
+          class={`mt-2 text-sm ${
+            trend.value >= 0 ? "text-green-600" : "text-red-600"
+          }`}
+        >
           {trend.value >= 0 ? "↑" : "↓"} {Math.abs(trend.value)}% {trend.label}
         </div>
       )}

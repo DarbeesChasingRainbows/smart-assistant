@@ -57,7 +57,9 @@ export function Table<T>({
                 {columns.map((col) => (
                   <th
                     key={col.key}
-                    class={`${cellPadding} text-xs font-semibold text-gray-600 uppercase tracking-wider ${alignClasses[col.align || "left"]}`}
+                    class={`${cellPadding} text-xs font-semibold text-gray-600 uppercase tracking-wider ${
+                      alignClasses[col.align || "left"]
+                    }`}
                     style={{ width: col.width }}
                   >
                     {col.header}
@@ -100,7 +102,9 @@ export function Table<T>({
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  class={`${cellPadding} text-xs font-semibold text-gray-600 uppercase tracking-wider ${alignClasses[col.align || "left"]}`}
+                  class={`${cellPadding} text-xs font-semibold text-gray-600 uppercase tracking-wider ${
+                    alignClasses[col.align || "left"]
+                  }`}
                   style={{ width: col.width }}
                 >
                   {col.header}
@@ -112,7 +116,9 @@ export function Table<T>({
             {data.map((item, index) => (
               <tr
                 key={keyExtractor(item, index)}
-                onClick={onRowClick ? () => onRowClick(item, index) : undefined}
+                onClick={onRowClick
+                  ? () => onRowClick(item, index)
+                  : undefined}
                 class={`
                   ${striped && index % 2 === 1 ? "bg-gray-50/50" : ""}
                   ${hoverable ? "hover:bg-gray-50" : ""}
@@ -123,11 +129,15 @@ export function Table<T>({
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    class={`${cellPadding} text-sm text-gray-900 ${alignClasses[col.align || "left"]}`}
+                    class={`${cellPadding} text-sm text-gray-900 ${
+                      alignClasses[col.align || "left"]
+                    }`}
                   >
                     {col.render
                       ? col.render(item, index)
-                      : (item as Record<string, unknown>)[col.key] as ComponentChildren}
+                      : (item as Record<string, unknown>)[
+                        col.key
+                      ] as ComponentChildren}
                   </td>
                 ))}
               </tr>
@@ -210,25 +220,27 @@ export function Pagination({
         </button>
 
         {pages.map((page, i) =>
-          page === "..." ? (
-            <span key={`ellipsis-${i}`} class="px-2 text-gray-400">
-              ...
-            </span>
-          ) : (
-            <button
-              key={page}
-              type="button"
-              onClick={() => onPageChange(page)}
-              class={`px-3 py-1.5 text-sm border rounded-md transition-colors ${
-                page === currentPage
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "border-gray-300 hover:bg-gray-50"
-              }`}
-              aria-current={page === currentPage ? "page" : undefined}
-            >
-              {page}
-            </button>
-          )
+          page === "..."
+            ? (
+              <span key={`ellipsis-${i}`} class="px-2 text-gray-400">
+                ...
+              </span>
+            )
+            : (
+              <button
+                key={page}
+                type="button"
+                onClick={() => onPageChange(page)}
+                class={`px-3 py-1.5 text-sm border rounded-md transition-colors ${
+                  page === currentPage
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "border-gray-300 hover:bg-gray-50"
+                }`}
+                aria-current={page === currentPage ? "page" : undefined}
+              >
+                {page}
+              </button>
+            )
         )}
 
         <button
@@ -273,7 +285,9 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      class={`inline-flex items-center font-medium rounded-full ${badgeVariants[variant]} ${badgeSizes[size]} ${className}`}
+      class={`inline-flex items-center font-medium rounded-full ${
+        badgeVariants[variant]
+      } ${badgeSizes[size]} ${className}`}
     >
       {children}
     </span>

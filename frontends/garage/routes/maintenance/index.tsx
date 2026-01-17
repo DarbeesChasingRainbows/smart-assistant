@@ -1,4 +1,4 @@
-import { PageProps, page } from "fresh";
+import { page, PageProps } from "fresh";
 import { define, url } from "../../utils.ts";
 
 export const handler = define.handlers({

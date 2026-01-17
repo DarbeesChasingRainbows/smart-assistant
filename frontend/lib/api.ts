@@ -18,8 +18,8 @@ function getApiBaseUrl(): string {
       return envUrl;
     }
     
-    // Otherwise, assume we are inside Docker and need to reach the 'api' service directly
-    // This handles the case where VITE_API_URL is set to "/api" or is missing
+    // CRITICAL: If env var is relative ("/api"), ignore it on the server 
+    // and use the internal Docker DNS name instead.
     return "http://api:5120/api";
   }
 

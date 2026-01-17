@@ -7,10 +7,13 @@ export const handler = define.handlers({
   async POST(ctx) {
     const userId = (ctx.state as { userId?: string }).userId;
     if (!userId) {
-      return new Response(JSON.stringify({ error: "Missing anonymous user ID" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ error: "Missing anonymous user ID" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
 
     try {
@@ -40,10 +43,15 @@ export const handler = define.handlers({
       return Response.json({ success: true });
     } catch (error) {
       console.error("Error recording quiz result:", error);
-      return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({
+          error: error instanceof Error ? error.message : "Unknown error",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
   },
 });

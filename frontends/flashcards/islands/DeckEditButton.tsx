@@ -63,7 +63,9 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
       closeModal();
       globalThis.location.reload();
     } catch (err: unknown) {
-      error.value = `Failed to update deck: ${err instanceof Error ? err.message : String(err)}`;
+      error.value = `Failed to update deck: ${
+        err instanceof Error ? err.message : String(err)
+      }`;
     } finally {
       loading.value = false;
     }
@@ -77,15 +79,26 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
         class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50"
         title="Edit Deck"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+          />
         </svg>
       </button>
 
       <dialog ref={dialogRef} class="modal text-left">
         <div class="modal-box w-11/12 max-w-xl">
           <h3 class="font-bold text-lg mb-4">Edit Deck</h3>
-          
+
           {error.value && (
             <div class="alert alert-error mb-4 text-sm py-2">
               <span>{error.value}</span>
@@ -100,7 +113,8 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
               <input
                 type="text"
                 value={name.value}
-                onInput={(e) => name.value = (e.target as HTMLInputElement).value}
+                onInput={(e) =>
+                  name.value = (e.target as HTMLInputElement).value}
                 class="input input-bordered w-full"
                 required
               />
@@ -112,7 +126,8 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
               </label>
               <textarea
                 value={description.value}
-                onInput={(e) => description.value = (e.target as HTMLTextAreaElement).value}
+                onInput={(e) =>
+                  description.value = (e.target as HTMLTextAreaElement).value}
                 class="textarea textarea-bordered w-full"
                 rows={3}
               />
@@ -126,7 +141,8 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
                 <input
                   type="text"
                   value={category.value}
-                  onInput={(e) => category.value = (e.target as HTMLInputElement).value}
+                  onInput={(e) =>
+                    category.value = (e.target as HTMLInputElement).value}
                   class="input input-bordered w-full"
                   required
                 />
@@ -139,7 +155,8 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
                 <input
                   type="text"
                   value={subcategory.value}
-                  onInput={(e) => subcategory.value = (e.target as HTMLInputElement).value}
+                  onInput={(e) =>
+                    subcategory.value = (e.target as HTMLInputElement).value}
                   class="input input-bordered w-full"
                 />
               </div>
@@ -151,7 +168,8 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
               </label>
               <select
                 value={difficulty.value}
-                onChange={(e) => difficulty.value = (e.target as HTMLSelectElement).value}
+                onChange={(e) =>
+                  difficulty.value = (e.target as HTMLSelectElement).value}
                 class="select select-bordered w-full"
               >
                 <option value="Beginner">Beginner</option>
@@ -162,15 +180,15 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
             </div>
 
             <div class="modal-action">
-              <button 
-                type="button" 
-                class="btn" 
+              <button
+                type="button"
+                class="btn"
                 onClick={closeModal}
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 class="btn btn-primary"
                 disabled={loading.value}
               >

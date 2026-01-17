@@ -1,4 +1,5 @@
 import type { ComponentChildren } from "preact";
+import { IS_BROWSER } from "fresh/runtime";
 import { isOnline } from "../lib/api.ts";
 import ToastContainer from "../islands/Toast.tsx";
 
@@ -10,18 +11,21 @@ interface NavigationProps {
 export function Navigation({ children, currentPath = "" }: NavigationProps) {
   const isActive = (path: string) => currentPath.includes(path);
 
+  // Only show offline banner in browser when actually offline
+  const showOfflineBanner = IS_BROWSER && !isOnline.value;
+
   return (
     <div class="drawer">
       <input id="mobile-nav-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col">
-        {/* Offline Banner - Shows when user is offline */}
-        {!isOnline.value && (
+        {/* Offline Banner - Shows when user is offline (client-side only) */}
+        {showOfflineBanner && (
           <div class="bg-[#ffb000]/20 border-b-2 border-[#ffb000]">
             <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3">
               <span class="text-xl">📡</span>
               <p class="font-mono text-sm text-[#ffb000]">
-                <strong>[OFFLINE MODE]</strong>{" "}
-                - Some features may be unavailable
+                <strong>[OFFLINE MODE]</strong>
+                {" "}- Some features may be unavailable
               </p>
             </div>
           </div>

@@ -22,10 +22,14 @@ const colorClasses = {
   danger: "text-red-600",
 };
 
-export function Spinner({ size = "md", color = "primary", class: className = "" }: SpinnerProps) {
+export function Spinner(
+  { size = "md", color = "primary", class: className = "" }: SpinnerProps,
+) {
   return (
     <svg
-      class={`animate-spin ${sizeClasses[size]} ${colorClasses[color]} ${className}`}
+      class={`animate-spin ${sizeClasses[size]} ${
+        colorClasses[color]
+      } ${className}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -54,7 +58,9 @@ export interface LoadingOverlayProps {
   fullScreen?: boolean;
 }
 
-export function LoadingOverlay({ show, message, fullScreen = false }: LoadingOverlayProps) {
+export function LoadingOverlay(
+  { show, message, fullScreen = false }: LoadingOverlayProps,
+) {
   if (!show) return null;
 
   const containerClasses = fullScreen
@@ -62,7 +68,9 @@ export function LoadingOverlay({ show, message, fullScreen = false }: LoadingOve
     : "absolute inset-0 z-10";
 
   return (
-    <div class={`${containerClasses} bg-white/80 backdrop-blur-sm flex items-center justify-center`}>
+    <div
+      class={`${containerClasses} bg-white/80 backdrop-blur-sm flex items-center justify-center`}
+    >
       <div class="flex flex-col items-center gap-3">
         <Spinner size="lg" />
         {message && <p class="text-gray-600 font-medium">{message}</p>}
@@ -85,7 +93,8 @@ export interface LoadingButtonProps {
 
 const buttonVariants = {
   primary: "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white",
-  secondary: "bg-gray-100 hover:bg-gray-200 disabled:bg-gray-100 text-gray-700 border border-gray-300",
+  secondary:
+    "bg-gray-100 hover:bg-gray-200 disabled:bg-gray-100 text-gray-700 border border-gray-300",
   danger: "bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white",
   ghost: "hover:bg-gray-100 text-gray-700",
 };
@@ -120,7 +129,14 @@ export function LoadingButton({
         ${className}
       `}
     >
-      {loading && <Spinner size="sm" color={variant === "primary" || variant === "danger" ? "white" : "gray"} />}
+      {loading && (
+        <Spinner
+          size="sm"
+          color={variant === "primary" || variant === "danger"
+            ? "white"
+            : "gray"}
+        />
+      )}
       {loading && loadingText ? loadingText : children}
     </button>
   );
@@ -141,16 +157,22 @@ const skeletonRounded = {
   full: "rounded-full",
 };
 
-export function Skeleton({ width, height, rounded = "md", class: className = "" }: SkeletonProps) {
+export function Skeleton(
+  { width, height, rounded = "md", class: className = "" }: SkeletonProps,
+) {
   return (
     <div
-      class={`animate-pulse bg-gray-200 ${skeletonRounded[rounded]} ${className}`}
+      class={`animate-pulse bg-gray-200 ${
+        skeletonRounded[rounded]
+      } ${className}`}
       style={{ width, height }}
     />
   );
 }
 
-export function SkeletonText({ lines = 3, class: className = "" }: { lines?: number; class?: string }) {
+export function SkeletonText(
+  { lines = 3, class: className = "" }: { lines?: number; class?: string },
+) {
   return (
     <div class={`space-y-2 ${className}`}>
       {Array.from({ length: lines }).map((_, i) => (

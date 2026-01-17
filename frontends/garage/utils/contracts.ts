@@ -62,7 +62,12 @@ export interface MaintenanceRecord {
 /**
  * Maintenance status enum
  */
-export type MaintenanceStatus = "scheduled" | "in-progress" | "completed" | "overdue" | "cancelled";
+export type MaintenanceStatus =
+  | "scheduled"
+  | "in-progress"
+  | "completed"
+  | "overdue"
+  | "cancelled";
 
 // ============================================================================
 // Request DTOs
@@ -115,7 +120,8 @@ export interface CreateMaintenanceRecordRequest {
 /**
  * Update maintenance record request
  */
-export interface UpdateMaintenanceRecordRequest extends CreateMaintenanceRecordRequest {
+export interface UpdateMaintenanceRecordRequest
+  extends CreateMaintenanceRecordRequest {
   id: string;
   actualCost?: number;
   actualHours?: number;

@@ -1,4 +1,4 @@
-import { PageProps, page } from "fresh";
+import { page, PageProps } from "fresh";
 import { Head } from "fresh/runtime";
 import { define, url } from "../../utils.ts";
 import { db } from "../../services/database.ts";
@@ -103,10 +103,15 @@ export default define.page(
           <div class="max-w-2xl mx-auto">
             {/* Header */}
             <div class="mb-8">
-              <a href={url("/vehicles")} class="text-blue-600 hover:text-blue-700 text-sm">
+              <a
+                href={url("/vehicles")}
+                class="text-blue-600 hover:text-blue-700 text-sm"
+              >
                 ← Back to Vehicles
               </a>
-              <h1 class="text-3xl font-bold text-gray-900 mt-2">Add New Vehicle</h1>
+              <h1 class="text-3xl font-bold text-gray-900 mt-2">
+                Add New Vehicle
+              </h1>
               <p class="text-gray-600 mt-2">
                 Enter vehicle details manually or lookup by VIN
               </p>

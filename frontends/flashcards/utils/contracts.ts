@@ -1,7 +1,7 @@
 /**
  * TypeScript contracts aligned with C# DTOs from Retention.App
  * These interfaces match the exact structure of the backend API responses.
- * 
+ *
  * @see Retention.App/Contracts/Dtos.cs
  * @see Retention.App/Controllers/UsersController.cs
  */
@@ -320,7 +320,7 @@ export interface PaginatedResponse<T> {
 /**
  * API response wrapper for consistent error handling
  */
-export type ApiResponse<T> = 
+export type ApiResponse<T> =
   | { success: true; data: T }
   | { success: false; error: ApiError };
 

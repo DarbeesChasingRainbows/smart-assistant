@@ -1,5 +1,5 @@
 import { App, staticFiles } from "fresh";
-import { type State, asset, url } from "./utils.ts";
+import { asset, type State, url } from "./utils.ts";
 
 // 1. Set the Base Path for internal routing
 export const app = new App<State>({ basePath: "/garage" });
@@ -14,7 +14,10 @@ app.appWrapper(({ Component }) => {
         <meta charset="utf-8" />
         <title>Garage | LifeOS</title>
         {/* MANUAL FIX: Inject CSS with the /garage prefix */}
-        <link rel="stylesheet" href={asset("/assets/client-entry-DDm9qb59.css")} />
+        <link
+          rel="stylesheet"
+          href={asset("/assets/client-entry-DDm9qb59.css")}
+        />
       </head>
       <body>
         <Component />
@@ -40,17 +43,28 @@ app.layout("/*", (ctx) => {
           <ul class="menu menu-horizontal px-1">
             {/* INTERNAL LINK: Use url() helper */}
             <li>
-              <a href={url("/")} class={currentPath === url("/") ? "active" : ""}>
+              <a
+                href={url("/")}
+                class={currentPath === url("/") ? "active" : ""}
+              >
                 Dashboard
               </a>
             </li>
             <li>
-              <a href={url("/vehicles")} class={currentPath.startsWith(url("/vehicles")) ? "active" : ""}>
+              <a
+                href={url("/vehicles")}
+                class={currentPath.startsWith(url("/vehicles")) ? "active" : ""}
+              >
                 Vehicles
               </a>
             </li>
             <li>
-              <a href={url("/maintenance")} class={currentPath.startsWith(url("/maintenance")) ? "active" : ""}>
+              <a
+                href={url("/maintenance")}
+                class={currentPath.startsWith(url("/maintenance"))
+                  ? "active"
+                  : ""}
+              >
                 Maintenance
               </a>
             </li>

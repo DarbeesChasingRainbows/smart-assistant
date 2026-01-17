@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM denoland/deno:latest AS base
+FROM denoland/deno:2.6.4 AS base
 
 ARG GIT_REVISION
 ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
@@ -18,7 +18,7 @@ COPY . .
 # Build locally
 RUN deno task build
 
-FROM denoland/deno:latest AS runtime
+FROM denoland/deno:2.6.4 AS runtime
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
@@ -31,6 +31,11 @@ WORKDIR /app
 COPY --from=base /app/_fresh ./_fresh
 COPY --from=base /app/deno.json ./
 COPY --from=base /app/deno.lock ./
+COPY --from=base /app/routes ./routes
+COPY --from=base /app/islands ./islands
+COPY --from=base /app/components ./components
+COPY --from=base /app/utils ./utils
+COPY --from=base /app/services ./services
 COPY --from=base /app/static ./static
 COPY --from=base /app/main.tsx ./
 COPY --from=base /app/node_modules ./node_modules

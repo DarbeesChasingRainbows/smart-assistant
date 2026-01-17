@@ -11,17 +11,8 @@
     "podman:build": "podman build -t lifeos-garage-frontend .",
     "podman:run": "podman run -d -p 8020:8000 --name garage-frontend --rm -e VITE_API_URL=http://host.containers.internal:5120 -e VITE_UPLOADS_URL=http://host.containers.internal:5120 lifeos-garage-frontend"
   },
-  "lint": {
-    "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ]
-    }
-  },
-  "exclude": [
-    "**/_fresh/*"
-  ],
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
+  "exclude": ["**/_fresh/*"],
   "imports": {
     "@/": "./",
     "fresh": "jsr:@fresh/core@^2.2.0",
@@ -35,15 +26,11 @@
     "clsx": "npm:clsx@^2.1.1",
     "tailwind-merge": "npm:tailwind-merge@^2.5.5",
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
-    "lucide-preact": "npm:lucide-preact@^0.460.0"
+    "lucide-preact": "npm:lucide-preact@^0.460.0",
+    "terser": "npm:terser@^5.39.0"
   },
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.asynciterable",
-      "dom.iterable",
-      "deno.ns"
-    ],
+    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
     "jsx": "precompile",
     "jsxImportSource": "preact",
     "jsxPrecompileSkipElements": [
@@ -61,8 +48,6 @@
       "noscript",
       "template"
     ],
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client"]
   }
 }

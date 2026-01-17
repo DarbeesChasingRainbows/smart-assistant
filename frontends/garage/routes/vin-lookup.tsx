@@ -16,7 +16,8 @@ export default define.page(function VinLookupPage() {
           </nav>
           <h1 class="text-4xl font-bold text-gray-800 mb-4">VIN Lookup</h1>
           <p class="text-xl text-gray-600">
-            Decode vehicle information using the Vehicle Identification Number (VIN)
+            Decode vehicle information using the Vehicle Identification Number
+            (VIN)
           </p>
         </div>
 
@@ -27,8 +28,9 @@ export default define.page(function VinLookupPage() {
               Vehicle Information Lookup
             </h2>
             <p class="text-gray-600">
-              Enter a 17-digit VIN to retrieve vehicle details including make, model, year, and more.
-              This service works for US vehicles registered with the NHTSA database.
+              Enter a 17-digit VIN to retrieve vehicle details including make,
+              model, year, and more. This service works for US vehicles
+              registered with the NHTSA database.
             </p>
           </div>
 
@@ -37,17 +39,22 @@ export default define.page(function VinLookupPage() {
 
           {/* Additional Information */}
           <div class="mt-8 pt-6 border-t border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">About VIN Lookup</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              About VIN Lookup
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h4 class="font-medium text-gray-800 mb-2">What is a VIN?</h4>
                 <p class="text-sm text-gray-600">
-                  A Vehicle Identification Number (VIN) is a unique 17-digit code assigned to every vehicle.
-                  It contains information about the vehicle's manufacturer, specifications, and history.
+                  A Vehicle Identification Number (VIN) is a unique 17-digit
+                  code assigned to every vehicle. It contains information about
+                  the vehicle's manufacturer, specifications, and history.
                 </p>
               </div>
               <div>
-                <h4 class="font-medium text-gray-800 mb-2">Where to find the VIN?</h4>
+                <h4 class="font-medium text-gray-800 mb-2">
+                  Where to find the VIN?
+                </h4>
                 <ul class="text-sm text-gray-600 space-y-1">
                   <li>• On the dashboard near the windshield</li>
                   <li>• On the driver's side door frame</li>
@@ -60,13 +67,13 @@ export default define.page(function VinLookupPage() {
 
           {/* Actions */}
           <div class="mt-8 flex gap-4">
-            <a 
+            <a
               href={url("/vehicles/add")}
               class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
             >
               Add Vehicle with VIN Data
             </a>
-            <a 
+            <a
               href={url("/")}
               class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition-colors"
             >

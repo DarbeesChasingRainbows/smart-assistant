@@ -13,7 +13,18 @@ interface Props {
   entityType?: string;
 }
 
-export default function MarkdownEditor({ value, onInput, placeholder, label, required, rows = 5, entityId, entityType }: Props) {
+export default function MarkdownEditor(
+  {
+    value,
+    onInput,
+    placeholder,
+    label,
+    required,
+    rows = 5,
+    entityId,
+    entityType,
+  }: Props,
+) {
   const previewMode = useSignal(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const uploading = useSignal(false);
@@ -50,7 +61,11 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
       const formData = new FormData();
       // If it's a blob (recording), give it a name
       if (file instanceof Blob && !(file instanceof File)) {
-        formData.append("file", file, `recording.${type === "audio" ? "webm" : "bin"}`);
+        formData.append(
+          "file",
+          file,
+          `recording.${type === "audio" ? "webm" : "bin"}`,
+        );
       } else {
         formData.append("file", file);
       }
@@ -70,11 +85,11 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
       if (!response.ok) throw new Error("Upload failed");
 
       const data = await response.json();
-      
+
       // Replace placeholder
       const currentValue = textareaRef.current?.value || "";
       let replacement = "";
-      
+
       if (type === "image") {
         replacement = `![image](${data.url})`;
       } else {
@@ -96,7 +111,7 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
-      
+
       mediaRecorderRef.current = recorder;
       audioChunksRef.current = [];
 
@@ -107,11 +122,13 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
       };
 
       recorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/webm",
+        });
         await uploadFile(audioBlob, "audio");
-        
+
         // Stop all tracks
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       recorder.start();
@@ -131,18 +148,21 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
 
   const insertText = (text: string) => {
     if (!textareaRef.current) return;
-    
+
     const start = textareaRef.current.selectionStart;
     const end = textareaRef.current.selectionEnd;
     const currentValue = textareaRef.current.value;
-    
-    const newValue = currentValue.substring(0, start) + text + currentValue.substring(end);
+
+    const newValue = currentValue.substring(0, start) + text +
+      currentValue.substring(end);
     onInput(newValue);
-    
+
     // Restore cursor position (after insertion)
     setTimeout(() => {
       if (textareaRef.current) {
-        textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + text.length;
+        textareaRef.current.selectionStart =
+          textareaRef.current.selectionEnd =
+            start + text.length;
         textareaRef.current.focus();
       }
     }, 0);
@@ -175,7 +195,8 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
 
     if (selectedText) {
       // If text selected, wrap it
-      const newValue = currentValue.substring(0, start) + textToInsert + currentValue.substring(end);
+      const newValue = currentValue.substring(0, start) + textToInsert +
+        currentValue.substring(end);
       onInput(newValue);
     } else {
       // Insert template
@@ -186,7 +207,10 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
   const renderMarkdown = (text: string) => {
     const html = marked.parse(text) as string;
     // Handle relative uploads for preview
-    const processed = html.replace(/src=(["'])\/uploads\//g, 'src=$1http://localhost:5137/uploads/');
+    const processed = html.replace(
+      /src=(["'])\/uploads\//g,
+      "src=$1http://localhost:5137/uploads/",
+    );
     return { __html: processed };
   };
 
@@ -198,36 +222,66 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
           <span class="label-text-alt text-gray-500">Markdown supported</span>
         </label>
       )}
-      
+
       <div class="border border-base-300 rounded-lg overflow-hidden bg-white">
         {/* Toolbar */}
         <div class="flex items-center gap-1 p-2 bg-base-200 border-b border-base-300">
           <div class="flex gap-1 mr-4">
-            <button type="button" onClick={() => format("bold")} class="btn btn-xs btn-ghost font-bold" title="Bold">B</button>
-            <button type="button" onClick={() => format("italic")} class="btn btn-xs btn-ghost italic" title="Italic">I</button>
-            <button type="button" onClick={() => format("link")} class="btn btn-xs btn-ghost" title="Link">🔗</button>
-            <button type="button" onClick={() => format("image")} class="btn btn-xs btn-ghost" title="Image">🖼️</button>
-            <button 
-              type="button" 
-              onClick={recording.value ? stopRecording : startRecording} 
-              class={`btn btn-xs ${recording.value ? "btn-error animate-pulse" : "btn-ghost"}`} 
+            <button
+              type="button"
+              onClick={() => format("bold")}
+              class="btn btn-xs btn-ghost font-bold"
+              title="Bold"
+            >
+              B
+            </button>
+            <button
+              type="button"
+              onClick={() => format("italic")}
+              class="btn btn-xs btn-ghost italic"
+              title="Italic"
+            >
+              I
+            </button>
+            <button
+              type="button"
+              onClick={() => format("link")}
+              class="btn btn-xs btn-ghost"
+              title="Link"
+            >
+              🔗
+            </button>
+            <button
+              type="button"
+              onClick={() => format("image")}
+              class="btn btn-xs btn-ghost"
+              title="Image"
+            >
+              🖼️
+            </button>
+            <button
+              type="button"
+              onClick={recording.value ? stopRecording : startRecording}
+              class={`btn btn-xs ${
+                recording.value ? "btn-error animate-pulse" : "btn-ghost"
+              }`}
               title={recording.value ? "Stop Recording" : "Record Audio"}
             >
               {recording.value ? "⏹️" : "🎤"}
             </button>
           </div>
-          
+
           <div class="flex-1"></div>
 
           <div class="tabs tabs-boxed tabs-xs bg-base-300">
-            <a 
-              class={`tab ${!previewMode.value ? 'tab-active' : ''}`} 
+            <a
+              class={`tab ${!previewMode.value ? "tab-active" : ""}`}
               onClick={() => previewMode.value = false}
             >
               Write
             </a>
-            <a 
-              class={`tab ${previewMode.value ? 'tab-active' : ''}`} 
+            <a
+              class={`tab ${previewMode.value ? "tab-active" : ""}`}
               onClick={() => previewMode.value = true}
             >
               Preview
@@ -237,35 +291,41 @@ export default function MarkdownEditor({ value, onInput, placeholder, label, req
 
         {/* Editor / Preview Area */}
         <div class="relative min-h-[150px]">
-          {!previewMode.value ? (
-            <textarea
-              ref={textareaRef}
-              value={value}
-              onInput={(e) => onInput((e.target as HTMLTextAreaElement).value)}
-              onPaste={handlePaste}
-              class="textarea w-full h-full min-h-[150px] p-4 focus:outline-none focus:ring-0 border-none resize-y bg-transparent font-mono text-sm leading-relaxed"
-              placeholder={placeholder}
-              required={required}
-              rows={rows}
-            />
-          ) : (
-            <div 
-              class="prose prose-sm p-4 min-h-[150px] w-full max-w-none overflow-y-auto"
-              dangerouslySetInnerHTML={renderMarkdown(value)}
-            />
-          )}
-          
+          {!previewMode.value
+            ? (
+              <textarea
+                ref={textareaRef}
+                value={value}
+                onInput={(e) =>
+                  onInput((e.target as HTMLTextAreaElement).value)}
+                onPaste={handlePaste}
+                class="textarea w-full h-full min-h-[150px] p-4 focus:outline-none focus:ring-0 border-none resize-y bg-transparent font-mono text-sm leading-relaxed"
+                placeholder={placeholder}
+                required={required}
+                rows={rows}
+              />
+            )
+            : (
+              <div
+                class="prose prose-sm p-4 min-h-[150px] w-full max-w-none overflow-y-auto"
+                dangerouslySetInnerHTML={renderMarkdown(value)}
+              />
+            )}
+
           {uploading.value && (
             <div class="absolute inset-0 bg-white/50 flex items-center justify-center">
-              <span class="loading loading-spinner loading-md text-primary"></span>
+              <span class="loading loading-spinner loading-md text-primary">
+              </span>
             </div>
           )}
         </div>
       </div>
-      
+
       <label class="label">
         <span class="label-text-alt text-gray-400">
-          {previewMode.value ? "Preview mode" : "Paste images directly to upload"}
+          {previewMode.value
+            ? "Preview mode"
+            : "Paste images directly to upload"}
         </span>
       </label>
     </div>

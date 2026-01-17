@@ -52,7 +52,9 @@ class VinLookupService {
       console.error("VIN lookup error:", error);
       return {
         error: "LOOKUP_FAILED",
-        message: error instanceof Error ? error.message : "Failed to lookup VIN",
+        message: error instanceof Error
+          ? error.message
+          : "Failed to lookup VIN",
       };
     }
   }

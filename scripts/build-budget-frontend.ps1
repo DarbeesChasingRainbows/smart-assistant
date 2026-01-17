@@ -26,7 +26,7 @@ if ((Test-Path $containerfileOpt) -and !(Test-Path "$containerfile.optimized-in-
 
 # Build with cache
 Write-Host "Building with cache..." -ForegroundColor Blue
-podman build `
+docker build `
     --file "frontends\budget\Containerfile" `
     --tag "localhost/smart-assistant_budget-frontend:latest" `
     --cache-from type=local,src="C:\temp\.budget-cache" `

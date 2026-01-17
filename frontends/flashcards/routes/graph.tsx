@@ -1,16 +1,18 @@
 import { define, url } from "../utils.ts";
-import { RetentionApiClient, Deck, CrossReference } from "../utils/api.ts";
+import { CrossReference, Deck, RetentionApiClient } from "../utils/api.ts";
 
 const client = new RetentionApiClient();
 
 export default define.page(async (_ctx) => {
   const decks = await client.getDecks();
   const allRefs: (CrossReference & { sourceDeck: Deck })[] = [];
-  
+
   // Fetch all cross-references for the graph
   for (const deck of decks) {
     const refs = await client.getCrossReferences(deck.id);
-    allRefs.push(...refs.map((ref: CrossReference) => ({ ...ref, sourceDeck: deck })));
+    allRefs.push(
+      ...refs.map((ref: CrossReference) => ({ ...ref, sourceDeck: deck })),
+    );
   }
 
   // Transform data for vis-network
@@ -19,36 +21,38 @@ export default define.page(async (_ctx) => {
     label: deck.name,
     title: `${deck.category} / ${deck.subcategory}\n${deck.cardCount} cards`,
     group: deck.category,
-    value: Math.max(10, Math.min(30, deck.cardCount / 10)) // Size based on card count
+    value: Math.max(10, Math.min(30, deck.cardCount / 10)), // Size based on card count
   }));
 
   const edges = allRefs.map((ref: CrossReference) => ({
     from: ref.sourceId,
     to: ref.targetId,
     title: ref.referenceType,
-    arrows: 'to',
+    arrows: "to",
     color: {
       color: getEdgeColor(ref.referenceType),
-      highlight: getEdgeColor(ref.referenceType)
-    }
+      highlight: getEdgeColor(ref.referenceType),
+    },
   }));
 
   function getEdgeColor(type: string): string {
     const colors = {
-      'Related': '#97C2FC',
-      'Prerequisite': '#FB7E81',
-      'FollowsFrom': '#C2FABC',
-      'Contradicts': '#FFA807',
-      'ExampleOf': '#DEB887'
+      "Related": "#97C2FC",
+      "Prerequisite": "#FB7E81",
+      "FollowsFrom": "#C2FABC",
+      "Contradicts": "#FFA807",
+      "ExampleOf": "#DEB887",
     };
-    return colors[type as keyof typeof colors] || '#CCCCCC';
+    return colors[type as keyof typeof colors] || "#CCCCCC";
   }
 
   return (
     <div class="min-h-screen bg-gray-50 p-4">
       <div class="max-w-7xl mx-auto">
         <div class="flex justify-between items-center mb-6">
-          <h1 class="text-3xl font-bold text-gray-900">Deck Relationship Graph</h1>
+          <h1 class="text-3xl font-bold text-gray-900">
+            Deck Relationship Graph
+          </h1>
           <div class="flex gap-2">
             <a href={url("/decks")} class="btn btn-ghost">Back to Decks</a>
             <a href={url("/")} class="btn btn-primary">Quiz</a>
@@ -59,14 +63,19 @@ export default define.page(async (_ctx) => {
           <div class="card-body">
             <div class="mb-4">
               <p class="text-sm text-gray-600">
-                Visualizing {decks.length} decks with {allRefs.length} relationships. 
-                Node sizes represent card counts. Edge colors indicate relationship types.
+                Visualizing {decks.length} decks with {allRefs.length}{" "}
+                relationships. Node sizes represent card counts. Edge colors
+                indicate relationship types.
               </p>
             </div>
-            
+
             {/* Graph container */}
-            <div id="network-graph" style="width: 100%; height: 600px; border: 1px solid #ddd;"></div>
-            
+            <div
+              id="network-graph"
+              style="width: 100%; height: 600px; border: 1px solid #ddd;"
+            >
+            </div>
+
             {/* Legend */}
             <div class="mt-4 flex flex-wrap gap-4 text-sm">
               <div class="flex items-center gap-2">
@@ -95,10 +104,15 @@ export default define.page(async (_ctx) => {
       </div>
 
       {/* Load vis-network scripts */}
-      <script src="https://unpkg.com/vis-data@latest/peer/umd/vis-data.min.js"></script>
-      <script src="https://unpkg.com/vis-network@latest/peer/umd/vis-network.min.js"></script>
-      <link rel="stylesheet" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
-      
+      <script src="https://unpkg.com/vis-data@latest/peer/umd/vis-data.min.js">
+      </script>
+      <script src="https://unpkg.com/vis-network@latest/peer/umd/vis-network.min.js">
+      </script>
+      <link
+        rel="stylesheet"
+        href="https://unpkg.com/vis-network/styles/vis-network.min.css"
+      />
+
       <script>
         {`
           // Initialize network after page loads
