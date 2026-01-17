@@ -215,11 +215,11 @@ export class GarageApiClient {
   // ============================================================================
 
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
-    // Remove /api suffix from baseUrl to get health endpoint
-    const healthUrl = this.baseUrl.endsWith('/api') 
-      ? this.baseUrl.slice(0, -4) + '/health'
-      : `${this.baseUrl}/health`;
-    const response = await fetch(healthUrl);
+    // Only remove /api if it's at the end of the URL
+    const baseUrl = this.baseUrl.endsWith('/api') 
+      ? this.baseUrl.slice(0, -4) 
+      : this.baseUrl;
+    const response = await fetch(`${baseUrl}/health`);
     if (!response.ok) {
       throw new Error(`Health check failed: ${response.statusText}`);
     }
