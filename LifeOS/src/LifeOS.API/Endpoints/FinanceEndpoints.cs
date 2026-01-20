@@ -904,62 +904,37 @@ public static class FinanceEndpoints
     // ==================== BUDGETS (Flexible Periods) ====================
 
     private static async Task<IResult> GetPeriodBudgetSummary(
-        [FromServices] ArangoDbContext db,
+        [FromServices] IFinanceApplicationService financeAppService,
         [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate,
         [FromQuery] string? periodType = null)
     {
-        // Build period key for lookup
-        var periodKey = $"{startDate:yyyy-MM-dd}_{endDate:yyyy-MM-dd}";
+        var result = await financeAppService.GetPeriodBudgetSummaryAsync(
+            new GetPeriodBudgetSummaryCommand(startDate, endDate, periodType));
 
-        // First try to find budgets by periodKey
-        var query = $@"
-            FOR doc IN {BudgetCollection}
-            FILTER doc.periodKey == @periodKey
-            RETURN doc";
-
-        var cursor = await db.Client.Cursor.PostCursorAsync<FinancialBudgetDocument>(
-            query, new Dictionary<string, object> { ["periodKey"] = periodKey });
-
-        var budgets = cursor.Result.ToList();
-
-        // If no budgets found by periodKey, try by date range
-        if (budgets.Count == 0)
+        if (result.IsError)
         {
-            var rangeQuery = $@"
-                FOR doc IN {BudgetCollection}
-                FILTER doc.startDate != null AND doc.endDate != null
-                FILTER doc.startDate >= @startDate AND doc.endDate <= @endDate
-                RETURN doc";
-
-            var rangeCursor = await db.Client.Cursor.PostCursorAsync<FinancialBudgetDocument>(
-                rangeQuery, new Dictionary<string, object>
-                {
-                    ["startDate"] = startDate.ToString("o"),
-                    ["endDate"] = endDate.ToString("o")
-                });
-
-            budgets = rangeCursor.Result.ToList();
+            var error = result.ErrorValue;
+            return error switch
+            {
+                LifeOS.Domain.Common.DomainError.ValidationError ve => Results.BadRequest(new { Error = ve.Item }),
+                LifeOS.Domain.Common.DomainError.BusinessRuleViolation br => Results.BadRequest(new { Error = br.Item }),
+                _ => Results.BadRequest(new { Error = "Budget summary failed" })
+            };
         }
 
-        // Calculate spent amounts from transactions in the date range
-        var budgetDtos = new List<FinancialBudgetDto>();
-        foreach (var budget in budgets)
-        {
-            var spentAmount = await CalculateSpentForCategory(db, budget.CategoryKey, startDate, endDate);
-            budget.SpentAmount = spentAmount;
-            budgetDtos.Add(MapBudget(budget));
-        }
+        var summaryResult = result.ResultValue;
+        var budgetDtos = summaryResult.Summary.Budgets.Select(b => MapBudget(b)).ToList();
 
         var summary = new PeriodBudgetSummaryDto
         {
-            PeriodType = periodType ?? "Custom",
-            StartDate = startDate,
-            EndDate = endDate,
-            PeriodKey = periodKey,
-            TotalBudgeted = budgetDtos.Sum(b => b.BudgetedAmount),
-            TotalSpent = budgetDtos.Sum(b => b.SpentAmount),
-            TotalAvailable = budgetDtos.Sum(b => b.AvailableAmount),
+            PeriodType = BudgetPeriodTypeModule.toString(summaryResult.Period.PeriodType),
+            StartDate = summaryResult.Period.StartDate,
+            EndDate = summaryResult.Period.EndDate,
+            PeriodKey = summaryResult.Period.PeriodKey,
+            TotalBudgeted = MoneyModule.value(summaryResult.Summary.TotalBudgeted),
+            TotalSpent = MoneyModule.value(summaryResult.Summary.TotalSpent),
+            TotalAvailable = MoneyModule.value(summaryResult.Summary.TotalRemaining),
             Categories = budgetDtos
         };
 
@@ -968,94 +943,42 @@ public static class FinanceEndpoints
 
     private static async Task<IResult> CreateOrUpdatePeriodBudget(
         CreateOrUpdatePeriodBudgetRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] IFinanceApplicationService financeAppService)
     {
-        var now = DateTime.UtcNow;
-        var periodKey = $"{request.StartDate:yyyy-MM-dd}_{request.EndDate:yyyy-MM-dd}";
+        var result = await financeAppService.UpsertPeriodBudgetAsync(
+            new UpsertPeriodBudgetCommand(
+                request.PeriodType,
+                request.StartDate,
+                request.EndDate,
+                request.CategoryKey,
+                request.BudgetedAmount,
+                request.RolloverAmount,
+                request.Notes));
 
-        // Check if budget exists for this category/period
-        var query = $@"
-            FOR doc IN {BudgetCollection}
-            FILTER doc.periodKey == @periodKey AND doc.categoryKey == @categoryKey
-            RETURN doc";
-
-        var cursor = await db.Client.Cursor.PostCursorAsync<FinancialBudgetDocument>(
-            query, new Dictionary<string, object>
-            {
-                ["periodKey"] = periodKey,
-                ["categoryKey"] = request.CategoryKey
-            });
-
-        var existing = cursor.Result.FirstOrDefault();
-
-        if (existing != null)
+        if (result.IsError)
         {
-            // Update existing
-            existing.PeriodType = request.PeriodType;
-            existing.StartDate = request.StartDate;
-            existing.EndDate = request.EndDate;
-            existing.BudgetedAmount = request.BudgetedAmount;
-            if (request.RolloverAmount.HasValue) existing.RolloverAmount = request.RolloverAmount.Value;
-            if (request.Notes != null) existing.Notes = request.Notes;
-            existing.UpdatedAt = now;
-
-            // Recalculate spent amount
-            existing.SpentAmount = await CalculateSpentForCategory(db, existing.CategoryKey, request.StartDate, request.EndDate);
-
-            await db.Client.Document.PutDocumentAsync($"{BudgetCollection}/{existing.Key}", existing);
-            return Results.Ok(MapBudget(existing));
-        }
-        else
-        {
-            // Calculate spent amount for new budget
-            var spentAmount = await CalculateSpentForCategory(db, request.CategoryKey, request.StartDate, request.EndDate);
-
-            var doc = new FinancialBudgetDocument
+            var error = result.ErrorValue;
+            return error switch
             {
-                Key = Guid.NewGuid().ToString("N")[..12],
-                Year = request.StartDate.Year,
-                Month = request.StartDate.Month,
-                PeriodType = request.PeriodType,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                PeriodKey = periodKey,
-                CategoryKey = request.CategoryKey,
-                BudgetedAmount = request.BudgetedAmount,
-                SpentAmount = spentAmount,
-                RolloverAmount = request.RolloverAmount ?? 0,
-                Notes = request.Notes,
-                CreatedAt = now,
-                UpdatedAt = now
+                LifeOS.Domain.Common.DomainError.ValidationError ve => Results.BadRequest(new { Error = ve.Item }),
+                LifeOS.Domain.Common.DomainError.BusinessRuleViolation br => Results.BadRequest(new { Error = br.Item }),
+                _ => Results.BadRequest(new { Error = "Budget upsert failed" })
             };
-
-            await db.Client.Document.PostDocumentAsync(BudgetCollection, doc);
-            return Results.Created($"/api/v1/finance/budgets/period?startDate={request.StartDate:yyyy-MM-dd}&endDate={request.EndDate:yyyy-MM-dd}", MapBudget(doc));
         }
+
+        var payload = result.ResultValue;
+        var response = MapBudget(payload.Budget);
+
+        if (payload.Created)
+        {
+            return Results.Created(
+                $"/api/v1/finance/budgets/period?startDate={request.StartDate:yyyy-MM-dd}&endDate={request.EndDate:yyyy-MM-dd}",
+                response);
+        }
+
+        return Results.Ok(response);
     }
 
-    private static async Task<decimal> CalculateSpentForCategory(
-        ArangoDbContext db,
-        string categoryKey,
-        DateTime startDate,
-        DateTime endDate)
-    {
-        var query = $@"
-            FOR doc IN {TransactionCollection}
-            FILTER doc.categoryKey == @categoryKey
-            FILTER doc.postedAt >= @startDate AND doc.postedAt <= @endDate
-            FILTER doc.amount < 0
-            RETURN ABS(doc.amount)";
-
-        var cursor = await db.Client.Cursor.PostCursorAsync<decimal>(
-            query, new Dictionary<string, object>
-            {
-                ["categoryKey"] = categoryKey,
-                ["startDate"] = startDate.ToString("o"),
-                ["endDate"] = endDate.ToString("o")
-            });
-
-        return cursor.Result.Sum();
-    }
 
     // ==================== PAY PERIOD CONFIG ====================
 
@@ -1115,107 +1038,6 @@ public static class FinanceEndpoints
         }
     }
 
-    // ==================== HELPER METHODS ====================
-
-    private static async Task CreateJournalEntriesForTransaction(
-        ArangoDbContext db,
-        string transactionKey,
-        string accountKey,
-        decimal amount,
-        DateTime entryDate)
-    {
-        var now = DateTime.UtcNow;
-
-        // For a simple transaction, we create a debit/credit pair
-        // Positive amount = credit to account (deposit)
-        // Negative amount = debit from account (withdrawal)
-        var entry = new FinancialJournalEntryDocument
-        {
-            Key = Guid.NewGuid().ToString("N")[..12],
-            TransactionKey = transactionKey,
-            AccountKey = accountKey,
-            Debit = amount < 0 ? Math.Abs(amount) : 0,
-            Credit = amount > 0 ? amount : 0,
-            EntryDate = entryDate,
-            CreatedAt = now
-        };
-
-        await db.Client.Document.PostDocumentAsync(JournalEntryCollection, entry);
-    }
-
-    private static async Task CreateJournalEntriesForTransfer(
-        ArangoDbContext db,
-        string withdrawalKey,
-        string depositKey,
-        string fromAccountKey,
-        string toAccountKey,
-        decimal amount,
-        DateTime entryDate)
-    {
-        var now = DateTime.UtcNow;
-        var absAmount = Math.Abs(amount);
-
-        // Debit from source account
-        var debitEntry = new FinancialJournalEntryDocument
-        {
-            Key = Guid.NewGuid().ToString("N")[..12],
-            TransactionKey = withdrawalKey,
-            AccountKey = fromAccountKey,
-            Debit = absAmount,
-            Credit = 0,
-            EntryDate = entryDate,
-            CreatedAt = now
-        };
-
-        // Credit to destination account
-        var creditEntry = new FinancialJournalEntryDocument
-        {
-            Key = Guid.NewGuid().ToString("N")[..12],
-            TransactionKey = depositKey,
-            AccountKey = toAccountKey,
-            Debit = 0,
-            Credit = absAmount,
-            EntryDate = entryDate,
-            CreatedAt = now
-        };
-
-        await db.Client.Document.PostDocumentAsync(JournalEntryCollection, debitEntry);
-        await db.Client.Document.PostDocumentAsync(JournalEntryCollection, creditEntry);
-    }
-
-    private static async Task UpdateAccountBalance(ArangoDbContext db, string accountKey, decimal amount)
-    {
-        var query = $@"
-            FOR doc IN {AccountCollection}
-            FILTER doc._key == @key
-            UPDATE doc WITH {{ 
-                currentBalance: doc.currentBalance + @amount,
-                updatedAt: @now
-            }} IN {AccountCollection}";
-
-        await db.Client.Cursor.PostCursorAsync<object>(query, new Dictionary<string, object>
-        {
-            ["key"] = accountKey,
-            ["amount"] = amount,
-            ["now"] = DateTime.UtcNow.ToString("o")
-        });
-    }
-
-    private static async Task<decimal> CalculateClearedBalance(ArangoDbContext db, List<string> transactionKeys)
-    {
-        if (transactionKeys.Count == 0) return 0;
-
-        var query = $@"
-            FOR doc IN {TransactionCollection}
-            FILTER doc._key IN @keys
-            RETURN doc.amount";
-
-        var cursor = await db.Client.Cursor.PostCursorAsync<decimal>(
-            query, new Dictionary<string, object> { ["keys"] = transactionKeys });
-
-        return cursor.Result.Sum();
-    }
-
     // ==================== MAPPERS ====================
 
     private static FinancialAccountDto MapAccount(FinancialAccountDocument doc) => new()
@@ -1272,6 +1094,24 @@ public static class FinanceEndpoints
         Notes = doc.Notes,
         CreatedAt = doc.CreatedAt,
         UpdatedAt = doc.UpdatedAt
+    };
+
+    private static FinancialBudgetDto MapBudget(Budget budget) => new()
+    {
+        Key = BudgetIdModule.value(budget.Id),
+        Year = budget.Period.StartDate.Year,
+        Month = budget.Period.StartDate.Month,
+        PeriodType = BudgetPeriodTypeModule.toString(budget.Period.PeriodType),
+        StartDate = budget.Period.StartDate,
+        EndDate = budget.Period.EndDate,
+        PeriodKey = budget.Period.PeriodKey,
+        CategoryKey = CategoryIdModule.value(budget.CategoryId),
+        BudgetedAmount = MoneyModule.value(budget.BudgetedAmount),
+        SpentAmount = MoneyModule.value(budget.SpentAmount),
+        RolloverAmount = MoneyModule.value(budget.RolloverAmount),
+        Notes = FSharpOption<string>.get_IsSome(budget.Notes) ? budget.Notes.Value : null,
+        CreatedAt = budget.CreatedAt,
+        UpdatedAt = budget.UpdatedAt
     };
 
     private static FinancialCategoryDto MapCategory(FinancialCategoryDocument doc) => new()
