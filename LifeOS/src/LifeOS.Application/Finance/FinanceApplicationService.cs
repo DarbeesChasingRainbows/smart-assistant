@@ -42,6 +42,27 @@ public sealed class FinanceApplicationService : IFinanceApplicationService
         return VoidTransactionInternalAsync(transactionKey);
     }
 
+    public Task<FSharpResult<Reconciliation, DomainError>> CreateReconciliationAsync(
+        CreateReconciliationCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        return CreateReconciliationInternalAsync(command);
+    }
+
+    public Task<FSharpResult<Reconciliation, DomainError>> MatchTransactionsAsync(
+        MatchTransactionsCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        return MatchTransactionsInternalAsync(command);
+    }
+
+    public Task<FSharpResult<Reconciliation, DomainError>> CompleteReconciliationAsync(
+        CompleteReconciliationCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        return CompleteReconciliationInternalAsync(command);
+    }
+
     private async Task<FSharpResult<TransferExecutionResult, DomainError>> ExecuteTransferInternalAsync(
         CreateTransferCommand command)
     {
@@ -281,5 +302,126 @@ public sealed class FinanceApplicationService : IFinanceApplicationService
         await _uow.CommitAsync();
 
         return FSharpResult<Transaction, DomainError>.NewOk(r.Transaction);
+    }
+
+    private async Task<FSharpResult<Reconciliation, DomainError>> CreateReconciliationInternalAsync(
+        CreateReconciliationCommand command)
+    {
+        var accountId = AccountIdModule.fromString(command.AccountKey);
+        var statementBalance = MoneyModule.create(command.StatementBalance);
+
+        // Verify account exists
+        var accountOpt = await _uow.Accounts.GetById(accountId);
+        if (FSharpOption<Account>.get_IsNone(accountOpt))
+            return FSharpResult<Reconciliation, DomainError>.NewError(
+                DomainError.NewNotFoundError("Account not found"));
+
+        // Create reconciliation directly using domain types
+        var now = global::System.DateTime.UtcNow;
+        var reconciliation = new Reconciliation(
+            id: ReconciliationIdModule.create(),
+            accountId: accountId,
+            statementDate: command.StatementDate,
+            statementBalance: statementBalance,
+            clearedBalance: MoneyModule.zero,
+            difference: statementBalance,
+            status: ReconciliationStatus.InProgress,
+            matchedTransactionIds: ListModule.Empty<TransactionId>(),
+            notes: FSharpOption<string>.None,
+            completedAt: FSharpOption<global::System.DateTime>.None,
+            createdAt: now,
+            updatedAt: now
+        );
+        await _uow.Reconciliations.Save(reconciliation);
+        await _uow.CommitAsync();
+
+        return FSharpResult<Reconciliation, DomainError>.NewOk(reconciliation);
+    }
+
+    private async Task<FSharpResult<Reconciliation, DomainError>> MatchTransactionsInternalAsync(
+        MatchTransactionsCommand command)
+    {
+        var reconId = ReconciliationIdModule.fromString(command.ReconciliationKey);
+        
+        // Get reconciliation
+        var reconOpt = await _uow.Reconciliations.GetById(reconId);
+        if (FSharpOption<Reconciliation>.get_IsNone(reconOpt))
+            return FSharpResult<Reconciliation, DomainError>.NewError(
+                DomainError.NewNotFoundError("Reconciliation not found"));
+
+        var reconciliation = reconOpt.Value;
+
+        // Match each transaction
+        foreach (var txKey in command.TransactionKeys)
+        {
+            var txId = TransactionIdModule.fromString(txKey);
+            var txOpt = await _uow.Transactions.GetById(txId);
+            
+            if (FSharpOption<Transaction>.get_IsSome(txOpt))
+            {
+                var tx = txOpt.Value;
+                var matchResult = reconciliation.MatchTransaction(txId, tx.Amount);
+                
+                if (matchResult.IsError)
+                    return FSharpResult<Reconciliation, DomainError>.NewError(matchResult.ErrorValue);
+                
+                reconciliation = matchResult.ResultValue;
+
+                // Update transaction status to Cleared and set reconciliation
+                var updateResult = tx.UpdateStatus(TransactionStatus.Cleared);
+                if (updateResult.IsError)
+                    return FSharpResult<Reconciliation, DomainError>.NewError(updateResult.ErrorValue);
+                
+                var updatedTx = updateResult.ResultValue;
+                await _uow.Transactions.Save(updatedTx);
+            }
+        }
+
+        await _uow.Reconciliations.Save(reconciliation);
+        await _uow.CommitAsync();
+
+        return FSharpResult<Reconciliation, DomainError>.NewOk(reconciliation);
+    }
+
+    private async Task<FSharpResult<Reconciliation, DomainError>> CompleteReconciliationInternalAsync(
+        CompleteReconciliationCommand command)
+    {
+        var reconId = ReconciliationIdModule.fromString(command.ReconciliationKey);
+        
+        // Get reconciliation
+        var reconOpt = await _uow.Reconciliations.GetById(reconId);
+        if (FSharpOption<Reconciliation>.get_IsNone(reconOpt))
+            return FSharpResult<Reconciliation, DomainError>.NewError(
+                DomainError.NewNotFoundError("Reconciliation not found"));
+
+        var reconciliation = reconOpt.Value;
+
+        // Complete the reconciliation
+        var completeResult = reconciliation.Complete();
+        if (completeResult.IsError)
+            return FSharpResult<Reconciliation, DomainError>.NewError(completeResult.ErrorValue);
+
+        var completedReconciliation = completeResult.ResultValue;
+
+        // Update all matched transactions to Reconciled status
+        foreach (var txId in completedReconciliation.MatchedTransactionIds)
+        {
+            var txOpt = await _uow.Transactions.GetById(txId);
+            if (FSharpOption<Transaction>.get_IsSome(txOpt))
+            {
+                var tx = txOpt.Value;
+                var reconcileResult = tx.Reconcile(reconId);
+                if (reconcileResult.IsError)
+                    return FSharpResult<Reconciliation, DomainError>.NewError(reconcileResult.ErrorValue);
+                
+                var updatedTx = reconcileResult.ResultValue;
+                await _uow.Transactions.Save(updatedTx);
+            }
+        }
+
+        await _uow.Reconciliations.Save(completedReconciliation);
+        await _uow.CommitAsync();
+
+        return FSharpResult<Reconciliation, DomainError>.NewOk(completedReconciliation);
     }
 }

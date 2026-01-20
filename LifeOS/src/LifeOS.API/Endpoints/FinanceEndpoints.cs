@@ -737,111 +737,80 @@ public static class FinanceEndpoints
 
     private static async Task<IResult> CreateReconciliation(
         CreateFinancialReconciliationRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] IFinanceApplicationService financeAppService)
     {
-        var now = DateTime.UtcNow;
-        var doc = new FinancialReconciliationDocument
-        {
-            Key = Guid.NewGuid().ToString("N")[..12],
-            AccountKey = request.AccountKey,
-            StatementDate = request.StatementDate,
-            StatementBalance = request.StatementBalance,
-            ClearedBalance = 0,
-            Difference = request.StatementBalance,
-            Status = "InProgress",
-            MatchedTransactionKeys = new List<string>(),
-            CreatedAt = now,
-            UpdatedAt = now
-        };
+        var result = await financeAppService.CreateReconciliationAsync(
+            new CreateReconciliationCommand(
+                AccountKey: request.AccountKey,
+                StatementDate: request.StatementDate,
+                StatementBalance: request.StatementBalance));
 
-        var result = await db.Client.Document.PostDocumentAsync(ReconciliationCollection, doc);
-        doc.Key = result._key;
-        return Results.Created($"/api/v1/finance/reconciliations/{doc.Key}", MapReconciliation(doc));
+        if (result.IsError)
+        {
+            var error = result.ErrorValue;
+            var errorMessage = error switch
+            {
+                LifeOS.Domain.Common.DomainError.ValidationError ve => ve.Item,
+                LifeOS.Domain.Common.DomainError.BusinessRuleViolation br => br.Item,
+                LifeOS.Domain.Common.DomainError.NotFoundError nf => nf.Item,
+                _ => "Reconciliation creation failed"
+            };
+            return Results.BadRequest(new { Error = errorMessage });
+        }
+
+        var reconciliation = result.ResultValue;
+        var key = ReconciliationIdModule.value(reconciliation.Id);
+        return Results.Created($"/api/v1/finance/reconciliations/{key}", MapReconciliation(reconciliation));
     }
 
     private static async Task<IResult> MatchTransactions(
         string key,
         MatchTransactionsRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] IFinanceApplicationService financeAppService)
     {
-        try
-        {
-            var recon = await db.Client.Document.GetDocumentAsync<FinancialReconciliationDocument>(ReconciliationCollection, key);
+        var result = await financeAppService.MatchTransactionsAsync(
+            new MatchTransactionsCommand(
+                ReconciliationKey: key,
+                TransactionKeys: request.TransactionKeys));
 
-            // Add new transaction keys
-            foreach (var txKey in request.TransactionKeys)
+        if (result.IsError)
+        {
+            var error = result.ErrorValue;
+            return error switch
             {
-                if (!recon.MatchedTransactionKeys.Contains(txKey))
-                {
-                    recon.MatchedTransactionKeys.Add(txKey);
-
-                    // Update transaction status to Cleared
-                    try
-                    {
-                        var tx = await db.Client.Document.GetDocumentAsync<FinancialTransactionDocument>(TransactionCollection, txKey);
-                        tx.Status = "Cleared";
-                        tx.ReconciliationKey = key;
-                        tx.UpdatedAt = DateTime.UtcNow;
-                        await db.Client.Document.PutDocumentAsync($"{TransactionCollection}/{txKey}", tx);
-                    }
-                    catch { /* Transaction may not exist */ }
-                }
-            }
-
-            // Recalculate cleared balance
-            var clearedBalance = await CalculateClearedBalance(db, recon.MatchedTransactionKeys);
-            recon.ClearedBalance = clearedBalance;
-            recon.Difference = recon.StatementBalance - clearedBalance;
-            recon.UpdatedAt = DateTime.UtcNow;
-
-            await db.Client.Document.PutDocumentAsync($"{ReconciliationCollection}/{key}", recon);
-            return Results.Ok(MapReconciliation(recon));
+                LifeOS.Domain.Common.DomainError.NotFoundError _ => Results.NotFound(),
+                LifeOS.Domain.Common.DomainError.ValidationError ve => Results.BadRequest(new { Error = ve.Item }),
+                LifeOS.Domain.Common.DomainError.BusinessRuleViolation br => Results.BadRequest(new { Error = br.Item }),
+                _ => Results.BadRequest(new { Error = "Match transactions failed" })
+            };
         }
-        catch
-        {
-            return Results.NotFound();
-        }
+
+        return Results.Ok(MapReconciliation(result.ResultValue));
     }
 
     private static async Task<IResult> CompleteReconciliation(
         string key,
         CompleteReconciliationRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] IFinanceApplicationService financeAppService)
     {
-        try
+        var result = await financeAppService.CompleteReconciliationAsync(
+            new CompleteReconciliationCommand(
+                ReconciliationKey: key,
+                Notes: request.Notes));
+
+        if (result.IsError)
         {
-            var recon = await db.Client.Document.GetDocumentAsync<FinancialReconciliationDocument>(ReconciliationCollection, key);
-
-            if (Math.Abs(recon.Difference) > 0.01m)
+            var error = result.ErrorValue;
+            return error switch
             {
-                return Results.BadRequest(new { Error = "Reconciliation difference must be zero to complete" });
-            }
-
-            recon.Status = "Completed";
-            recon.Notes = request.Notes;
-            recon.CompletedAt = DateTime.UtcNow;
-            recon.UpdatedAt = DateTime.UtcNow;
-
-            // Mark all matched transactions as Reconciled
-            foreach (var txKey in recon.MatchedTransactionKeys)
-            {
-                try
-                {
-                    var tx = await db.Client.Document.GetDocumentAsync<FinancialTransactionDocument>(TransactionCollection, txKey);
-                    tx.Status = "Reconciled";
-                    tx.UpdatedAt = DateTime.UtcNow;
-                    await db.Client.Document.PutDocumentAsync($"{TransactionCollection}/{txKey}", tx);
-                }
-                catch { /* Transaction may not exist */ }
-            }
-
-            await db.Client.Document.PutDocumentAsync($"{ReconciliationCollection}/{key}", recon);
-            return Results.Ok(MapReconciliation(recon));
+                LifeOS.Domain.Common.DomainError.NotFoundError _ => Results.NotFound(),
+                LifeOS.Domain.Common.DomainError.ValidationError ve => Results.BadRequest(new { Error = ve.Item }),
+                LifeOS.Domain.Common.DomainError.BusinessRuleViolation br => Results.BadRequest(new { Error = br.Item }),
+                _ => Results.BadRequest(new { Error = "Complete reconciliation failed" })
+            };
         }
-        catch
-        {
-            return Results.NotFound();
-        }
+
+        return Results.Ok(MapReconciliation(result.ResultValue));
     }
 
     // ==================== BUDGETS (Legacy Month-Based) ====================
@@ -1383,6 +1352,22 @@ public static class FinanceEndpoints
         CompletedAt = doc.CompletedAt,
         CreatedAt = doc.CreatedAt,
         UpdatedAt = doc.UpdatedAt
+    };
+
+    private static FinancialReconciliationDto MapReconciliation(Reconciliation r) => new()
+    {
+        Key = ReconciliationIdModule.value(r.Id),
+        AccountKey = AccountIdModule.value(r.AccountId),
+        StatementDate = r.StatementDate,
+        StatementBalance = MoneyModule.value(r.StatementBalance),
+        ClearedBalance = MoneyModule.value(r.ClearedBalance),
+        Difference = MoneyModule.value(r.Difference),
+        Status = ReconciliationStatusModule.toString(r.Status),
+        MatchedTransactionKeys = r.MatchedTransactionIds.Select(TransactionIdModule.value).ToList(),
+        Notes = Microsoft.FSharp.Core.FSharpOption<string>.get_IsSome(r.Notes) ? r.Notes.Value : null,
+        CompletedAt = Microsoft.FSharp.Core.FSharpOption<global::System.DateTime>.get_IsSome(r.CompletedAt) ? r.CompletedAt.Value : null,
+        CreatedAt = r.CreatedAt,
+        UpdatedAt = r.UpdatedAt
     };
 
     private static FinancialBudgetDto MapBudget(FinancialBudgetDocument doc) => new()

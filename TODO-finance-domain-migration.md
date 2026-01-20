@@ -73,4 +73,11 @@ Move Finance business logic out of `LifeOS.API` (primary adapter) and into the a
 - For incremental migration, keep current Arango queries for reads; move writes first.
 
 ## Work log
-- [ ] Phase 1 started: create application service interface and registration.
+- [x] Phase 1 completed: IFinanceApplicationService interface and implementation already exist
+- [x] Transfer, Create/Update/Void Transaction operations already use application service
+- [x] Phase 2 completed: Extracted Reconciliation use-cases to application service
+  - [x] CreateReconciliation
+  - [x] MatchTransactions
+  - [x] CompleteReconciliation
+- [ ] Phase 3: Extract Budget period calculations to application service
+- [ ] Phase 4: Move helper methods to appropriate layers
