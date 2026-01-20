@@ -1,4 +1,5 @@
 import { asset } from "fresh/runtime";
+import ToastContainer from "../islands/ToastContainer.tsx";
 
 export default function App({ Component }: { Component: () => any }) {
   return (
@@ -14,6 +15,7 @@ export default function App({ Component }: { Component: () => any }) {
       </head>
       <body>
         <Component />
+        <ToastContainer />
       </body>
     </html>
   );
