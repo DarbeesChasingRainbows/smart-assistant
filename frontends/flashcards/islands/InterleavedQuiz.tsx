@@ -1,9 +1,9 @@
 /** @jsxImportSource preact */
-import { useSignal } from "@preact/signals";
+import { useSignal, useComputed } from "@preact/signals";
 import { marked } from "marked";
 import type { Deck, Flashcard } from "../utils/api.ts";
 import type { InterleavedQuizResponse } from "../utils/api.ts";
-import ErrorAlert from "../components/ErrorAlert.tsx";
+import Alert from "../components/ui/Alert.tsx";
 import LoadingSpinner from "../components/LoadingSpinner.tsx";
 
 interface InterleavedQuizProps {
@@ -36,6 +36,30 @@ export default function InterleavedQuiz({ availableDecks }: InterleavedQuizProps
   const loadingElapsed = useSignal(0);
   const error = useSignal("");
   const quizStarted = useSignal(false);
+
+  // Memoized deck progress calculation - avoids O(n²) computation on every render
+  const deckProgress = useComputed(() => {
+    if (!session.value) return new Map();
+
+    const progress = new Map<string, { completed: number; total: number; name: string }>();
+
+    Object.entries(session.value.deckInfos).forEach(([id, info]) => {
+      const cardsFromDeck = session.value!.cards.filter(c => c.deckId === id);
+      // More efficient: slice completed cards, then filter by deck
+      const completedFromDeck = session.value!.cards
+        .slice(0, currentIndex.value)
+        .filter(c => c.deckId === id)
+        .length;
+
+      progress.set(id, {
+        completed: completedFromDeck,
+        total: cardsFromDeck.length,
+        name: info.name,
+      });
+    });
+
+    return progress;
+  });
 
   const toggleDeck = (deckId: string) => {
     const newSet = new Set(selectedDeckIds.value);
@@ -180,7 +204,9 @@ export default function InterleavedQuiz({ availableDecks }: InterleavedQuizProps
         </div>
 
         {error.value && (
-          <ErrorAlert message={error.value} onRetry={() => error.value = ""} />
+          <Alert variant="error" onDismiss={() => error.value = ""}>
+            {error.value}
+          </Alert>
         )}
 
         {loading.value ? (
@@ -300,10 +326,10 @@ export default function InterleavedQuiz({ availableDecks }: InterleavedQuizProps
   if (!currentCard.value || !session.value) {
     return (
       <div class="text-center p-8">
-        <div class="alert alert-success mb-6">
-          <span>Quiz completed! 🎉</span>
-        </div>
-        <button type="button" class="btn btn-primary" onClick={() => quizStarted.value = false}>
+        <Alert variant="success" class="mb-6">
+          Quiz completed! Great work on your study session.
+        </Alert>
+        <button type="button" class="btn btn-primary min-h-[44px]" onClick={() => quizStarted.value = false}>
           Start New Quiz
         </button>
       </div>
@@ -339,22 +365,18 @@ export default function InterleavedQuiz({ availableDecks }: InterleavedQuizProps
           
           {/* Per-deck progress indicators */}
           <div class="flex flex-wrap gap-2 mt-3 justify-center">
-            {Object.entries(session.value.deckInfos).map(([id, info]) => {
-              const cardsFromDeck = session.value!.cards.filter(c => c.deckId === id);
-              const completedFromDeck = cardsFromDeck.filter((_, i) => 
-                session.value!.cards.indexOf(cardsFromDeck[i]) < currentIndex.value
-              ).length;
-              return (
-                <div key={id} class="text-xs text-gray-500">
-                  {info.name}: {completedFromDeck}/{info.cardCount}
-                </div>
-              );
-            })}
+            {Array.from(deckProgress.value.entries()).map(([id, data]) => (
+              <div key={id} class="text-xs text-gray-500">
+                {data.name}: {data.completed}/{data.total}
+              </div>
+            ))}
           </div>
         </div>
 
         {error.value && (
-          <ErrorAlert message={error.value} onRetry={() => error.value = ""} />
+          <Alert variant="error" onDismiss={() => error.value = ""}>
+            {error.value}
+          </Alert>
         )}
 
         {/* Flashcard */}

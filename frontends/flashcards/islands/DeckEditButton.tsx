@@ -1,5 +1,9 @@
 import { useSignal } from "@preact/signals";
-import { useRef } from "preact/hooks";
+import Modal from "../components/ui/Modal.tsx";
+import Alert from "../components/ui/Alert.tsx";
+import FormInput from "../components/forms/FormInput.tsx";
+import FormSelect from "../components/forms/FormSelect.tsx";
+import FormTextarea from "../components/forms/FormTextarea.tsx";
 
 interface Deck {
   id: string;
@@ -11,7 +15,7 @@ interface Deck {
 }
 
 export default function DeckEditButton({ deck }: { deck: Deck }) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const isOpen = useSignal(false);
   const loading = useSignal(false);
   const error = useSignal("");
 
@@ -30,14 +34,14 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
     subcategory.value = deck.subcategory || "";
     difficulty.value = deck.difficultyLevel;
     error.value = "";
-    dialogRef.current?.showModal();
+    isOpen.value = true;
   };
 
   const closeModal = () => {
-    dialogRef.current?.close();
+    isOpen.value = false;
   };
 
-  const handleUpdate = async (e: Event) => {
+  const handleSubmit = async (e: Event) => {
     e.preventDefault();
     loading.value = true;
     error.value = "";
@@ -63,7 +67,7 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
       closeModal();
       globalThis.location.reload();
     } catch (err: unknown) {
-      error.value = `Failed to update deck: ${err instanceof Error ? err.message : String(err)}`;
+      error.value = err instanceof Error ? err.message : String(err);
     } finally {
       loading.value = false;
     }
@@ -74,115 +78,98 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
       <button
         type="button"
         onClick={openModal}
-        class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50"
-        title="Edit Deck"
+        class="min-h-[44px] px-4 py-2 bg-[#0a0a0a] border border-[#00d9ff] text-[#00d9ff] hover:bg-[#00d9ff]/10 transition-colors flex items-center gap-2"
+        style="border-radius: 0;"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
+        <span class="font-mono text-sm">Edit Deck</span>
       </button>
 
-      <dialog ref={dialogRef} class="modal text-left">
-        <div class="modal-box w-11/12 max-w-xl">
-          <h3 class="font-bold text-lg mb-4">Edit Deck</h3>
-          
-          {error.value && (
-            <div class="alert alert-error mb-4 text-sm py-2">
-              <span>{error.value}</span>
-            </div>
-          )}
+      <Modal
+        open={isOpen.value}
+        onClose={closeModal}
+        title="Edit Deck"
+        subtitle="Update deck information and settings"
+        variant="accent"
+        maxWidth="large"
+        preventClose={loading.value}
+        footer={
+          <>
+            <button
+              type="button"
+              class="min-h-[44px] px-6 py-2 bg-[#1a1a1a] border border-[#444] text-[#ddd] hover:bg-[#222] transition-colors"
+              style="border-radius: 0;"
+              onClick={closeModal}
+              disabled={loading.value}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="edit-deck-form"
+              class="min-h-[44px] px-6 py-2 bg-[#00d9ff] border border-[#00d9ff] text-[#0a0a0a] hover:bg-[#00b8dd] transition-colors font-semibold"
+              style="border-radius: 0;"
+              disabled={loading.value}
+            >
+              {loading.value ? "Saving..." : "Save Changes"}
+            </button>
+          </>
+        }
+      >
+        {error.value && (
+          <Alert variant="error" onDismiss={() => error.value = ""} class="mb-4">
+            {error.value}
+          </Alert>
+        )}
 
-          <form onSubmit={handleUpdate} class="space-y-4">
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Name</span>
-              </label>
-              <input
-                type="text"
-                value={name.value}
-                onInput={(e) => name.value = (e.target as HTMLInputElement).value}
-                class="input input-bordered w-full"
-                required
-              />
-            </div>
+        <form id="edit-deck-form" onSubmit={handleSubmit} class="space-y-4">
+          <FormInput
+            label="Name"
+            value={name.value}
+            onChange={(e) => name.value = (e.target as HTMLInputElement).value}
+            required
+            placeholder="e.g., Spanish Vocabulary"
+          />
 
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Description</span>
-              </label>
-              <textarea
-                value={description.value}
-                onInput={(e) => description.value = (e.target as HTMLTextAreaElement).value}
-                class="textarea textarea-bordered w-full"
-                rows={3}
-              />
-            </div>
+          <FormTextarea
+            label="Description"
+            value={description.value}
+            onChange={(e) => description.value = (e.target as HTMLTextAreaElement).value}
+            rows={3}
+            placeholder="Brief description of this deck..."
+          />
 
-            <div class="grid grid-cols-2 gap-4">
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Category</span>
-                </label>
-                <input
-                  type="text"
-                  value={category.value}
-                  onInput={(e) => category.value = (e.target as HTMLInputElement).value}
-                  class="input input-bordered w-full"
-                  required
-                />
-              </div>
+          <div class="grid grid-cols-2 gap-4">
+            <FormInput
+              label="Category"
+              value={category.value}
+              onChange={(e) => category.value = (e.target as HTMLInputElement).value}
+              required
+              placeholder="e.g., Languages"
+            />
 
-              <div class="form-control">
-                <label class="label">
-                  <span class="label-text">Subcategory</span>
-                </label>
-                <input
-                  type="text"
-                  value={subcategory.value}
-                  onInput={(e) => subcategory.value = (e.target as HTMLInputElement).value}
-                  class="input input-bordered w-full"
-                />
-              </div>
-            </div>
+            <FormInput
+              label="Subcategory"
+              value={subcategory.value}
+              onChange={(e) => subcategory.value = (e.target as HTMLInputElement).value}
+              placeholder="e.g., Spanish"
+            />
+          </div>
 
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Difficulty</span>
-              </label>
-              <select
-                value={difficulty.value}
-                onChange={(e) => difficulty.value = (e.target as HTMLSelectElement).value}
-                class="select select-bordered w-full"
-              >
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-                <option value="Expert">Expert</option>
-              </select>
-            </div>
-
-            <div class="modal-action">
-              <button 
-                type="button" 
-                class="btn" 
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                disabled={loading.value}
-              >
-                {loading.value ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-          <button type="button" onClick={closeModal}>close</button>
+          <FormSelect
+            label="Difficulty"
+            value={difficulty.value}
+            onChange={(e) => difficulty.value = (e.target as HTMLSelectElement).value}
+          >
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+          </FormSelect>
         </form>
-      </dialog>
+      </Modal>
     </>
   );
 }
