@@ -21,6 +21,18 @@ public interface IFinanceApplicationService
     Task<FSharpResult<Transaction, DomainError>> VoidTransactionAsync(
         string transactionKey,
         CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<Reconciliation, DomainError>> CreateReconciliationAsync(
+        CreateReconciliationCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<Reconciliation, DomainError>> MatchTransactionsAsync(
+        MatchTransactionsCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<Reconciliation, DomainError>> CompleteReconciliationAsync(
+        CompleteReconciliationCommand command,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed record CreateTransferCommand(
@@ -58,3 +70,16 @@ public sealed record UpdateTransactionCommand(
     string? Status,
     string? CheckNumber,
     List<string>? Tags);
+
+public sealed record CreateReconciliationCommand(
+    string AccountKey,
+    global::System.DateTime StatementDate,
+    decimal StatementBalance);
+
+public sealed record MatchTransactionsCommand(
+    string ReconciliationKey,
+    List<string> TransactionKeys);
+
+public sealed record CompleteReconciliationCommand(
+    string ReconciliationKey,
+    string? Notes);
