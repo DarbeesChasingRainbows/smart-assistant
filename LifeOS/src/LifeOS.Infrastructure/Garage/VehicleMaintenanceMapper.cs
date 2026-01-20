@@ -78,7 +78,7 @@ public static class VehicleMaintenanceMapper
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when record is null.</exception>
     public static VehicleMaintenanceRecordDocument ToDocument(VehicleMaintenanceRecord record) =>
-        ToDocument(record, idempotencyKey: null);
+        ToDocument(record, idempotencyKey: null!);
 
     /// <summary>
     /// Maps an ArangoDB VehicleMaintenanceRecordDocument to a VehicleMaintenanceRecord domain entity.

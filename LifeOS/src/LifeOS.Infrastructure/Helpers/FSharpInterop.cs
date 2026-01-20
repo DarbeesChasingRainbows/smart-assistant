@@ -43,7 +43,7 @@ public static class FSharpInterop
 
     /// Convert C# void to F# unit
     public static Microsoft.FSharp.Core.Unit ToUnit() =>
-        default(Microsoft.FSharp.Core.Unit);
+        null!;
 
     /// Convert C# Kingdom enum to F# Kingdom discriminated union
     /// Note: This method expects the C# Kingdom enum to have the same values as the F# DU

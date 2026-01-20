@@ -1,0 +1,95 @@
+Build started 1/19/2026 3:37:01 PM.
+     1>Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" on node 1 (default targets).
+     1>ValidateSolutionConfiguration:
+         Building solution configuration "Debug|Any CPU".
+     1>Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" (1) is building "D:\repos\smart-assistant\LifeOS\src\LifeOS.RulesEngine.FSharp\LifeOS.RulesEngine.FSharp.fsproj" (2) on node 5 (default targets).
+     2>GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       CoreGenerateAssemblyInfo:
+       Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+       _GenerateSourceLinkFile:
+         Source Link file 'obj\Debug\net10.0\LifeOS.RulesEngine.FSharp.sourcelink.json' is up-to-date.
+       CoreCompile:
+       Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+       GenerateBuildDependencyFile:
+       Skipping target "GenerateBuildDependencyFile" because all output files are up-to-date with respect to the input files.
+       CopyFilesToOutputDirectory:
+         LifeOS.RulesEngine.FSharp -> D:\repos\smart-assistant\LifeOS\src\LifeOS.RulesEngine.FSharp\bin\Debug\net10.0\LifeOS.RulesEngine.FSharp.dll
+     2>Done Building Project "D:\repos\smart-assistant\LifeOS\src\LifeOS.RulesEngine.FSharp\LifeOS.RulesEngine.FSharp.fsproj" (default targets).
+     1>Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" (1) is building "D:\repos\smart-assistant\LifeOS\src\LifeOS.Domain\LifeOS.Domain.fsproj" (6) on node 1 (default targets).
+     6>GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       CoreGenerateAssemblyInfo:
+       Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+       _GenerateSourceLinkFile:
+         Source Link file 'obj\Debug\net10.0\LifeOS.Domain.sourcelink.json' is up-to-date.
+       CoreCompile:
+       Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+       GenerateBuildDependencyFile:
+       Skipping target "GenerateBuildDependencyFile" because all output files are up-to-date with respect to the input files.
+       CopyFilesToOutputDirectory:
+         LifeOS.Domain -> D:\repos\smart-assistant\LifeOS\src\LifeOS.Domain\bin\Debug\net10.0\LifeOS.Domain.dll
+     6>Done Building Project "D:\repos\smart-assistant\LifeOS\src\LifeOS.Domain\LifeOS.Domain.fsproj" (default targets).
+     1>Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" (1) is building "D:\repos\smart-assistant\LifeOS\src\LifeOS.Application\LifeOS.Application.csproj" (3) on node 4 (default targets).
+     3>GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       CoreGenerateAssemblyInfo:
+       Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+       _GenerateSourceLinkFile:
+         Source Link file 'obj\Debug\net10.0\LifeOS.Application.sourcelink.json' is up-to-date.
+       CoreCompile:
+       Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+       GenerateBuildDependencyFile:
+       Skipping target "GenerateBuildDependencyFile" because all output files are up-to-date with respect to the input files.
+       CopyFilesToOutputDirectory:
+         LifeOS.Application -> D:\repos\smart-assistant\LifeOS\src\LifeOS.Application\bin\Debug\net10.0\LifeOS.Application.dll
+     3>Done Building Project "D:\repos\smart-assistant\LifeOS\src\LifeOS.Application\LifeOS.Application.csproj" (default targets).
+     1>Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" (1) is building "D:\repos\smart-assistant\LifeOS\src\LifeOS.Infrastructure\LifeOS.Infrastructure.csproj" (4) on node 2 (default targets).
+     4>GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       CoreGenerateAssemblyInfo:
+       Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+       _GenerateSourceLinkFile:
+         Source Link file 'obj\Debug\net10.0\LifeOS.Infrastructure.sourcelink.json' is up-to-date.
+       CoreCompile:
+       Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+       GenerateBuildDependencyFile:
+       Skipping target "GenerateBuildDependencyFile" because all output files are up-to-date with respect to the input files.
+       CopyFilesToOutputDirectory:
+         LifeOS.Infrastructure -> D:\repos\smart-assistant\LifeOS\src\LifeOS.Infrastructure\bin\Debug\net10.0\LifeOS.Infrastructure.dll
+     4>Done Building Project "D:\repos\smart-assistant\LifeOS\src\LifeOS.Infrastructure\LifeOS.Infrastructure.csproj" (default targets).
+     1>Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" (1) is building "D:\repos\smart-assistant\LifeOS\src\LifeOS.API\LifeOS.API.csproj" (5) on node 3 (default targets).
+     5>GenerateTargetFrameworkMonikerAttribute:
+       Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+       CoreGenerateAssemblyInfo:
+       Skipping target "CoreGenerateAssemblyInfo" because all output files are up-to-date with respect to the input files.
+       _DiscoverMvcApplicationParts:
+       Skipping target "_DiscoverMvcApplicationParts" because all output files are up-to-date with respect to the input files.
+       _GenerateSourceLinkFile:
+         Source Link file 'obj\Debug\net10.0\LifeOS.API.sourcelink.json' is up-to-date.
+       CoreCompile:
+       Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+       _CreateAppHost:
+       Skipping target "_CreateAppHost" because all output files are up-to-date with respect to the input files.
+       _ProcessScopedCssFiles:
+       Skipping target "_ProcessScopedCssFiles" because it has no outputs.
+       _ProcessScopedCssFiles:
+       Skipping target "_ProcessScopedCssFiles" because it has no outputs.
+       _BuildCopyStaticWebAssetsPreserveNewest:
+       Skipping target "_BuildCopyStaticWebAssetsPreserveNewest" because it has no outputs.
+       _CopyOutOfDateSourceItemsToOutputDirectory:
+       Skipping target "_CopyOutOfDateSourceItemsToOutputDirectory" because all output files are up-to-date with respect to the input files.
+       GenerateBuildDependencyFile:
+       Skipping target "GenerateBuildDependencyFile" because all output files are up-to-date with respect to the input files.
+       GenerateBuildRuntimeConfigurationFiles:
+       Skipping target "GenerateBuildRuntimeConfigurationFiles" because all output files are up-to-date with respect to the input files.
+       CopyFilesToOutputDirectory:
+         LifeOS.API -> D:\repos\smart-assistant\LifeOS\src\LifeOS.API\bin\Debug\net10.0\LifeOS.API.dll
+     5>Done Building Project "D:\repos\smart-assistant\LifeOS\src\LifeOS.API\LifeOS.API.csproj" (default targets).
+     1>Done Building Project "D:\repos\smart-assistant\LifeOS\LifeOS.sln" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.98

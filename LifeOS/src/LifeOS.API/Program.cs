@@ -1,6 +1,7 @@
 using LifeOS.API.Endpoints;
 using LifeOS.Application;
 using LifeOS.Infrastructure;
+using LifeOS.Infrastructure.Persistence.ArangoDB;
 using LifeOS.RulesEngine.Adapters;
 using MediatR;
 
@@ -91,4 +92,62 @@ app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = Dat
     .WithName("HealthCheck")
     .WithTags("System");
 
+// Initialize database collections
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("Starting database initialization...");
+InitializeDatabaseAsync(app).GetAwaiter().GetResult();
+logger.LogInformation("Database initialization completed");
+
 app.Run();
+
+async Task InitializeDatabaseAsync(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var arangoContext = scope.ServiceProvider.GetRequiredService<ArangoDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
+    try
+    {
+        var collectionApi = arangoContext.Client.Collection;
+        
+        // Budget domain collections to create
+        var budgetCollections = new[]
+        {
+            ArangoDbContext.Collections.BudgetPayPeriods,
+            ArangoDbContext.Collections.BudgetCategoryGroups,
+            ArangoDbContext.Collections.BudgetCategories,
+            ArangoDbContext.Collections.BudgetAssignments,
+            ArangoDbContext.Collections.BudgetCategoryCarryovers,
+            ArangoDbContext.Collections.BudgetIncomeEntries,
+            ArangoDbContext.Collections.BudgetAccounts,
+            ArangoDbContext.Collections.BudgetBills,
+            ArangoDbContext.Collections.BudgetGoals,
+            ArangoDbContext.Collections.BudgetTransactions
+        };
+
+        foreach (var collectionName in budgetCollections)
+        {
+            try
+            {
+                await collectionApi.GetCollectionAsync(collectionName);
+                logger.LogDebug("Collection '{CollectionName}' exists", collectionName);
+            }
+            catch (ArangoDBNetStandard.ApiErrorException)
+            {
+                logger.LogInformation("Creating collection '{CollectionName}'", collectionName);
+                await collectionApi.PostCollectionAsync(new ArangoDBNetStandard.CollectionApi.Models.PostCollectionBody
+                {
+                    Name = collectionName,
+                    Type = ArangoDBNetStandard.CollectionApi.Models.CollectionType.Document
+                });
+            }
+        }
+        
+        logger.LogInformation("Budget collections initialization completed");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Failed to initialize database collections");
+        throw;
+    }
+}

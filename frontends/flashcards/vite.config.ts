@@ -23,26 +23,18 @@ export default defineConfig({
   },
   build: {
     // Build optimizations
-    minify: "terser",
     sourcemap: false, // Disable sourcemaps for faster builds
     rollupOptions: {
       output: {
         manualChunks: {
           // Split vendor code for better caching
           vendor: ["preact", "@preact/signals"],
-          fresh: ["@fresh/core"],
         },
-      },
-    },
-    // Enable parallel processing
-    terserOptions: {
-      compress: {
-        passes: 2, // Multiple passes for better compression
       },
     },
   },
   // Optimize dependency pre-bundling
   optimizeDeps: {
-    include: ["preact", "@preact/signals", "@fresh/core"],
+    include: ["preact", "@preact/signals"],
   },
 });
