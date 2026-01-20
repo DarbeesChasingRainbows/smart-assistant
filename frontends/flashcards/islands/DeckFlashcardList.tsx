@@ -1,6 +1,7 @@
 import { useSignal } from "@preact/signals";
-import { useRef } from "preact/hooks";
 import MarkdownEditor from "./MarkdownEditor.tsx";
+import Modal from "../components/ui/Modal.tsx";
+import Alert from "../components/ui/Alert.tsx";
 
 interface Flashcard {
   id: string;
@@ -23,9 +24,9 @@ export default function DeckFlashcardList(
   const error = useSignal("");
   const success = useSignal("");
 
-  // Dialog refs
-  const editDialogRef = useRef<HTMLDialogElement>(null);
-  const deleteDialogRef = useRef<HTMLDialogElement>(null);
+  // Modal state signals
+  const editModalOpen = useSignal(false);
+  const deleteModalOpen = useSignal(false);
 
   // Form signals
   const editingId = useSignal<string | null>(null);
@@ -46,11 +47,11 @@ export default function DeckFlashcardList(
       editQuestion.value = "";
       editAnswer.value = "";
     }
-    editDialogRef.current?.showModal();
+    editModalOpen.value = true;
   };
 
   const closeEditModal = () => {
-    editDialogRef.current?.close();
+    editModalOpen.value = false;
     editingId.value = null;
     editQuestion.value = "";
     editAnswer.value = "";
@@ -116,11 +117,11 @@ export default function DeckFlashcardList(
 
   const openDeleteModal = (id: string) => {
     deleteId.value = id;
-    deleteDialogRef.current?.showModal();
+    deleteModalOpen.value = true;
   };
 
   const closeDeleteModal = () => {
-    deleteDialogRef.current?.close();
+    deleteModalOpen.value = false;
     deleteId.value = null;
   };
 
@@ -177,15 +178,21 @@ export default function DeckFlashcardList(
       </div>
 
       {error.value && (
-        <div class="alert alert-error text-sm py-2">
-          <span>{error.value}</span>
-        </div>
+        <Alert
+          variant="error"
+          onDismiss={() => error.value = ""}
+        >
+          {error.value}
+        </Alert>
       )}
 
       {success.value && (
-        <div class="alert alert-success text-sm py-2">
-          <span>{success.value}</span>
-        </div>
+        <Alert
+          variant="success"
+          onDismiss={() => success.value = ""}
+        >
+          {success.value}
+        </Alert>
       )}
 
       <div class="grid gap-4">
@@ -212,8 +219,8 @@ export default function DeckFlashcardList(
                   <button
                     type="button"
                     onClick={() => openEditModal(card)}
-                    class="btn btn-ghost btn-xs"
-                    title="Edit"
+                    class="min-h-[44px] px-3 py-2 flex items-center gap-2 bg-[#1a1a1a] border border-[#333] hover:border-[#00d9ff] transition-colors text-sm"
+                    style="border-radius: 0;"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -229,12 +236,13 @@ export default function DeckFlashcardList(
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                       />
                     </svg>
+                    <span>Edit</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => openDeleteModal(card.id)}
-                    class="btn btn-ghost btn-xs text-error"
-                    title="Delete"
+                    class="min-h-[44px] px-3 py-2 flex items-center gap-2 bg-[#1a1a1a] border border-[#ff4444] hover:bg-[#ff4444]/10 transition-colors text-sm text-[#ff4444]"
+                    style="border-radius: 0;"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -250,6 +258,7 @@ export default function DeckFlashcardList(
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
                     </svg>
+                    <span>Delete</span>
                   </button>
                 </div>
               </div>
@@ -264,82 +273,104 @@ export default function DeckFlashcardList(
         )}
       </div>
 
-      {/* Edit Modal */}
-      <dialog ref={editDialogRef} class="modal">
-        <div class="modal-box">
-          <h3 class="font-bold text-lg mb-4">
-            {editingId.value ? "Edit Card" : "New Card"}
-          </h3>
-          <form onSubmit={handleSave} class="space-y-4">
-            <div class="form-control">
-              <MarkdownEditor
-                label="Question"
-                value={editQuestion.value}
-                onInput={(val) => editQuestion.value = val}
-                placeholder="Enter question..."
-                required
-                rows={5}
-                entityId={editingId.value || deckId}
-                entityType={editingId.value ? "flashcard" : "deck"}
-              />
-            </div>
-            <div class="form-control">
-              <MarkdownEditor
-                label="Answer"
-                value={editAnswer.value}
-                onInput={(val) => editAnswer.value = val}
-                placeholder="Enter answer..."
-                required
-                rows={5}
-                entityId={editingId.value || deckId}
-                entityType={editingId.value ? "flashcard" : "deck"}
-              />
-            </div>
-            <div class="modal-action">
-              <button type="button" class="btn" onClick={closeEditModal}>
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                disabled={loading.value}
-              >
-                {loading.value ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-          <button type="button" onClick={closeEditModal}>close</button>
-        </form>
-      </dialog>
-
-      {/* Delete Confirmation Modal */}
-      <dialog ref={deleteDialogRef} class="modal">
-        <div class="modal-box">
-          <h3 class="font-bold text-lg text-error">Delete Card?</h3>
-          <p class="py-4">
-            Are you sure you want to delete this card? This action cannot be
-            undone.
-          </p>
-          <div class="modal-action">
-            <button type="button" class="btn" onClick={closeDeleteModal}>
+      {/* Edit/Add Modal */}
+      <Modal
+        open={editModalOpen.value}
+        onClose={closeEditModal}
+        title={editingId.value ? "Edit Card" : "New Card"}
+        subtitle={editingId.value
+          ? "Update the flashcard question and answer"
+          : "Add a new flashcard to your deck"}
+        variant="accent"
+        maxWidth="large"
+        preventClose={loading.value}
+        footer={
+          <>
+            <button
+              type="button"
+              class="min-h-[44px] px-6 py-2 bg-[#1a1a1a] border-2 border-[#333] hover:border-[#666] text-[#ddd] transition-colors font-mono"
+              onClick={closeEditModal}
+              disabled={loading.value}
+              style="border-radius: 0;"
+            >
               Cancel
             </button>
             <button
               type="button"
-              class="btn btn-error"
+              class="min-h-[44px] px-6 py-2 bg-[#00d9ff]/10 border-2 border-[#00d9ff] text-[#00d9ff] hover:bg-[#00d9ff]/20 transition-colors font-mono"
+              onClick={handleSave}
+              disabled={loading.value}
+              style="border-radius: 0;"
+            >
+              {loading.value ? "Saving..." : "Save"}
+            </button>
+          </>
+        }
+      >
+        <form onSubmit={handleSave} class="space-y-4">
+          <div class="form-control">
+            <MarkdownEditor
+              label="Question"
+              value={editQuestion.value}
+              onInput={(val) => editQuestion.value = val}
+              placeholder="Enter question..."
+              required
+              rows={5}
+              entityId={editingId.value || deckId}
+              entityType={editingId.value ? "flashcard" : "deck"}
+            />
+          </div>
+          <div class="form-control">
+            <MarkdownEditor
+              label="Answer"
+              value={editAnswer.value}
+              onInput={(val) => editAnswer.value = val}
+              placeholder="Enter answer..."
+              required
+              rows={5}
+              entityId={editingId.value || deckId}
+              entityType={editingId.value ? "flashcard" : "deck"}
+            />
+          </div>
+        </form>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={deleteModalOpen.value}
+        onClose={closeDeleteModal}
+        title="Delete Card?"
+        variant="error"
+        maxWidth="small"
+        preventClose={loading.value}
+        footer={
+          <>
+            <button
+              type="button"
+              class="min-h-[44px] px-6 py-2 bg-[#1a1a1a] border-2 border-[#333] hover:border-[#666] text-[#ddd] transition-colors font-mono"
+              onClick={closeDeleteModal}
+              disabled={loading.value}
+              style="border-radius: 0;"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="min-h-[44px] px-6 py-2 bg-[#ff4444]/10 border-2 border-[#ff4444] text-[#ff4444] hover:bg-[#ff4444]/20 transition-colors font-mono"
               onClick={handleDelete}
               disabled={loading.value}
+              style="border-radius: 0;"
             >
               {loading.value ? "Deleting..." : "Delete"}
             </button>
-          </div>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-          <button type="button" onClick={closeDeleteModal}>close</button>
-        </form>
-      </dialog>
+          </>
+        }
+      >
+        <p class="text-[#ddd]">
+          Are you sure you want to delete this card? This action cannot be
+          undone.
+        </p>
+      </Modal>
     </div>
   );
 }

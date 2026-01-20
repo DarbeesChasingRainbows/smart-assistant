@@ -25,5 +25,5 @@ public sealed class FinanceUnitOfWork(
     public IReconciliationRepository Reconciliations { get; } = reconciliations;
     public IPayPeriodConfigRepository PayPeriodConfig { get; } = payPeriodConfig;
 
-    public Task<Unit> CommitAsync() => Task.FromResult(default(Unit));
+    public Task<Unit> CommitAsync() => Task.FromResult<Unit>(null!);
 }

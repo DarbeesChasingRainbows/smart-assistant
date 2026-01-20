@@ -13,12 +13,12 @@ namespace LifeOS.API;
 /// <summary>
 /// Initializes the ArangoDB database with required collections
 /// </summary>
-public class DatabaseInitializer : IHostedService
+public class DatabaseInitializer2 : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<DatabaseInitializer> _logger;
+    private readonly ILogger<DatabaseInitializer2> _logger;
 
-    public DatabaseInitializer(IServiceProvider serviceProvider, ILogger<DatabaseInitializer> logger)
+    public DatabaseInitializer2(IServiceProvider serviceProvider, ILogger<DatabaseInitializer2> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;

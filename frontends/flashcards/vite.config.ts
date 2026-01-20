@@ -26,7 +26,6 @@ export default defineConfig({
   },
   build: {
     // Build optimizations
-    minify: "terser",
     sourcemap: false, // Disable sourcemaps for faster builds
     rollupOptions: {
       external: ["@fresh/core"], // Externalize @fresh/core
@@ -35,12 +34,6 @@ export default defineConfig({
           // Split vendor code for better caching
           vendor: ["preact", "@preact/signals"],
         },
-      },
-    },
-    // Enable parallel processing
-    terserOptions: {
-      compress: {
-        passes: 2, // Multiple passes for better compression
       },
     },
   },

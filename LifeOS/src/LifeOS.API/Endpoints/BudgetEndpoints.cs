@@ -1499,7 +1499,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
         var firstResult = assignedCursor.Result.FirstOrDefault();
         decimal assigned = 0m;
-        var totalAssigned = firstResult != null && decimal.TryParse(firstResult.ToString(), out assigned) ? assigned : 0m;
+        var totalAssigned = decimal.TryParse(firstResult?.ToString() ?? "0", out assigned) ? assigned : 0m;
 
         return new PayPeriodBudgetSummaryDto
         {

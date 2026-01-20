@@ -1,9 +1,9 @@
 /** @jsxImportSource preact */
-import { useSignal } from "@preact/signals";
+import { useSignal, useComputed } from "@preact/signals";
 import { marked } from "marked";
 import type { Deck, Flashcard } from "../utils/api.ts";
 import type { InterleavedQuizResponse } from "../utils/api.ts";
-import ErrorAlert from "../components/ErrorAlert.tsx";
+import Alert from "../components/ui/Alert.tsx";
 import LoadingSpinner from "../components/LoadingSpinner.tsx";
 
 interface InterleavedQuizProps {
@@ -12,33 +12,54 @@ interface InterleavedQuizProps {
 
 type ReviewRating = "Again" | "Hard" | "Good" | "Easy";
 
-const wait = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 const flipAnimationMs = 700;
 
 /**
  * Interleaved Quiz component that allows studying cards from multiple decks.
  * Cards are shuffled across decks to improve learning through interleaving.
  */
-export default function InterleavedQuiz(
-  { availableDecks }: InterleavedQuizProps,
-) {
+export default function InterleavedQuiz({ availableDecks }: InterleavedQuizProps) {
   // Selection state
   const selectedDeckIds = useSignal<Set<string>>(new Set());
   const cardsPerDeck = useSignal(5);
   const difficulty = useSignal("Medium");
-
+  
   // Quiz state
   const session = useSignal<InterleavedQuizResponse | null>(null);
   const currentCard = useSignal<Flashcard | null>(null);
   const currentIndex = useSignal(0);
   const isFlipped = useSignal(false);
-
+  
   // UI state
   const loading = useSignal(false);
   const loadingElapsed = useSignal(0);
   const error = useSignal("");
   const quizStarted = useSignal(false);
+
+  // Memoized deck progress calculation - avoids O(n²) computation on every render
+  const deckProgress = useComputed(() => {
+    if (!session.value) return new Map();
+
+    const progress = new Map<string, { completed: number; total: number; name: string }>();
+
+    Object.entries(session.value.deckInfos).forEach(([id, info]) => {
+      const cardsFromDeck = session.value!.cards.filter(c => c.deckId === id);
+      // More efficient: slice completed cards, then filter by deck
+      const completedFromDeck = session.value!.cards
+        .slice(0, currentIndex.value)
+        .filter(c => c.deckId === id)
+        .length;
+
+      progress.set(id, {
+        completed: completedFromDeck,
+        total: cardsFromDeck.length,
+        name: info.name,
+      });
+    });
+
+    return progress;
+  });
 
   const toggleDeck = (deckId: string) => {
     const newSet = new Set(selectedDeckIds.value);
@@ -51,7 +72,7 @@ export default function InterleavedQuiz(
   };
 
   const selectAll = () => {
-    selectedDeckIds.value = new Set(availableDecks.map((d) => d.id));
+    selectedDeckIds.value = new Set(availableDecks.map(d => d.id));
   };
 
   const clearAll = () => {
@@ -125,11 +146,8 @@ export default function InterleavedQuiz(
 
   const processContent = (content: string) => {
     let html = marked.parse(content) as string;
-    html = html.replace(/Spell the word:\s*[^\<]+(?=\<|$)/, "Spell the word:");
-    return html.replace(
-      /src=(["'])\/uploads\//g,
-      "src=$1http://localhost:5137/uploads/",
-    );
+    html = html.replace(/Spell the word:\s*[^\<]+(?=\<|$)/, 'Spell the word:');
+    return html.replace(/src=(["'])\/uploads\//g, 'src=$1http://localhost:5137/uploads/');
   };
 
   const submitRating = async (rating: ReviewRating) => {
@@ -165,9 +183,7 @@ export default function InterleavedQuiz(
   };
 
   const getCurrentDeckInfo = () => {
-    if (!session.value || currentIndex.value >= session.value.cards.length) {
-      return null;
-    }
+    if (!session.value || currentIndex.value >= session.value.cards.length) return null;
     const card = session.value.cards[currentIndex.value];
     return {
       name: card.deckName,
@@ -180,144 +196,126 @@ export default function InterleavedQuiz(
     return (
       <div class="max-w-4xl mx-auto p-6 space-y-6">
         <div class="text-center mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">
-            Interleaved Study
-          </h1>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Interleaved Study</h1>
           <p class="text-gray-600">
-            Select multiple decks to study together. Cards will be shuffled
-            across subjects to improve long-term retention through interleaving.
+            Select multiple decks to study together. Cards will be shuffled across subjects
+            to improve long-term retention through interleaving.
           </p>
         </div>
 
         {error.value && (
-          <ErrorAlert
-            message={error.value}
-            onRetry={() => error.value = ""}
-          />
+          <Alert variant="error" onDismiss={() => error.value = ""}>
+            {error.value}
+          </Alert>
         )}
 
-        {loading.value
-          ? (
-            <LoadingSpinner
-              message="Creating interleaved quiz..."
-              showTimeoutWarning
-              elapsedSeconds={loadingElapsed.value}
-            />
-          )
-          : (
-            <>
-              {/* Deck Selection */}
-              <div class="card bg-white shadow-lg">
-                <div class="card-body">
-                  <div class="flex justify-between items-center mb-4">
-                    <h2 class="card-title">Select Decks</h2>
-                    <div class="space-x-2">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-ghost"
-                        onClick={selectAll}
-                      >
-                        Select All
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-ghost"
-                        onClick={clearAll}
-                      >
-                        Clear
-                      </button>
-                    </div>
+        {loading.value ? (
+          <LoadingSpinner 
+            message="Creating interleaved quiz..." 
+            showTimeoutWarning 
+            elapsedSeconds={loadingElapsed.value} 
+          />
+        ) : (
+          <>
+            {/* Deck Selection */}
+            <div class="card bg-white shadow-lg">
+              <div class="card-body">
+                <div class="flex justify-between items-center mb-4">
+                  <h2 class="card-title">Select Decks</h2>
+                  <div class="space-x-2">
+                    <button type="button" class="btn btn-sm btn-ghost" onClick={selectAll}>
+                      Select All
+                    </button>
+                    <button type="button" class="btn btn-sm btn-ghost" onClick={clearAll}>
+                      Clear
+                    </button>
                   </div>
-
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {availableDecks.map((deck) => (
-                      <label
-                        key={deck.id}
-                        class={`cursor-pointer p-4 rounded-lg border-2 transition-all ${
-                          selectedDeckIds.value.has(deck.id)
-                            ? "border-primary bg-primary/10"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          class="checkbox checkbox-primary mr-3"
-                          checked={selectedDeckIds.value.has(deck.id)}
-                          onChange={() => toggleDeck(deck.id)}
-                        />
-                        <span class="font-medium">{deck.name}</span>
-                        <div class="text-sm text-gray-500 mt-1">
-                          {deck.category} • {deck.cardCount} cards
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-
-                  {availableDecks.length === 0 && (
-                    <div class="text-center text-gray-500 py-8">
-                      No decks available. Create some decks first!
-                    </div>
-                  )}
                 </div>
-              </div>
 
-              {/* Quiz Options */}
-              <div class="card bg-white shadow-lg">
-                <div class="card-body">
-                  <h2 class="card-title mb-4">Quiz Options</h2>
-
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-control">
-                      <label class="label">
-                        <span class="label-text">Cards per deck</span>
-                      </label>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {availableDecks.map((deck) => (
+                    <label
+                      key={deck.id}
+                      class={`cursor-pointer p-4 rounded-lg border-2 transition-all ${
+                        selectedDeckIds.value.has(deck.id)
+                          ? "border-primary bg-primary/10"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
                       <input
-                        type="number"
-                        min="1"
-                        max="20"
-                        value={cardsPerDeck.value}
-                        onInput={(e) =>
-                          cardsPerDeck.value =
-                            parseInt((e.target as HTMLInputElement).value) || 5}
-                        class="input input-bordered"
+                        type="checkbox"
+                        class="checkbox checkbox-primary mr-3"
+                        checked={selectedDeckIds.value.has(deck.id)}
+                        onChange={() => toggleDeck(deck.id)}
                       />
-                    </div>
+                      <span class="font-medium">{deck.name}</span>
+                      <div class="text-sm text-gray-500 mt-1">
+                        {deck.category} • {deck.cardCount} cards
+                      </div>
+                    </label>
+                  ))}
+                </div>
 
-                    <div class="form-control">
-                      <label class="label">
-                        <span class="label-text">Difficulty</span>
-                      </label>
-                      <select
-                        class="select select-bordered"
-                        value={difficulty.value}
-                        onChange={(e) =>
-                          difficulty.value =
-                            (e.target as HTMLSelectElement).value}
-                      >
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
-                        <option value="Expert">Expert</option>
-                      </select>
-                    </div>
+                {availableDecks.length === 0 && (
+                  <div class="text-center text-gray-500 py-8">
+                    No decks available. Create some decks first!
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quiz Options */}
+            <div class="card bg-white shadow-lg">
+              <div class="card-body">
+                <h2 class="card-title mb-4">Quiz Options</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="form-control">
+                    <label class="label">
+                      <span class="label-text">Cards per deck</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={cardsPerDeck.value}
+                      onInput={(e) => cardsPerDeck.value = parseInt((e.target as HTMLInputElement).value) || 5}
+                      class="input input-bordered"
+                    />
+                  </div>
+
+                  <div class="form-control">
+                    <label class="label">
+                      <span class="label-text">Difficulty</span>
+                    </label>
+                    <select
+                      class="select select-bordered"
+                      value={difficulty.value}
+                      onChange={(e) => difficulty.value = (e.target as HTMLSelectElement).value}
+                    >
+                      <option value="Easy">Easy</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Hard">Hard</option>
+                      <option value="Expert">Expert</option>
+                    </select>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Start Button */}
-              <div class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-primary btn-lg"
-                  onClick={startQuiz}
-                  disabled={selectedDeckIds.value.size === 0}
-                >
-                  Start Interleaved Quiz ({selectedDeckIds.value.size}{" "}
-                  decks selected)
-                </button>
-              </div>
-            </>
-          )}
+            {/* Start Button */}
+            <div class="text-center">
+              <button
+                type="button"
+                class="btn btn-primary btn-lg"
+                onClick={startQuiz}
+                disabled={selectedDeckIds.value.size === 0}
+              >
+                Start Interleaved Quiz ({selectedDeckIds.value.size} decks selected)
+              </button>
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -328,14 +326,10 @@ export default function InterleavedQuiz(
   if (!currentCard.value || !session.value) {
     return (
       <div class="text-center p-8">
-        <div class="alert alert-success mb-6">
-          <span>Quiz completed! 🎉</span>
-        </div>
-        <button
-          type="button"
-          class="btn btn-primary"
-          onClick={() => quizStarted.value = false}
-        >
+        <Alert variant="success" class="mb-6">
+          Quiz completed! Great work on your study session.
+        </Alert>
+        <button type="button" class="btn btn-primary min-h-[44px]" onClick={() => quizStarted.value = false}>
           Start New Quiz
         </button>
       </div>
@@ -365,37 +359,24 @@ export default function InterleavedQuiz(
           <div class="w-full bg-gray-200 rounded-full h-2">
             <div
               class="bg-primary h-2 rounded-full transition-all"
-              style={`width: ${
-                ((currentIndex.value + 1) / session.value.cards.length) * 100
-              }%`}
-            >
-            </div>
+              style={`width: ${((currentIndex.value + 1) / session.value.cards.length) * 100}%`}
+            ></div>
           </div>
-
+          
           {/* Per-deck progress indicators */}
           <div class="flex flex-wrap gap-2 mt-3 justify-center">
-            {Object.entries(session.value.deckInfos).map(([id, info]) => {
-              const cardsFromDeck = session.value!.cards.filter((c) =>
-                c.deckId === id
-              );
-              const completedFromDeck = cardsFromDeck.filter((_, i) =>
-                session.value!.cards.indexOf(cardsFromDeck[i]) <
-                  currentIndex.value
-              ).length;
-              return (
-                <div key={id} class="text-xs text-gray-500">
-                  {info.name}: {completedFromDeck}/{info.cardCount}
-                </div>
-              );
-            })}
+            {Array.from(deckProgress.value.entries()).map(([id, data]) => (
+              <div key={id} class="text-xs text-gray-500">
+                {data.name}: {data.completed}/{data.total}
+              </div>
+            ))}
           </div>
         </div>
 
         {error.value && (
-          <ErrorAlert
-            message={error.value}
-            onRetry={() => error.value = ""}
-          />
+          <Alert variant="error" onDismiss={() => error.value = ""}>
+            {error.value}
+          </Alert>
         )}
 
         {/* Flashcard */}
@@ -413,15 +394,11 @@ export default function InterleavedQuiz(
                   <div class="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
                     Question
                   </div>
-                  <div
+                  <div 
                     class="text-xl font-semibold leading-relaxed prose max-w-none"
-                    dangerouslySetInnerHTML={{
-                      __html: processContent(currentCard.value.question),
-                    }}
+                    dangerouslySetInnerHTML={{ __html: processContent(currentCard.value.question) }}
                   />
-                  <p class="text-sm text-gray-500 mt-6">
-                    Click to reveal answer →
-                  </p>
+                  <p class="text-sm text-gray-500 mt-6">Click to reveal answer →</p>
                 </div>
               </div>
             </div>
@@ -433,15 +410,11 @@ export default function InterleavedQuiz(
                   <div class="inline-block px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
                     Answer
                   </div>
-                  <div
+                  <div 
                     class="text-lg font-medium leading-relaxed prose max-w-none"
-                    dangerouslySetInnerHTML={{
-                      __html: processContent(currentCard.value.answer),
-                    }}
+                    dangerouslySetInnerHTML={{ __html: processContent(currentCard.value.answer) }}
                   />
-                  <p class="text-sm text-gray-500 mt-6">
-                    ← Click to show question
-                  </p>
+                  <p class="text-sm text-gray-500 mt-6">← Click to show question</p>
                 </div>
               </div>
             </div>

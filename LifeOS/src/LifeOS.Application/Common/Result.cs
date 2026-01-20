@@ -5,12 +5,12 @@ namespace LifeOS.Application.Common
     {
         public static Result<TSuccess, TError> Ok<TSuccess, TError>(TSuccess value)
         {
-            return new Result<TSuccess, TError>(value, default, true);
+            return new Result<TSuccess, TError>(value, default!, true);
         }
 
         public static Result<TSuccess, TError> Error<TSuccess, TError>(TError error)
         {
-            return new Result<TSuccess, TError>(default, error, false);
+            return new Result<TSuccess, TError>(default!, error, false);
         }
     }
 
