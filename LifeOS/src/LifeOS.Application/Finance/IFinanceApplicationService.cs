@@ -33,6 +33,14 @@ public interface IFinanceApplicationService
     Task<FSharpResult<Reconciliation, DomainError>> CompleteReconciliationAsync(
         CompleteReconciliationCommand command,
         CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<PeriodBudgetSummaryResult, DomainError>> GetPeriodBudgetSummaryAsync(
+        GetPeriodBudgetSummaryCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<FSharpResult<UpsertPeriodBudgetResult, DomainError>> UpsertPeriodBudgetAsync(
+        UpsertPeriodBudgetCommand command,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed record CreateTransferCommand(
@@ -83,3 +91,25 @@ public sealed record MatchTransactionsCommand(
 public sealed record CompleteReconciliationCommand(
     string ReconciliationKey,
     string? Notes);
+
+public sealed record GetPeriodBudgetSummaryCommand(
+    global::System.DateTime StartDate,
+    global::System.DateTime EndDate,
+    string? PeriodType);
+
+public sealed record UpsertPeriodBudgetCommand(
+    string PeriodType,
+    global::System.DateTime StartDate,
+    global::System.DateTime EndDate,
+    string CategoryKey,
+    decimal BudgetedAmount,
+    decimal? RolloverAmount,
+    string? Notes);
+
+public sealed record PeriodBudgetSummaryResult(
+    BudgetPeriod Period,
+    BudgetSummary Summary);
+
+public sealed record UpsertPeriodBudgetResult(
+    Budget Budget,
+    bool Created);

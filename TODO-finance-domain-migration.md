@@ -79,5 +79,5 @@ Move Finance business logic out of `LifeOS.API` (primary adapter) and into the a
   - [x] CreateReconciliation
   - [x] MatchTransactions
   - [x] CompleteReconciliation
-- [ ] Phase 3: Extract Budget period calculations to application service
-- [ ] Phase 4: Move helper methods to appropriate layers
+- [x] Phase 3 completed: Extracted budget period calculations to application service
+- [x] Phase 4 completed: Removed leftover FinanceEndpoints helper methods
