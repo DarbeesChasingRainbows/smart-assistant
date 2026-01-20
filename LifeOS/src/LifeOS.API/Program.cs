@@ -1,3 +1,4 @@
+using LifeOS.API.BackgroundServices;
 using LifeOS.API.Endpoints;
 using LifeOS.Application;
 using LifeOS.Infrastructure;
@@ -58,6 +59,9 @@ builder.Services.AddCors(options =>
         }
     );
 });
+
+// Add Background Services
+builder.Services.AddHostedService<RecurringBillService>();
 
 var app = builder.Build();
 

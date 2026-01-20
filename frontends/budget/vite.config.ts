@@ -24,9 +24,13 @@ export default defineConfig({
     // Build optimizations
     minify: "esbuild",
     sourcemap: false, // Disable sourcemaps for faster builds
+    rollupOptions: {
+      external: ["@fresh/core"], // Externalize @fresh/core
+    },
   },
   // Optimize dependency pre-bundling
   optimizeDeps: {
     include: ["preact", "@preact/signals"],
+    exclude: ["@fresh/core"], // Exclude from optimization
   },
 });

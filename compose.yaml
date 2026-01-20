@@ -1,9 +1,9 @@
-version: "3.8"
-
 services:
-  # ArangoDB - Multi-model Graph Database
+  # ArangoDB
   arangodb:
     image: arangodb:latest
+    container_name: lifeos-arangodb
+    hostname: arangodb
     environment:
       ARANGO_ROOT_PASSWORD: ${ARANGO_ROOT_PASSWORD:-lifeos123}
     ports:
@@ -24,6 +24,7 @@ services:
 
   arango-init:
     image: arangodb:latest
+    container_name: lifeos-arango-init
     environment:
       ARANGO_ROOT_PASSWORD: ${ARANGO_ROOT_PASSWORD:-lifeos123}
     volumes:
@@ -47,9 +48,11 @@ services:
     build:
       context: ./LifeOS
       dockerfile: Containerfile
+    container_name: lifeos-api
+    hostname: api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5120
+      - ASPNETCORE_URLS=http://0.0.0.0:5120
       - ArangoDB__Endpoint=http://arangodb:8529
       - ArangoDB__Database=lifeos
       - ArangoDB__Username=root
@@ -66,9 +69,11 @@ services:
     networks:
       - lifeos-network
 
-  # MinIO - S3-compatible Object Storage for receipts/files
+  # MinIO
   minio:
     image: quay.io/minio/minio:latest
+    container_name: lifeos-minio
+    hostname: minio
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
@@ -86,24 +91,31 @@ services:
     networks:
       - lifeos-network
 
-  # Deno Fresh Frontend
+  # Main Frontend
   frontend:
     build:
       context: ./frontend
       dockerfile: Containerfile
+    container_name: lifeos-frontend
+    hostname: frontend
     environment:
-      - VITE_API_URL=http://api:5120/api
+      # CHANGED: Use relative path so browser requests go through Caddy
+      - VITE_API_URL=/api
     depends_on:
       - api
     networks:
       - lifeos-network
 
-  # Caddy Gateway (Single Entrypoint)
+  # Caddy Gateway
   caddy:
     image: caddy:2-alpine
+    container_name: lifeos-caddy
+    hostname: caddy
     depends_on:
       - frontend
       - garage-frontend
+      - flashcards-frontend
+      - budget-frontend
     ports:
       - "8000:8000"
     volumes:
@@ -111,16 +123,19 @@ services:
     networks:
       - lifeos-network
 
-  # Flashcards Frontend (Fresh) - uses LifeOS API (ArangoDB + MinIO)
+  # Flashcards Frontend
   flashcards-frontend:
     build:
       context: ./frontends/flashcards
       dockerfile: Containerfile
+    container_name: lifeos-flashcards
+    hostname: flashcards-frontend
     environment:
       - DENO_ENV=production
-      - FRESH_BASE_PATH=/flashcards  # This helps Fresh align its internal router
-      - VITE_API_URL=http://api:5120/api
-      - VITE_UPLOADS_URL=http://api:5120/api
+      - FRESH_BASE_PATH=/flashcards
+      # CHANGED: Use relative path
+      - VITE_API_URL=/api
+      - VITE_UPLOADS_URL=/api
       - DENO_DEPLOYMENT_ID=${GIT_REVISION:-local}
     ports:
       - "8030:8000"
@@ -130,35 +145,49 @@ services:
     networks:
       - lifeos-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/flashcards/"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # Garage Frontend (VehicleMaintenence) - uses LifeOS API
+  # Garage Frontend
   garage-frontend:
     build:
       context: ./frontends/garage
       dockerfile: Containerfile
+    container_name: lifeos-garage
+    hostname: garage-frontend
     environment:
       - DENO_ENV=production
-      - VITE_API_URL=http://api:5120/api
-      - VITE_UPLOADS_URL=http://api:5120/api
+      - FRESH_BASE_PATH=/garage
+      # CHANGED: Use relative path
+      - VITE_API_URL=/api
+      - VITE_UPLOADS_URL=/api
     depends_on:
       - api
     networks:
       - lifeos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/garage/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  # Budget Frontend (Pay-Period Zero-Based Budgeting) - LifeOS version (frontends/budget)
+  # Budget Frontend
   budget-frontend:
     build:
       context: ./frontends/budget
       dockerfile: Containerfile
+    container_name: lifeos-budget
+    hostname: budget-frontend
     environment:
       - DENO_ENV=production
       - FRESH_BASE_PATH=/budget
+      # Use API hostname for server-side fetching in Docker
       - VITE_API_URL=http://api:5120/api
+      - VITE_UPLOADS_URL=/api
       - DENO_DEPLOYMENT_ID=${GIT_REVISION:-local}
     ports:
       - "8040:8000"
@@ -167,7 +196,7 @@ services:
     networks:
       - lifeos-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/budget/"]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -67,7 +67,7 @@ export function Modal({
     if (!open || !modalRef.current) return;
 
     const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
@@ -124,7 +124,10 @@ export function Modal({
           <div class="flex items-center justify-between p-4 border-b border-gray-200">
             <div>
               {title && (
-                <h2 id="modal-title" class="text-lg font-semibold text-gray-900">
+                <h2
+                  id="modal-title"
+                  class="text-lg font-semibold text-gray-900"
+                >
                   {title}
                 </h2>
               )}
@@ -141,8 +144,18 @@ export function Modal({
                 class="p-1 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors"
                 aria-label="Close modal"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             )}
@@ -169,9 +182,15 @@ const alignClasses = {
   between: "justify-between",
 };
 
-export function ModalFooter({ children, class: className = "", align = "right" }: ModalFooterProps) {
+export function ModalFooter(
+  { children, class: className = "", align = "right" }: ModalFooterProps,
+) {
   return (
-    <div class={`flex items-center gap-3 p-4 border-t border-gray-200 ${alignClasses[align]} ${className}`}>
+    <div
+      class={`flex items-center gap-3 p-4 border-t border-gray-200 ${
+        alignClasses[align]
+      } ${className}`}
+    >
       {children}
     </div>
   );

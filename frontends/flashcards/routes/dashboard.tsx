@@ -20,12 +20,15 @@ export const handler = define.handlers({
   async GET(_ctx) {
     try {
       const decks = await client.getDecks();
-      const health: HealthCheckResponse | null = await client.healthCheck().catch(() => null);
+      const health: HealthCheckResponse | null = await client.healthCheck()
+        .catch(() => null);
 
       const categories = new Set(decks.map((d) => d.category).filter(Boolean));
       const totalCards = decks.reduce((sum, d) => sum + (d.cardCount ?? 0), 0);
       const recentDecks = [...decks]
-        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+        .sort((a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        )
         .slice(0, 5);
 
       return {
@@ -64,7 +67,11 @@ export default define.page<typeof handler>(function DashboardPage(props) {
         </div>
       )}
 
-      <FlashcardsDashboard stats={stats} recentDecks={recentDecks} health={health} />
+      <FlashcardsDashboard
+        stats={stats}
+        recentDecks={recentDecks}
+        health={health}
+      />
     </div>
   );
 });

@@ -1,7 +1,9 @@
 using System.Globalization;
+using LifeOS.API.BackgroundServices;
 using LifeOS.API.DTOs;
 using LifeOS.Infrastructure.Persistence.ArangoDB;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace LifeOS.API.Endpoints;
 
@@ -78,6 +80,7 @@ public static class BudgetEndpoints
         bills.MapPost("/", CreateBill).WithName("CreateBudgetBill");
         bills.MapPut("/{key}", UpdateBill).WithName("UpdateBudgetBill");
         bills.MapPost("/{key}/paid", MarkBillPaid).WithName("MarkBudgetBillPaid");
+        bills.MapPost("/generate-instances", GenerateRecurringBillInstances).WithName("GenerateRecurringBillInstances");
 
         // Goals
         var goals = group.MapGroup("/goals");
@@ -1098,6 +1101,42 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         }
 
         return nextDate;
+    }
+
+    private static async Task<IResult> GenerateRecurringBillInstances(
+        [FromServices] IServiceProvider serviceProvider)
+    {
+        try
+        {
+            // Get the RecurringBillService from the hosted services
+            var recurringBillService = serviceProvider.GetServices<IHostedService>()
+                .OfType<RecurringBillService>()
+                .FirstOrDefault();
+
+            if (recurringBillService == null)
+            {
+                return Results.Problem(
+                    title: "Service not found",
+                    detail: "RecurringBillService is not registered",
+                    statusCode: 500);
+            }
+
+            // Trigger bill instance generation manually
+            await recurringBillService.GenerateBillInstances(CancellationToken.None);
+
+            return Results.Ok(new
+            {
+                message = "Bill instance generation triggered successfully. Check logs for details.",
+                timestamp = DateTime.UtcNow
+            });
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(
+                title: "Error generating bill instances",
+                detail: ex.Message,
+                statusCode: 500);
+        }
     }
 
     // ==================== GOALS ====================

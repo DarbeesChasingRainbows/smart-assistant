@@ -15,22 +15,10 @@
     "test:e2e:headed": "npx playwright test --headed"
   },
   "lint": {
-    "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ]
-    },
-    "exclude": [
-      "playwright.config.ts",
-      "tests/e2e/**"
-    ]
+    "rules": { "tags": ["fresh", "recommended"] },
+    "exclude": ["playwright.config.ts", "tests/e2e/**"]
   },
-  "exclude": [
-    "**/_fresh/*",
-    "playwright.config.ts",
-    "tests/e2e/**"
-  ],
+  "exclude": ["**/_fresh/*", "playwright.config.ts", "tests/e2e/**"],
   "imports": {
     "@/": "./",
     "fresh": "jsr:@fresh/core@^2.2.0",
@@ -41,16 +29,12 @@
     "tailwindcss": "npm:tailwindcss@^4.1.10",
     "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.10",
     "marked": "npm:marked@^9.1.2",
-    "daisyui": "npm:daisyui@latest"
+    "daisyui": "npm:daisyui@latest",
+    "terser": "npm:terser@^5.39.0"
   },
   "compilerOptions": {
     "strict": true,
-    "lib": [
-      "dom",
-      "dom.asynciterable",
-      "dom.iterable",
-      "deno.ns"
-    ],
+    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
     "jsx": "precompile",
     "jsxImportSource": "preact",
     "jsxPrecompileSkipElements": [
@@ -69,8 +53,6 @@
       "noscript",
       "template"
     ],
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client"]
   }
 }

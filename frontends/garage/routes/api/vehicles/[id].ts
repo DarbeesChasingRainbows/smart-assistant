@@ -51,10 +51,14 @@ export const handler = define.handlers({
         updates.vin = Validator.validateVin(body.vin);
       }
       if (body.currentMileage !== undefined) {
-        updates.currentMileage = Validator.validateMileage(String(body.currentMileage));
+        updates.currentMileage = Validator.validateMileage(
+          String(body.currentMileage),
+        );
       }
       if (body.licensePlate !== undefined) {
-        updates.licensePlate = Validator.validateLicensePlate(body.licensePlate);
+        updates.licensePlate = Validator.validateLicensePlate(
+          body.licensePlate,
+        );
       }
       if (body.color !== undefined) {
         updates.color = Validator.validateColor(body.color);

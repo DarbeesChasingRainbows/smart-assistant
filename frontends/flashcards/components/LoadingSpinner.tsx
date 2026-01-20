@@ -19,7 +19,7 @@ export default function LoadingSpinner({
     <div class="flex flex-col items-center justify-center gap-4 p-8">
       <span class="loading loading-spinner loading-lg text-primary"></span>
       <p class="text-gray-600">{message}</p>
-      
+
       {showTimeoutWarning && elapsedSeconds >= 5 && (
         <div class="alert alert-warning max-w-md">
           <svg
@@ -43,7 +43,7 @@ export default function LoadingSpinner({
           </div>
         </div>
       )}
-      
+
       {showTimeoutWarning && elapsedSeconds >= 15 && (
         <div class="alert alert-error max-w-md">
           <svg

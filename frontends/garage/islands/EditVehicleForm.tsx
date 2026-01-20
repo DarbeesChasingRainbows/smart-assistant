@@ -29,7 +29,7 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
   const licensePlate = useSignal(vehicle.licensePlate || "");
   const color = useSignal(vehicle.color || "");
   const currentMileage = useSignal(vehicle.currentMileage.toString());
-  
+
   const submitting = useSignal(false);
   const deleting = useSignal(false);
   const error = useSignal<string | null>(null);
@@ -62,7 +62,7 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
       }
 
       success.value = "Vehicle updated successfully!";
-      
+
       // Update local state with response
       if (data.currentMileage !== undefined) {
         currentMileage.value = data.currentMileage.toString();
@@ -106,8 +106,16 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
       {/* Messages */}
       {error.value && (
         <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded flex items-start gap-2">
-          <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <svg
+            class="w-5 h-5 shrink-0 mt-0.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
           </svg>
           <span>{error.value}</span>
         </div>
@@ -115,8 +123,16 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
 
       {success.value && (
         <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded flex items-start gap-2">
-          <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          <svg
+            class="w-5 h-5 shrink-0 mt-0.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
           </svg>
           <span>{success.value}</span>
         </div>
@@ -124,7 +140,9 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
 
       {/* Vehicle Info (Read-only) */}
       <div class="bg-gray-50 rounded-lg p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Vehicle Details</h2>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">
+          Vehicle Details
+        </h2>
         <div class="grid grid-cols-2 gap-4 text-sm">
           <div>
             <span class="text-gray-600">Type:</span>
@@ -180,7 +198,8 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
           )}
         </div>
         <p class="text-xs text-gray-500 mt-4">
-          * Year, make, model, trim, engine, and transmission cannot be changed after creation.
+          * Year, make, model, trim, engine, and transmission cannot be changed
+          after creation.
         </p>
       </div>
 
@@ -199,7 +218,8 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
             <input
               type="text"
               value={vin.value}
-              onInput={(e) => vin.value = (e.target as HTMLInputElement).value.toUpperCase()}
+              onInput={(e) =>
+                vin.value = (e.target as HTMLInputElement).value.toUpperCase()}
               placeholder="Optional"
               maxLength={17}
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase font-mono"
@@ -214,7 +234,8 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
             <input
               type="text"
               value={licensePlate.value}
-              onInput={(e) => licensePlate.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                licensePlate.value = (e.target as HTMLInputElement).value}
               placeholder="Optional"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -228,7 +249,8 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
             <input
               type="text"
               value={color.value}
-              onInput={(e) => color.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                color.value = (e.target as HTMLInputElement).value}
               placeholder="Optional"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -242,7 +264,8 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
             <input
               type="number"
               value={currentMileage.value}
-              onInput={(e) => currentMileage.value = (e.target as HTMLInputElement).value}
+              onInput={(e) =>
+                currentMileage.value = (e.target as HTMLInputElement).value}
               required
               min="0"
               placeholder="Current odometer reading"
@@ -264,14 +287,16 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
             disabled={submitting.value}
             class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2"
           >
-            {submitting.value ? (
-              <>
-                <Spinner size="sm" color="white" />
-                Saving...
-              </>
-            ) : (
-              "Save Changes"
-            )}
+            {submitting.value
+              ? (
+                <>
+                  <Spinner size="sm" color="white" />
+                  Saving...
+                </>
+              )
+              : (
+                "Save Changes"
+              )}
           </button>
         </div>
       </form>
@@ -280,8 +305,8 @@ export default function EditVehicleForm({ vehicle }: EditVehicleFormProps) {
       <div class="bg-white rounded-lg shadow-sm p-6 border-2 border-red-200">
         <h2 class="text-lg font-semibold text-red-600 mb-4">Danger Zone</h2>
         <p class="text-sm text-gray-600 mb-4">
-          Deleting this vehicle will permanently remove all associated maintenance schedules and records.
-          This action cannot be undone.
+          Deleting this vehicle will permanently remove all associated
+          maintenance schedules and records. This action cannot be undone.
         </p>
 
         <button

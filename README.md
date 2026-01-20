@@ -15,21 +15,21 @@ This project follows **Hexagonal Architecture** with:
 
 ### Prerequisites
 
-- [Podman](https://podman.io/) or Docker
+- [Docker](https://www.docker.com/) (recommended) or Podman
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
 - [Deno](https://deno.land/)
 
-### Option 1: Using Podman Compose (Recommended)
+### Option 1: Using Docker Compose (Recommended)
 
 ```bash
 # Start all services
-podman-compose up -d
+docker compose up -d
 
 # View logs
-podman-compose logs -f
+docker compose logs -f
 
 # Stop services
-podman-compose down
+docker compose down
 ```
 
 ### Option 2: Manual Setup
@@ -90,7 +90,8 @@ smart-assistant/
 │   ├── setup-arangodb.ps1      # Windows setup
 │   ├── setup-arangodb.sh       # Linux/macOS setup
 │   └── init-arangodb.js        # Database initialization
-├── docker-compose.yml          # Podman/Docker compose
+├── compose.yaml               # Docker Compose configuration
+├── compose.override.yaml      # Development overrides
 └── .env                        # Environment variables
 ```
 
@@ -146,10 +147,10 @@ deno check **/*.tsx
 
 ```bash
 # Build all containers
-podman-compose build
+docker compose build
 
 # Run in production mode
-podman-compose -f docker-compose.yml up -d
+docker compose up -d
 ```
 
 ## License

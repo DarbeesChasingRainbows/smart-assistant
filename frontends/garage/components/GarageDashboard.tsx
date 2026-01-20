@@ -1,20 +1,26 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card.tsx";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card.tsx";
 import { Badge } from "./ui/badge.tsx";
 import { Button } from "./ui/button.tsx";
-import { 
-  Car, 
-  Gauge, 
-  Fuel, 
-  Calendar, 
-  AlertTriangle, 
-  Wrench, 
-  Clock, 
-  Activity, 
+import {
+  Activity,
+  AlertTriangle,
+  Calendar,
+  Car,
+  Clock,
   DollarSign,
+  FileText,
+  Fuel,
+  Gauge,
+  Settings as _Settings,
   TrendingUp,
   Users as _Users,
-  Settings as _Settings,
-  FileText
+  Wrench,
 } from "lucide-preact";
 
 // Mock data - replace with actual API calls
@@ -29,10 +35,10 @@ const vehicles = [
     fuelLevel: 75,
     nextService: "Jan 15, 2026",
     nextServiceDays: 9,
-    image: "/api/placeholder/400/300"
+    image: "/api/placeholder/400/300",
   },
   {
-    id: "2", 
+    id: "2",
     name: "RV Adventure",
     model: "2022 Class A",
     status: "Maintenance",
@@ -41,7 +47,7 @@ const vehicles = [
     fuelLevel: 60,
     nextService: "Feb 1, 2026",
     nextServiceDays: 26,
-    image: "/api/placeholder/400/300"
+    image: "/api/placeholder/400/300",
   },
   {
     id: "3",
@@ -53,8 +59,8 @@ const vehicles = [
     fuelLevel: 90,
     nextService: "Mar 10, 2026",
     nextServiceDays: 63,
-    image: "/api/placeholder/400/300"
-  }
+    image: "/api/placeholder/400/300",
+  },
 ];
 
 const maintenanceAlerts = [
@@ -64,7 +70,7 @@ const maintenanceAlerts = [
     vehicle: "Ford F-150",
     priority: "High",
     description: "Regular oil change required",
-    dueDate: "Jan 15, 2026"
+    dueDate: "Jan 15, 2026",
   },
   {
     id: "2",
@@ -72,7 +78,7 @@ const maintenanceAlerts = [
     vehicle: "RV Adventure",
     priority: "Medium",
     description: "Rotate and inspect tires",
-    dueDate: "Jan 30, 2026"
+    dueDate: "Jan 30, 2026",
   },
   {
     id: "3",
@@ -80,8 +86,8 @@ const maintenanceAlerts = [
     vehicle: "Harley Davidson",
     priority: "Low",
     description: "Annual brake system check",
-    dueDate: "Feb 15, 2026"
-  }
+    dueDate: "Feb 15, 2026",
+  },
 ];
 
 const recentActivities = [
@@ -91,7 +97,7 @@ const recentActivities = [
     vehicle: "Ford F-150",
     cost: "$89.99",
     date: "2 days ago",
-    icon: <Wrench className="h-5 w-5 text-blue-500" />
+    icon: <Wrench className="h-5 w-5 text-blue-500" />,
   },
   {
     id: "2",
@@ -99,7 +105,7 @@ const recentActivities = [
     vehicle: "RV Adventure",
     cost: "$245.00",
     date: "5 days ago",
-    icon: <Fuel className="h-5 w-5 text-green-500" />
+    icon: <Fuel className="h-5 w-5 text-green-500" />,
   },
   {
     id: "3",
@@ -107,15 +113,35 @@ const recentActivities = [
     vehicle: "All Vehicles",
     cost: "$1,250.00",
     date: "1 week ago",
-    icon: <FileText className="h-5 w-5 text-purple-500" />
-  }
+    icon: <FileText className="h-5 w-5 text-purple-500" />,
+  },
 ];
 
 const quickActions = [
-  { id: "1", label: "Add Vehicle", icon: <Car className="h-5 w-5" />, color: "bg-blue-500" },
-  { id: "2", label: "Schedule Service", icon: <Calendar className="h-5 w-5" />, color: "bg-green-500" },
-  { id: "3", label: "Log Maintenance", icon: <Wrench className="h-5 w-5" />, color: "bg-orange-500" },
-  { id: "4", label: "View Reports", icon: <TrendingUp className="h-5 w-5" />, color: "bg-purple-500" }
+  {
+    id: "1",
+    label: "Add Vehicle",
+    icon: <Car className="h-5 w-5" />,
+    color: "bg-blue-500",
+  },
+  {
+    id: "2",
+    label: "Schedule Service",
+    icon: <Calendar className="h-5 w-5" />,
+    color: "bg-green-500",
+  },
+  {
+    id: "3",
+    label: "Log Maintenance",
+    icon: <Wrench className="h-5 w-5" />,
+    color: "bg-orange-500",
+  },
+  {
+    id: "4",
+    label: "View Reports",
+    icon: <TrendingUp className="h-5 w-5" />,
+    color: "bg-purple-500",
+  },
 ];
 
 function getStatusColor(status: string) {
@@ -153,7 +179,9 @@ export default function GarageDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold mb-2">Garage Dashboard</h1>
-              <p className="text-blue-100 text-lg">Manage your fleet and keep everything running smoothly</p>
+              <p className="text-blue-100 text-lg">
+                Manage your fleet and keep everything running smoothly
+              </p>
             </div>
             <div className="hidden md:flex items-center gap-8">
               <div className="text-center">
@@ -161,7 +189,9 @@ export default function GarageDashboard() {
                 <div className="text-blue-100 text-sm">Total Vehicles</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold">{maintenanceAlerts.length}</div>
+                <div className="text-3xl font-bold">
+                  {maintenanceAlerts.length}
+                </div>
                 <div className="text-blue-100 text-sm">Pending Services</div>
               </div>
               <div className="text-center">
@@ -177,7 +207,9 @@ export default function GarageDashboard() {
         {/* Vehicle Overview */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">Your Vehicles</h2>
+            <h2 className="text-2xl font-bold text-foreground">
+              Your Vehicles
+            </h2>
             <Button className="gap-2">
               <Car className="h-4 w-4" />
               Add Vehicle
@@ -185,11 +217,18 @@ export default function GarageDashboard() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {vehicles.map((vehicle) => (
-              <Card key={vehicle.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+              <Card
+                key={vehicle.id}
+                className="overflow-hidden hover:shadow-lg transition-shadow"
+              >
                 <div className="relative h-48 bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                   <Car className="h-16 w-16 text-gray-400" />
                   <div className="absolute top-3 right-3">
-                    <Badge className={`${getStatusColor(vehicle.status)} text-white border-0`}>
+                    <Badge
+                      className={`${
+                        getStatusColor(vehicle.status)
+                      } text-white border-0`}
+                    >
                       {vehicle.status}
                     </Badge>
                   </div>
@@ -201,7 +240,9 @@ export default function GarageDashboard() {
                       <CardDescription>{vehicle.model}</CardDescription>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-foreground">{vehicle.healthScore}%</p>
+                      <p className="text-2xl font-bold text-foreground">
+                        {vehicle.healthScore}%
+                      </p>
                       <p className="text-xs text-muted-foreground">Health</p>
                     </div>
                   </div>
@@ -212,19 +253,25 @@ export default function GarageDashboard() {
                       <Gauge className="h-4 w-4 text-muted-foreground" />
                       <span className="text-muted-foreground">Mileage</span>
                     </div>
-                    <span className="font-semibold">{vehicle.mileage.toLocaleString()} mi</span>
+                    <span className="font-semibold">
+                      {vehicle.mileage.toLocaleString()} mi
+                    </span>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
                         <Fuel className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">Fuel Level</span>
+                        <span className="text-muted-foreground">
+                          Fuel Level
+                        </span>
                       </div>
-                      <span className="font-semibold">{vehicle.fuelLevel}%</span>
+                      <span className="font-semibold">
+                        {vehicle.fuelLevel}%
+                      </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-blue-600 h-2 rounded-full transition-all"
                         style={{ width: `${vehicle.fuelLevel}%` }}
                       />
@@ -234,7 +281,9 @@ export default function GarageDashboard() {
                   <div className="space-y-2 pt-2 border-t">
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">Next Service</span>
+                      <span className="text-muted-foreground">
+                        Next Service
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{vehicle.nextService}</span>
@@ -264,7 +313,9 @@ export default function GarageDashboard() {
                     <AlertTriangle className="h-5 w-5 text-orange-500" />
                     Maintenance Alerts
                   </CardTitle>
-                  <CardDescription>Upcoming services and inspections</CardDescription>
+                  <CardDescription>
+                    Upcoming services and inspections
+                  </CardDescription>
                 </div>
                 <Button variant="ghost" size="sm">
                   View All
@@ -283,12 +334,19 @@ export default function GarageDashboard() {
                   <div className="flex-1 space-y-1">
                     <div className="flex items-start justify-between gap-2">
                       <h4 className="font-semibold text-sm">{alert.type}</h4>
-                      <Badge variant={getPriorityColor(alert.priority)} className="text-xs">
+                      <Badge
+                        variant={getPriorityColor(alert.priority)}
+                        className="text-xs"
+                      >
                         {alert.priority}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">{alert.vehicle}</p>
-                    <p className="text-xs text-muted-foreground">{alert.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {alert.vehicle}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {alert.description}
+                    </p>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
                       <Clock className="h-3 w-3" />
                       Due: {alert.dueDate}
@@ -327,8 +385,12 @@ export default function GarageDashboard() {
                   <div className="flex-1 space-y-1">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h4 className="font-semibold text-sm">{activity.description}</h4>
-                        <p className="text-sm text-muted-foreground">{activity.vehicle}</p>
+                        <h4 className="font-semibold text-sm">
+                          {activity.description}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {activity.vehicle}
+                        </p>
                       </div>
                       {activity.cost && (
                         <div className="flex items-center gap-1 text-sm font-semibold">
@@ -362,7 +424,9 @@ export default function GarageDashboard() {
                   variant="outline"
                   className="h-24 flex-col gap-2 hover:bg-accent"
                 >
-                  <div className={`h-10 w-10 rounded-full ${action.color} flex items-center justify-center text-white`}>
+                  <div
+                    className={`h-10 w-10 rounded-full ${action.color} flex items-center justify-center text-white`}
+                  >
                     {action.icon}
                   </div>
                   <span className="text-sm font-medium">{action.label}</span>

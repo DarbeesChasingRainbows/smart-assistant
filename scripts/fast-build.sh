@@ -48,13 +48,13 @@ apply_frontend_optimizations "budget"
 
 # Pull latest base images to avoid download delays
 echo "📦 Pulling latest base images..."
-podman pull mcr.microsoft.com/dotnet/sdk:10.0
-podman pull mcr.microsoft.com/dotnet/aspnet:10.0
-podman pull denoland/deno:latest
+docker pull mcr.microsoft.com/dotnet/sdk:10.0
+docker pull mcr.microsoft.com/dotnet/aspnet:10.0
+docker pull denoland/deno:latest
 
 # Build with cache and parallelism
 echo "🔨 Building with cache and parallelism..."
-python -m podman_compose --parallel 4 build
+docker compose --parallel 4 build
 
 echo "✅ Build complete!"
 

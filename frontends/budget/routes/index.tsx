@@ -20,7 +20,10 @@ export const handler = define.handlers({
     const startedAt = Date.now();
 
     const rawApiUrl = Deno.env.get("VITE_API_URL");
-    const apiUrl = rawApiUrl || "http://api:5120/api";
+    // Server-side fetch requires absolute URL - relative paths don't work
+    const apiUrl = (rawApiUrl && rawApiUrl.startsWith("http")) 
+      ? rawApiUrl 
+      : "http://api:5120/api";
     const endpoint = "v1/people";
     const normalizedBase = apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl;
     const fullUrl = `${normalizedBase}/${endpoint}`;

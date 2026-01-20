@@ -4,22 +4,35 @@
  */
 
 function getApiBaseUrl(): string {
-  // Islands run in the browser and must not rely on the Deno global.
-  if (typeof globalThis.window !== "undefined") {
+  // 1. Browser Environment (Client Side)
+  // Always use the relative path so requests go through Caddy
+  if (typeof document !== "undefined") {
     return "/api";
   }
 
+  // 2. Deno Server Environment (SSR)
   if (typeof Deno !== "undefined" && Deno.env?.get) {
-    return Deno.env.get("VITE_API_URL") || "http://localhost:5120/api";
+    // If explicitly set to an absolute URL (e.g. external host), use it
+    const envUrl = Deno.env.get("VITE_API_URL");
+    if (envUrl && envUrl.startsWith("http")) {
+      return envUrl;
+    }
+    
+    // CRITICAL: If env var is relative ("/api"), ignore it on the server 
+    // and use the internal Docker DNS name instead.
+    return "http://api:5120/api";
   }
 
+  // Fallback
   return "http://localhost:5120/api";
 }
 
 const API_BASE_URL = `${getApiBaseUrl()}/v1`;
 
-// Types matching the .NET API DTOs
+// ... rest of the file remains exactly the same ...
+// (Do not remove the interfaces or api object below)
 export interface VehicleDto {
+
   id: string;
   vin: string;
   licensePlate: string | null;

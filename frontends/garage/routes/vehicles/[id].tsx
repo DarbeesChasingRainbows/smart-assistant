@@ -1,4 +1,4 @@
-import { PageProps, page } from "fresh";
+import { page, PageProps } from "fresh";
 import { Head } from "fresh/runtime";
 import { define, url } from "../../utils.ts";
 import { db } from "../../services/database.ts";
@@ -375,7 +375,9 @@ export default define.page(
                               </div>
 
                               <a
-                                href={url(`/vehicles/${vehicle.id}/maintenance?schedule=${due.scheduleId}`)}
+                                href={url(
+                                  `/vehicles/${vehicle.id}/maintenance?schedule=${due.scheduleId}`,
+                                )}
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-3 rounded text-sm transition-colors"
                               >
                                 Record Service
@@ -424,7 +426,12 @@ export default define.page(
                                   {new Date(record.maintenanceDate)
                                     .toLocaleDateString()}
                                   {record.mileageAtService && (
-                                    <span> • {record.mileageAtService.toLocaleString()} miles</span>
+                                    <span>
+                                      •{" "}
+                                      {record.mileageAtService.toLocaleString()}
+                                      {" "}
+                                      miles
+                                    </span>
                                   )}
                                 </p>
                                 {record.serviceProvider && (
