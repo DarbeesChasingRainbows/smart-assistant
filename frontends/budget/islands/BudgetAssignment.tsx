@@ -447,6 +447,12 @@ function BudgetAssignmentContent(
           ...g,
           categories: g.categories.filter((c) => c.key !== categoryKey),
         }));
+
+        // Remove assignment from local state to update totals
+        const newAssignments = { ...assignments.value };
+        delete newAssignments[categoryKey];
+        assignments.value = newAssignments;
+
         toast.success("Category deleted");
       } else {
         const error = await res.text();
