@@ -1,5 +1,6 @@
 import { asset } from "fresh/runtime";
 import ToastContainer from "../islands/ToastContainer.tsx";
+import KeyboardShortcutsHelp from "../islands/KeyboardShortcutsHelp.tsx";
 
 export default function App({ Component }: { Component: () => any }) {
   return (
@@ -16,6 +17,7 @@ export default function App({ Component }: { Component: () => any }) {
       <body>
         <Component />
         <ToastContainer />
+        <KeyboardShortcutsHelp />
       </body>
     </html>
   );
