@@ -70,7 +70,7 @@ public static class ComponentMapper
     /// Converts string values back to appropriate domain types and enums.
     /// Reconstructs option types from nullable document properties.
     /// </remarks>
-    public static Component ToDomain(ComponentDocument doc)
+    public static Component? ToDomain(ComponentDocument? doc)
     {
         if (doc == null)
             return null;

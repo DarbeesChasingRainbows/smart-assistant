@@ -43,22 +43,25 @@ type User = {
     UpdatedAt: DateTime
 } with
     member this.UpdateRole (newRole: Role) =
-        Ok { this with 
-            Role = newRole
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                Role = newRole
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.Deactivate () =
-        Ok { this with 
-            IsActive = false
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                IsActive = false
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.Activate () =
-        Ok { this with 
-            IsActive = true
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                IsActive = true
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.CanApproveTasks =
         match this.Role with

@@ -31,6 +31,19 @@ function BudgetAssignmentContent(
 ) {
   const groups = useSignal<CategoryGroup[]>(initialCategories);
   const assignments = useSignal<Record<string, number>>(initialAssignments);
+
+  const incomeGroups = useComputed(() =>
+    groups.value.filter((g) => g.type === "Income")
+  );
+  const expenseGroups = useComputed(() =>
+    groups.value.filter((g) => g.type !== "Income")
+  );
+
+  const allSortedGroups = useComputed(() => [
+    ...incomeGroups.value,
+    ...expenseGroups.value,
+  ]);
+
   const isUpdating = useSignal<Record<string, boolean>>({});
   const summary = useSignal<BudgetSummary>(initialSummary);
   const categoryBalances = useSignal<CategoryBalance[]>(
@@ -40,6 +53,7 @@ function BudgetAssignmentContent(
   // Drag state
   const draggedCategoryId = useSignal<string | null>(null);
   const draggedFromGroupId = useSignal<string | null>(null);
+  const draggedGroupKey = useSignal<string | null>(null);
 
   // Inline edit state
   const editingCategoryId = useSignal<string | null>(null);
@@ -64,6 +78,12 @@ function BudgetAssignmentContent(
   const newCategoryName = useSignal("");
   const newCategoryTarget = useSignal("");
   const isCreatingCategory = useSignal(false);
+
+  // Add group modal state
+  const isAddGroupModalOpen = useSignal(false);
+  const newGroupName = useSignal("");
+  const newGroupType = useSignal("Expense");
+  const isCreatingGroup = useSignal(false);
 
   // Assignment input state (per category) to keep typing stable
   const assignmentInputs = useSignal<Record<string, string>>({});
@@ -238,6 +258,51 @@ function BudgetAssignmentContent(
     }
   };
 
+  const createGroup = async () => {
+    if (!newGroupName.value.trim()) {
+      toast.error("Group name is required");
+      return;
+    }
+
+    isCreatingGroup.value = true;
+
+    try {
+      const sortOrder = groups.value.length;
+      const response = await fetch(`${API_BASE}/category-groups`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          familyId: "default",
+          name: newGroupName.value.trim(),
+          type: newGroupType.value,
+          sortOrder,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create group");
+      }
+
+      // Reload groups
+      const groupsResponse = await fetch(
+        `${API_BASE}/category-groups?familyId=default`,
+      );
+      if (groupsResponse.ok) {
+        const updatedGroups = await groupsResponse.json();
+        groups.value = updatedGroups;
+      }
+
+      toast.success(`Group "${newGroupName.value}" created`);
+      isAddGroupModalOpen.value = false;
+      newGroupName.value = "";
+    } catch (error) {
+      console.error("Error creating group:", error);
+      toast.error("Failed to create group");
+    } finally {
+      isCreatingGroup.value = false;
+    }
+  };
+
   // Get all categories flattened for the transfer dropdown
   const allCategories = useComputed(() =>
     groups.value.flatMap((g) =>
@@ -345,6 +410,52 @@ function BudgetAssignmentContent(
       toast.error("Error updating group");
     }
     editingGroupId.value = null;
+  };
+
+  const deleteGroup = async (groupKey: string) => {
+    if (!confirm("Are you sure you want to delete this group?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/category-groups/${groupKey}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        groups.value = groups.value.filter((g) => g.key !== groupKey);
+        toast.success("Group deleted");
+      } else {
+        const error = await res.text();
+        toast.error(error || "Failed to delete group");
+      }
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      toast.error("Error deleting group");
+    }
+  };
+
+  const deleteCategory = async (categoryKey: string) => {
+    if (!confirm("Are you sure you want to delete this category?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/categories/${categoryKey}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        // Remove locally
+        groups.value = groups.value.map((g) => ({
+          ...g,
+          categories: g.categories.filter((c) => c.key !== categoryKey),
+        }));
+        toast.success("Category deleted");
+      } else {
+        const error = await res.text();
+        toast.error(error || "Failed to delete category");
+      }
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      toast.error("Error deleting category");
+    }
   };
 
   // Drag and drop handlers
@@ -503,6 +614,60 @@ function BudgetAssignmentContent(
     draggedFromGroupId.value = null;
   };
 
+  const handleGroupDragStart = (e: DragEvent, groupKey: string) => {
+    if (editingGroupId.value) return; // Don't drag while editing
+    draggedGroupKey.value = groupKey;
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = "move";
+    }
+  };
+
+  const handleGroupDrop = async (e: DragEvent, targetGroupKey: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!draggedGroupKey.value || draggedGroupKey.value === targetGroupKey) {
+      draggedGroupKey.value = null;
+      return;
+    }
+
+    const groupList = [...groups.value];
+    const fromIndex = groupList.findIndex((g) =>
+      g.key === draggedGroupKey.value
+    );
+    const toIndex = groupList.findIndex((g) => g.key === targetGroupKey);
+
+    if (fromIndex === -1 || toIndex === -1) {
+      draggedGroupKey.value = null;
+      return;
+    }
+
+    // Reorder locally
+    const [movedGroup] = groupList.splice(fromIndex, 1);
+    groupList.splice(toIndex, 0, movedGroup);
+    groups.value = groupList;
+
+    // Save to backend
+    const reorderItems = groupList.map((g, idx) => ({
+      key: g.key,
+      sortOrder: idx,
+    }));
+
+    try {
+      await fetch(`${API_BASE}/category-groups/reorder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ groups: reorderItems }),
+      });
+      toast.success("Groups reordered");
+    } catch (error) {
+      console.error("Error reordering groups:", error);
+      toast.error("Failed to save group order");
+    }
+
+    draggedGroupKey.value = null;
+  };
+
   return (
     <div class="space-y-6">
       {/* Budget Summary Bar */}
@@ -568,20 +733,32 @@ function BudgetAssignmentContent(
       </div>
 
       {/* Category Groups */}
-      {groups.value.filter((g: CategoryGroup) => g.categories.length > 0).map(
+      {allSortedGroups.value.map(
         (group: CategoryGroup) => {
-          const groupId = group.id;
-          if (groupId == null) return null;
+          const groupKey = group.key;
+          if (!groupKey) return null;
+          const isIncomeGroup = group.type === "Income";
+
           return (
             <div
-              key={groupId}
-              class="card bg-[#1a1a1a] shadow-xl border border-[#333] overflow-hidden"
+              key={groupKey}
+              class={`card bg-[#1a1a1a] shadow-xl border border-[#333] overflow-hidden mb-6 ${
+                draggedGroupKey.value === groupKey ? "opacity-50" : ""
+              }`}
+              draggable={!editingGroupId.value}
+              onDragStart={(e) => handleGroupDragStart(e, groupKey)}
               onDragOver={handleDragOver}
-              onDrop={(e) => handleDropOnGroup(e, groupId)}
+              onDrop={(e) => {
+                if (draggedGroupKey.value) {
+                  handleGroupDrop(e, groupKey);
+                } else {
+                  handleDropOnGroup(e, groupKey);
+                }
+              }}
             >
               <div class="card-body p-0">
                 {/* Group Header - Editable */}
-                {editingGroupId.value === groupId
+                {editingGroupId.value === groupKey
                   ? (
                     <div class="flex items-center gap-2 p-4 border-b border-[#333] bg-[#0a0a0a]">
                       <input
@@ -606,12 +783,22 @@ function BudgetAssignmentContent(
                       >
                         CANCEL
                       </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-ghost text-red-500 font-mono"
+                        onClick={() => deleteGroup(groupKey)}
+                        title="Delete Group"
+                      >
+                        🗑️
+                      </button>
                     </div>
                   )
                   : (
                     <div class="flex items-center px-4 py-3 bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
                       <h3
-                        class="font-bold text-[#00d9ff] font-mono cursor-pointer hover:underline flex items-center gap-2"
+                        class={`font-bold font-mono cursor-pointer hover:underline flex items-center gap-2 ${
+                          isIncomeGroup ? "text-[#00ff88]" : "text-[#00d9ff]"
+                        }`}
                         onClick={() => startEditGroup(group)}
                       >
                         {group.name.toUpperCase()}
@@ -623,8 +810,12 @@ function BudgetAssignmentContent(
                           class="w-20 md:w-28 text-right cursor-pointer hover:text-[#00d9ff] flex items-center justify-end gap-1"
                           onClick={() => showSpent.value = !showSpent.value}
                         >
-                          {showSpent.value ? "SPENT" : "REMAINING"}
-                          <span class="text-[10px]">▼</span>
+                          {isIncomeGroup
+                            ? "RECEIVED"
+                            : showSpent.value
+                            ? "SPENT"
+                            : "REMAINING"}
+                          {!isIncomeGroup && <span class="text-[10px]">▼</span>}
                         </span>
                       </div>
                     </div>
@@ -633,21 +824,20 @@ function BudgetAssignmentContent(
                 {/* Categories - Draggable */}
                 <div class="divide-y divide-[#333]">
                   {group.categories.map((category: Category) => {
-                    const groupId = group.id;
-                    const categoryId = category.id;
-                    if (groupId == null || categoryId == null) return null;
+                    const categoryKey = category.key;
+                    if (!categoryKey) return null;
 
-                    const assigned = getAssignedAmount(categoryId);
-                    const spent = getSpentAmount(categoryId);
+                    const assigned = getAssignedAmount(categoryKey);
+                    const spent = getSpentAmount(categoryKey);
                     const remaining = assigned - spent;
-                    const isLoading = isUpdating.value[categoryId];
-                    const isEditing = editingCategoryId.value === categoryId;
-                    const isDragging = draggedCategoryId.value === categoryId;
-                    const isSelected = selectedCategoryId.value === categoryId;
+                    const isLoading = isUpdating.value[categoryKey];
+                    const isEditing = editingCategoryId.value === categoryKey;
+                    const isDragging = draggedCategoryId.value === categoryKey;
+                    const isSelected = selectedCategoryId.value === categoryKey;
 
                     return (
                       <div
-                        key={categoryId}
+                        key={categoryKey}
                         class={`flex items-center transition-all border-l-2 cursor-pointer
                       ${
                           isSelected
@@ -658,12 +848,12 @@ function BudgetAssignmentContent(
                     `}
                         draggable={!isEditing}
                         onDragStart={(e) =>
-                          handleDragStart(e, categoryId, groupId)}
+                          handleDragStart(e, categoryKey, groupKey)}
                         onDragOver={handleDragOver}
                         onDrop={(e) =>
-                          handleDropOnCategory(e, categoryId, groupId)}
+                          handleDropOnCategory(e, categoryKey, groupKey)}
                         onClick={() =>
-                          !isEditing && toggleCategorySelection(categoryId)}
+                          !isEditing && toggleCategorySelection(categoryKey)}
                       >
                         {/* Drag Handle */}
                         <div
@@ -712,6 +902,14 @@ function BudgetAssignmentContent(
                               >
                                 ×
                               </button>
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-ghost text-red-500 font-mono"
+                                onClick={() => deleteCategory(categoryKey)}
+                                title="Delete Category"
+                              >
+                                🗑️
+                              </button>
                             </div>
                           )
                           : (
@@ -734,6 +932,12 @@ function BudgetAssignmentContent(
                                 >
                                   {category.name}
                                 </span>
+                                {category.targetAmount > 0 && (
+                                  <div class="text-[10px] text-[#666] font-mono mt-0.5">
+                                    Target:{" "}
+                                    {formatCurrency(category.targetAmount)}
+                                  </div>
+                                )}
                               </div>
 
                               {/* Planned (Assigned) Amount */}
@@ -750,7 +954,7 @@ function BudgetAssignmentContent(
                                           isLoading ? "opacity-50" : ""
                                         }`}
                                         value={assignmentInputs
-                                          .value[categoryId] ??
+                                          .value[categoryKey] ??
                                           (assigned ? assigned.toString() : "")}
                                         placeholder="0.00"
                                         step="0.01"
@@ -759,8 +963,8 @@ function BudgetAssignmentContent(
                                         onFocus={() => {
                                           assignmentInputs.value = {
                                             ...assignmentInputs.value,
-                                            [categoryId]: assignmentInputs
-                                              .value[categoryId] ?? (assigned
+                                            [categoryKey]: assignmentInputs
+                                              .value[categoryKey] ?? (assigned
                                                 ? assigned.toString()
                                                 : ""),
                                           };
@@ -768,7 +972,8 @@ function BudgetAssignmentContent(
                                         onInput={(e) => {
                                           assignmentInputs.value = {
                                             ...assignmentInputs.value,
-                                            [categoryId]: e.currentTarget.value,
+                                            [categoryKey]:
+                                              e.currentTarget.value,
                                           };
                                         }}
                                         onBlur={(e) => {
@@ -778,7 +983,7 @@ function BudgetAssignmentContent(
                                             parseFloat(newValue) || 0;
                                           if (newAmount !== assigned) {
                                             handleAssignmentChange(
-                                              categoryId,
+                                              categoryKey,
                                               newValue,
                                             );
                                           }
@@ -786,7 +991,7 @@ function BudgetAssignmentContent(
                                         onKeyDown={(e) => {
                                           if (e.key === "Enter") {
                                             handleAssignmentChange(
-                                              categoryId,
+                                              categoryKey,
                                               e.currentTarget.value,
                                             );
                                             e.currentTarget.blur();
@@ -831,7 +1036,7 @@ function BudgetAssignmentContent(
                                     class="text-[#888] hover:text-[#00d9ff] text-lg"
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      openTransferModal(categoryId);
+                                      openTransferModal(categoryKey);
                                     }}
                                     title="Transfer funds"
                                   >
@@ -846,18 +1051,18 @@ function BudgetAssignmentContent(
                   })}
 
                   {/* Add Item link */}
-                  <div class="px-4 py-2 border-t border-[#333] bg-[#0a0a0a]/50">
+                  <div class="px-4 py-3 border-t">
                     <button
                       type="button"
-                      class="text-[#888] hover:text-[#00d9ff] text-[10px] font-bold font-mono uppercase tracking-wider"
+                      class="text-primary hover:text-primary-focus text-sm font-medium"
                       onClick={() => {
-                        addCategoryGroupId.value = group.id ?? null;
+                        addCategoryGroupId.value = groupKey;
                         newCategoryName.value = "";
                         newCategoryTarget.value = "";
                         isAddCategoryModalOpen.value = true;
                       }}
                     >
-                      + ADD CATEGORY
+                      Add Item
                     </button>
                   </div>
                 </div>
@@ -866,6 +1071,20 @@ function BudgetAssignmentContent(
           );
         },
       )}
+
+      {/* Add Group Button */}
+      <div class="card bg-[#1a1a1a] border border-dashed border-[#333] hover:border-[#00d9ff]/50 transition-colors cursor-pointer">
+        <button
+          type="button"
+          class="card-body p-4 items-center justify-center text-[#888] hover:text-[#00d9ff] font-mono"
+          onClick={() => {
+            newGroupName.value = "";
+            isAddGroupModalOpen.value = true;
+          }}
+        >
+          + ADD GROUP
+        </button>
+      </div>
 
       {/* Fund Transfer Modal */}
       {isTransferModalOpen.value && (
@@ -899,11 +1118,11 @@ function BudgetAssignmentContent(
                 <div class="border border-[#333] bg-[#0a0a0a] rounded p-2">
                   {(() => {
                     const fromCat = allCategories.value.find((c) =>
-                      c.id === transferFromCategoryId.value
+                      c.key === transferFromCategoryId.value
                     );
-                    const fromRemaining = fromCat?.id != null
-                      ? getAssignedAmount(fromCat.id) -
-                        getSpentAmount(fromCat.id)
+                    const fromRemaining = fromCat?.key != null
+                      ? getAssignedAmount(fromCat.key) -
+                        getSpentAmount(fromCat.key)
                       : 0;
                     return fromCat
                       ? (
@@ -931,11 +1150,9 @@ function BudgetAssignmentContent(
                 </label>
                 <select
                   class="select select-bordered select-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
-                  value={transferToCategoryId.value?.toString() || ""}
+                  value={transferToCategoryId.value || ""}
                   onChange={(e) =>
-                    transferToCategoryId.value = e.currentTarget.value
-                      ? parseInt(e.currentTarget.value)
-                      : null}
+                    transferToCategoryId.value = e.currentTarget.value || null}
                 >
                   <option value="">SELECT...</option>
                   {groups.value.map((group: CategoryGroup) => (
@@ -946,16 +1163,16 @@ function BudgetAssignmentContent(
                     >
                       {group.categories
                         .filter((c: Category) =>
-                          c.id !== transferFromCategoryId.value
+                          c.key !== transferFromCategoryId.value
                         )
                         .map((c: Category) => {
-                          if (c.id == null) {
+                          if (!c.key) {
                             return null;
                           }
-                          const catRemaining = getAssignedAmount(c.id) -
-                            getSpentAmount(c.id);
+                          const catRemaining = getAssignedAmount(c.key) -
+                            getSpentAmount(c.key);
                           return (
-                            <option key={c.id} value={c.id}>
+                            <option key={c.key} value={c.key}>
                               {c.name} ({formatCurrency(catRemaining)})
                             </option>
                           );
@@ -987,10 +1204,10 @@ function BudgetAssignmentContent(
               </div>
               {transferFromCategoryId.value && (() => {
                 const fromCat = allCategories.value.find((c) =>
-                  c.id === transferFromCategoryId.value
+                  c.key === transferFromCategoryId.value
                 );
-                const available = fromCat?.id != null
-                  ? getAssignedAmount(fromCat.id) - getSpentAmount(fromCat.id)
+                const available = fromCat?.key != null
+                  ? getAssignedAmount(fromCat.key) - getSpentAmount(fromCat.key)
                   : 0;
                 const transferAmt = parseFloat(transferAmount.value) || 0;
                 if (transferAmt > available) {
@@ -1035,6 +1252,101 @@ function BudgetAssignmentContent(
         </div>
       )}
 
+      {/* Add Group Modal */}
+      {isAddGroupModalOpen.value && (
+        <div class="modal modal-open">
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-md">
+            <h3 class="font-bold text-xl mb-4 text-white font-mono">
+              ADD CATEGORY GROUP
+            </h3>
+            <p class="text-[#888] text-xs mb-6 font-mono">
+              CREATE A NEW GROUP TO ORGANIZE YOUR BUDGET CATEGORIES.
+            </p>
+
+            <div class="mb-4">
+              <label class="label">
+                <span class="label-text font-mono text-xs text-[#888]">
+                  GROUP TYPE
+                </span>
+              </label>
+              <div class="flex gap-4">
+                <label class="label cursor-pointer gap-2">
+                  <input
+                    type="radio"
+                    name="groupType"
+                    class="radio radio-primary radio-sm"
+                    checked={newGroupType.value === "Expense"}
+                    onChange={() => newGroupType.value = "Expense"}
+                  />
+                  <span class="label-text font-mono text-xs text-white">
+                    EXPENSE
+                  </span>
+                </label>
+                <label class="label cursor-pointer gap-2">
+                  <input
+                    type="radio"
+                    name="groupType"
+                    class="radio radio-primary radio-sm"
+                    checked={newGroupType.value === "Income"}
+                    onChange={() => newGroupType.value = "Income"}
+                  />
+                  <span class="label-text font-mono text-xs text-white">
+                    INCOME
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="label">
+                <span class="label-text font-mono text-xs text-[#888]">
+                  GROUP NAME *
+                </span>
+              </label>
+              <input
+                type="text"
+                class="input input-bordered w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                placeholder="e.g., LIFESTYLE, DEBT"
+                value={newGroupName.value}
+                onInput={(e) => {
+                  newGroupName.value = e.currentTarget.value;
+                }}
+                maxLength={50}
+                autoFocus
+              />
+            </div>
+
+            <div class="modal-action">
+              <button
+                type="button"
+                class="btn btn-ghost font-mono text-xs"
+                onClick={() => isAddGroupModalOpen.value = false}
+                disabled={isCreatingGroup.value}
+              >
+                CANCEL
+              </button>
+              <button
+                type="button"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono text-xs"
+                disabled={isCreatingGroup.value || !newGroupName.value.trim()}
+                onClick={createGroup}
+              >
+                {isCreatingGroup.value
+                  ? <span class="loading loading-spinner loading-xs"></span>
+                  : "CREATE GROUP"}
+              </button>
+            </div>
+          </div>
+          <div
+            class="modal-backdrop"
+            onClick={() => {
+              if (!isCreatingGroup.value) isAddGroupModalOpen.value = false;
+            }}
+          >
+          </div>
+        </div>
+      )}
+
       {/* Add Category Modal */}
       {isAddCategoryModalOpen.value && (
         <div class="modal modal-open">
@@ -1045,7 +1357,7 @@ function BudgetAssignmentContent(
             <p class="text-[#888] text-xs mb-6 font-mono">
               {(() => {
                 const group = groups.value.find((g) =>
-                  g.id === addCategoryGroupId.value
+                  g.key === addCategoryGroupId.value
                 );
                 return group
                   ? `CREATING NEW CATEGORY IN "${group.name.toUpperCase()}"`

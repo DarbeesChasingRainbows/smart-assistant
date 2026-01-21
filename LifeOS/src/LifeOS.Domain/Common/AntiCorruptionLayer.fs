@@ -117,11 +117,11 @@ type GarageEventAdapter() =
                     Cost = maintenance.Cost |> Option.defaultValue 0m
                     Date = maintenance.Date
                     MaintenanceType = maintenance.MaintenanceType |}
-        | ComponentInstalled component -> 
+        | ComponentInstalled installedComponent -> 
             Some {| EventType = "MaintenanceExpense"
-                    VehicleId = component.VehicleId
+                    VehicleId = installedComponent.VehicleId
                     Cost = 0m
-                    Date = component.InstallDate
+                    Date = installedComponent.InstallDate
                     MaintenanceType = "Part Installation" |}
         | _ -> None
 

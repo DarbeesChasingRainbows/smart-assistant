@@ -59,6 +59,7 @@ export interface CategoryGroup {
   id?: number;
   familyIdNumber?: number;
   name: string;
+  type?: string; // "Income" or "Expense"
   sortOrder: number;
   isSystem: boolean;
   createdAt: string;

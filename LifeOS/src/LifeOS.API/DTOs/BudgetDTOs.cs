@@ -47,6 +47,7 @@ public record BudgetCategoryGroupDto
     public string Key { get; init; } = string.Empty;
     public string FamilyId { get; init; } = string.Empty;
     public string Name { get; init; } = string.Empty;
+    public string Type { get; init; } = "Expense"; // "Income" or "Expense"
     public int SortOrder { get; init; }
     public bool IsSystem { get; init; }
     public DateTime CreatedAt { get; init; }
@@ -57,7 +58,25 @@ public record CreateCategoryGroupRequest
 {
     public string FamilyId { get; init; } = string.Empty;
     public string Name { get; init; } = string.Empty;
+    public string Type { get; init; } = "Expense";
     public int SortOrder { get; init; }
+}
+
+public record UpdateCategoryGroupRequest
+{
+    public string? Name { get; init; }
+    public string? Type { get; init; }
+}
+
+public record ReorderGroupItem
+{
+    public string Key { get; init; } = string.Empty;
+    public int SortOrder { get; init; }
+}
+
+public record ReorderCategoryGroupsRequest
+{
+    public List<ReorderGroupItem> Groups { get; init; } = [];
 }
 
 // Category DTOs
@@ -88,6 +107,18 @@ public record UpdateBudgetCategoryRequest
     public decimal? TargetAmount { get; init; }
     public int? SortOrder { get; init; }
     public bool? IsHidden { get; init; }
+}
+
+public record ReorderCategoryItem
+{
+    public string Key { get; init; } = string.Empty;
+    public string GroupKey { get; init; } = string.Empty;
+    public int SortOrder { get; init; }
+}
+
+public record ReorderCategoriesRequest
+{
+    public List<ReorderCategoryItem> Categories { get; init; } = [];
 }
 
 // Budget Assignment DTOs (Zero-Based Budgeting Core)
@@ -297,6 +328,7 @@ public record CategoryBalanceDto
     public string CategoryKey { get; init; } = string.Empty;
     public string CategoryName { get; init; } = string.Empty;
     public string GroupName { get; init; } = string.Empty;
+    public bool IsIncome { get; init; }
     public decimal Carryover { get; init; }
     public decimal Assigned { get; init; }
     public decimal Spent { get; init; }

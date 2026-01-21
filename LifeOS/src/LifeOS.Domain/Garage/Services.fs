@@ -16,13 +16,13 @@ type VehicleDomainService(vehicleRepo: IVehicleRepository, componentRepo: ICompo
     
     interface IVehicleDomainService with
         
-        member _.InstallComponentAsync vehicle component =
+        member _.InstallComponentAsync vehicle part =
             async {
                 // Validate component can be installed
-                match Component.canInstallOnVehicle component vehicle.Id with
+                match Component.canInstallOnVehicle part vehicle.Id with
                 | Ok () ->
                     // Update component state
-                    match component.InstallOnVehicle vehicle.Id with
+                    match part.InstallOnVehicle vehicle.Id with
                     | Ok updatedComponent ->
                         // Save changes
                         let! savedComponent = componentRepo.UpdateAsync updatedComponent |> Async.AwaitTask
@@ -33,13 +33,13 @@ type VehicleDomainService(vehicleRepo: IVehicleRepository, componentRepo: ICompo
                 | Error e -> return Error e
             } |> Async.StartAsTask
         
-        member _.RemoveComponentAsync vehicle component storageLocation =
+        member _.RemoveComponentAsync vehicle part storageLocation =
             async {
                 // Validate component is installed on this vehicle
-                match component.GetInstalledVehicleId() with
+                match part.GetInstalledVehicleId() with
                 | Some vehicleId when vehicleId = vehicle.Id ->
                     // Remove component
-                    match component.RemoveFromVehicle storageLocation with
+                    match part.RemoveFromVehicle storageLocation with
                     | Ok updatedComponent ->
                         let! savedComponent = componentRepo.UpdateAsync updatedComponent |> Async.AwaitTask
                         return Ok (vehicle, savedComponent)
@@ -48,13 +48,13 @@ type VehicleDomainService(vehicleRepo: IVehicleRepository, componentRepo: ICompo
                 | None -> return Error (BusinessRuleViolation "Component is not installed on any vehicle")
             } |> Async.StartAsTask
         
-        member _.TransferComponentAsync fromVehicle toVehicle component =
+        member _.TransferComponentAsync fromVehicle toVehicle part =
             async {
                 // Validate component is installed on fromVehicle
-                match component.GetInstalledVehicleId() with
+                match part.GetInstalledVehicleId() with
                 | Some vehicleId when vehicleId = fromVehicle.Id ->
                     // Remove from current vehicle
-                    match component.RemoveFromVehicle None with
+                    match part.RemoveFromVehicle None with
                     | Ok removedComponent ->
                         // Install on new vehicle
                         match removedComponent.InstallOnVehicle toVehicle.Id with
@@ -91,7 +91,7 @@ type ComponentDomainService(componentRepo: IComponentRepository) =
                     return isUnique
             } |> Async.StartAsTask
         
-        member _.GetMaintenanceScheduleAsync component currentDate =
+        member _.GetMaintenanceScheduleAsync part currentDate =
             async {
                 // This would typically query maintenance records
                 // For now, return empty list - implementation would be in infrastructure

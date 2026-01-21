@@ -20,56 +20,62 @@ type Vision = {
     member this.Activate () =
         match this.Status with
         | Draft ->
-            Ok { this with 
-                Status = Active
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Active
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only draft visions can be activated")
     
     member this.PutOnHold (reason: string) =
         match this.Status with
         | Active ->
-            Ok { this with 
-                Status = OnHold
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = OnHold
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only active visions can be put on hold")
     
     member this.Resume () =
         match this.Status with
         | OnHold ->
-            Ok { this with 
-                Status = Active
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Active
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only on-hold visions can be resumed")
     
     member this.Complete () =
         match this.Status with
         | Active | OnHold ->
-            Ok { this with 
-                Status = VisionStatus.Completed
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = VisionStatus.Completed
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only active or on-hold visions can be completed")
     
     member this.Archive () =
         match this.Status with
         | status when status <> Archived ->
-            Ok { this with 
-                Status = Archived
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Archived
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Vision is already archived")
     
     member this.UpdateTitle (newTitle: string) =
         if String.IsNullOrEmpty(newTitle) then
             Error (ValidationError "Vision title cannot be empty")
         else
-            Ok { this with 
-                Title = newTitle
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Title = newTitle
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.AddCoreValue (value: string) =
         if String.IsNullOrEmpty(value) then
@@ -77,19 +83,21 @@ type Vision = {
         elif this.CoreValues |> List.contains value then
             Error (BusinessRuleViolation "Core value already exists")
         else
-            Ok { this with 
-                CoreValues = value :: this.CoreValues
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    CoreValues = value :: this.CoreValues
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.RemoveCoreValue (value: string) =
         if not (this.CoreValues |> List.contains value) then
             Error (ValidationError "Core value not found")
         else
-            Ok { this with 
-                CoreValues = this.CoreValues |> List.filter ((<>) value)
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    CoreValues = this.CoreValues |> List.filter ((<>) value)
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.AddStrategicPriority (priority: string) =
         if String.IsNullOrEmpty(priority) then
@@ -97,10 +105,11 @@ type Vision = {
         elif this.StrategicPriorities |> List.contains priority then
             Error (BusinessRuleViolation "Strategic priority already exists")
         else
-            Ok { this with 
-                StrategicPriorities = priority :: this.StrategicPriorities
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    StrategicPriorities = priority :: this.StrategicPriorities
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.GetProgressPercentage (kras: KRA seq) =
         let visionKRAs = kras |> Seq.filter (fun k -> k.VisionId = this.Id)
