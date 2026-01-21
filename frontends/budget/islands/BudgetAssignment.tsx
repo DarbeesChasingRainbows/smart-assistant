@@ -31,6 +31,19 @@ function BudgetAssignmentContent(
 ) {
   const groups = useSignal<CategoryGroup[]>(initialCategories);
   const assignments = useSignal<Record<string, number>>(initialAssignments);
+
+  const incomeGroups = useComputed(() =>
+    groups.value.filter((g) => g.type === "Income")
+  );
+  const expenseGroups = useComputed(() =>
+    groups.value.filter((g) => g.type !== "Income")
+  );
+
+  const allSortedGroups = useComputed(() => [
+    ...incomeGroups.value,
+    ...expenseGroups.value,
+  ]);
+
   const isUpdating = useSignal<Record<string, boolean>>({});
   const summary = useSignal<BudgetSummary>(initialSummary);
   const categoryBalances = useSignal<CategoryBalance[]>(
@@ -69,6 +82,7 @@ function BudgetAssignmentContent(
   // Add group modal state
   const isAddGroupModalOpen = useSignal(false);
   const newGroupName = useSignal("");
+  const newGroupType = useSignal("Expense");
   const isCreatingGroup = useSignal(false);
 
   // Assignment input state (per category) to keep typing stable
@@ -260,6 +274,7 @@ function BudgetAssignmentContent(
         body: JSON.stringify({
           familyId: "default",
           name: newGroupName.value.trim(),
+          type: newGroupType.value,
           sortOrder,
         }),
       });
@@ -672,14 +687,16 @@ function BudgetAssignmentContent(
       </div>
 
       {/* Category Groups */}
-      {groups.value.map(
+      {allSortedGroups.value.map(
         (group: CategoryGroup) => {
           const groupKey = group.key;
           if (!groupKey) return null;
+          const isIncomeGroup = group.type === "Income";
+
           return (
             <div
               key={groupKey}
-              class={`card bg-[#1a1a1a] shadow-xl border border-[#333] overflow-hidden ${
+              class={`card bg-[#1a1a1a] shadow-xl border border-[#333] overflow-hidden mb-6 ${
                 draggedGroupKey.value === groupKey ? "opacity-50" : ""
               }`}
               draggable={!editingGroupId.value}
@@ -725,7 +742,9 @@ function BudgetAssignmentContent(
                   : (
                     <div class="flex items-center px-4 py-3 bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
                       <h3
-                        class="font-bold text-[#00d9ff] font-mono cursor-pointer hover:underline flex items-center gap-2"
+                        class={`font-bold font-mono cursor-pointer hover:underline flex items-center gap-2 ${
+                          isIncomeGroup ? "text-[#00ff88]" : "text-[#00d9ff]"
+                        }`}
                         onClick={() => startEditGroup(group)}
                       >
                         {group.name.toUpperCase()}
@@ -737,8 +756,12 @@ function BudgetAssignmentContent(
                           class="w-20 md:w-28 text-right cursor-pointer hover:text-[#00d9ff] flex items-center justify-end gap-1"
                           onClick={() => showSpent.value = !showSpent.value}
                         >
-                          {showSpent.value ? "SPENT" : "REMAINING"}
-                          <span class="text-[10px]">▼</span>
+                          {isIncomeGroup
+                            ? "RECEIVED"
+                            : showSpent.value
+                            ? "SPENT"
+                            : "REMAINING"}
+                          {!isIncomeGroup && <span class="text-[10px]">▼</span>}
                         </span>
                       </div>
                     </div>
@@ -1177,6 +1200,40 @@ function BudgetAssignmentContent(
             <p class="text-[#888] text-xs mb-6 font-mono">
               CREATE A NEW GROUP TO ORGANIZE YOUR BUDGET CATEGORIES.
             </p>
+
+            <div class="mb-4">
+              <label class="label">
+                <span class="label-text font-mono text-xs text-[#888]">
+                  GROUP TYPE
+                </span>
+              </label>
+              <div class="flex gap-4">
+                <label class="label cursor-pointer gap-2">
+                  <input
+                    type="radio"
+                    name="groupType"
+                    class="radio radio-primary radio-sm"
+                    checked={newGroupType.value === "Expense"}
+                    onChange={() => newGroupType.value = "Expense"}
+                  />
+                  <span class="label-text font-mono text-xs text-white">
+                    EXPENSE
+                  </span>
+                </label>
+                <label class="label cursor-pointer gap-2">
+                  <input
+                    type="radio"
+                    name="groupType"
+                    class="radio radio-primary radio-sm"
+                    checked={newGroupType.value === "Income"}
+                    onChange={() => newGroupType.value = "Income"}
+                  />
+                  <span class="label-text font-mono text-xs text-white">
+                    INCOME
+                  </span>
+                </label>
+              </div>
+            </div>
 
             <div class="mb-6">
               <label class="label">

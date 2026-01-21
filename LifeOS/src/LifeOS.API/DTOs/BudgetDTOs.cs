@@ -47,6 +47,7 @@ public record BudgetCategoryGroupDto
     public string Key { get; init; } = string.Empty;
     public string FamilyId { get; init; } = string.Empty;
     public string Name { get; init; } = string.Empty;
+    public string Type { get; init; } = "Expense"; // "Income" or "Expense"
     public int SortOrder { get; init; }
     public bool IsSystem { get; init; }
     public DateTime CreatedAt { get; init; }
@@ -57,7 +58,14 @@ public record CreateCategoryGroupRequest
 {
     public string FamilyId { get; init; } = string.Empty;
     public string Name { get; init; } = string.Empty;
+    public string Type { get; init; } = "Expense";
     public int SortOrder { get; init; }
+}
+
+public record UpdateCategoryGroupRequest
+{
+    public string? Name { get; init; }
+    public string? Type { get; init; }
 }
 
 public record ReorderGroupItem
@@ -320,6 +328,7 @@ public record CategoryBalanceDto
     public string CategoryKey { get; init; } = string.Empty;
     public string CategoryName { get; init; } = string.Empty;
     public string GroupName { get; init; } = string.Empty;
+    public bool IsIncome { get; init; }
     public decimal Carryover { get; init; }
     public decimal Assigned { get; init; }
     public decimal Spent { get; init; }

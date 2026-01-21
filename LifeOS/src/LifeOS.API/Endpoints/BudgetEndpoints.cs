@@ -49,6 +49,7 @@ public static class BudgetEndpoints
         categoryGroups.MapGet("/", GetCategoryGroups).WithName("GetBudgetCategoryGroups");
         categoryGroups.MapPost("/", CreateCategoryGroup).WithName("CreateBudgetCategoryGroup");
         categoryGroups.MapPost("/reorder", ReorderCategoryGroups).WithName("ReorderBudgetCategoryGroups");
+        categoryGroups.MapPut("/{key}", UpdateCategoryGroup).WithName("UpdateBudgetCategoryGroup");
 
         // Categories
         var categories = group.MapGroup("/categories");
@@ -538,6 +539,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             _key = Guid.NewGuid().ToString("N")[..12],
             familyId = request.FamilyId,
             name = request.Name,
+            type = request.Type,
             sortOrder = request.SortOrder,
             isSystem = false,
             createdAt = now
@@ -545,6 +547,26 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
         var result = await db.Client.Document.PostDocumentAsync(CategoryGroupCollection, doc);
         return Results.Created($"/api/v1/budget/category-groups/{result._key}", doc);
+    }
+
+    private static async Task<IResult> UpdateCategoryGroup(
+        string key,
+        UpdateCategoryGroupRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            var updates = new Dictionary<string, object> { { "updatedAt", DateTime.UtcNow } };
+            if (request.Name != null) updates["name"] = request.Name;
+            if (request.Type != null) updates["type"] = request.Type;
+
+            await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(CategoryGroupCollection, key, updates);
+            return Results.Ok();
+        }
+        catch
+        {
+            return Results.NotFound();
+        }
     }
 
     private static async Task<IResult> ReorderCategoryGroups(
@@ -1630,29 +1652,47 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             return null;
         }
 
-        var totalIncome = decimal.TryParse(period.totalIncome?.ToString(), out decimal inc) ? inc : 0m;
-
-        // Get total assigned
-        var assignedQuery = $@"
+        // Calculate Total Planned Income (Targets of Income Categories)
+        // Note: Targets are global per category, not per period. Ideally should be per period if income varies.
+        // But for now, we use Category.TargetAmount as the planned income.
+        // TODO: Move Income Planning to AssignmentCollection or specific IncomePlanningCollection if it varies by period.
+        // For EveryDollar style, you usually adjust the "Planned" amount for the month.
+        // If we use AssignmentCollection for "Planned Expense", maybe we use it for "Planned Income" too?
+        // Let's assume for now: Income Group -> AssignedAmount = Planned Income.
+        
+        // Let's check assignments for Income Groups
+        var incomeAssignedQuery = $@"
             FOR doc IN {AssignmentCollection}
             FILTER doc.payPeriodKey == @payPeriodKey
-            COLLECT AGGREGATE total = SUM(doc.assignedAmount)
-            RETURN total";
+            LET cat = FIRST(FOR c IN {CategoryCollection} FILTER c._key == doc.categoryKey RETURN c)
+            LET grp = FIRST(FOR g IN {CategoryGroupCollection} FILTER g._key == cat.groupKey RETURN g)
+            FILTER grp.type == 'Income'
+            RETURN doc.assignedAmount";
+            
+        var incomeCursor = await db.Client.Cursor.PostCursorAsync<decimal>(
+            incomeAssignedQuery, new Dictionary<string, object> { { "payPeriodKey", payPeriodKey } });
+        var totalPlannedIncome = incomeCursor.Result.Sum();
 
-        var assignedCursor = await db.Client.Cursor.PostCursorAsync<dynamic>(
-            assignedQuery, new Dictionary<string, object> { { "payPeriodKey", payPeriodKey } });
+        // Get total assigned to EXPENSES
+        var expenseAssignedQuery = $@"
+            FOR doc IN {AssignmentCollection}
+            FILTER doc.payPeriodKey == @payPeriodKey
+            LET cat = FIRST(FOR c IN {CategoryCollection} FILTER c._key == doc.categoryKey RETURN c)
+            LET grp = FIRST(FOR g IN {CategoryGroupCollection} FILTER g._key == cat.groupKey RETURN g)
+            FILTER grp.type != 'Income'
+            RETURN doc.assignedAmount";
 
-        var firstResult = assignedCursor.Result.FirstOrDefault();
-        decimal assigned = 0m;
-        var totalAssigned = decimal.TryParse(firstResult?.ToString() ?? "0", out assigned) ? assigned : 0m;
+        var expenseCursor = await db.Client.Cursor.PostCursorAsync<decimal>(
+            expenseAssignedQuery, new Dictionary<string, object> { { "payPeriodKey", payPeriodKey } });
+        var totalExpenseAssigned = expenseCursor.Result.Sum();
 
         return new PayPeriodBudgetSummaryDto
         {
             PayPeriodKey = payPeriodKey,
             PayPeriodName = period.name?.ToString() ?? "",
-            TotalIncome = totalIncome,
-            TotalAssigned = totalAssigned,
-            Unassigned = totalIncome - totalAssigned
+            TotalIncome = totalPlannedIncome,
+            TotalAssigned = totalExpenseAssigned,
+            Unassigned = totalPlannedIncome - totalExpenseAssigned
         };
     }
 
@@ -1662,6 +1702,12 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         var query = $@"
             FOR cat IN {CategoryCollection}
             FILTER cat.familyId == @familyId
+            LET grp = FIRST(
+                FOR g IN {CategoryGroupCollection}
+                FILTER g._key == cat.groupKey
+                RETURN g
+            )
+            LET isIncome = grp.type == 'Income'
             LET carryoverDoc = FIRST(
                 FOR co IN {CarryoverCollection}
                 FILTER co.familyId == @familyId AND co.payPeriodKey == @payPeriodKey AND co.categoryKey == cat._key
@@ -1674,18 +1720,15 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             )
             LET spent = SUM(
                 FOR t IN {TransactionCollection}
-                FILTER t.categoryKey == cat._key AND t.payPeriodKey == @payPeriodKey AND t.amount < 0
+                FILTER t.categoryKey == cat._key AND t.payPeriodKey == @payPeriodKey
+                FILTER (isIncome ? t.amount > 0 : t.amount < 0)
                 RETURN ABS(t.amount)
-            )
-            LET grp = FIRST(
-                FOR g IN {CategoryGroupCollection}
-                FILTER g._key == cat.groupKey
-                RETURN g
             )
             RETURN {{
                 categoryKey: cat._key,
                 categoryName: cat.name,
                 groupName: grp.name,
+                isIncome: isIncome,
                 carryover: carryoverDoc.carryover || 0,
                 assigned: assignment.assignedAmount || 0,
                 spent: spent || 0
@@ -1699,6 +1742,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             CategoryKey = doc.categoryKey?.ToString() ?? "",
             CategoryName = doc.categoryName?.ToString() ?? "",
             GroupName = doc.groupName?.ToString() ?? "",
+            IsIncome = doc.isIncome == true,
             Carryover = decimal.TryParse(doc.carryover?.ToString(), out decimal co) ? co : 0,
             Assigned = decimal.TryParse(doc.assigned?.ToString(), out decimal a) ? a : 0,
             Spent = decimal.TryParse(doc.spent?.ToString(), out decimal s) ? s : 0
@@ -1855,6 +1899,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         Key = doc._key?.ToString() ?? "",
         FamilyId = doc.familyId?.ToString() ?? "",
         Name = doc.name?.ToString() ?? "",
+        Type = doc.type?.ToString() ?? "Expense",
         SortOrder = int.TryParse(doc.sortOrder?.ToString() ?? "", out int sort) ? sort : 0,
         IsSystem = doc.isSystem == true,
         CreatedAt = DateTime.TryParse(doc.createdAt?.ToString(), out DateTime created) ? created : DateTime.MinValue,
