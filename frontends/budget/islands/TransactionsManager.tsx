@@ -1012,7 +1012,7 @@ function TransactionsManagerContent({
         <div class="flex gap-2 flex-wrap">
           <button
             type="button"
-            class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            class="bg-[#111111] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
             onClick={openTransferModal}
           >
             <span class="mr-2">⇄</span>Transfer

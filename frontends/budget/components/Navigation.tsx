@@ -32,7 +32,7 @@ export function Navigation({ children, currentPath = "" }: NavigationProps) {
         )}
 
         {/* Header - Always visible */}
-        <header class="bg-[#0a0a0a] text-white shadow-lg border-b border-[#00d9ff]/20">
+        <header class="bg-[#111111] text-white shadow-lg border-b border-[#00d9ff]/20">
           <div class="max-w-7xl mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
               {/* Logo and Mobile Menu Button */}

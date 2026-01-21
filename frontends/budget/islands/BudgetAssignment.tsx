@@ -684,17 +684,19 @@ function BudgetAssignmentContent(
   return (
     <div class="space-y-6">
       {/* Budget Summary Bar */}
-      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333] sticky top-0 z-10">
+      <div class="card bg-[#1c1c1c] shadow-xl border border-[#444] sticky top-0 z-10">
         <div class="card-body p-4 md:p-6">
           <div class="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div class="text-xs md:text-sm text-[#888] font-mono">INCOME</div>
+              <div class="text-xs md:text-sm text-[#a0a0a0] font-mono">
+                INCOME
+              </div>
               <div class="text-lg md:text-xl font-bold text-[#00ff88] font-mono">
                 {formatCurrency(summary.value.totalIncome)}
               </div>
             </div>
             <div>
-              <div class="text-xs md:text-sm text-[#888] font-mono">
+              <div class="text-xs md:text-sm text-[#a0a0a0] font-mono">
                 ASSIGNED
               </div>
               <div class="text-lg md:text-xl font-bold text-[#00d9ff] font-mono">
@@ -702,7 +704,7 @@ function BudgetAssignmentContent(
               </div>
             </div>
             <div>
-              <div class="text-xs md:text-sm text-[#888] font-mono">
+              <div class="text-xs md:text-sm text-[#a0a0a0] font-mono">
                 UNASSIGNED
               </div>
               <div
@@ -718,7 +720,7 @@ function BudgetAssignmentContent(
               </div>
             </div>
           </div>
-          <div class="w-full bg-[#0a0a0a] border border-[#333] h-2 mt-4">
+          <div class="w-full bg-[#111111] border border-[#444] h-2 mt-4">
             <div
               class={`h-full transition-all duration-300 ${
                 unassigned.value === 0
@@ -755,7 +757,7 @@ function BudgetAssignmentContent(
           return (
             <div
               key={groupKey}
-              class={`card bg-[#1a1a1a] shadow-xl border border-[#333] overflow-hidden mb-6 ${
+              class={`card bg-[#1c1c1c] shadow-xl border border-[#444] overflow-hidden mb-6 ${
                 draggedGroupKey.value === groupKey ? "opacity-50" : ""
               }`}
               draggable={!editingGroupId.value}
@@ -773,10 +775,10 @@ function BudgetAssignmentContent(
                 {/* Group Header - Editable */}
                 {editingGroupId.value === groupKey
                   ? (
-                    <div class="flex items-center gap-2 p-4 border-b border-[#333] bg-[#0a0a0a]">
+                    <div class="flex items-center gap-2 p-4 border-b border-[#444] bg-[#111111]">
                       <input
                         type="text"
-                        class="input input-bordered input-sm flex-1 bg-[#1a1a1a] border-[#333] text-white font-mono"
+                        class="input input-bordered input-sm flex-1 bg-[#1c1c1c] border-[#444] text-[#e0e0e0] font-mono"
                         value={editName.value}
                         onInput={(e) => editName.value = e.currentTarget.value}
                         onKeyDown={(e) => e.key === "Enter" && saveEditGroup()}
@@ -791,7 +793,7 @@ function BudgetAssignmentContent(
                       </button>
                       <button
                         type="button"
-                        class="btn btn-sm btn-ghost text-[#888] font-mono"
+                        class="btn btn-sm btn-ghost text-[#a0a0a0] font-mono"
                         onClick={() => editingGroupId.value = null}
                       >
                         CANCEL
@@ -807,7 +809,7 @@ function BudgetAssignmentContent(
                     </div>
                   )
                   : (
-                    <div class="flex items-center px-4 py-3 bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
+                    <div class="flex items-center px-4 py-3 bg-[#111111] border-b-2 border-[#00d9ff]">
                       <h3
                         class={`font-bold font-mono cursor-pointer hover:underline flex items-center gap-2 ${
                           isIncomeGroup ? "text-[#00ff88]" : "text-[#00d9ff]"
@@ -817,7 +819,7 @@ function BudgetAssignmentContent(
                         {group.name.toUpperCase()}
                         <span class="text-[10px] opacity-50">▼</span>
                       </h3>
-                      <div class="ml-auto flex items-center gap-4 md:gap-8 text-[10px] md:text-xs text-[#888] font-mono">
+                      <div class="ml-auto flex items-center gap-4 md:gap-8 text-[10px] md:text-xs text-[#a0a0a0] font-mono">
                         <span class="w-16 md:w-24 text-right">PLANNED</span>
                         <span
                           class="w-20 md:w-28 text-right cursor-pointer hover:text-[#00d9ff] flex items-center justify-end gap-1"
@@ -885,7 +887,7 @@ function BudgetAssignmentContent(
                             >
                               <input
                                 type="text"
-                                class="input input-bordered input-sm flex-1 bg-[#0a0a0a] border-[#333] text-white font-mono"
+                                class="input input-bordered input-sm flex-1 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
                                 value={editName.value}
                                 onInput={(e) =>
                                   editName.value = e.currentTarget.value}
@@ -894,7 +896,7 @@ function BudgetAssignmentContent(
                               />
                               <input
                                 type="number"
-                                class="input input-bordered input-sm w-24 md:w-28 bg-[#0a0a0a] border-[#333] text-white font-mono"
+                                class="input input-bordered input-sm w-24 md:w-28 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
                                 value={editTarget.value}
                                 onInput={(e) =>
                                   editTarget.value = e.currentTarget.value}
@@ -940,7 +942,7 @@ function BudgetAssignmentContent(
                                   class={`font-medium font-mono text-sm ${
                                     isSelected
                                       ? "text-[#00d9ff] underline cursor-text"
-                                      : "text-white"
+                                      : "text-[#e0e0e0]"
                                   }`}
                                 >
                                   {category.name}
@@ -963,7 +965,7 @@ function BudgetAssignmentContent(
                                     <div class="relative inline-block">
                                       <input
                                         type="number"
-                                        class={`input input-bordered input-sm w-20 md:w-24 text-right bg-[#0a0a0a] border-[#00d9ff] text-[#00d9ff] font-mono text-sm ${
+                                        class={`input input-bordered input-sm w-20 md:w-24 text-right bg-[#111111] border-[#00d9ff] text-[#00d9ff] font-mono text-sm ${
                                           isLoading ? "opacity-50" : ""
                                         }`}
                                         value={assignmentInputs
@@ -1020,7 +1022,7 @@ function BudgetAssignmentContent(
                                     </div>
                                   )
                                   : (
-                                    <span class="text-white font-mono text-sm">
+                                    <span class="text-[#e0e0e0] font-mono text-sm">
                                       {formatCurrency(assigned)}
                                     </span>
                                   )}
@@ -1046,7 +1048,7 @@ function BudgetAssignmentContent(
                                 {isSelected && (
                                   <button
                                     type="button"
-                                    class="text-[#888] hover:text-[#00d9ff] text-lg"
+                                    class="text-[#a0a0a0] hover:text-[#00d9ff] text-lg"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       openTransferModal(categoryKey);
@@ -1086,10 +1088,10 @@ function BudgetAssignmentContent(
       )}
 
       {/* Add Group Button */}
-      <div class="card bg-[#1a1a1a] border border-dashed border-[#333] hover:border-[#00d9ff]/50 transition-colors cursor-pointer">
+      <div class="card bg-[#1c1c1c] border border-dashed border-[#444] hover:border-[#00d9ff]/50 transition-colors cursor-pointer">
         <button
           type="button"
-          class="card-body p-4 items-center justify-center text-[#888] hover:text-[#00d9ff] font-mono"
+          class="card-body p-4 items-center justify-center text-[#a0a0a0] hover:text-[#00d9ff] font-mono"
           onClick={() => {
             newGroupName.value = "";
             isAddGroupModalOpen.value = true;
@@ -1102,21 +1104,21 @@ function BudgetAssignmentContent(
       {/* Fund Transfer Modal */}
       {isTransferModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-md">
+          <div class="modal-box bg-[#1c1c1c] border border-[#444] max-w-md">
             {/* Header */}
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 rounded bg-[#00ff88]/20 flex items-center justify-center border border-[#00ff88]/30">
                 <span class="text-[#00ff88] text-lg">💵</span>
               </div>
               <div class="w-10 h-10 rounded bg-[#333] flex items-center justify-center border border-[#444]">
-                <span class="text-[#888]">⇄</span>
+                <span class="text-[#a0a0a0]">⇄</span>
               </div>
             </div>
 
-            <h3 class="font-bold text-xl mb-2 text-white font-mono">
+            <h3 class="font-bold text-xl mb-2 text-[#e0e0e0] font-mono">
               FUND TRANSFER
             </h3>
-            <p class="text-[#888] text-xs mb-6 font-mono">
+            <p class="text-[#a0a0a0] text-xs mb-6 font-mono">
               SELECT DESTINATION CATEGORY AND AMOUNT. PLANNED AMOUNTS WILL BE
               ADJUSTED.
             </p>
@@ -1125,10 +1127,10 @@ function BudgetAssignmentContent(
             <div class="grid grid-cols-[1fr_auto_1fr] gap-2 items-start mb-6">
               {/* From */}
               <div>
-                <label class="text-[10px] text-[#888] mb-1 block font-mono">
+                <label class="text-[10px] text-[#a0a0a0] mb-1 block font-mono">
                   FROM
                 </label>
-                <div class="border border-[#333] bg-[#0a0a0a] rounded p-2">
+                <div class="border border-[#444] bg-[#111111] rounded p-2">
                   {(() => {
                     const fromCat = allCategories.value.find((c) =>
                       c.key === transferFromCategoryId.value
@@ -1143,7 +1145,7 @@ function BudgetAssignmentContent(
                           <div class="font-bold text-[#00d9ff] font-mono text-xs truncate">
                             {fromCat.name}
                           </div>
-                          <div class="text-[10px] text-[#888] font-mono">
+                          <div class="text-[10px] text-[#a0a0a0] font-mono">
                             {formatCurrency(fromRemaining)} AVL
                           </div>
                         </div>
@@ -1158,11 +1160,11 @@ function BudgetAssignmentContent(
 
               {/* To */}
               <div>
-                <label class="text-[10px] text-[#888] mb-1 block font-mono">
+                <label class="text-[10px] text-[#a0a0a0] mb-1 block font-mono">
                   TO
                 </label>
                 <select
-                  class="select select-bordered select-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                  class="select select-bordered select-sm w-full bg-[#111111] border-[#444] text-[#e0e0e0] font-mono text-xs"
                   value={transferToCategoryId.value || ""}
                   onChange={(e) =>
                     transferToCategoryId.value = e.currentTarget.value || null}
@@ -1172,7 +1174,7 @@ function BudgetAssignmentContent(
                     <optgroup
                       key={group.id ?? group.name}
                       label={group.name.toUpperCase()}
-                      class="bg-[#1a1a1a]"
+                      class="bg-[#1c1c1c]"
                     >
                       {group.categories
                         .filter((c: Category) =>
@@ -1198,7 +1200,7 @@ function BudgetAssignmentContent(
 
             {/* Amount */}
             <div class="mb-6">
-              <label class="text-[10px] text-[#888] mb-1 block font-mono">
+              <label class="text-[10px] text-[#a0a0a0] mb-1 block font-mono">
                 AMOUNT
               </label>
               <div class="relative">
@@ -1207,7 +1209,7 @@ function BudgetAssignmentContent(
                 </span>
                 <input
                   type="number"
-                  class="input input-bordered w-full pl-7 bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered w-full pl-7 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
                   placeholder="0.00"
                   step="0.01"
                   min="0"
@@ -1268,17 +1270,17 @@ function BudgetAssignmentContent(
       {/* Add Group Modal */}
       {isAddGroupModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-md">
-            <h3 class="font-bold text-xl mb-4 text-white font-mono">
+          <div class="modal-box bg-[#1c1c1c] border border-[#444] max-w-md">
+            <h3 class="font-bold text-xl mb-4 text-[#e0e0e0] font-mono">
               ADD CATEGORY GROUP
             </h3>
-            <p class="text-[#888] text-xs mb-6 font-mono">
+            <p class="text-[#a0a0a0] text-xs mb-6 font-mono">
               CREATE A NEW GROUP TO ORGANIZE YOUR BUDGET CATEGORIES.
             </p>
 
             <div class="mb-4">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#888]">
+                <span class="label-text font-mono text-xs text-[#a0a0a0]">
                   GROUP TYPE
                 </span>
               </label>
@@ -1291,7 +1293,7 @@ function BudgetAssignmentContent(
                     checked={newGroupType.value === "Expense"}
                     onChange={() => newGroupType.value = "Expense"}
                   />
-                  <span class="label-text font-mono text-xs text-white">
+                  <span class="label-text font-mono text-xs text-[#e0e0e0]">
                     EXPENSE
                   </span>
                 </label>
@@ -1303,7 +1305,7 @@ function BudgetAssignmentContent(
                     checked={newGroupType.value === "Income"}
                     onChange={() => newGroupType.value = "Income"}
                   />
-                  <span class="label-text font-mono text-xs text-white">
+                  <span class="label-text font-mono text-xs text-[#e0e0e0]">
                     INCOME
                   </span>
                 </label>
@@ -1312,13 +1314,13 @@ function BudgetAssignmentContent(
 
             <div class="mb-6">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#888]">
+                <span class="label-text font-mono text-xs text-[#a0a0a0]">
                   GROUP NAME *
                 </span>
               </label>
               <input
                 type="text"
-                class="input input-bordered w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                class="input input-bordered w-full bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
                 placeholder="e.g., LIFESTYLE, DEBT"
                 value={newGroupName.value}
                 onInput={(e) => {
@@ -1363,11 +1365,11 @@ function BudgetAssignmentContent(
       {/* Add Category Modal */}
       {isAddCategoryModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-md">
-            <h3 class="font-bold text-xl mb-4 text-white font-mono">
+          <div class="modal-box bg-[#1c1c1c] border border-[#444] max-w-md">
+            <h3 class="font-bold text-xl mb-4 text-[#e0e0e0] font-mono">
               ADD CATEGORY
             </h3>
-            <p class="text-[#888] text-xs mb-6 font-mono">
+            <p class="text-[#a0a0a0] text-xs mb-6 font-mono">
               {(() => {
                 const group = groups.value.find((g) =>
                   g.key === addCategoryGroupId.value
@@ -1381,13 +1383,13 @@ function BudgetAssignmentContent(
             {/* Category Name */}
             <div class="mb-4">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#888]">
+                <span class="label-text font-mono text-xs text-[#a0a0a0]">
                   NAME *
                 </span>
               </label>
               <input
                 type="text"
-                class="input input-bordered w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                class="input input-bordered w-full bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
                 placeholder="e.g., GROCERIES, GAS, ENTERTAINMENT"
                 value={newCategoryName.value}
                 onInput={(e) => {
@@ -1400,7 +1402,7 @@ function BudgetAssignmentContent(
             {/* Target Amount */}
             <div class="mb-6">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#888]">
+                <span class="label-text font-mono text-xs text-[#a0a0a0]">
                   MONTHLY TARGET (OPTIONAL)
                 </span>
               </label>
@@ -1410,7 +1412,7 @@ function BudgetAssignmentContent(
                 </span>
                 <input
                   type="number"
-                  class="input input-bordered w-full pl-7 bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered w-full pl-7 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
                   placeholder="0.00"
                   step="0.01"
                   min="0"
