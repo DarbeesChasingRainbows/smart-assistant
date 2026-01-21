@@ -3,6 +3,7 @@ import { useEffect } from "preact/hooks";
 import MarkdownEditor from "./MarkdownEditor.tsx";
 import Modal from "../components/ui/Modal.tsx";
 import Alert from "../components/ui/Alert.tsx";
+import Tooltip from "../components/ui/Tooltip.tsx";
 import { RetentionApiClient } from "../utils/api.ts";
 import type { Deck } from "../utils/contracts.ts";
 
@@ -452,26 +453,30 @@ export default function FlashcardManager() {
             {flashcards.value.map((card) => (
               <div key={card.id} class="border border-gray-200 rounded-lg p-4 relative group">
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => openEditModal(card)}
-                    class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50 min-h-[44px] flex items-center gap-2"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    <span class="text-sm">Edit</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => deleteFlashcard(card.id)}
-                    class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50 min-h-[44px] flex items-center gap-2"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    <span class="text-sm">Delete</span>
-                  </button>
+                  <Tooltip content="Edit this flashcard (modify question and answer)" position="top">
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(card)}
+                      class="btn btn-ghost btn-sm text-blue-600 hover:bg-blue-50 min-h-[44px] flex items-center gap-2"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      <span class="text-sm">Edit</span>
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Permanently delete this flashcard (cannot be undone)" position="top">
+                    <button
+                      type="button"
+                      onClick={() => deleteFlashcard(card.id)}
+                      class="btn btn-ghost btn-sm text-red-600 hover:bg-red-50 min-h-[44px] flex items-center gap-2"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      <span class="text-sm">Delete</span>
+                    </button>
+                  </Tooltip>
                 </div>
                 <div class="font-medium text-gray-800 mb-2 pr-10">{card.question}</div>
                 <div class="text-gray-600">{card.answer}</div>
