@@ -24,80 +24,88 @@ type CropBatch = {
     member this.Seed (quantity: Quantity) (date: DateTime) =
         match this.Status with
         | Planned ->
-            Ok { this with 
-                Status = Seeded
-                Quantity = quantity
-                DateSeeded = Some date
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Seeded
+                    Quantity = quantity
+                    DateSeeded = Some date
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only planned batches can be seeded")
     
     member this.Germinate () =
         match this.Status with
         | Seeded ->
-            Ok { this with 
-                Status = Germinated
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Germinated
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only seeded batches can germinate")
     
     member this.MarkAsGrowing () =
         match this.Status with
         | Germinated ->
-            Ok { this with 
-                Status = Growing
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Growing
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only germinated batches can be marked as growing")
     
     member this.Flower () =
         match this.Status with
         | Growing ->
-            Ok { this with 
-                Status = Flowering
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Flowering
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only growing batches can flower")
     
     member this.Fruit () =
         match this.Status with
         | Flowering ->
-            Ok { this with 
-                Status = Fruiting
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Fruiting
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only flowering batches can fruit")
     
     member this.Harvest (actualYield: Quantity) (quality: string option) (date: DateTime) =
         match this.Status with
         | Fruiting ->
-            Ok { this with 
-                Status = Harvested
-                ActualYield = Some actualYield
-                Quality = quality
-                DateHarvested = Some date
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Harvested
+                    ActualYield = Some actualYield
+                    Quality = quality
+                    DateHarvested = Some date
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only fruiting batches can be harvested")
     
     member this.MarkAsFailed (reason: string) =
         match this.Status with
         | status when status <> Harvested && status <> Terminated ->
-            Ok { this with 
-                Status = Failed
-                Notes = Some reason
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Failed
+                    Notes = Some reason
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Cannot mark completed batches as failed")
     
     member this.Terminate (reason: string) =
         match this.Status with
         | status when status <> Harvested && status <> Terminated ->
-            Ok { this with 
-                Status = Terminated
-                Notes = Some reason
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Terminated
+                    Notes = Some reason
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Cannot terminate completed batches")
     
     member this.IsCompleted =

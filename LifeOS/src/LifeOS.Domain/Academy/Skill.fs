@@ -27,19 +27,22 @@ type Skill = {
       elif skillId = this.Id then
           Error (BusinessRuleViolation "A skill cannot be a prerequisite of itself")
       else
-          Ok { this with 
-              Prerequisites = skillId :: this.Prerequisites
-              UpdatedAt = DateTime.utcNow()
-          }
+          Ok
+              { this with
+                  Prerequisites = skillId :: this.Prerequisites
+                  UpdatedAt = DateTime.utcNow()
+              }
   
   member this.RemovePrerequisite (skillId: SkillId) =
       if not (this.Prerequisites |> List.contains skillId) then
           Error (ValidationError "Skill is not a prerequisite")
       else
-          Ok { this with 
-              Prerequisites = this.Prerequisites |> List.filter ((<>) skillId)
-              UpdatedAt = DateTime.utcNow()
-          }
+          Ok
+              { this with
+                  Prerequisites =
+                      this.Prerequisites |> List.filter ((<>) skillId)
+                  UpdatedAt = DateTime.utcNow()
+              }
   
   member this.AddRelatedSkill (skillId: SkillId) =
       if this.RelatedSkills |> List.contains skillId then
@@ -47,31 +50,35 @@ type Skill = {
       elif skillId = this.Id then
           Error (BusinessRuleViolation "A skill cannot be related to itself")
       else
-          Ok { this with 
-              RelatedSkills = skillId :: this.RelatedSkills
-              UpdatedAt = DateTime.utcNow()
-          }
+          Ok
+              { this with
+                  RelatedSkills = skillId :: this.RelatedSkills
+                  UpdatedAt = DateTime.utcNow()
+              }
   
   member this.UpdateXPReward (newReward: XP) =
       if XP.value newReward < 0 then
           Error (ValidationError "XP reward cannot be negative")
       else
-          Ok { this with 
-              BaseXPReward = newReward
+          Ok
+              { this with
+                  BaseXPReward = newReward
+                  UpdatedAt = DateTime.utcNow()
+              }
+  
+  member this.Deactivate () =
+      Ok
+          { this with
+              IsActive = false
               UpdatedAt = DateTime.utcNow()
           }
   
-  member this.Deactivate () =
-      Ok { this with 
-          IsActive = false
-          UpdatedAt = DateTime.utcNow()
-      }
-  
   member this.Activate () =
-      Ok { this with 
-          IsActive = true
-          UpdatedAt = DateTime.utcNow()
-      }
+      Ok
+          { this with
+              IsActive = true
+              UpdatedAt = DateTime.utcNow()
+          }
 
 // User Skill Progress - Tracks user's progress in a skill
 type UserSkill = {
@@ -109,7 +116,7 @@ type UserSkill = {
                   Streak 1
           | None -> Streak 1
       
-      { this with 
+      { this with
           CurrentLevel = newLevel
           CurrentXP = newCurrentXP
           TotalXP = newTotalXP
@@ -119,7 +126,7 @@ type UserSkill = {
       }
   
   member this.ResetStreak () =
-      { this with 
+      { this with
           Streak = Streak.zero
           UpdatedAt = DateTime.utcNow()
       }

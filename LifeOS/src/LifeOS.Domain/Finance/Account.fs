@@ -128,13 +128,14 @@ module Merchant =
         }
     
     let updateDetails (merchant: Merchant) name website notes defaultCategoryId =
-        Ok { merchant with
-            Name = name
-            Website = website
-            Notes = notes
-            DefaultCategoryId = defaultCategoryId
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { merchant with
+                Name = name
+                Website = website
+                Notes = notes
+                DefaultCategoryId = defaultCategoryId
+                UpdatedAt = DateTime.utcNow()
+            }
 
 /// Category entity for transaction classification
 type Category = {

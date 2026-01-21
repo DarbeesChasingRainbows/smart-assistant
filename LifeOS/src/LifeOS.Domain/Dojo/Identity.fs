@@ -19,19 +19,22 @@ type Identity = {
         if this.AssociatedHabits |> List.contains habitId then
             Error (BusinessRuleViolation "Habit is already associated with this identity")
         else
-            Ok { this with 
-                AssociatedHabits = habitId :: this.AssociatedHabits
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    AssociatedHabits = habitId :: this.AssociatedHabits
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.RemoveHabit (habitId: HabitId) =
         if not (this.AssociatedHabits |> List.contains habitId) then
             Error (ValidationError "Habit is not associated with this identity")
         else
-            Ok { this with 
-                AssociatedHabits = this.AssociatedHabits |> List.filter ((<>) habitId)
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    AssociatedHabits =
+                        this.AssociatedHabits |> List.filter ((<>) habitId)
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.AddMilestone (name: string) (description: string) (requiredStreak: StreakDays) (requiredCompletionRate: CompletionRate) =
         if String.IsNullOrEmpty(name) then
@@ -39,37 +42,41 @@ type Identity = {
         elif this.Milestones |> List.exists (fun m -> m.Name = name) then
             Error (BusinessRuleViolation "Milestone with this name already exists")
         else
-            let newMilestone = {
-                Id = Guid.NewGuid()
-                Name = name
-                Description = description
-                RequiredStreak = requiredStreak
-                RequiredCompletionRate = requiredCompletionRate
-                IsAchieved = false
-                AchievedAt = None
-            }
+            let newMilestone =
+                {
+                    Id = Guid.NewGuid()
+                    Name = name
+                    Description = description
+                    RequiredStreak = requiredStreak
+                    RequiredCompletionRate = requiredCompletionRate
+                    IsAchieved = false
+                    AchievedAt = None
+                }
             
-            Ok { this with 
-                Milestones = newMilestone :: this.Milestones
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Milestones = newMilestone :: this.Milestones
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.AchieveMilestone (milestoneId: Guid) (currentDate: DateTime) =
         match this.Milestones |> List.tryFind (fun m -> m.Id = milestoneId) with
         | Some milestone when not milestone.IsAchieved ->
-            let updatedMilestone = { milestone with 
-                IsAchieved = true
-                AchievedAt = Some currentDate
-            }
+            let updatedMilestone =
+                { milestone with
+                    IsAchieved = true
+                    AchievedAt = Some currentDate
+                }
             
             let updatedMilestones = 
                 this.Milestones 
                 |> List.map (fun m -> if m.Id = milestoneId then updatedMilestone else m)
             
-            Ok { this with 
-                Milestones = updatedMilestones
-                UpdatedAt = currentDate
-            }
+            Ok
+                { this with
+                    Milestones = updatedMilestones
+                    UpdatedAt = currentDate
+                }
         | Some _ -> Error (BusinessRuleViolation "Milestone is already achieved")
         | None -> Error (NotFoundError "Milestone not found")
     
@@ -85,10 +92,11 @@ type Identity = {
                 | Expert -> Master
                 | Master -> Master // Shouldn't reach here
             
-            Ok { this with 
-                Level = nextLevel
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Level = nextLevel
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.GetProgressPercentage (habits: Habit seq) =
         let associatedHabits = 
@@ -110,17 +118,18 @@ module Identity =
         if String.IsNullOrEmpty(name) then
             Error (ValidationError "Identity name is required")
         else
-            Ok {
-                Id = DojoId.createIdentityId()
-                UserId = userId
-                Name = name
-                Description = description
-                Level = Novice
-                AssociatedHabits = []
-                Milestones = []
-                CreatedAt = DateTime.utcNow()
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                {
+                    Id = DojoId.createIdentityId()
+                    UserId = userId
+                    Name = name
+                    Description = description
+                    Level = Novice
+                    AssociatedHabits = []
+                    Milestones = []
+                    CreatedAt = DateTime.utcNow()
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     // Business rules
     let currentLevelOrder = 

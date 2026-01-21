@@ -28,10 +28,11 @@ type Transaction = {
         if not (TransactionStatus.canTransitionTo this.Status newStatus) then
             Error (BusinessRuleViolation $"Cannot transition from {TransactionStatus.toString this.Status} to {TransactionStatus.toString newStatus}")
         else
-            Ok { this with 
-                Status = newStatus
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = newStatus
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     /// Void the transaction
     member this.Void () =
@@ -41,60 +42,70 @@ type Transaction = {
         | TransactionStatus.Void -> 
             Error (BusinessRuleViolation "Transaction is already void")
         | _ ->
-            Ok { this with Status = TransactionStatus.Void; UpdatedAt = DateTime.utcNow() }
+            Ok
+                { this with
+                    Status = TransactionStatus.Void
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     /// Update transaction details
     member this.UpdateDetails merchantId categoryId description memo tags : Result<Transaction, DomainError> =
-        Ok { this with
-            MerchantId = merchantId
-            CategoryId = categoryId
-            Description = description
-            Memo = memo
-            Tags = tags
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                MerchantId = merchantId
+                CategoryId = categoryId
+                Description = description
+                Memo = memo
+                Tags = tags
+                UpdatedAt = DateTime.utcNow()
+            }
     
     /// Update posted date
     member this.UpdatePostedAt (postedAt: DateTime) : Result<Transaction, DomainError> =
-        Ok { this with
-            PostedAt = postedAt
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                PostedAt = postedAt
+                UpdatedAt = DateTime.utcNow()
+            }
     
     /// Update check number
     member this.UpdateCheckNumber (checkNumber: string option) : Result<Transaction, DomainError> =
-        Ok { this with
-            CheckNumber = checkNumber
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                CheckNumber = checkNumber
+                UpdatedAt = DateTime.utcNow()
+            }
     
     /// Update amount (only allowed for pending transactions)
     member this.UpdateAmount (newAmount: Money) =
         match this.Status with
         | Pending ->
-            Ok { this with
-                Amount = newAmount
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Amount = newAmount
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ ->
             Error (BusinessRuleViolation "Can only update amount for pending transactions")
     
     /// Attach a receipt
     member this.AttachReceipt (receiptId: ReceiptId) =
-        Ok { this with
-            ReceiptId = Some receiptId
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                ReceiptId = Some receiptId
+                UpdatedAt = DateTime.utcNow()
+            }
     
     /// Mark as reconciled
     member this.Reconcile (reconciliationId: ReconciliationId) =
         match this.Status with
         | Cleared ->
-            Ok { this with
-                Status = Reconciled
-                ReconciliationId = Some reconciliationId
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Reconciled
+                    ReconciliationId = Some reconciliationId
+                    UpdatedAt = DateTime.utcNow()
+                }
         | Reconciled ->
             Error (BusinessRuleViolation "Transaction is already reconciled")
         | _ ->

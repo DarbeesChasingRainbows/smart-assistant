@@ -464,7 +464,7 @@ export default define.page<typeof handler>(function Dashboard(props) {
 
               {/* Right Column - Budget Assignment (2 cols wide) */}
               <div class="lg:col-span-2">
-                {summary && period && categories.length > 0
+                {summary && period
                   ? (
                     <BudgetAssignmentIsland
                       categories={categories}

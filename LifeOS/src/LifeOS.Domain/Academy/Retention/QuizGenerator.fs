@@ -33,10 +33,10 @@ module QuizGenerator =
                 NewCardRatio = 0.2
             }
         
-        let withSkillIds skillIds request =
+        let withSkillIds skillIds (request: QuizGenerationRequest) =
             { request with SkillIds = skillIds }
         
-        let withDifficulty difficulty request =
+        let withDifficulty difficulty (request: QuizGenerationRequest) =
             { request with Difficulty = Some difficulty }
         
         let withTimeLimit timeLimit request =

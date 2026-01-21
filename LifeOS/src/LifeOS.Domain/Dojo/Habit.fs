@@ -25,37 +25,41 @@ type Habit = {
     
     member this.Pause () =
         if this.Status = Active then
-            Ok { this with 
-                Status = Paused
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Paused
+                    UpdatedAt = DateTime.utcNow()
+                }
         else
             Error (BusinessRuleViolation "Only active habits can be paused")
     
     member this.Resume () =
         if this.Status = Paused then
-            Ok { this with 
-                Status = Active
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Active
+                    UpdatedAt = DateTime.utcNow()
+                }
         else
             Error (BusinessRuleViolation "Only paused habits can be resumed")
     
     member this.Complete () =
         if this.Status = Active then
-            Ok { this with 
-                Status = HabitStatus.Completed
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = HabitStatus.Completed
+                    UpdatedAt = DateTime.utcNow()
+                }
         else
             Error (BusinessRuleViolation "Only active habits can be marked as completed")
     
     member this.Archive () =
         if this.Status <> Archived then
-            Ok { this with 
-                Status = Archived
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Archived
+                    UpdatedAt = DateTime.utcNow()
+                }
         else
             Error (BusinessRuleViolation "Habit is already archived")
     
@@ -66,14 +70,14 @@ type Habit = {
                 if StreakDays.value newStreak > StreakDays.value this.LongestStreak then newStreak
                 else this.LongestStreak
             
-            { this with 
+            { this with
                 CurrentStreak = newStreak
                 LongestStreak = newLongest
                 TotalCompletions = this.TotalCompletions + 1
                 UpdatedAt = currentDate
             }
         else
-            { this with 
+            { this with
                 CurrentStreak = StreakDays.zero
                 UpdatedAt = currentDate
             }
@@ -141,19 +145,21 @@ module Habit =
         match habit.IdentityId with
         | Some _ -> Error (BusinessRuleViolation "Habit is already associated with an identity")
         | None ->
-            Ok { habit with 
-                IdentityId = Some identityId
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { habit with
+                    IdentityId = Some identityId
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     let disassociateFromIdentity (habit: Habit) =
         match habit.IdentityId with
         | None -> Error (BusinessRuleViolation "Habit is not associated with any identity")
         | Some _ ->
-            Ok { habit with 
-                IdentityId = None
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { habit with
+                    IdentityId = None
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     let calculateSuccessRate (habit: Habit) (daysSinceCreation: int) =
         if daysSinceCreation > 0 && habit.IsActive then

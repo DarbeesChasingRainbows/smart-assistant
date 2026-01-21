@@ -28,7 +28,7 @@ public static class VehicleMapper
         };
     }
 
-    public static Vehicle ToDomain(VehicleDocument doc)
+    public static Vehicle? ToDomain(VehicleDocument? doc)
     {
         if (doc == null)
             return null;

@@ -21,54 +21,60 @@ type KRA = {
     member this.Start () =
         match this.Status with
         | NotStarted ->
-            Ok { this with 
-                Status = InProgress
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = InProgress
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only not started KRAs can be started")
     
     member this.MarkAtRisk (reason: string) =
         match this.Status with
         | InProgress ->
-            Ok { this with 
-                Status = AtRisk
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = AtRisk
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Only in-progress KRAs can be marked as at risk")
     
     member this.Complete (completionDate: DateTime) =
         match this.Status with
         | InProgress | AtRisk ->
-            Ok { this with 
-                Status = Completed
-                ActualCompletionDate = Some completionDate
-                UpdatedAt = completionDate
-            }
+            Ok
+                { this with
+                    Status = Completed
+                    ActualCompletionDate = Some completionDate
+                    UpdatedAt = completionDate
+                }
         | _ -> Error (BusinessRuleViolation "Only in-progress or at-risk KRAs can be completed")
     
     member this.Cancel (reason: string) =
         match this.Status with
         | status when status <> Completed && status <> Cancelled ->
-            Ok { this with 
-                Status = Cancelled
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Status = Cancelled
+                    UpdatedAt = DateTime.utcNow()
+                }
         | _ -> Error (BusinessRuleViolation "Cannot cancel completed KRAs")
     
     member this.UpdateWeight (newWeight: Weight) =
-        Ok { this with 
-            Weight = newWeight
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                Weight = newWeight
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.SetTargetDate (targetDate: DateTime) =
         if targetDate < DateTime.utcNow() then
             Error (ValidationError "Target date cannot be in the past")
         else
-            Ok { this with 
-                TargetCompletionDate = Some targetDate
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    TargetCompletionDate = Some targetDate
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.IsOverdue (currentDate: DateTime) =
         match this.TargetCompletionDate, this.Status with

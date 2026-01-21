@@ -25,44 +25,50 @@ type Flashcard = {
         elif String.IsNullOrWhiteSpace(answer) then
             Error (ValidationError "Answer cannot be empty")
         else
-            Ok { this with
-                Question = question
-                Answer = answer
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                { this with
+                    Question = question
+                    Answer = answer
+                    UpdatedAt = DateTime.UtcNow
+                }
     
     member this.UpdateScheduling newScheduling =
-        Ok { this with
-            Scheduling = newScheduling
-            UpdatedAt = DateTime.UtcNow
-        }
+        Ok
+            { this with
+                Scheduling = newScheduling
+                UpdatedAt = DateTime.UtcNow
+            }
     
     member this.AddGlossaryTerm termId =
         if this.GlossaryTermIds |> List.contains termId then
             Error (BusinessRuleViolation "Glossary term already linked")
         else
-            Ok { this with
-                GlossaryTermIds = termId :: this.GlossaryTermIds
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                { this with
+                    GlossaryTermIds = termId :: this.GlossaryTermIds
+                    UpdatedAt = DateTime.UtcNow
+                }
     
     member this.RemoveGlossaryTerm termId =
         if not (this.GlossaryTermIds |> List.contains termId) then
             Error (ValidationError "Glossary term not linked")
         else
-            Ok { this with
-                GlossaryTermIds = this.GlossaryTermIds |> List.filter ((<>) termId)
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                { this with
+                    GlossaryTermIds =
+                        this.GlossaryTermIds |> List.filter ((<>) termId)
+                    UpdatedAt = DateTime.UtcNow
+                }
     
     member this.AddCrossReference refId =
         if this.CrossReferenceIds |> List.contains refId then
             Error (BusinessRuleViolation "Cross-reference already exists")
         else
-            Ok { this with
-                CrossReferenceIds = refId :: this.CrossReferenceIds
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                { this with
+                    CrossReferenceIds = refId :: this.CrossReferenceIds
+                    UpdatedAt = DateTime.UtcNow
+                }
 
 // Flashcard factory module
 module Flashcard =
@@ -72,18 +78,19 @@ module Flashcard =
         elif String.IsNullOrWhiteSpace(answer) then
             Error (ValidationError "Answer is required")
         else
-            Ok {
-                Id = RetentionId.createFlashcardId()
-                DeckId = deckId
-                Question = question
-                Answer = answer
-                Metadata = metadata |> Option.defaultValue (QuestionMetadata.simple())
-                Scheduling = SchedulingData.create()
-                GlossaryTermIds = []
-                CrossReferenceIds = []
-                CreatedAt = DateTime.UtcNow
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                {
+                    Id = RetentionId.createFlashcardId()
+                    DeckId = deckId
+                    Question = question
+                    Answer = answer
+                    Metadata = metadata |> Option.defaultValue (QuestionMetadata.simple())
+                    Scheduling = SchedulingData.create()
+                    GlossaryTermIds = []
+                    CrossReferenceIds = []
+                    CreatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow
+                }
     
     let createSimple deckId question answer =
         create deckId question answer None
@@ -124,14 +131,15 @@ type Deck = {
         if String.IsNullOrWhiteSpace(name) then
             Error (ValidationError "Deck name cannot be empty")
         else
-            Ok { this with
-                Name = name
-                Description = description
-                Category = category
-                Subcategory = subcategory
-                DifficultyLevel = difficulty
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                { this with
+                    Name = name
+                    Description = description
+                    Category = category
+                    Subcategory = subcategory
+                    DifficultyLevel = difficulty
+                    UpdatedAt = DateTime.UtcNow
+                }
     
     member this.GenerateShareToken () =
         let token = 
@@ -139,37 +147,48 @@ type Deck = {
             |> Convert.ToBase64String
             |> fun s -> s.Replace("/", "_").Replace("+", "-").TrimEnd('=')
             |> fun s -> s.Substring(0, min 12 s.Length)
-        Ok { this with
-            ShareToken = Some token
-            UpdatedAt = DateTime.UtcNow
-        }
+        Ok
+            { this with
+                ShareToken = Some token
+                UpdatedAt = DateTime.UtcNow
+            }
     
     member this.RevokeShareToken () =
-        Ok { this with
-            ShareToken = None
-            UpdatedAt = DateTime.UtcNow
-        }
+        Ok
+            { this with
+                ShareToken = None
+                UpdatedAt = DateTime.UtcNow
+            }
     
     member this.AddSkillMapping mapping =
         if this.SkillMappings |> List.exists (fun m -> m.SkillId = mapping.SkillId) then
             Error (BusinessRuleViolation "Skill mapping already exists")
         else
-            Ok { this with
-                SkillMappings = mapping :: this.SkillMappings
+            Ok
+                { this with
+                    SkillMappings = mapping :: this.SkillMappings
+                    UpdatedAt = DateTime.UtcNow
+                }
+    
+    member this.RemoveSkillMapping skillId =
+        Ok
+            { this with
+                SkillMappings =
+                    this.SkillMappings |> List.filter (fun m -> m.SkillId <> skillId)
                 UpdatedAt = DateTime.UtcNow
             }
     
-    member this.RemoveSkillMapping skillId =
-        Ok { this with
-            SkillMappings = this.SkillMappings |> List.filter (fun m -> m.SkillId <> skillId)
+    member this.IncrementFlashcardCount () =
+        { this with
+            FlashcardCount = this.FlashcardCount + 1
             UpdatedAt = DateTime.UtcNow
         }
     
-    member this.IncrementFlashcardCount () =
-        { this with FlashcardCount = this.FlashcardCount + 1; UpdatedAt = DateTime.UtcNow }
-    
     member this.DecrementFlashcardCount () =
-        { this with FlashcardCount = max 0 (this.FlashcardCount - 1); UpdatedAt = DateTime.UtcNow }
+        { this with
+            FlashcardCount = max 0 (this.FlashcardCount - 1)
+            UpdatedAt = DateTime.UtcNow
+        }
 
 // Deck factory module
 module Deck =
@@ -177,19 +196,20 @@ module Deck =
         if String.IsNullOrWhiteSpace(name) then
             Error (ValidationError "Deck name is required")
         else
-            Ok {
-                Id = RetentionId.createDeckId()
-                Name = name
-                Description = description |> Option.defaultValue ""
-                Category = category |> Option.defaultValue ""
-                Subcategory = subcategory |> Option.defaultValue ""
-                DifficultyLevel = difficulty |> Option.defaultValue Intermediate
-                SkillMappings = []
-                ShareToken = None
-                FlashcardCount = 0
-                CreatedAt = DateTime.UtcNow
-                UpdatedAt = DateTime.UtcNow
-            }
+            Ok
+                {
+                    Id = RetentionId.createDeckId()
+                    Name = name
+                    Description = description |> Option.defaultValue ""
+                    Category = category |> Option.defaultValue ""
+                    Subcategory = subcategory |> Option.defaultValue ""
+                    DifficultyLevel = difficulty |> Option.defaultValue Intermediate
+                    SkillMappings = []
+                    ShareToken = None
+                    FlashcardCount = 0
+                    CreatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow
+                }
     
     let createWithId id name description category subcategory difficulty skillMappings shareToken flashcardCount createdAt updatedAt =
         {

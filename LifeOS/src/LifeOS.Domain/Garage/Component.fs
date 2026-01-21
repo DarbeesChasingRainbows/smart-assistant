@@ -21,10 +21,11 @@ type Component = {
     member this.InstallOnVehicle (vehicleId: VehicleId) =
         match this.Location with
         | InStorage _ ->
-            Ok { this with 
-                Location = InstalledOn (vehicleId, DateTime.utcNow())
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Location = InstalledOn(vehicleId, DateTime.utcNow())
+                    UpdatedAt = DateTime.utcNow()
+                }
         | InstalledOn (currentVehicleId, _) ->
             if currentVehicleId = vehicleId then
                 Error (BusinessRuleViolation "Component is already installed on this vehicle")
@@ -33,21 +34,23 @@ type Component = {
     
     member this.RemoveFromVehicle (storageLocation: string option) =
         match this.Location with
-        | InstalledOn (vehicleId, installDate) ->
-            Ok { this with 
-                Location = InStorage storageLocation
-                UpdatedAt = DateTime.utcNow()
-            }
+        | InstalledOn (_vehicleId, _installDate) ->
+            Ok
+                { this with
+                    Location = InStorage storageLocation
+                    UpdatedAt = DateTime.utcNow()
+                }
         | InStorage _ ->
             Error (BusinessRuleViolation "Component is already in storage")
     
     member this.UpdateStorageLocation (newLocation: string option) =
         match this.Location with
         | InStorage _ ->
-            Ok { this with 
-                Location = InStorage newLocation
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    Location = InStorage newLocation
+                    UpdatedAt = DateTime.utcNow()
+                }
         | InstalledOn _ ->
             Error (BusinessRuleViolation "Cannot change storage location while component is installed")
     
@@ -82,8 +85,8 @@ module Component =
             }
     
     // Domain service to check if component can be installed
-    let canInstallOnVehicle (component: Component) (vehicleId: VehicleId) =
-        match component.Location with
+    let canInstallOnVehicle (part: Component) (vehicleId: VehicleId) =
+        match part.Location with
         | InStorage _ -> Ok ()
         | InstalledOn (installedVehicleId, _) ->
             if installedVehicleId = vehicleId then
@@ -92,13 +95,13 @@ module Component =
                 Error (BusinessRuleViolation "Component is installed on a different vehicle")
     
     // Check if component is under warranty
-    let isUnderWarranty (component: Component) (currentDate: DateTime) =
-        match component.WarrantyExpiry with
+    let isUnderWarranty (part: Component) (currentDate: DateTime) =
+        match part.WarrantyExpiry with
         | Some expiry -> currentDate < expiry
         | None -> false
     
     // Calculate component age in days
-    let getAgeInDays (component: Component) (currentDate: DateTime) =
-        match component.PurchaseDate with
+    let getAgeInDays (part: Component) (currentDate: DateTime) =
+        match part.PurchaseDate with
         | Some purchaseDate -> (currentDate - purchaseDate).Days
         | None -> 0

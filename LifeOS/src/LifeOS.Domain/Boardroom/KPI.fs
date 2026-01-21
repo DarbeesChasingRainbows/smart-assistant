@@ -41,36 +41,40 @@ type KPI = {
             else
                 BelowTarget
         
-        Ok { this with 
-            CurrentValue = validatedValue
-            Status = newStatus
-            UpdatedAt = measuredDate
-        }
+        Ok
+            { this with
+                CurrentValue = validatedValue
+                Status = newStatus
+                UpdatedAt = measuredDate
+            }
     
     member this.SetTarget (newTarget: decimal) =
         let validatedTarget = 
             match TargetValue.create newTarget with
             | Ok v -> v
             | Error _ -> TargetValue newTarget
-        Ok { this with 
-            TargetValue = validatedTarget
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                TargetValue = validatedTarget
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.SetStretchTarget (stretchTarget: decimal) =
         if stretchTarget <= decimal (TargetValue.value this.TargetValue) then
             Error (ValidationError "Stretch target must be greater than target")
         else
-            Ok { this with 
-                StretchTarget = Some stretchTarget
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    StretchTarget = Some stretchTarget
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.SetBaseline (baseline: decimal) =
-        Ok { this with 
-            BaselineValue = Some baseline
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                BaselineValue = Some baseline
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.GetProgressPercentage () =
         let target = decimal (TargetValue.value this.TargetValue)

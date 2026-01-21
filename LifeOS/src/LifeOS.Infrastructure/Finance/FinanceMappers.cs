@@ -109,7 +109,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static Transaction ToDomain(FinancialTransactionDocument doc)
+    public static Transaction? ToDomain(FinancialTransactionDocument? doc)
     {
         if (doc is null)
             return null;
@@ -198,7 +198,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static JournalEntry ToDomain(FinancialJournalEntryDocument doc)
+    public static JournalEntry? ToDomain(FinancialJournalEntryDocument? doc)
     {
         if (doc is null)
             return null;
@@ -279,7 +279,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static Merchant ToDomain(FinancialMerchantDocument doc)
+    public static Merchant? ToDomain(FinancialMerchantDocument? doc)
     {
         if (doc is null)
             return null;
@@ -366,7 +366,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static Category ToDomain(FinancialCategoryDocument doc)
+    public static Category? ToDomain(FinancialCategoryDocument? doc)
     {
         if (doc is null)
             return null;
@@ -435,7 +435,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static Receipt ToDomain(FinancialReceiptDocument doc)
+    public static Receipt? ToDomain(FinancialReceiptDocument? doc)
     {
         if (doc is null)
             return null;
@@ -530,7 +530,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static Budget ToDomain(FinancialBudgetDocument doc)
+    public static Budget? ToDomain(FinancialBudgetDocument? doc)
     {
         if (doc is null)
             return null;
@@ -613,7 +613,7 @@ internal static class FinanceMappers
     /// <exception cref="FormatException">
     /// Thrown when GUID parsing fails for invalid document keys.
     /// </exception>
-    public static Reconciliation ToDomain(FinancialReconciliationDocument doc)
+    public static Reconciliation? ToDomain(FinancialReconciliationDocument? doc)
     {
         if (doc is null)
             return null;
@@ -689,7 +689,7 @@ internal static class FinanceMappers
     /// Reconstructs pay period configuration with anchor date and length.
     /// Simple mapping as pay period config has minimal properties.
     /// </remarks>
-    public static PayPeriodConfig ToDomain(PayPeriodConfigDocument doc)
+    public static PayPeriodConfig? ToDomain(PayPeriodConfigDocument? doc)
     {
         if (doc is null)
             return null;

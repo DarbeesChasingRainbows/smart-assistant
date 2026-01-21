@@ -29,38 +29,44 @@ type GardenBed = {
     member this.PlantSpecies (speciesId: SpeciesId) =
         match this.CanPlantSpecies speciesId with
         | Ok () ->
-            Ok { this with 
-                PlantedSpecies = speciesId :: this.PlantedSpecies
-                UpdatedAt = DateTime.utcNow()
-            }
+            Ok
+                { this with
+                    PlantedSpecies = speciesId :: this.PlantedSpecies
+                    UpdatedAt = DateTime.utcNow()
+                }
         | Error e -> Error e
     
     member this.RemoveSpecies (speciesId: SpeciesId) =
         if not (this.PlantedSpecies |> List.contains speciesId) then
             Error (ValidationError "Species is not planted in this bed")
         else
-            Ok { this with 
-                PlantedSpecies = this.PlantedSpecies |> List.filter ((<>) speciesId)
+            Ok
+                { this with
+                    PlantedSpecies =
+                        this.PlantedSpecies |> List.filter ((<>) speciesId)
+                    UpdatedAt = DateTime.utcNow()
+                }
+    
+    member this.ClearBed () =
+        Ok
+            { this with
+                PlantedSpecies = []
                 UpdatedAt = DateTime.utcNow()
             }
     
-    member this.ClearBed () =
-        Ok { this with 
-            PlantedSpecies = []
-            UpdatedAt = DateTime.utcNow()
-        }
-    
     member this.Deactivate () =
-        Ok { this with 
-            IsActive = false
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                IsActive = false
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.Activate () =
-        Ok { this with 
-            IsActive = true
-            UpdatedAt = DateTime.utcNow()
-        }
+        Ok
+            { this with
+                IsActive = true
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.GetAvailableArea (speciesList: Species seq) =
         // Calculate area used by current plantings based on spacing requirements

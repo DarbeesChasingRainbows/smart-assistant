@@ -22,29 +22,33 @@ type Vehicle = {
         match Mileage.value newMileage with
         | m when m < Mileage.value this.CurrentMileage -> 
             Error (BusinessRuleViolation "Mileage cannot be decreased")
-        | _ -> 
-            Ok { this with 
-                CurrentMileage = newMileage
-                UpdatedAt = DateTime.utcNow ()
-            }
+        | _ ->
+            Ok
+                { this with
+                    CurrentMileage = newMileage
+                    UpdatedAt = DateTime.utcNow()
+                }
     
     member this.UpdateLicensePlate (newPlate: LicensePlate) =
-        Ok { this with 
-            LicensePlate = newPlate
-            UpdatedAt = DateTime.utcNow ()
-        }
+        Ok
+            { this with
+                LicensePlate = newPlate
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.Deactivate () =
-        Ok { this with 
-            IsActive = false
-            UpdatedAt = DateTime.utcNow ()
-        }
+        Ok
+            { this with
+                IsActive = false
+                UpdatedAt = DateTime.utcNow()
+            }
     
     member this.Activate () =
-        Ok { this with 
-            IsActive = true
-            UpdatedAt = DateTime.utcNow ()
-        }
+        Ok
+            { this with
+                IsActive = true
+                UpdatedAt = DateTime.utcNow()
+            }
 
 // Vehicle Module for factory methods and operations
 module Vehicle =
@@ -70,8 +74,8 @@ module Vehicle =
         }
     
     // Business rules
-    let canInstallComponent (vehicle: Vehicle) (component: Component) =
-        match component.Location with
+    let canInstallComponent (vehicle: Vehicle) (part: Component) =
+        match part.Location with
         | InStorage _ -> Ok ()
         | InstalledOn (vehicleId, _) ->
             if vehicleId = vehicle.Id then

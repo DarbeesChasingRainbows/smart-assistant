@@ -34,57 +34,62 @@ type AcademyTask = {
   member this.Start (currentDate: DateTime) =
       match this.CanStart with
       | true ->
-          Ok { this with 
-              Status = InProgress
-              UpdatedAt = currentDate
-          }
+          Ok
+              { this with
+                  Status = InProgress
+                  UpdatedAt = currentDate
+              }
       | false ->
           Error (BusinessRuleViolation "Task cannot be started in current status")
   
   member this.Complete (duration: int option) (currentDate: DateTime) =
       match this.Status with
       | InProgress ->
-          Ok { this with 
-              Status = Completed
-              ActualDuration = duration
-              CompletedAt = Some currentDate
-              UpdatedAt = currentDate
-          }
+          Ok
+              { this with
+                  Status = Completed
+                  ActualDuration = duration
+                  CompletedAt = Some currentDate
+                  UpdatedAt = currentDate
+              }
       | _ ->
           Error (BusinessRuleViolation "Only in-progress tasks can be completed")
   
   member this.Approve (approverId: UserId) (currentDate: DateTime) =
       match this.Status with
       | Completed ->
-          Ok { this with 
-              Status = Approved
-              ApprovedAt = Some currentDate
-              ApprovedBy = Some approverId
-              UpdatedAt = currentDate
-          }
+          Ok
+              { this with
+                  Status = Approved
+                  ApprovedAt = Some currentDate
+                  ApprovedBy = Some approverId
+                  UpdatedAt = currentDate
+              }
       | _ ->
           Error (BusinessRuleViolation "Only completed tasks can be approved")
   
   member this.Reject (rejectorId: UserId) (reason: string) (currentDate: DateTime) =
       match this.Status with
       | Completed ->
-          Ok { this with 
-              Status = Rejected
-              ApprovedBy = Some rejectorId
-              RejectionReason = Some reason
-              UpdatedAt = currentDate
-          }
+          Ok
+              { this with
+                  Status = Rejected
+                  ApprovedBy = Some rejectorId
+                  RejectionReason = Some reason
+                  UpdatedAt = currentDate
+              }
       | _ ->
           Error (BusinessRuleViolation "Only completed tasks can be rejected")
   
   member this.Cancel (reason: string) (currentDate: DateTime) =
       match this.Status with
       | status when status <> Approved && status <> Completed ->
-          Ok { this with 
-              Status = Cancelled
-              RejectionReason = Some reason
-              UpdatedAt = currentDate
-          }
+          Ok
+              { this with
+                  Status = Cancelled
+                  RejectionReason = Some reason
+                  UpdatedAt = currentDate
+              }
       | _ ->
           Error (BusinessRuleViolation "Cannot cancel approved or completed tasks")
   
