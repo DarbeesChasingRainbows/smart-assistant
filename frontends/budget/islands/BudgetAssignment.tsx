@@ -847,6 +847,12 @@ function BudgetAssignmentContent(
                                 >
                                   {category.name}
                                 </span>
+                                {category.targetAmount > 0 && (
+                                  <div class="text-[10px] text-[#666] font-mono mt-0.5">
+                                    Target:{" "}
+                                    {formatCurrency(category.targetAmount)}
+                                  </div>
+                                )}
                               </div>
 
                               {/* Planned (Assigned) Amount */}
