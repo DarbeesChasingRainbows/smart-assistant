@@ -48,12 +48,14 @@ public static class BudgetEndpoints
         var categoryGroups = group.MapGroup("/category-groups");
         categoryGroups.MapGet("/", GetCategoryGroups).WithName("GetBudgetCategoryGroups");
         categoryGroups.MapPost("/", CreateCategoryGroup).WithName("CreateBudgetCategoryGroup");
+        categoryGroups.MapPost("/reorder", ReorderCategoryGroups).WithName("ReorderBudgetCategoryGroups");
 
         // Categories
         var categories = group.MapGroup("/categories");
         categories.MapGet("/", GetCategories).WithName("GetBudgetCategories");
         categories.MapGet("/{key}", GetCategory).WithName("GetBudgetCategory");
         categories.MapPost("/", CreateCategory).WithName("CreateBudgetCategory");
+        categories.MapPost("/reorder", ReorderCategories).WithName("ReorderBudgetCategories");
         categories.MapPut("/{key}", UpdateCategory).WithName("UpdateBudgetCategory");
         categories.MapGet("/{key}/balance", GetCategoryBalance).WithName("GetBudgetCategoryBalance");
 
@@ -545,6 +547,29 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         return Results.Created($"/api/v1/budget/category-groups/{result._key}", doc);
     }
 
+    private static async Task<IResult> ReorderCategoryGroups(
+        ReorderCategoryGroupsRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            foreach (var item in request.Groups)
+            {
+                var updates = new Dictionary<string, object>
+                {
+                    { "sortOrder", item.SortOrder },
+                    { "updatedAt", DateTime.UtcNow }
+                };
+                await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(CategoryGroupCollection, item.Key, updates);
+            }
+            return Results.Ok();
+        }
+        catch
+        {
+            return Results.Problem("Failed to reorder category groups");
+        }
+    }
+
     // ==================== CATEGORIES ====================
 
     private static async Task<IResult> GetCategories(
@@ -602,6 +627,35 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
         var result = await db.Client.Document.PostDocumentAsync(CategoryCollection, doc);
         return Results.Created($"/api/v1/budget/categories/{result._key}", MapCategory(doc));
+    }
+
+    private static async Task<IResult> ReorderCategories(
+        ReorderCategoriesRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            foreach (var item in request.Categories)
+            {
+                var updates = new Dictionary<string, object>
+                {
+                    { "sortOrder", item.SortOrder },
+                    { "updatedAt", DateTime.UtcNow }
+                };
+                
+                if (!string.IsNullOrEmpty(item.GroupKey))
+                {
+                    updates["groupKey"] = item.GroupKey;
+                }
+
+                await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(CategoryCollection, item.Key, updates);
+            }
+            return Results.Ok();
+        }
+        catch
+        {
+            return Results.Problem("Failed to reorder categories");
+        }
     }
 
     private static async Task<IResult> UpdateCategory(

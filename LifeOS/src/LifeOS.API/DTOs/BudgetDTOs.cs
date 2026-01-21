@@ -60,6 +60,17 @@ public record CreateCategoryGroupRequest
     public int SortOrder { get; init; }
 }
 
+public record ReorderGroupItem
+{
+    public string Key { get; init; } = string.Empty;
+    public int SortOrder { get; init; }
+}
+
+public record ReorderCategoryGroupsRequest
+{
+    public List<ReorderGroupItem> Groups { get; init; } = [];
+}
+
 // Category DTOs
 public record BudgetCategoryDto
 {
@@ -88,6 +99,18 @@ public record UpdateBudgetCategoryRequest
     public decimal? TargetAmount { get; init; }
     public int? SortOrder { get; init; }
     public bool? IsHidden { get; init; }
+}
+
+public record ReorderCategoryItem
+{
+    public string Key { get; init; } = string.Empty;
+    public string GroupKey { get; init; } = string.Empty;
+    public int SortOrder { get; init; }
+}
+
+public record ReorderCategoriesRequest
+{
+    public List<ReorderCategoryItem> Categories { get; init; } = [];
 }
 
 // Budget Assignment DTOs (Zero-Based Budgeting Core)
