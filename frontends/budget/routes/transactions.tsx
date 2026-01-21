@@ -1,5 +1,5 @@
 import { Head } from "fresh/runtime";
-import { define, url } from "../utils.ts";
+import { define } from "../utils.ts";
 import type {
   Account,
   Category,
@@ -184,7 +184,7 @@ export default define.page<typeof handler>(function TransactionsPage(props) {
                   <TransactionImportIsland
                     accountKey={accounts[0].accountKey ||
                       accounts[0].id?.toString() || ""}
-                    onImportComplete={() => globalThis.location.reload()}
+                    reloadOnComplete
                   />
                 )}
               </div>

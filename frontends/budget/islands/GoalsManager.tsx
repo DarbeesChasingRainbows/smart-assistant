@@ -1,5 +1,7 @@
 import { useSignal } from "@preact/signals";
 import type { Goal } from "../types/api.ts";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface Props {
   initialGoals: Goal[];
@@ -15,16 +17,14 @@ const GOAL_TYPES = [
   { value: "emergency_fund", label: "Emergency Fund" },
 ];
 
-export default function GoalsManager({ initialGoals }: Props) {
+function GoalsManagerContent({ initialGoals }: Props) {
   const goals = useSignal<Goal[]>(initialGoals);
   const isModalOpen = useSignal(false);
   const editingGoal = useSignal<Goal | null>(null);
   const isSubmitting = useSignal(false);
-  const contributionGoalId = useSignal<number | null>(null);
   const contributionAmount = useSignal("");
   const isContributionModalOpen = useSignal(false);
   const contributionModalGoal = useSignal<Goal | null>(null);
-  const celebratingGoalId = useSignal<number | null>(null);
 
   const formName = useSignal("");
   const formTargetAmount = useSignal("");
@@ -88,6 +88,9 @@ export default function GoalsManager({ initialGoals }: Props) {
           goals.value = goals.value.map((g) =>
             g.id === updated.id ? updated : g
           );
+          toast.success("Goal updated successfully!");
+        } else {
+          toast.error("Failed to update goal");
         }
       } else {
         const res = await fetch(`${API_BASE}/goals`, {
@@ -98,11 +101,15 @@ export default function GoalsManager({ initialGoals }: Props) {
         if (res.ok) {
           const created = await res.json();
           goals.value = [...goals.value, created];
+          toast.success("Goal created successfully!");
+        } else {
+          toast.error("Failed to create goal");
         }
       }
       isModalOpen.value = false;
     } catch (error) {
       console.error("Error saving goal:", error);
+      toast.error("Failed to save goal");
     } finally {
       isSubmitting.value = false;
     }
@@ -180,15 +187,15 @@ export default function GoalsManager({ initialGoals }: Props) {
 
       // Show celebration if goal completed
       if (isNowComplete && !goal.isCompleted) {
-        celebratingGoalId.value = goalId;
-        setTimeout(() => {
-          celebratingGoalId.value = null;
-        }, 5000);
+        toast.success(`Goal Completed! 🎉 ${goal.name} reached 100%!`, 10000);
+      } else {
+        toast.success(`Added ${formatCurrency(amount)} to ${goal.name}`);
       }
 
       closeContributionModal();
     } catch (error) {
       console.error("Error adding contribution:", error);
+      toast.error("Failed to add contribution");
     } finally {
       isSubmitting.value = false;
     }
@@ -196,26 +203,40 @@ export default function GoalsManager({ initialGoals }: Props) {
 
   const markComplete = async (goal: Goal) => {
     try {
-      await fetch(`${API_BASE}/goals/${goal.id}`, {
+      const res = await fetch(`${API_BASE}/goals/${goal.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isCompleted: true }),
       });
-      goals.value = goals.value.map((g) =>
-        g.id === goal.id ? { ...g, isCompleted: true } : g
-      );
+      if (res.ok) {
+        goals.value = goals.value.map((g) =>
+          g.id === goal.id ? { ...g, isCompleted: true } : g
+        );
+        toast.success(`Goal Completed! 🎉 ${goal.name} marked as complete.`);
+      } else {
+        toast.error("Failed to complete goal");
+      }
     } catch (error) {
       console.error("Error completing goal:", error);
+      toast.error("Failed to complete goal");
     }
   };
 
   const deleteGoal = async (goal: Goal) => {
     if (!confirm(`Delete "${goal.name}"?`)) return;
     try {
-      await fetch(`${API_BASE}/goals/${goal.id}`, { method: "DELETE" });
-      goals.value = goals.value.filter((g) => g.id !== goal.id);
+      const res = await fetch(`${API_BASE}/goals/${goal.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        goals.value = goals.value.filter((g) => g.id !== goal.id);
+        toast.success("Goal deleted");
+      } else {
+        toast.error("Failed to delete goal");
+      }
     } catch (error) {
       console.error("Error deleting goal:", error);
+      toast.error("Failed to delete goal");
     }
   };
 
@@ -385,28 +406,6 @@ export default function GoalsManager({ initialGoals }: Props) {
                     return null;
                   })()}
                 </div>
-
-                {/* Celebration Banner */}
-                {celebratingGoalId.value === goal.id && (
-                  <div class="alert bg-[#00ff88]/10 border border-[#00ff88]/30 mt-4 animate-pulse">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="stroke-current shrink-0 h-6 w-6 text-[#00ff88]"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span class="font-bold text-[#00ff88] font-mono">
-                      🎉 GOAL COMPLETED!
-                    </span>
-                  </div>
-                )}
 
                 <button
                   type="button"
@@ -609,27 +608,33 @@ export default function GoalsManager({ initialGoals }: Props) {
             </h3>
 
             {/* Goal Progress Summary */}
-            <div class="bg-slate-50 p-4 rounded-lg mb-4">
+            <div class="bg-[#0a0a0a] border border-[#333] p-4 rounded mb-4">
               <div class="flex justify-between items-center mb-2">
-                <span class="text-sm text-slate-600">Current Progress</span>
-                <span class="font-bold text-lg">
+                <span class="text-sm text-[#888] font-mono">
+                  Current Progress
+                </span>
+                <span class="font-bold text-lg text-white font-mono">
                   {(
                     (contributionModalGoal.value.currentAmount /
                       contributionModalGoal.value.targetAmount) * 100
                   ).toFixed(0)}%
                 </span>
               </div>
-              <progress
-                class="progress progress-primary w-full mb-2"
-                value={Math.min(
-                  100,
-                  (contributionModalGoal.value.currentAmount /
-                    contributionModalGoal.value.targetAmount) * 100,
-                )}
-                max="100"
-              >
-              </progress>
-              <div class="flex justify-between text-xs text-slate-500">
+              <div class="w-full bg-[#333] h-2 border border-[#444] mb-2">
+                <div
+                  class="h-full bg-[#00d9ff]"
+                  style={{
+                    width: `${
+                      Math.min(
+                        100,
+                        (contributionModalGoal.value.currentAmount /
+                          contributionModalGoal.value.targetAmount) * 100,
+                      )
+                    }%`,
+                  }}
+                />
+              </div>
+              <div class="flex justify-between text-xs text-[#888] font-mono">
                 <span>
                   {formatCurrency(contributionModalGoal.value.currentAmount)}
                 </span>
@@ -646,12 +651,12 @@ export default function GoalsManager({ initialGoals }: Props) {
               );
               if (schedule && schedule.perWeekAmount) {
                 return (
-                  <div class="alert alert-info mb-4 py-2 text-sm">
+                  <div class="alert bg-[#00d9ff]/10 border border-[#00d9ff]/30 mb-4 py-2 text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      class="stroke-current shrink-0 w-4 h-4"
+                      class="stroke-current shrink-0 w-4 h-4 text-[#00d9ff]"
                     >
                       <path
                         stroke-linecap="round"
@@ -661,8 +666,12 @@ export default function GoalsManager({ initialGoals }: Props) {
                       />
                     </svg>
                     <div>
-                      <div class="font-medium">Suggested Schedule:</div>
-                      <div>{schedule.suggestion}</div>
+                      <div class="font-medium text-[#00d9ff] font-mono">
+                        Suggested Schedule:
+                      </div>
+                      <div class="text-[#00d9ff] font-mono text-xs">
+                        {schedule.suggestion}
+                      </div>
                     </div>
                   </div>
                 );
@@ -676,14 +685,14 @@ export default function GoalsManager({ initialGoals }: Props) {
                 <span class="label-text">Contribution Amount</span>
               </label>
               <div class="join w-full">
-                <span class="join-item bg-slate-100 flex items-center px-4">
+                <span class="join-item bg-[#0a0a0a] border border-[#333] flex items-center px-4 text-[#00d9ff] font-mono">
                   $
                 </span>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
-                  class="input input-bordered join-item flex-1"
+                  class="input input-bordered join-item flex-1 bg-[#0a0a0a] border-[#333] text-white font-mono"
                   placeholder="0.00"
                   value={contributionAmount.value}
                   onInput={(e) =>
@@ -694,7 +703,7 @@ export default function GoalsManager({ initialGoals }: Props) {
             </div>
 
             {/* Quick Amount Buttons */}
-            <div class="flex gap-2 mt-3">
+            <div class="flex flex-wrap gap-2 mt-3">
               {(() => {
                 const schedule = calculateFundingSchedule(
                   contributionModalGoal.value,
@@ -708,12 +717,12 @@ export default function GoalsManager({ initialGoals }: Props) {
                     <button
                       key="week"
                       type="button"
-                      class="btn btn-sm btn-outline flex-1"
+                      class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] flex-1 font-mono"
                       onClick={() =>
                         contributionAmount.value = schedule.perWeekAmount!
                           .toFixed(2)}
                     >
-                      Weekly ({formatCurrency(schedule.perWeekAmount)})
+                      Week ({formatCurrency(schedule.perWeekAmount)})
                     </button>,
                   );
                 }
@@ -722,12 +731,12 @@ export default function GoalsManager({ initialGoals }: Props) {
                     <button
                       key="month"
                       type="button"
-                      class="btn btn-sm btn-outline flex-1"
+                      class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] flex-1 font-mono"
                       onClick={() =>
                         contributionAmount.value = schedule.perMonthAmount!
                           .toFixed(2)}
                     >
-                      Monthly ({formatCurrency(schedule.perMonthAmount)})
+                      Month ({formatCurrency(schedule.perMonthAmount)})
                     </button>,
                   );
                 }
@@ -735,7 +744,7 @@ export default function GoalsManager({ initialGoals }: Props) {
                   <button
                     key="full"
                     type="button"
-                    class="btn btn-sm btn-outline flex-1"
+                    class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] flex-1 font-mono"
                     onClick={() =>
                       contributionAmount.value = remaining.toFixed(2)}
                   >
@@ -750,14 +759,14 @@ export default function GoalsManager({ initialGoals }: Props) {
             <div class="modal-action">
               <button
                 type="button"
-                class="btn"
+                class="btn min-h-[44px] font-mono"
                 onClick={closeContributionModal}
               >
                 Cancel
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
                 onClick={() => addContribution(contributionModalGoal.value!.id)}
                 disabled={isSubmitting.value ||
                   !contributionAmount.value ||
@@ -774,5 +783,13 @@ export default function GoalsManager({ initialGoals }: Props) {
         </div>
       )}
     </div>
+  );
+}
+
+export default function GoalsManager(props: Props) {
+  return (
+    <ErrorBoundary>
+      <GoalsManagerContent {...props} />
+    </ErrorBoundary>
   );
 }

@@ -1,7 +1,12 @@
 import { Head } from "fresh/runtime";
 import { define, url } from "../utils.ts";
-import type { CategoryBalance } from "../types/api.ts";
+import type {
+  BudgetSummary,
+  CategoryBalance,
+  CategoryGroup,
+} from "../types/api.ts";
 import { Navigation } from "../components/Navigation.tsx";
+import BudgetAssignmentIsland from "../islands/BudgetAssignment.tsx";
 
 interface AccountSummaryDto {
   accountKey: string;
@@ -30,15 +35,6 @@ interface BudgetGoalDto {
   isCompleted: boolean;
 }
 
-interface PayPeriodBudgetSummaryDto {
-  payPeriodKey: string;
-  payPeriodName: string;
-  totalIncome: number;
-  totalAssigned: number;
-  unassigned: number;
-  isFullyAllocated: boolean;
-}
-
 interface BudgetPayPeriodDto {
   key: string;
   familyId: string;
@@ -53,7 +49,7 @@ interface BudgetPayPeriodDto {
 
 interface BudgetDashboardDto {
   currentPayPeriod: BudgetPayPeriodDto | null;
-  budgetSummary: PayPeriodBudgetSummaryDto | null;
+  budgetSummary: BudgetSummary | null;
   accounts: AccountSummaryDto[];
   upcomingBills: UpcomingBillDto[];
   goals: BudgetGoalDto[];
@@ -62,6 +58,8 @@ interface BudgetDashboardDto {
 
 interface DashboardData {
   dashboard: BudgetDashboardDto | null;
+  categories: CategoryGroup[];
+  assignments: Record<string, number>;
   error?: string;
 }
 
@@ -75,19 +73,27 @@ export const handler = define.handlers({
     const normalizedBase = apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl;
 
     try {
-      const dashboardRes = await fetch(
-        `${normalizedBase}/v1/budget/dashboard?familyId=${
-          encodeURIComponent(familyId)
-        }`,
-        {
-          headers: { Accept: "application/json" },
-        },
-      );
+      const [dashboardRes, categoriesRes] = await Promise.all([
+        fetch(
+          `${normalizedBase}/v1/budget/dashboard?familyId=${
+            encodeURIComponent(familyId)
+          }`,
+          { headers: { Accept: "application/json" } },
+        ),
+        fetch(
+          `${normalizedBase}/v1/budget/category-groups?familyId=${
+            encodeURIComponent(familyId)
+          }`,
+          { headers: { Accept: "application/json" } },
+        ),
+      ]);
 
       if (!dashboardRes.ok) {
         return {
           data: {
             dashboard: null,
+            categories: [],
+            assignments: {},
             error:
               `Backend error (${dashboardRes.status}) loading budget dashboard`,
           },
@@ -95,11 +101,37 @@ export const handler = define.handlers({
       }
 
       const dashboard: BudgetDashboardDto = await dashboardRes.json();
-      return { data: { dashboard } };
+      const categories: CategoryGroup[] = categoriesRes.ok
+        ? await categoriesRes.json()
+        : [];
+
+      let assignments: Record<string, number> = {};
+      if (dashboard.currentPayPeriod) {
+        const assignRes = await fetch(
+          `${normalizedBase}/v1/budget/assignments?payPeriodKey=${dashboard.currentPayPeriod.key}`,
+          { headers: { Accept: "application/json" } },
+        );
+        if (assignRes.ok) {
+          const assignList: { categoryKey: string; assignedAmount: number }[] =
+            await assignRes.json();
+          // Map to Record<string, number>
+          assignments = assignList.reduce(
+            (acc, a) => ({ ...acc, [a.categoryKey]: a.assignedAmount }),
+            {},
+          );
+        }
+      }
+
+      return { data: { dashboard, categories, assignments } };
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
       return {
-        data: { dashboard: null, error: "Could not connect to backend" },
+        data: {
+          dashboard: null,
+          categories: [],
+          assignments: {},
+          error: "Could not connect to backend",
+        },
       };
     }
   },
@@ -113,13 +145,15 @@ function formatCurrency(amount: number): string {
 }
 
 export default define.page<typeof handler>(function Dashboard(props) {
-  const { dashboard, error } = props.data as DashboardData;
+  const { dashboard, categories, assignments, error } = props
+    .data as DashboardData;
 
   const period = dashboard?.currentPayPeriod ?? null;
   const summary = dashboard?.budgetSummary ?? null;
   const accounts = dashboard?.accounts ?? [];
   const upcomingBills = dashboard?.upcomingBills ?? [];
   const goals = dashboard?.goals ?? [];
+  const categoryBalances = dashboard?.categoryBalances ?? [];
   const totalAccountBalance = accounts.reduce(
     (sum, a) => sum + (a.balance ?? 0),
     0,
@@ -194,11 +228,12 @@ export default define.page<typeof handler>(function Dashboard(props) {
                 <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
                   <div class="card-body p-4 md:p-6">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3">
-                      <h2 class="text-lg font-mono text-[#00d9ff] flex items-center gap-2">
-                        <span>$</span>
+                      <h2 class="text-base font-bold font-mono text-white flex items-center gap-2">
+                        <span class="text-[#00d9ff]">[</span>
                         <span>ACCOUNTS</span>
+                        <span class="text-[#00d9ff]">]</span>
                       </h2>
-                      <span class="text-xl md:text-2xl font-bold font-mono text-white">
+                      <span class="text-xl md:text-2xl font-bold font-mono text-[#00ff88]">
                         {formatCurrency(totalAccountBalance)}
                       </span>
                     </div>
@@ -241,29 +276,30 @@ export default define.page<typeof handler>(function Dashboard(props) {
                 <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
                   <div class="card-body p-4 md:p-6">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
-                      <h2 class="text-lg font-mono text-[#00d9ff] flex items-center gap-2">
-                        <span>📅</span>
+                      <h2 class="text-base font-bold font-mono text-white flex items-center gap-2">
+                        <span class="text-[#00d9ff]">[</span>
                         <span>BILLS</span>
+                        <span class="text-[#00d9ff]">]</span>
                       </h2>
                       {billsNeedingAttention > 0 && (
                         <span
-                          class={`badge ${
+                          class={`badge font-mono text-[10px] ${
                             overdueBills.length > 0
-                              ? "badge-error"
-                              : "badge-warning"
+                              ? "badge-error border-red-500/50"
+                              : "bg-[#ffb000]/20 text-[#ffb000] border-[#ffb000]/40"
                           }`}
                         >
-                          {billsNeedingAttention} need attention
+                          {billsNeedingAttention} ALERT
                         </span>
                       )}
                     </div>
 
                     {/* Bill Reminder Summary */}
                     {(overdueBills.length > 0 || billsDueSoon.length > 0) && (
-                      <div class="alert alert-warning mb-3 py-2">
+                      <div class="alert bg-[#ffb000]/10 border border-[#ffb000]/30 mb-3 py-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          class="stroke-current shrink-0 h-5 w-5"
+                          class="stroke-current shrink-0 h-5 w-5 text-[#ffb000]"
                           fill="none"
                           viewBox="0 0 24 24"
                         >
@@ -274,17 +310,17 @@ export default define.page<typeof handler>(function Dashboard(props) {
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                           />
                         </svg>
-                        <span class="text-sm">
+                        <span class="text-xs font-mono text-[#ffb000]">
                           {overdueBills.length > 0 && (
-                            <span class="font-semibold text-error">
-                              {overdueBills.length} overdue
+                            <span class="font-bold uppercase">
+                              {overdueBills.length} OVERDUE
                             </span>
                           )}
                           {overdueBills.length > 0 && billsDueSoon.length > 0 &&
                             " • "}
                           {billsDueSoon.length > 0 && (
-                            <span>
-                              {billsDueSoon.length} due within 3 days
+                            <span class="uppercase">
+                              {billsDueSoon.length} DUE SOON
                             </span>
                           )}
                         </span>
@@ -374,9 +410,10 @@ export default define.page<typeof handler>(function Dashboard(props) {
                 {/* Goals Progress */}
                 <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
                   <div class="card-body p-4 md:p-6">
-                    <h2 class="text-lg font-mono text-[#00d9ff] flex items-center gap-2 mb-3">
-                      <span>🎯</span>
+                    <h2 class="text-base font-bold font-mono text-white flex items-center gap-2 mb-3">
+                      <span class="text-[#00d9ff]">[</span>
                       <span>GOALS</span>
+                      <span class="text-[#00d9ff]">]</span>
                     </h2>
                     {goals.length === 0
                       ? (
@@ -427,84 +464,15 @@ export default define.page<typeof handler>(function Dashboard(props) {
 
               {/* Right Column - Budget Assignment (2 cols wide) */}
               <div class="lg:col-span-2">
-                {summary && period
+                {summary && period && categories.length > 0
                   ? (
-                    <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
-                      <div class="card-body p-4 md:p-6">
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
-                          <h2 class="text-xl md:text-2xl text-white font-mono flex items-center gap-2">
-                            <span class="text-[#00d9ff]">[</span>
-                            SUMMARY
-                            <span class="text-[#00d9ff]">]</span>
-                          </h2>
-                          <a
-                            href={url("/settings")}
-                            class="btn bg-[#00ff88]/20 hover:bg-[#00ff88]/30 border border-[#00ff88] text-[#00ff88] btn-sm min-h-[44px] font-mono"
-                          >
-                            <span class="mr-2">+</span>Add Income
-                          </a>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
-                            <div class="stat-title text-[#888] font-mono text-xs">
-                              INCOME
-                            </div>
-                            <div class="stat-value text-lg md:text-2xl font-mono text-white">
-                              {formatCurrency(summary.totalIncome)}
-                            </div>
-                            <div class="stat-desc text-[#00ff88] font-mono text-xs">
-                              {summary.totalIncome > 0
-                                ? "Ready to assign"
-                                : "Add your income"}
-                            </div>
-                          </div>
-                          <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
-                            <div class="stat-title text-[#888] font-mono text-xs">
-                              ASSIGNED
-                            </div>
-                            <div class="stat-value text-lg md:text-2xl font-mono text-white">
-                              {formatCurrency(summary.totalAssigned)}
-                            </div>
-                            <div class="stat-desc text-[#888] font-mono text-xs">
-                              {summary.totalAssigned > 0
-                                ? `${
-                                  ((summary.totalAssigned /
-                                    summary.totalIncome) *
-                                    100).toFixed(0)
-                                }% allocated`
-                                : "Not assigned yet"}
-                            </div>
-                          </div>
-                          <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
-                            <div class="stat-title text-[#888] font-mono text-xs">
-                              UNASSIGNED
-                            </div>
-                            <div
-                              class={`stat-value text-lg md:text-2xl font-mono ${
-                                summary.unassigned === 0
-                                  ? "text-[#00ff88]"
-                                  : "text-[#ffb000]"
-                              }`}
-                            >
-                              {formatCurrency(summary.unassigned)}
-                            </div>
-                            <div
-                              class={`stat-desc font-mono text-xs ${
-                                summary.unassigned === 0
-                                  ? "text-[#00ff88]"
-                                  : "text-[#ffb000]"
-                              }`}
-                            >
-                              {summary.unassigned === 0
-                                ? "✓ Fully allocated"
-                                : summary.unassigned > 0
-                                ? "Needs assignment"
-                                : "Over-assigned!"}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <BudgetAssignmentIsland
+                      categories={categories}
+                      assignments={assignments}
+                      summary={summary}
+                      payPeriodKey={period.key}
+                      categoryBalances={categoryBalances}
+                    />
                   )
                   : (
                     <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">

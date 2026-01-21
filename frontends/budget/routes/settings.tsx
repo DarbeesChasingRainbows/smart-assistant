@@ -1,7 +1,8 @@
 import { Head } from "fresh/runtime";
-import { define, url } from "../utils.ts";
+import { define } from "../utils.ts";
 import type { CategoryGroup, PayPeriod } from "../types/api.ts";
 import SettingsManager from "../islands/SettingsManager.tsx";
+import { Navigation } from "../components/Navigation.tsx";
 
 function getApiBase(): string {
   const rawApiUrl = Deno.env.get("VITE_API_URL");
@@ -57,7 +58,7 @@ export default define.page<typeof handler>(function SettingsPage(props) {
     .data as SettingsData;
 
   return (
-    <div class="min-h-screen bg-slate-100">
+    <>
       <Head>
         <title>Budget - Settings</title>
         <link
@@ -67,46 +68,41 @@ export default define.page<typeof handler>(function SettingsPage(props) {
         />
       </Head>
 
-      <header class="bg-slate-800 text-white p-4 shadow-lg">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-          <a
-            href={url("/dashboard")}
-            class="text-2xl font-bold hover:text-slate-300"
-          >
-            💰 Budget
-          </a>
-          <nav class="flex items-center gap-2">
-            <a href={url("/dashboard")} class="btn btn-ghost btn-sm">
-              Dashboard
-            </a>
-            <a href={url("/accounts")} class="btn btn-ghost btn-sm">Accounts</a>
-            <a href={url("/transactions")} class="btn btn-ghost btn-sm">
-              Transactions
-            </a>
-            <a href={url("/bills")} class="btn btn-ghost btn-sm">Bills</a>
-            <a href={url("/goals")} class="btn btn-ghost btn-sm">Goals</a>
-            <a href={url("/settings")} class="btn btn-primary btn-sm">
-              Settings
-            </a>
-          </nav>
+      <Navigation currentPath="/settings">
+        <div class="min-h-screen bg-[#0a0a0a]">
+          <main class="max-w-7xl mx-auto p-4 md:p-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-white font-mono mb-6 flex items-center gap-3">
+              <span class="text-[#00d9ff]">⚙</span>
+              <span>SETTINGS</span>
+            </h1>
+
+            {error && (
+              <div class="alert alert-error mb-6 font-mono">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <SettingsManager
+              currentPeriod={currentPeriod}
+              allPeriods={allPeriods}
+              categories={categories}
+            />
+          </main>
         </div>
-      </header>
-
-      <main class="max-w-6xl mx-auto p-6">
-        <h1 class="text-3xl font-bold text-slate-800 mb-6">⚙️ Settings</h1>
-
-        {error && (
-          <div class="alert alert-error mb-6">
-            <span>{error}</span>
-          </div>
-        )}
-
-        <SettingsManager
-          currentPeriod={currentPeriod}
-          allPeriods={allPeriods}
-          categories={categories}
-        />
-      </main>
-    </div>
+      </Navigation>
+    </>
   );
 });

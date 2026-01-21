@@ -7,6 +7,8 @@ import type {
   CategoryGroup,
   Transaction,
 } from "../types/api.ts";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface Props {
   initialTransactions: Transaction[];
@@ -31,7 +33,7 @@ const UI_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget"
   : "";
 
-export default function TransactionsManager({
+function TransactionsManagerContent({
   initialTransactions = [],
   accounts = [],
   categories = [],
@@ -196,9 +198,12 @@ export default function TransactionsManager({
       if (res.ok) {
         transactions.value = await res.json();
         calculateAccountStats();
+      } else {
+        toast.error("Failed to load transactions");
       }
     } catch (error) {
       console.error("Error loading transactions:", error);
+      toast.error("Error loading transactions");
     }
   };
 
@@ -249,6 +254,7 @@ export default function TransactionsManager({
         }),
       });
       if (res.ok) {
+        toast.success("Transaction created");
         await loadAllTransactions();
         await refreshCategoryBalances();
         isModalOpen.value = false;
@@ -260,9 +266,11 @@ export default function TransactionsManager({
           res.statusText,
           body,
         );
+        toast.error("Failed to create transaction");
       }
     } catch (error) {
       console.error("Error creating transaction:", error);
+      toast.error("Error creating transaction");
     } finally {
       isSubmitting.value = false;
     }
@@ -292,9 +300,13 @@ export default function TransactionsManager({
               } as Transaction
               : t
           );
+          toast.success(newIsCleared ? "Cleared" : "Uncleared");
+        } else {
+          toast.error("Failed to update cleared status");
         }
       } catch (error) {
         console.error("Error updating cleared status:", error);
+        toast.error("Error updating cleared status");
       }
       return;
     }
@@ -305,21 +317,27 @@ export default function TransactionsManager({
         ? "uncleared"
         : "cleared";
     try {
-      await fetch(`${API_BASE}/transactions/${key}/clear`, {
+      const res = await fetch(`${API_BASE}/transactions/${key}/clear`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      transactions.value = transactions.value.map((t) =>
-        getTxKey(t) === key
-          ? {
-            ...(t as unknown as Record<string, unknown>),
-            clearedStatus: newStatus,
-          } as Transaction
-          : t
-      );
+      if (res.ok) {
+        transactions.value = transactions.value.map((t) =>
+          getTxKey(t) === key
+            ? {
+              ...(t as unknown as Record<string, unknown>),
+              clearedStatus: newStatus,
+            } as Transaction
+            : t
+        );
+        toast.success(newStatus === "cleared" ? "Cleared" : "Uncleared");
+      } else {
+        toast.error("Failed to update cleared status");
+      }
     } catch (error) {
       console.error("Error updating cleared status:", error);
+      toast.error("Error updating cleared status");
     }
   };
 
@@ -439,7 +457,7 @@ export default function TransactionsManager({
 
     const total = getSplitsTotal();
     if (Math.abs(total - splitTransactionAmount.value) > 0.01) {
-      alert(
+      toast.error(
         `Splits total (${
           formatCurrency(total)
         }) must equal transaction amount (${
@@ -476,10 +494,14 @@ export default function TransactionsManager({
             } as Transaction
             : t
         );
+        toast.success("Splits saved");
         isSplitModalOpen.value = false;
+      } else {
+        toast.error("Failed to save splits");
       }
     } catch (error) {
       console.error("Error saving splits:", error);
+      toast.error("Error saving splits");
     } finally {
       isSubmitting.value = false;
     }
@@ -488,11 +510,19 @@ export default function TransactionsManager({
   const deleteTransaction = async (tx: Transaction) => {
     if (!confirm("Delete this transaction?")) return;
     try {
-      await fetch(`${API_BASE}/transactions/${tx.id}`, { method: "DELETE" });
-      transactions.value = transactions.value.filter((t) => t.id !== tx.id);
-      calculateAccountStats();
+      const res = await fetch(`${API_BASE}/transactions/${tx.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        transactions.value = transactions.value.filter((t) => t.id !== tx.id);
+        calculateAccountStats();
+        toast.success("Transaction deleted");
+      } else {
+        toast.error("Failed to delete transaction");
+      }
     } catch (error) {
       console.error("Error deleting transaction:", error);
+      toast.error("Error deleting transaction");
     }
   };
 
@@ -533,14 +563,15 @@ export default function TransactionsManager({
       const txIds = Array.from(selectedTxIds.value);
 
       // Batch API calls with Promise.all
-      await Promise.all(
+      const results = await Promise.all(
         txIds.map(async (txId, index) => {
-          await fetch(`${API_BASE}/transactions/${txId}/clear`, {
+          const r = await fetch(`${API_BASE}/transactions/${txId}/clear`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status: "cleared" }),
           });
           bulkProgressCurrent.value = index + 1;
+          return r.ok;
         }),
       );
 
@@ -552,10 +583,17 @@ export default function TransactionsManager({
           } as Transaction
           : t
       );
+      if (results.every((r) => r)) {
+        toast.success(`${txIds.length} transactions cleared`);
+      } else {
+        toast.warning("Some transactions failed to clear");
+      }
       clearSelection();
     } catch (error) {
       console.error("Error bulk clearing:", error);
-      alert("Error clearing transactions. Some may not have been updated.");
+      toast.error(
+        "Error clearing transactions. Some may not have been updated.",
+      );
     } finally {
       isSubmitting.value = false;
       bulkProgressTotal.value = 0;
@@ -580,21 +618,31 @@ export default function TransactionsManager({
       const txIds = Array.from(selectedTxIds.value);
 
       // Batch API calls with Promise.all
-      await Promise.all(
+      const results = await Promise.all(
         txIds.map(async (txId, index) => {
-          await fetch(`${API_BASE}/transactions/${txId}`, { method: "DELETE" });
+          const r = await fetch(`${API_BASE}/transactions/${txId}`, {
+            method: "DELETE",
+          });
           bulkProgressCurrent.value = index + 1;
+          return r.ok;
         }),
       );
 
       transactions.value = transactions.value.filter((t) =>
         !selectedTxIds.value.has(getTxKey(t))
       );
+      if (results.every((r) => r)) {
+        toast.success(`${txIds.length} transactions deleted`);
+      } else {
+        toast.warning("Some transactions failed to delete");
+      }
       clearSelection();
       calculateAccountStats();
     } catch (error) {
       console.error("Error bulk deleting:", error);
-      alert("Error deleting transactions. Some may not have been deleted.");
+      toast.error(
+        "Error deleting transactions. Some may not have been deleted.",
+      );
     } finally {
       isSubmitting.value = false;
       bulkProgressTotal.value = 0;
@@ -624,14 +672,15 @@ export default function TransactionsManager({
       const txIds = Array.from(selectedTxIds.value);
 
       // Batch API calls with Promise.all for parallel execution
-      await Promise.all(
+      const results = await Promise.all(
         txIds.map(async (txId, index) => {
-          await fetch(`${API_BASE}/transactions/${txId}`, {
+          const r = await fetch(`${API_BASE}/transactions/${txId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ categoryKey }),
           });
           bulkProgressCurrent.value = index + 1;
+          return r.ok;
         }),
       );
 
@@ -643,12 +692,19 @@ export default function TransactionsManager({
           } as Transaction
           : t
       );
+      if (results.every((r) => r)) {
+        toast.success(`${txIds.length} transactions categorized`);
+      } else {
+        toast.warning("Some transactions failed to categorize");
+      }
       isBulkCategoryModalOpen.value = false;
       clearSelection();
       await refreshCategoryBalances();
     } catch (error) {
       console.error("Error applying bulk category:", error);
-      alert("Error categorizing transactions. Some may not have been updated.");
+      toast.error(
+        "Error categorizing transactions. Some may not have been updated.",
+      );
     } finally {
       isSubmitting.value = false;
       bulkProgressTotal.value = 0;
@@ -693,6 +749,7 @@ export default function TransactionsManager({
     transactions.value = JSON.parse(JSON.stringify(lastState.transactions));
     undoHistory.value = undoHistory.value.slice(0, -1);
     calculateAccountStats();
+    toast.info(`Undone: ${lastState.action}`);
   };
 
   const redo = () => {
@@ -713,6 +770,7 @@ export default function TransactionsManager({
     transactions.value = JSON.parse(JSON.stringify(nextState.transactions));
     redoHistory.value = redoHistory.value.slice(0, -1);
     calculateAccountStats();
+    toast.info(`Redone: ${nextState.action.replace("Undo ", "")}`);
   };
 
   // Bulk edit functions
@@ -752,14 +810,15 @@ export default function TransactionsManager({
       const updatePayload = getUpdatePayload();
 
       // Batch API calls with Promise.all
-      await Promise.all(
+      const results = await Promise.all(
         txIds.map(async (txId, index) => {
-          await fetch(`${API_BASE}/transactions/${txId}`, {
+          const r = await fetch(`${API_BASE}/transactions/${txId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatePayload),
           });
           bulkProgressCurrent.value = index + 1;
+          return r.ok;
         }),
       );
 
@@ -785,11 +844,16 @@ export default function TransactionsManager({
         }
       });
 
+      if (results.every((r) => r)) {
+        toast.success(`${txIds.length} transactions updated`);
+      } else {
+        toast.warning("Some transactions failed to update");
+      }
       isBulkEditModalOpen.value = false;
       clearSelection();
     } catch (error) {
       console.error(`Error bulk editing ${bulkEditField.value}:`, error);
-      alert(
+      toast.error(
         `Error updating ${bulkEditField.value}. Some transactions may not have been updated.`,
       );
     } finally {
@@ -831,7 +895,7 @@ export default function TransactionsManager({
       !transferAmount.value
     ) return;
     if (transferFromAccountId.value === transferToAccountId.value) {
-      alert("Cannot transfer to the same account");
+      toast.error("Cannot transfer to the same account");
       return;
     }
 
@@ -841,22 +905,24 @@ export default function TransactionsManager({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fromAccountId: parseInt(transferFromAccountId.value),
-          toAccountId: parseInt(transferToAccountId.value),
+          fromAccountKey: transferFromAccountId.value,
+          toAccountKey: transferToAccountId.value,
           amount: parseFloat(transferAmount.value),
           transactionDate: transferDate.value,
           memo: transferMemo.value || null,
         }),
       });
       if (res.ok) {
+        toast.success("Transfer complete");
         await loadAllTransactions();
         isTransferModalOpen.value = false;
       } else {
         const err = await res.text();
-        alert(`Transfer failed: ${err}`);
+        toast.error(`Transfer failed: ${err}`);
       }
     } catch (error) {
       console.error("Error creating transfer:", error);
+      toast.error("Error creating transfer");
     } finally {
       isSubmitting.value = false;
     }
@@ -964,14 +1030,17 @@ export default function TransactionsManager({
       {/* Bulk Actions Toolbar */}
       {selectedTxIds.value.size > 0 && (
         <div class="flex items-center gap-2 p-3 bg-[#00d9ff]/10 border border-[#00d9ff]/30 rounded flex-wrap">
-          <span class="font-medium text-[#00d9ff] font-mono">
-            {selectedTxIds.value.size} selected
+          <span class="font-bold text-[#00d9ff] font-mono text-sm">
+            {selectedTxIds.value.size} SELECTED
           </span>
 
           {/* Bulk Edit Dropdown */}
           <div class="dropdown">
-            <label tabIndex={0} class="btn btn-sm btn-outline">
-              ✏️ Edit
+            <label
+              tabIndex={0}
+              class="btn btn-xs min-h-[32px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] font-mono"
+            >
+              EDIT
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-3 w-3 ml-1"
@@ -989,21 +1058,30 @@ export default function TransactionsManager({
             </label>
             <ul
               tabIndex={0}
-              class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              class="dropdown-content z-[1] menu p-2 shadow bg-[#1a1a1a] border border-[#333] rounded w-52 font-mono text-xs"
             >
               <li>
-                <a onClick={() => openBulkEditModal("date")}>
-                  📅 Change Date
+                <a
+                  onClick={() => openBulkEditModal("date")}
+                  class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10"
+                >
+                  📅 CHANGE DATE
                 </a>
               </li>
               <li>
-                <a onClick={() => openBulkEditModal("payee")}>
-                  👤 Change Payee
+                <a
+                  onClick={() => openBulkEditModal("payee")}
+                  class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10"
+                >
+                  👤 CHANGE PAYEE
                 </a>
               </li>
               <li>
-                <a onClick={() => openBulkEditModal("memo")}>
-                  📝 Change Memo
+                <a
+                  onClick={() => openBulkEditModal("memo")}
+                  class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10"
+                >
+                  📝 CHANGE MEMO
                 </a>
               </li>
             </ul>
@@ -1011,33 +1089,33 @@ export default function TransactionsManager({
 
           <button
             type="button"
-            class="btn btn-sm btn-outline"
+            class="btn btn-xs min-h-[32px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] font-mono"
             onClick={openBulkCategoryModal}
           >
-            🏷️ Category
+            CATEGORY
           </button>
           <button
             type="button"
-            class="btn btn-sm btn-outline btn-success"
+            class="btn btn-xs min-h-[32px] bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
             onClick={bulkClear}
             disabled={isSubmitting.value}
           >
-            ✓ Clear
+            CLEAR
           </button>
           <button
             type="button"
-            class="btn btn-sm btn-outline btn-error"
+            class="btn btn-xs min-h-[32px] bg-red-500/20 border-red-500 text-red-400 font-mono"
             onClick={bulkDelete}
             disabled={isSubmitting.value}
           >
-            🗑️ Delete
+            DELETE
           </button>
           <button
             type="button"
-            class="btn btn-sm btn-ghost"
+            class="btn btn-xs min-h-[32px] btn-ghost text-[#666] hover:text-white font-mono"
             onClick={clearSelection}
           >
-            Clear Selection
+            CLEAR SELECTION
           </button>
         </div>
       )}
@@ -1239,18 +1317,20 @@ export default function TransactionsManager({
       {/* Add Transaction Modal */}
       {isModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box max-w-2xl">
-            <h3 class="font-bold text-lg mb-4">Add Transaction</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              ADD TRANSACTION
+            </h3>
             <form onSubmit={handleSubmit}>
               {/* Inflow/Outflow Toggle */}
               <div class="form-control mb-4">
                 <label class="label cursor-pointer justify-start gap-4">
                   <span
-                    class={`font-medium ${
-                      !formIsInflow.value ? "text-red-600" : "text-slate-400"
+                    class={`font-bold font-mono text-xs ${
+                      !formIsInflow.value ? "text-red-500" : "text-[#444]"
                     }`}
                   >
-                    Outflow
+                    OUTFLOW
                   </span>
                   <input
                     type="checkbox"
@@ -1260,11 +1340,11 @@ export default function TransactionsManager({
                       formIsInflow.value = e.currentTarget.checked}
                   />
                   <span
-                    class={`font-medium ${
-                      formIsInflow.value ? "text-green-600" : "text-slate-400"
+                    class={`font-bold font-mono text-xs ${
+                      formIsInflow.value ? "text-[#00ff88]" : "text-[#444]"
                     }`}
                   >
-                    Inflow
+                    INFLOW
                   </span>
                 </label>
               </div>
@@ -1273,10 +1353,12 @@ export default function TransactionsManager({
                 {/* Account Selector */}
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Account</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      ACCOUNT
+                    </span>
                   </label>
                   <select
-                    class="select select-bordered"
+                    class="select select-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                     value={formAccountId.value}
                     onChange={(e) =>
                       formAccountId.value = e.currentTarget.value}
@@ -1289,7 +1371,7 @@ export default function TransactionsManager({
                         key={getAccountKey(acc)}
                         value={getAccountKey(acc)}
                       >
-                        {getAccountLabel(acc)}
+                        {getAccountLabel(acc).toUpperCase()}
                       </option>
                     ))}
                   </select>
@@ -1297,11 +1379,13 @@ export default function TransactionsManager({
 
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                     value={formDate.value}
                     onInput={(e) => formDate.value = e.currentTarget.value}
                     required
@@ -1310,12 +1394,14 @@ export default function TransactionsManager({
 
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text">Payee</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      PAYEE
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
-                    placeholder="e.g., Walmart, Shell Gas"
+                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    placeholder="e.g., WALMART, SHELL GAS"
                     value={formPayee.value}
                     onInput={(e) => formPayee.value = e.currentTarget.value}
                   />
@@ -1323,13 +1409,15 @@ export default function TransactionsManager({
 
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Amount</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      AMOUNT
+                    </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
                     min="0"
-                    class="input input-bordered"
+                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                     placeholder="0.00"
                     value={formAmount.value}
                     onInput={(e) => formAmount.value = e.currentTarget.value}
@@ -1340,28 +1428,34 @@ export default function TransactionsManager({
                 {/* Category with Available Balance */}
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Category</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      CATEGORY
+                    </span>
                   </label>
                   <select
-                    class="select select-bordered"
+                    class="select select-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                     value={formCategoryId.value}
                     onChange={(e) =>
                       formCategoryId.value = e.currentTarget.value}
                   >
-                    <option value="">Uncategorized</option>
+                    <option value="">UNCATEGORIZED</option>
                     {(categoryGroups || []).map((group) => (
-                      <optgroup key={group.id} label={group.name}>
+                      <optgroup
+                        key={group.id}
+                        label={group.name.toUpperCase()}
+                        class="bg-[#1a1a1a]"
+                      >
                         {(group.categories || []).map((cat) => {
                           const catKey = cat.key || cat.id?.toString();
                           const bal = categoryBalancesSignal.value.find((
                             b: CategoryBalance,
-                          ) =>
-                            b.categoryKey === catKey
-                          );
+                          ) => b.categoryKey === catKey);
                           const available = bal?.available ?? 0;
                           return (
                             <option key={catKey} value={catKey}>
-                              {cat.name} ({formatCurrency(available)})
+                              {cat.name.toUpperCase()} ({formatCurrency(
+                                available,
+                              )})
                             </option>
                           );
                         })}
@@ -1372,12 +1466,14 @@ export default function TransactionsManager({
 
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text">Memo</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      MEMO
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
-                    placeholder="Optional note"
+                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    placeholder="OPTIONAL NOTE"
                     value={formMemo.value}
                     onInput={(e) => formMemo.value = e.currentTarget.value}
                   />
@@ -1387,11 +1483,11 @@ export default function TransactionsManager({
               {/* Category Balances Quick View */}
               {!formIsInflow.value && categoryBalancesSignal.value.length > 0 &&
                 (
-                  <div class="mt-4 p-3 bg-slate-50 rounded-lg max-h-40 overflow-y-auto">
-                    <div class="text-xs font-semibold text-slate-500 mb-2">
-                      Category Balances
+                  <div class="mt-4 p-3 bg-[#0a0a0a] border border-[#333] rounded max-h-40 overflow-y-auto">
+                    <div class="text-[10px] font-bold text-[#666] mb-2 font-mono uppercase">
+                      CATEGORY BALANCES
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-[10px] font-mono">
                       {categoryBalancesSignal.value
                         .filter((b: CategoryBalance) => b.available !== 0)
                         .sort((a: CategoryBalance, b: CategoryBalance) =>
@@ -1401,19 +1497,21 @@ export default function TransactionsManager({
                         .map((bal: CategoryBalance) => (
                           <div
                             key={bal.categoryKey}
-                            class={`flex justify-between p-1 rounded cursor-pointer hover:bg-slate-100 ${
+                            class={`flex justify-between p-1 rounded cursor-pointer border border-transparent hover:border-[#00d9ff]/30 hover:bg-[#00d9ff]/5 ${
                               formCategoryId.value === bal.categoryKey
-                                ? "bg-primary/10"
-                                : ""
+                                ? "bg-[#00d9ff]/10 border-[#00d9ff]/30 text-[#00d9ff]"
+                                : "text-[#888]"
                             }`}
                             onClick={() =>
                               formCategoryId.value = bal.categoryKey}
                           >
-                            <span class="truncate">{bal.categoryName}</span>
+                            <span class="truncate">
+                              {bal.categoryName.toUpperCase()}
+                            </span>
                             <span
                               class={bal.available >= 0
-                                ? "text-green-600"
-                                : "text-red-600"}
+                                ? "text-[#00ff88]"
+                                : "text-red-500"}
                             >
                               {formatCurrency(bal.available)}
                             </span>
@@ -1426,19 +1524,19 @@ export default function TransactionsManager({
               <div class="modal-action">
                 <button
                   type="button"
-                  class="btn"
+                  class="btn font-mono"
                   onClick={() => isModalOpen.value = false}
                 >
-                  Cancel
+                  CANCEL
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
                     ? <span class="loading loading-spinner loading-sm"></span>
-                    : "Save"}
+                    : "SAVE TRANSACTION"}
                 </button>
               </div>
             </form>
@@ -1451,75 +1549,67 @@ export default function TransactionsManager({
       {/* Split Transaction Modal - ENHANCED */}
       {isSplitModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box max-w-2xl">
-            <h3 class="font-bold text-lg mb-4">✂️ Split Transaction</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              ✂️ SPLIT TRANSACTION
+            </h3>
 
             {/* Preset Buttons */}
             <div class="mb-4">
-              <label class="label">
-                <span class="label-text font-medium">Quick Presets:</span>
+              <label class="label py-0">
+                <span class="label-text font-mono text-[10px] text-[#888]">
+                  QUICK PRESETS:
+                </span>
               </label>
-              <div class="flex gap-2 flex-wrap">
+              <div class="flex gap-2 flex-wrap mt-1">
+                {["50/50", "thirds", "quarters"].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    class="btn btn-xs bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] font-mono"
+                    onClick={() =>
+                      applySplitPreset(p as "50/50" | "thirds" | "quarters")}
+                  >
+                    {p.toUpperCase()}
+                  </button>
+                ))}
                 <button
                   type="button"
-                  class="btn btn-sm btn-outline"
-                  onClick={() => applySplitPreset("50/50")}
-                >
-                  50/50
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline"
-                  onClick={() => applySplitPreset("thirds")}
-                >
-                  Thirds
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline"
-                  onClick={() => applySplitPreset("quarters")}
-                >
-                  Quarters
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline btn-ghost"
+                  class="btn btn-xs btn-ghost text-red-400 font-mono"
                   onClick={() => applySplitPreset("custom")}
                 >
-                  Reset
+                  RESET
                 </button>
               </div>
             </div>
 
             {/* Enhanced Total Indicator with Border Color */}
             <div
-              class={`mb-4 p-4 bg-slate-50 rounded-lg border-2 ${
+              class={`mb-4 p-4 bg-[#0a0a0a] rounded border-2 font-mono ${
                 Math.abs(
                     getSplitsTotal() - Math.abs(splitTransactionAmount.value),
                   ) < 0.01
-                  ? "border-green-500"
-                  : "border-red-500"
+                  ? "border-[#00ff88]/30"
+                  : "border-red-500/30"
               }`}
             >
               <div class="flex justify-between items-center mb-2">
-                <span class="font-medium text-slate-700">
-                  Transaction Total:
-                </span>
-                <span class="text-xl font-bold text-slate-800">
+                <span class="text-[10px] text-[#888]">TRANSACTION TOTAL:</span>
+                <span class="text-lg font-bold text-white">
                   {formatCurrency(Math.abs(splitTransactionAmount.value))}
                 </span>
               </div>
-              <div class="divider my-1"></div>
+              <div class="divider before:bg-[#333] after:bg-[#333] my-1"></div>
               <div class="flex justify-between items-center">
-                <span class="font-medium text-slate-700">Splits Total:</span>
+                <span class="text-[10px] text-[#888]">SPLITS TOTAL:</span>
                 <span
-                  class={`text-xl font-bold ${
+                  class={`text-lg font-bold ${
                     Math.abs(
                         getSplitsTotal() -
                           Math.abs(splitTransactionAmount.value),
                       ) < 0.01
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-[#00ff88]"
+                      : "text-red-500"
                   }`}
                 >
                   {formatCurrency(getSplitsTotal())}
@@ -1528,14 +1618,14 @@ export default function TransactionsManager({
               {Math.abs(
                     getSplitsTotal() - Math.abs(splitTransactionAmount.value),
                   ) >= 0.01 && (
-                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-200">
-                  <span class="text-sm font-medium text-slate-600">
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-[#333]">
+                  <span class="text-[10px] text-[#888]">
                     {getSplitsTotal() < Math.abs(splitTransactionAmount.value)
-                      ? "Remaining:"
-                      : "Over by:"}
+                      ? "REMAINING:"
+                      : "OVER BY:"}
                   </span>
                   <div class="flex items-center gap-2">
-                    <span class="text-lg font-semibold text-red-600">
+                    <span class="text-base font-bold text-red-500">
                       {formatCurrency(
                         Math.abs(
                           Math.abs(splitTransactionAmount.value) -
@@ -1547,67 +1637,35 @@ export default function TransactionsManager({
                         Math.abs(splitTransactionAmount.value) && (
                       <button
                         type="button"
-                        class="btn btn-xs btn-success"
+                        class="btn btn-xs bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
                         onClick={autoDistributeRemaining}
-                        title="Add remaining amount to last split"
                       >
-                        Auto-Fix
+                        AUTO-FIX
                       </button>
                     )}
                   </div>
                 </div>
               )}
-              {Math.abs(
-                    getSplitsTotal() - Math.abs(splitTransactionAmount.value),
-                  ) < 0.01 && (
-                <div class="flex items-center justify-center mt-2 pt-2 border-t border-green-200">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 text-green-600 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span class="text-sm font-medium text-green-600">
-                    Splits balanced!
-                  </span>
-                </div>
-              )}
             </div>
 
-            <div class="space-y-3">
+            <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
               {splitRows.value.map((row, index) => (
                 <div
                   key={index}
-                  class={`flex gap-2 items-start p-2 bg-slate-50 rounded ${
+                  class={`grid grid-cols-[1fr_100px_1fr_auto] gap-2 items-end p-2 bg-[#0a0a0a] border border-[#333] rounded ${
                     !row.categoryId && parseFloat(row.amount) > 0
-                      ? "border border-yellow-300"
+                      ? "border-[#ffb000]/50"
                       : ""
                   }`}
                 >
-                  <div class="form-control flex-1">
+                  <div class="form-control">
                     <label class="label py-0">
-                      <span class="label-text text-xs">
-                        Category
-                        {!row.categoryId && parseFloat(row.amount) > 0 && (
-                          <span
-                            class="text-yellow-600 ml-1"
-                            title="Consider assigning a category"
-                          >
-                            ⚠️
-                          </span>
-                        )}
+                      <span class="label-text text-[10px] text-[#888] font-mono">
+                        CATEGORY
                       </span>
                     </label>
                     <select
-                      class="select select-bordered select-sm w-full"
+                      class="select select-bordered select-xs w-full !bg-[#1a1a1a] border-[#333] !text-white font-mono"
                       value={row.categoryId}
                       onChange={(e) =>
                         updateSplitRow(
@@ -1616,9 +1674,13 @@ export default function TransactionsManager({
                           e.currentTarget.value,
                         )}
                     >
-                      <option value="">Uncategorized</option>
+                      <option value="">UNCATEGORIZED</option>
                       {(categoryGroups || []).map((group) => (
-                        <optgroup key={group.id} label={group.name}>
+                        <optgroup
+                          key={group.id}
+                          label={group.name.toUpperCase()}
+                          class="bg-[#1a1a1a]"
+                        >
                           {(categories || []).filter((c) => {
                             const groupKey = group.key || group.id?.toString();
                             return (groupKey && c.groupKey === groupKey) ||
@@ -1627,7 +1689,7 @@ export default function TransactionsManager({
                             const catKey = cat.key || cat.id?.toString();
                             return (
                               <option key={catKey} value={catKey}>
-                                {cat.name}
+                                {cat.name.toUpperCase()}
                               </option>
                             );
                           })}
@@ -1635,27 +1697,31 @@ export default function TransactionsManager({
                       ))}
                     </select>
                   </div>
-                  <div class="form-control w-28">
+                  <div class="form-control">
                     <label class="label py-0">
-                      <span class="label-text text-xs">Amount</span>
+                      <span class="label-text text-[10px] text-[#888] font-mono">
+                        AMOUNT
+                      </span>
                     </label>
                     <input
                       type="number"
                       step="0.01"
-                      class="input input-bordered input-sm"
+                      class="input input-bordered input-xs !bg-[#1a1a1a] border-[#333] !text-white font-mono text-right"
                       value={row.amount}
                       onInput={(e) =>
                         updateSplitRow(index, "amount", e.currentTarget.value)}
                     />
                   </div>
-                  <div class="form-control flex-1">
+                  <div class="form-control">
                     <label class="label py-0">
-                      <span class="label-text text-xs">Memo</span>
+                      <span class="label-text text-[10px] text-[#888] font-mono">
+                        MEMO
+                      </span>
                     </label>
                     <input
                       type="text"
-                      class="input input-bordered input-sm"
-                      placeholder="Optional"
+                      class="input input-bordered input-xs !bg-[#1a1a1a] border-[#333] !text-white font-mono"
+                      placeholder="NOTE"
                       value={row.memo}
                       onInput={(e) =>
                         updateSplitRow(index, "memo", e.currentTarget.value)}
@@ -1663,7 +1729,7 @@ export default function TransactionsManager({
                   </div>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-sm btn-circle mt-6"
+                    class="btn btn-ghost btn-xs text-red-400"
                     onClick={() => removeSplitRow(index)}
                     disabled={splitRows.value.length <= 1}
                   >
@@ -1675,23 +1741,23 @@ export default function TransactionsManager({
 
             <button
               type="button"
-              class="btn btn-ghost btn-sm mt-3"
+              class="btn btn-ghost btn-xs mt-3 text-[#00d9ff] font-mono"
               onClick={addSplitRow}
             >
-              + Add Split
+              + ADD SPLIT ROW
             </button>
 
             <div class="modal-action">
               <button
                 type="button"
-                class="btn"
+                class="btn font-mono"
                 onClick={() => isSplitModalOpen.value = false}
               >
-                Cancel
+                CANCEL
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                 onClick={saveSplits}
                 disabled={isSubmitting.value ||
                   Math.abs(
@@ -1701,7 +1767,7 @@ export default function TransactionsManager({
               >
                 {isSubmitting.value
                   ? <span class="loading loading-spinner loading-sm"></span>
-                  : "Save Splits"}
+                  : "SAVE SPLITS"}
               </button>
             </div>
           </div>
@@ -1715,26 +1781,35 @@ export default function TransactionsManager({
       {/* Bulk Category Modal */}
       {isBulkCategoryModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">
-              Assign Category to {selectedTxIds.value.size} Transaction(s)
+          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              BULK CATEGORIZE
             </h3>
+            <p class="text-[#888] text-xs mb-4 font-mono">
+              ASSIGN CATEGORY TO {selectedTxIds.value.size} TRANSACTIONS.
+            </p>
             <div class="form-control">
               <label class="label">
-                <span class="label-text">Category</span>
+                <span class="label-text font-mono text-xs text-[#888]">
+                  CATEGORY
+                </span>
               </label>
               <select
-                class="select select-bordered w-full"
+                class="select select-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                 value={bulkCategoryId.value}
                 onChange={(e) => bulkCategoryId.value = e.currentTarget.value}
               >
-                <option value="">Select a category...</option>
+                <option value="">SELECT A CATEGORY...</option>
                 {(categoryGroups || []).map((group) => (
-                  <optgroup key={group.id} label={group.name}>
-                    {(categories || []).filter((c) =>
-                      c.categoryGroupId === group.id
-                    ).map((cat) => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <optgroup
+                    key={group.id}
+                    label={group.name.toUpperCase()}
+                    class="bg-[#1a1a1a]"
+                  >
+                    {(group.categories || []).map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name.toUpperCase()}
+                      </option>
                     ))}
                   </optgroup>
                 ))}
@@ -1743,20 +1818,20 @@ export default function TransactionsManager({
             <div class="modal-action">
               <button
                 type="button"
-                class="btn"
+                class="btn font-mono"
                 onClick={() => isBulkCategoryModalOpen.value = false}
               >
-                Cancel
+                CANCEL
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                 onClick={applyBulkCategory}
                 disabled={isSubmitting.value || !bulkCategoryId.value}
               >
                 {isSubmitting.value
                   ? <span class="loading loading-spinner loading-sm"></span>
-                  : "Apply"}
+                  : "APPLY"}
               </button>
             </div>
           </div>
@@ -1771,15 +1846,19 @@ export default function TransactionsManager({
       {/* Transfer Modal */}
       {isTransferModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">↔️ Transfer Between Accounts</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              ↔️ ACCOUNT TRANSFER
+            </h3>
             <div class="space-y-4">
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">From Account</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    FROM ACCOUNT
+                  </span>
                 </label>
                 <select
-                  class="select select-bordered w-full"
+                  class="select select-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                   value={transferFromAccountId.value}
                   onChange={(e) =>
                     transferFromAccountId.value = e.currentTarget.value}
@@ -1788,17 +1867,19 @@ export default function TransactionsManager({
                     !(a as unknown as { isClosed?: boolean }).isClosed
                   ).map((acc) => (
                     <option key={getAccountKey(acc)} value={getAccountKey(acc)}>
-                      {getAccountLabel(acc)}
+                      {getAccountLabel(acc).toUpperCase()}
                     </option>
                   ))}
                 </select>
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">To Account</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    TO ACCOUNT
+                  </span>
                 </label>
                 <select
-                  class="select select-bordered w-full"
+                  class="select select-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                   value={transferToAccountId.value}
                   onChange={(e) =>
                     transferToAccountId.value = e.currentTarget.value}
@@ -1807,25 +1888,27 @@ export default function TransactionsManager({
                     !(a as unknown as { isClosed?: boolean }).isClosed
                   ).map((acc) => (
                     <option key={getAccountKey(acc)} value={getAccountKey(acc)}>
-                      {getAccountLabel(acc)}
+                      {getAccountLabel(acc).toUpperCase()}
                     </option>
                   ))}
                 </select>
               </div>
               {transferFromAccountId.value === transferToAccountId.value && (
-                <div class="text-error text-sm">
-                  Cannot transfer to the same account
+                <div class="text-red-500 font-mono text-[10px] uppercase">
+                  ⚠️ CANNOT TRANSFER TO SAME ACCOUNT
                 </div>
               )}
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Amount</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    AMOUNT
+                  </span>
                 </label>
                 <input
                   type="number"
                   step="0.01"
                   min="0.01"
-                  class="input input-bordered"
+                  class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                   placeholder="0.00"
                   value={transferAmount.value}
                   onInput={(e) => transferAmount.value = e.currentTarget.value}
@@ -1833,23 +1916,27 @@ export default function TransactionsManager({
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Date</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    DATE
+                  </span>
                 </label>
                 <input
                   type="date"
-                  class="input input-bordered"
+                  class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                   value={transferDate.value}
                   onInput={(e) => transferDate.value = e.currentTarget.value}
                 />
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Memo (optional)</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    MEMO (OPTIONAL)
+                  </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered"
-                  placeholder="Optional note"
+                  class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                  placeholder="OPTIONAL NOTE"
                   value={transferMemo.value}
                   onInput={(e) => transferMemo.value = e.currentTarget.value}
                 />
@@ -1858,21 +1945,21 @@ export default function TransactionsManager({
             <div class="modal-action">
               <button
                 type="button"
-                class="btn"
+                class="btn font-mono"
                 onClick={() => isTransferModalOpen.value = false}
               >
-                Cancel
+                CANCEL
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                 onClick={createTransfer}
                 disabled={isSubmitting.value || !transferAmount.value ||
                   transferFromAccountId.value === transferToAccountId.value}
               >
                 {isSubmitting.value
                   ? <span class="loading loading-spinner loading-sm"></span>
-                  : "Create Transfer"}
+                  : "CREATE TRANSFER"}
               </button>
             </div>
           </div>
@@ -1887,29 +1974,24 @@ export default function TransactionsManager({
       {/* Bulk Edit Modal */}
       {isBulkEditModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">
-              Bulk Edit {bulkEditField.value === "date"
-                ? "📅 Date"
-                : bulkEditField.value === "payee"
-                ? "👤 Payee"
-                : "📝 Memo"} for {selectedTxIds.value.size} Transaction(s)
+          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              BULK EDIT {bulkEditField.value.toUpperCase()}
             </h3>
+            <p class="text-[#888] text-xs mb-4 font-mono">
+              UPDATING {selectedTxIds.value.size} TRANSACTIONS.
+            </p>
             <div class="form-control">
               <label class="label">
-                <span class="label-text">
-                  New {bulkEditField.value === "date"
-                    ? "Date"
-                    : bulkEditField.value === "payee"
-                    ? "Payee"
-                    : "Memo"}
+                <span class="label-text font-mono text-xs text-[#888]">
+                  NEW {bulkEditField.value.toUpperCase()}
                 </span>
               </label>
               {bulkEditField.value === "date"
                 ? (
                   <input
                     type="date"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
                     value={bulkEditValue.value}
                     onInput={(e) => bulkEditValue.value = e.currentTarget.value}
                   />
@@ -1917,8 +1999,8 @@ export default function TransactionsManager({
                 : (
                   <input
                     type="text"
-                    class="input input-bordered w-full"
-                    placeholder={`Enter new ${bulkEditField.value}...`}
+                    class="input input-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    placeholder={`ENTER NEW ${bulkEditField.value.toUpperCase()}...`}
                     value={bulkEditValue.value}
                     onInput={(e) => bulkEditValue.value = e.currentTarget.value}
                   />
@@ -1927,20 +2009,20 @@ export default function TransactionsManager({
             <div class="modal-action">
               <button
                 type="button"
-                class="btn"
+                class="btn font-mono"
                 onClick={() => isBulkEditModalOpen.value = false}
               >
-                Cancel
+                CANCEL
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                 onClick={applyBulkEdit}
                 disabled={isSubmitting.value || !bulkEditValue.value.trim()}
               >
                 {isSubmitting.value
                   ? <span class="loading loading-spinner loading-sm"></span>
-                  : "Apply"}
+                  : "APPLY"}
               </button>
             </div>
           </div>
@@ -1954,39 +2036,37 @@ export default function TransactionsManager({
 
       {/* Progress Indicator */}
       {bulkProgressTotal.value > 0 && (
-        <div class="toast toast-center z-50">
-          <div class="alert alert-info shadow-lg">
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="stroke-current flex-shrink-0 w-6 h-6 animate-spin"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              <div>
-                <div class="font-bold">{bulkProgressMessage.value}</div>
-                <div class="text-xs">
-                  {bulkProgressCurrent.value} of {bulkProgressTotal.value}{" "}
-                  completed
+        <div class="toast toast-center z-[100]">
+          <div class="alert bg-[#0a0a0a] border-2 border-[#00d9ff] shadow-2xl min-w-[300px]">
+            <div class="flex flex-col w-full gap-2">
+              <div class="flex items-center gap-3">
+                <span class="loading loading-spinner text-[#00d9ff]"></span>
+                <div class="font-bold text-[#00d9ff] font-mono text-xs uppercase">
+                  {bulkProgressMessage.value}
                 </div>
-                <progress
-                  class="progress progress-primary w-56 mt-2"
-                  value={bulkProgressCurrent.value}
-                  max={bulkProgressTotal.value}
-                >
-                </progress>
               </div>
+              <div class="text-[10px] text-[#888] font-mono">
+                {bulkProgressCurrent.value} / {bulkProgressTotal.value}{" "}
+                OPERATIONS COMPLETED
+              </div>
+              <progress
+                class="progress progress-primary w-full bg-[#333]"
+                value={bulkProgressCurrent.value}
+                max={bulkProgressTotal.value}
+              >
+              </progress>
             </div>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+export default function TransactionsManager(props: Props) {
+  return (
+    <ErrorBoundary>
+      <TransactionsManagerContent {...props} />
+    </ErrorBoundary>
   );
 }

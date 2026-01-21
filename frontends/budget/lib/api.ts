@@ -24,7 +24,7 @@ function getApiBaseUrl(): string {
   if (typeof document !== "undefined") {
     return "/api";
   }
-  
+
   // Server (Deno): Use internal Docker DNS
   if (typeof Deno !== "undefined" && Deno.env?.get) {
     const envUrl = Deno.env.get("VITE_API_URL");
@@ -245,14 +245,14 @@ async function fetchApi<T>(
 /**
  * Wrapper for GET requests (no retry queue)
  */
-async function fetchApiGet<T>(endpoint: string): Promise<T> {
+function fetchApiGet<T>(endpoint: string): Promise<T> {
   return fetchApi<T>(endpoint, { method: "GET" });
 }
 
 /**
  * Wrapper for POST requests (with retry queue support)
  */
-async function fetchApiPost<T>(
+function fetchApiPost<T>(
   endpoint: string,
   body: unknown,
 ): Promise<T> {

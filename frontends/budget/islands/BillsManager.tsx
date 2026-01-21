@@ -1,5 +1,7 @@
 import { useSignal } from "@preact/signals";
 import type { Bill, Category } from "../types/api.ts";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface Props {
   initialBills: Bill[];
@@ -18,14 +20,12 @@ const FREQUENCIES = [
   { value: "yearly", label: "Yearly" },
 ];
 
-export default function BillsManager({ initialBills, categories }: Props) {
+function BillsManagerContent({ initialBills, categories }: Props) {
   const bills = useSignal<Bill[]>(initialBills);
   const isModalOpen = useSignal(false);
   const editingBill = useSignal<Bill | null>(null);
   const isSubmitting = useSignal(false);
   const markingPaidId = useSignal<number | null>(null);
-  const successMessage = useSignal<string | null>(null);
-  const errorMessage = useSignal<string | null>(null);
 
   const formName = useSignal("");
   const formAmount = useSignal("0");
@@ -108,6 +108,9 @@ export default function BillsManager({ initialBills, categories }: Props) {
           bills.value = bills.value.map((b) =>
             b.id === updated.id ? updated : b
           );
+          toast.success("Bill updated successfully!");
+        } else {
+          toast.error("Failed to update bill");
         }
       } else {
         const res = await fetch(`${API_BASE}/bills`, {
@@ -118,11 +121,15 @@ export default function BillsManager({ initialBills, categories }: Props) {
         if (res.ok) {
           const created = await res.json();
           bills.value = [...bills.value, created];
+          toast.success("Bill created successfully!");
+        } else {
+          toast.error("Failed to create bill");
         }
       }
       isModalOpen.value = false;
     } catch (error) {
       console.error("Error saving bill:", error);
+      toast.error("Failed to save bill");
     } finally {
       isSubmitting.value = false;
     }
@@ -130,8 +137,6 @@ export default function BillsManager({ initialBills, categories }: Props) {
 
   const markPaid = async (bill: Bill) => {
     markingPaidId.value = bill.id;
-    errorMessage.value = null;
-    successMessage.value = null;
 
     try {
       const res = await fetch(`${API_BASE}/bills/${bill.id}/paid`, {
@@ -157,26 +162,17 @@ export default function BillsManager({ initialBills, categories }: Props) {
         bills.value = await billsRes.json();
       }
 
-      // Show success message
-      successMessage.value =
-        `✓ ${bill.name} marked as paid! Transaction created. Next due: ${
+      // Show success message via toast
+      toast.success(
+        `${bill.name} marked as paid! Next due: ${
           new Date(result.nextDueDate).toLocaleDateString()
-        }`;
-
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        successMessage.value = null;
-      }, 5000);
+        }`,
+      );
     } catch (error) {
       console.error("Error marking paid:", error);
-      errorMessage.value = error instanceof Error
-        ? error.message
-        : "Error marking bill as paid";
-
-      // Clear error message after 5 seconds
-      setTimeout(() => {
-        errorMessage.value = null;
-      }, 5000);
+      toast.error(
+        error instanceof Error ? error.message : "Error marking bill as paid",
+      );
     } finally {
       markingPaidId.value = null;
     }
@@ -185,10 +181,18 @@ export default function BillsManager({ initialBills, categories }: Props) {
   const deleteBill = async (bill: Bill) => {
     if (!confirm(`Delete "${bill.name}"?`)) return;
     try {
-      await fetch(`${API_BASE}/bills/${bill.id}`, { method: "DELETE" });
-      bills.value = bills.value.filter((b) => b.id !== bill.id);
+      const res = await fetch(`${API_BASE}/bills/${bill.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        bills.value = bills.value.filter((b) => b.id !== bill.id);
+        toast.success("Bill deleted");
+      } else {
+        toast.error("Failed to delete bill");
+      }
     } catch (error) {
       console.error("Error deleting bill:", error);
+      toast.error("Failed to delete bill");
     }
   };
 
@@ -212,46 +216,6 @@ export default function BillsManager({ initialBills, categories }: Props) {
 
   return (
     <div class="space-y-4 md:space-y-6">
-      {/* Success Message Toast */}
-      {successMessage.value && (
-        <div class="alert alert-success shadow-lg font-mono">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>{successMessage.value}</span>
-        </div>
-      )}
-
-      {/* Error Message Toast */}
-      {errorMessage.value && (
-        <div class="alert alert-error shadow-lg font-mono">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>{errorMessage.value}</span>
-        </div>
-      )}
-
       <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
         <div class="card-body p-4 md:p-6">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -543,5 +507,13 @@ export default function BillsManager({ initialBills, categories }: Props) {
         </div>
       )}
     </div>
+  );
+}
+
+export default function BillsManager(props: Props) {
+  return (
+    <ErrorBoundary>
+      <BillsManagerContent {...props} />
+    </ErrorBoundary>
   );
 }

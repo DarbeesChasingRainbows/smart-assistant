@@ -5,6 +5,8 @@ import type {
   CategoryGroup,
   Transaction,
 } from "../types/api.ts";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface Props {
   transactions: Transaction[];
@@ -13,7 +15,7 @@ interface Props {
   categoryGroups: CategoryGroup[];
 }
 
-export default function TransactionExportIsland(
+function TransactionExportContent(
   { transactions, accounts, categories, categoryGroups }: Props,
 ) {
   const isOpen = useSignal(false);
@@ -161,7 +163,7 @@ export default function TransactionExportIsland(
       const url = URL.createObjectURL(blob);
 
       // Create download link
-      const link = document.createElement("a");
+      const link = document.body.appendChild(document.createElement("a"));
       link.href = url;
 
       // Generate filename with date range
@@ -170,17 +172,17 @@ export default function TransactionExportIsland(
       link.download = `transactions_${start}_to_${end}.csv`;
 
       // Trigger download
-      document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
       // Clean up
       URL.revokeObjectURL(url);
 
+      toast.success("CSV export initiated");
       closeModal();
     } catch (error) {
       console.error("Error exporting CSV:", error);
-      alert("Error exporting transactions. Please try again.");
+      toast.error("Error exporting transactions. Please try again.");
     } finally {
       isExporting.value = false;
     }
@@ -192,7 +194,7 @@ export default function TransactionExportIsland(
     <>
       <button
         type="button"
-        class="btn btn-outline btn-sm"
+        class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
         onClick={openExportModal}
       >
         <svg
@@ -209,24 +211,28 @@ export default function TransactionExportIsland(
             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        Export CSV
+        EXPORT CSV
       </button>
 
       {isOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Export Transactions</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              EXPORT TRANSACTIONS
+            </h3>
 
             <div class="space-y-4">
               {/* Date Range */}
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Start Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      START DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={startDate.value}
                     onInput={(e) => startDate.value = e.currentTarget.value}
                   />
@@ -234,11 +240,13 @@ export default function TransactionExportIsland(
 
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">End Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      END DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={endDate.value}
                     onInput={(e) => endDate.value = e.currentTarget.value}
                   />
@@ -248,21 +256,24 @@ export default function TransactionExportIsland(
               {/* Account Filter */}
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Account</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    ACCOUNT
+                  </span>
                 </label>
                 <select
-                  class="select select-bordered"
+                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                   value={selectedAccount.value}
                   onChange={(e) =>
                     selectedAccount.value = e.currentTarget.value}
                 >
-                  <option value="all">All Accounts</option>
+                  <option value="all">ALL ACCOUNTS</option>
                   {accounts.map((account) => (
                     <option
                       key={account.accountKey || account.id}
                       value={account.accountKey || account.id?.toString()}
                     >
-                      {account.accountName || account.name}
+                      {(account.accountName || account.name || "Unknown")
+                        .toUpperCase()}
                     </option>
                   ))}
                 </select>
@@ -271,39 +282,45 @@ export default function TransactionExportIsland(
               {/* Status Filters */}
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text">Include Status</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    INCLUDE STATUS
+                  </span>
                 </label>
                 <div class="space-y-2">
-                  <label class="label cursor-pointer justify-start gap-2">
+                  <label class="label cursor-pointer justify-start gap-3">
                     <input
                       type="checkbox"
-                      class="checkbox checkbox-sm"
+                      class="checkbox checkbox-sm checkbox-primary"
                       checked={includeCleared.value}
                       onChange={(e) =>
                         includeCleared.value = e.currentTarget.checked}
                     />
-                    <span class="label-text">Cleared Transactions</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      CLEARED TRANSACTIONS
+                    </span>
                   </label>
-                  <label class="label cursor-pointer justify-start gap-2">
+                  <label class="label cursor-pointer justify-start gap-3">
                     <input
                       type="checkbox"
-                      class="checkbox checkbox-sm"
+                      class="checkbox checkbox-sm checkbox-primary"
                       checked={includeUncleared.value}
                       onChange={(e) =>
                         includeUncleared.value = e.currentTarget.checked}
                     />
-                    <span class="label-text">Uncleared Transactions</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      UNCLEARED TRANSACTIONS
+                    </span>
                   </label>
                 </div>
               </div>
 
               {/* Preview Count */}
-              <div class="alert alert-info">
+              <div class="alert bg-[#00d9ff]/10 border border-[#00d9ff]/30">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  class="stroke-current shrink-0 w-6 h-6"
+                  class="stroke-current shrink-0 w-6 h-6 text-[#00d9ff]"
                 >
                   <path
                     stroke-linecap="round"
@@ -313,27 +330,31 @@ export default function TransactionExportIsland(
                   >
                   </path>
                 </svg>
-                <span>
-                  {filteredCount} transaction{filteredCount !== 1 ? "s" : ""}
+                <span class="text-[#00d9ff] font-mono text-xs">
+                  {filteredCount} TRANSACTION{filteredCount !== 1 ? "S" : ""}
                   {" "}
-                  will be exported
+                  WILL BE EXPORTED
                 </span>
               </div>
             </div>
 
             <div class="modal-action">
-              <button type="button" class="btn" onClick={closeModal}>
-                Cancel
+              <button
+                type="button"
+                class="btn font-mono"
+                onClick={closeModal}
+              >
+                CANCEL
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
                 onClick={downloadCSV}
                 disabled={isExporting.value || filteredCount === 0}
               >
                 {isExporting.value
                   ? <span class="loading loading-spinner loading-sm"></span>
-                  : "Download CSV"}
+                  : "DOWNLOAD CSV"}
               </button>
             </div>
           </div>
@@ -341,5 +362,13 @@ export default function TransactionExportIsland(
         </div>
       )}
     </>
+  );
+}
+
+export default function TransactionExportIsland(props: Props) {
+  return (
+    <ErrorBoundary>
+      <TransactionExportContent {...props} />
+    </ErrorBoundary>
   );
 }
