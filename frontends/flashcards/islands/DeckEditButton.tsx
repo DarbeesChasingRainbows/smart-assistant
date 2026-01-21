@@ -1,6 +1,7 @@
 import { useSignal } from "@preact/signals";
 import Modal from "../components/ui/Modal.tsx";
 import Alert from "../components/ui/Alert.tsx";
+import Tooltip from "../components/ui/Tooltip.tsx";
 import FormInput from "../components/forms/FormInput.tsx";
 import FormSelect from "../components/forms/FormSelect.tsx";
 import FormTextarea from "../components/forms/FormTextarea.tsx";
@@ -75,17 +76,19 @@ export default function DeckEditButton({ deck }: { deck: Deck }) {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={openModal}
-        class="min-h-[44px] px-4 py-2 bg-[#0a0a0a] border border-[#00d9ff] text-[#00d9ff] hover:bg-[#00d9ff]/10 transition-colors flex items-center gap-2"
-        style="border-radius: 0;"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-        </svg>
-        <span class="font-mono text-sm">Edit Deck</span>
-      </button>
+      <Tooltip content="Edit deck metadata (name, description, category, difficulty)" position="top">
+        <button
+          type="button"
+          onClick={openModal}
+          class="min-h-[44px] px-4 py-2 bg-[#0a0a0a] border border-[#00d9ff] text-[#00d9ff] hover:bg-[#00d9ff]/10 transition-colors flex items-center gap-2"
+          style="border-radius: 0;"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          <span class="font-mono text-sm">Edit Deck</span>
+        </button>
+      </Tooltip>
 
       <Modal
         open={isOpen.value}
