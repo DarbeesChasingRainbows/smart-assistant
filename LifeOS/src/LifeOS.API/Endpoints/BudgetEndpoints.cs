@@ -598,20 +598,67 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
     {
         try
         {
-            // Check for categories
-            var checkQuery = $"FOR c IN {CategoryCollection} FILTER c.groupKey == @key LIMIT 1 RETURN 1";
-            var cursor = await db.Client.Cursor.PostCursorAsync<int>(checkQuery, new Dictionary<string, object> { { "key", key } });
-            if (cursor.Result.Any())
+            // Get all categories in this group
+            var categoriesQuery = $"FOR c IN {CategoryCollection} FILTER c.groupKey == @key RETURN c";
+            var categoriesCursor = await db.Client.Cursor.PostCursorAsync<dynamic>(categoriesQuery, new Dictionary<string, object> { { "key", key } });
+            var categories = categoriesCursor.Result.ToList();
+
+            if (categories.Count > 0)
             {
-                return Results.BadRequest("Cannot delete group with categories. Move or delete categories first.");
+                var categoryKeys = categories.Select(c => (string)c._key).ToList();
+                
+                // Check for transactions in ANY of these categories
+                var transactionCheckQuery = $@"
+                    FOR t IN {TransactionCollection}
+                    FILTER t.categoryKey IN @categoryKeys
+                    LIMIT 1
+                    RETURN 1";
+                
+                var txCursor = await db.Client.Cursor.PostCursorAsync<int>(
+                    transactionCheckQuery, 
+                    new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+                
+                if (txCursor.Result.Any())
+                {
+                     return Results.BadRequest("Cannot delete group: One or more categories have transactions associated with them.");
+                }
+
+                // Safe to cascade delete
+                // 1. Assignments
+                var deleteAssignments = $@"
+                    FOR a IN {AssignmentCollection}
+                    FILTER a.categoryKey IN @categoryKeys
+                    REMOVE a IN {AssignmentCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(deleteAssignments, new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+
+                // 2. Goals
+                var deleteGoals = $@"
+                    FOR g IN {GoalCollection}
+                    FILTER g.categoryKey IN @categoryKeys
+                    REMOVE g IN {GoalCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(deleteGoals, new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+
+                // 3. Bills (Unlink)
+                var unlinkBills = $@"
+                    FOR b IN {BillCollection}
+                    FILTER b.categoryKey IN @categoryKeys
+                    UPDATE b WITH {{ categoryKey: null }} IN {BillCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(unlinkBills, new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+
+                // 4. Categories
+                var deleteCategories = $@"
+                    FOR c IN {CategoryCollection}
+                    FILTER c.groupKey == @key
+                    REMOVE c IN {CategoryCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(deleteCategories, new Dictionary<string, object> { { "key", key } });
             }
 
             await db.Client.Document.DeleteDocumentAsync(CategoryGroupCollection, key);
             return Results.NoContent();
         }
-        catch
+        catch (Exception ex)
         {
-            return Results.NotFound();
+            return Results.Problem(ex.Message);
         }
     }
 

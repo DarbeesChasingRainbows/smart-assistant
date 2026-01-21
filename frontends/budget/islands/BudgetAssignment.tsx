@@ -413,7 +413,14 @@ function BudgetAssignmentContent(
   };
 
   const deleteGroup = async (groupKey: string) => {
-    if (!confirm("Are you sure you want to delete this group?")) return;
+    const group = groups.value.find((g) => g.key === groupKey);
+    const categoryCount = group?.categories.length || 0;
+
+    const message = categoryCount > 0
+      ? `Delete group "${group?.name}"? This will also delete all ${categoryCount} categories within it.`
+      : `Delete group "${group?.name}"?`;
+
+    if (!confirm(message)) return;
 
     try {
       const res = await fetch(`${API_BASE}/category-groups/${groupKey}`, {
