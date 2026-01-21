@@ -1,10 +1,13 @@
 /** @jsxImportSource preact */
 import { useSignal, useComputed } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 import { marked } from "marked";
 import type { Deck, Flashcard } from "../utils/api.ts";
 import type { InterleavedQuizResponse } from "../utils/api.ts";
 import Alert from "../components/ui/Alert.tsx";
 import LoadingSpinner from "../components/LoadingSpinner.tsx";
+import KeyboardHint from "../components/ui/KeyboardHint.tsx";
+import { registerShortcut } from "../lib/keyboard.ts";
 
 interface InterleavedQuizProps {
   availableDecks: Deck[];
@@ -190,6 +193,60 @@ export default function InterleavedQuiz({ availableDecks }: InterleavedQuizProps
       category: card.deckCategory,
     };
   };
+
+  // Register keyboard shortcuts for quiz
+  useEffect(() => {
+    if (!quizStarted.value || !currentCard.value) return;
+
+    const cleanups: (() => void)[] = [];
+
+    // Space - Flip card
+    cleanups.push(registerShortcut({
+      key: " ",
+      handler: (e) => {
+        e.preventDefault();
+        flipCard();
+      },
+      description: "Flip flashcard",
+      scope: "quiz",
+    }));
+
+    // 1-4 - Rate card (only when flipped)
+    if (isFlipped.value) {
+      cleanups.push(registerShortcut({
+        key: "1",
+        handler: () => submitRating("Again"),
+        description: "Rate as Again (1)",
+        scope: "quiz",
+      }));
+
+      cleanups.push(registerShortcut({
+        key: "2",
+        handler: () => submitRating("Hard"),
+        description: "Rate as Hard (2)",
+        scope: "quiz",
+      }));
+
+      cleanups.push(registerShortcut({
+        key: "3",
+        handler: () => submitRating("Good"),
+        description: "Rate as Good (3)",
+        scope: "quiz",
+      }));
+
+      cleanups.push(registerShortcut({
+        key: "4",
+        handler: () => submitRating("Easy"),
+        description: "Rate as Easy (4)",
+        scope: "quiz",
+      }));
+    }
+
+    // Cleanup on unmount or when quiz state changes
+    return () => {
+      cleanups.forEach(cleanup => cleanup());
+    };
+  }, [quizStarted.value, currentCard.value, isFlipped.value]);
 
   // Deck selection UI
   if (!quizStarted.value) {
