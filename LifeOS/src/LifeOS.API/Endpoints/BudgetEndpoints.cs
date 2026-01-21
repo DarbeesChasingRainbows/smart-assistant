@@ -50,6 +50,7 @@ public static class BudgetEndpoints
         categoryGroups.MapPost("/", CreateCategoryGroup).WithName("CreateBudgetCategoryGroup");
         categoryGroups.MapPost("/reorder", ReorderCategoryGroups).WithName("ReorderBudgetCategoryGroups");
         categoryGroups.MapPut("/{key}", UpdateCategoryGroup).WithName("UpdateBudgetCategoryGroup");
+        categoryGroups.MapDelete("/{key}", DeleteCategoryGroup).WithName("DeleteBudgetCategoryGroup");
 
         // Categories
         var categories = group.MapGroup("/categories");
@@ -58,6 +59,7 @@ public static class BudgetEndpoints
         categories.MapPost("/", CreateCategory).WithName("CreateBudgetCategory");
         categories.MapPost("/reorder", ReorderCategories).WithName("ReorderBudgetCategories");
         categories.MapPut("/{key}", UpdateCategory).WithName("UpdateBudgetCategory");
+        categories.MapDelete("/{key}", DeleteCategory).WithName("DeleteBudgetCategory");
         categories.MapGet("/{key}/balance", GetCategoryBalance).WithName("GetBudgetCategoryBalance");
 
         // Budget Assignments (CQRS Command - Core Zero-Based Budgeting)
@@ -592,6 +594,27 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         }
     }
 
+    private static async Task<IResult> DeleteCategoryGroup(string key, [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            // Check for categories
+            var checkQuery = $"FOR c IN {CategoryCollection} FILTER c.groupKey == @key LIMIT 1 RETURN 1";
+            var cursor = await db.Client.Cursor.PostCursorAsync<int>(checkQuery, new Dictionary<string, object> { { "key", key } });
+            if (cursor.Result.Any())
+            {
+                return Results.BadRequest("Cannot delete group with categories. Move or delete categories first.");
+            }
+
+            await db.Client.Document.DeleteDocumentAsync(CategoryGroupCollection, key);
+            return Results.NoContent();
+        }
+        catch
+        {
+            return Results.NotFound();
+        }
+    }
+
     // ==================== CATEGORIES ====================
 
     private static async Task<IResult> GetCategories(
@@ -696,6 +719,35 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
             await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(CategoryCollection, key, updates);
             return Results.Ok();
+        }
+        catch
+        {
+            return Results.NotFound();
+        }
+    }
+
+    private static async Task<IResult> DeleteCategory(string key, [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            // Check for transactions
+            var checkQuery = $"FOR t IN {TransactionCollection} FILTER t.categoryKey == @key LIMIT 1 RETURN 1";
+            var cursor = await db.Client.Cursor.PostCursorAsync<int>(checkQuery, new Dictionary<string, object> { { "key", key } });
+            if (cursor.Result.Any())
+            {
+                return Results.BadRequest("Cannot delete category with transactions.");
+            }
+
+            // Cleanup Assignments, Goals, Bills
+            var cleanupQuery = $@"
+                FOR a IN {AssignmentCollection} FILTER a.categoryKey == @key REMOVE a IN {AssignmentCollection}
+                FOR g IN {GoalCollection} FILTER g.categoryKey == @key REMOVE g IN {GoalCollection}
+                FOR b IN {BillCollection} FILTER b.categoryKey == @key UPDATE b WITH {{ categoryKey: null }} IN {BillCollection}
+                REMOVE {{ _key: @key }} IN {CategoryCollection}
+            ";
+            
+            await db.Client.Cursor.PostCursorAsync<dynamic>(cleanupQuery, new Dictionary<string, object> { { "key", key } });
+            return Results.NoContent();
         }
         catch
         {

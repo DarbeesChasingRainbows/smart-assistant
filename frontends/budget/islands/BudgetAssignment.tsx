@@ -412,6 +412,52 @@ function BudgetAssignmentContent(
     editingGroupId.value = null;
   };
 
+  const deleteGroup = async (groupKey: string) => {
+    if (!confirm("Are you sure you want to delete this group?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/category-groups/${groupKey}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        groups.value = groups.value.filter((g) => g.key !== groupKey);
+        toast.success("Group deleted");
+      } else {
+        const error = await res.text();
+        toast.error(error || "Failed to delete group");
+      }
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      toast.error("Error deleting group");
+    }
+  };
+
+  const deleteCategory = async (categoryKey: string) => {
+    if (!confirm("Are you sure you want to delete this category?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/categories/${categoryKey}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        // Remove locally
+        groups.value = groups.value.map((g) => ({
+          ...g,
+          categories: g.categories.filter((c) => c.key !== categoryKey),
+        }));
+        toast.success("Category deleted");
+      } else {
+        const error = await res.text();
+        toast.error(error || "Failed to delete category");
+      }
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      toast.error("Error deleting category");
+    }
+  };
+
   // Drag and drop handlers
   const handleDragStart = (
     e: DragEvent,
@@ -737,6 +783,14 @@ function BudgetAssignmentContent(
                       >
                         CANCEL
                       </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-ghost text-red-500 font-mono"
+                        onClick={() => deleteGroup(groupKey)}
+                        title="Delete Group"
+                      >
+                        🗑️
+                      </button>
                     </div>
                   )
                   : (
@@ -847,6 +901,14 @@ function BudgetAssignmentContent(
                                 onClick={() => editingCategoryId.value = null}
                               >
                                 ×
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-ghost text-red-500 font-mono"
+                                onClick={() => deleteCategory(categoryKey)}
+                                title="Delete Category"
+                              >
+                                🗑️
                               </button>
                             </div>
                           )
