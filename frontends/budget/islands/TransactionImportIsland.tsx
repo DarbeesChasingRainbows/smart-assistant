@@ -1,5 +1,6 @@
 import { useSignal } from "@preact/signals";
-import { useEffect } from "preact/hooks";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface ImportedTransaction {
   date: string;
@@ -20,11 +21,11 @@ interface ColumnMapping {
 
 interface Props {
   accountKey: string;
-  onImportComplete?: () => void;
+  reloadOnComplete?: boolean;
 }
 
-export default function TransactionImportIsland(
-  { accountKey, onImportComplete }: Props,
+function TransactionImportContent(
+  { accountKey, reloadOnComplete }: Props,
 ) {
   const isOpen = useSignal(false);
   const currentStep = useSignal<"upload" | "map" | "preview">("upload");
@@ -41,7 +42,6 @@ export default function TransactionImportIsland(
   const previewTransactions = useSignal<ImportedTransaction[]>([]);
   const selectedTransactions = useSignal<Set<number>>(new Set());
   const isImporting = useSignal(false);
-  const error = useSignal<string | null>(null);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
@@ -56,7 +56,6 @@ export default function TransactionImportIsland(
     detectedHeaders.value = [];
     previewTransactions.value = [];
     selectedTransactions.value = new Set();
-    error.value = null;
   };
 
   const closeModal = () => {
@@ -67,8 +66,6 @@ export default function TransactionImportIsland(
     const input = e.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
-
-    error.value = null;
 
     try {
       const content = await file.text();
@@ -85,17 +82,21 @@ export default function TransactionImportIsland(
         importFormat.value = "csv";
         await parseCSV(content);
       } else {
-        error.value =
-          "Unsupported file format. Please upload CSV, OFX, or QFX files.";
+        toast.error(
+          "Unsupported format. Please upload CSV, OFX, or QFX files.",
+        );
       }
     } catch (err) {
-      error.value = `Error reading file: ${
-        err instanceof Error ? err.message : "Unknown error"
-      }`;
+      console.error("File upload error:", err);
+      toast.error(
+        `Error reading file: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`,
+      );
     }
   };
 
-  const parseCSV = async (content: string) => {
+  const parseCSV = (content: string) => {
     try {
       // Use PapaParse pattern for parsing
       const lines = content.split("\n").filter((line) => line.trim());
@@ -145,13 +146,16 @@ export default function TransactionImportIsland(
 
       currentStep.value = "map";
     } catch (err) {
-      error.value = `Error parsing CSV: ${
-        err instanceof Error ? err.message : "Unknown error"
-      }`;
+      console.error("CSV parse error:", err);
+      toast.error(
+        `Error parsing CSV: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`,
+      );
     }
   };
 
-  const parseOFX = async (content: string) => {
+  const parseOFX = (content: string) => {
     try {
       // Simple OFX parser for STMTTRN (statement transaction) tags
       const transactions: Record<string, string>[] = [];
@@ -199,9 +203,12 @@ export default function TransactionImportIsland(
       currentStep.value = "preview";
       generatePreview();
     } catch (err) {
-      error.value = `Error parsing OFX: ${
-        err instanceof Error ? err.message : "Unknown error"
-      }`;
+      console.error("OFX parse error:", err);
+      toast.error(
+        `Error parsing OFX: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`,
+      );
     }
   };
 
@@ -268,7 +275,7 @@ export default function TransactionImportIsland(
       !columnMapping.value.date || !columnMapping.value.payee ||
       !columnMapping.value.amount
     ) {
-      error.value = "Please map at least Date, Payee, and Amount columns";
+      toast.error("Please map at least Date, Payee, and Amount columns");
       return;
     }
 
@@ -276,7 +283,7 @@ export default function TransactionImportIsland(
     generatePreview();
   };
 
-  const generatePreview = async () => {
+  const generatePreview = () => {
     try {
       const transactions: ImportedTransaction[] = [];
 
@@ -327,9 +334,12 @@ export default function TransactionImportIsland(
         transactions.map((_, index) => index),
       );
     } catch (err) {
-      error.value = `Error generating preview: ${
-        err instanceof Error ? err.message : "Unknown error"
-      }`;
+      console.error("Preview generation error:", err);
+      toast.error(
+        `Error generating preview: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`,
+      );
     }
   };
 
@@ -355,7 +365,6 @@ export default function TransactionImportIsland(
 
   const importTransactions = async () => {
     isImporting.value = true;
-    error.value = null;
 
     try {
       const selected = previewTransactions.value.filter((_, index) =>
@@ -382,15 +391,19 @@ export default function TransactionImportIsland(
         }
       }
 
+      toast.success(`${selected.length} transactions imported successfully`);
       // Success
       closeModal();
-      if (onImportComplete) {
-        onImportComplete();
+      if (reloadOnComplete) {
+        globalThis.location.reload();
       }
     } catch (err) {
-      error.value = `Import failed: ${
-        err instanceof Error ? err.message : "Unknown error"
-      }`;
+      console.error("Import error:", err);
+      toast.error(
+        `Import failed: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`,
+      );
     } finally {
       isImporting.value = false;
     }
@@ -400,71 +413,61 @@ export default function TransactionImportIsland(
     <>
       <button
         type="button"
-        class="btn btn-primary btn-sm"
+        class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
         onClick={openImportModal}
       >
-        Import Transactions
+        IMPORT DATA
       </button>
 
       {isOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box max-w-5xl">
-            <h3 class="font-bold text-lg mb-4">Import Transactions</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-5xl shadow-2xl">
+            <h3 class="font-bold text-xl mb-4 text-[#00d9ff] font-mono uppercase">
+              TRANSACTION IMPORT
+            </h3>
 
             {/* Progress Steps */}
-            <ul class="steps steps-horizontal w-full mb-6">
-              <li class="step step-primary">
-                Upload File
-              </li>
+            <ul class="steps steps-horizontal w-full mb-8 font-mono text-[10px]">
+              <li class="step step-primary uppercase">UPLOAD</li>
               <li
-                class={`step ${
+                class={`step uppercase ${
                   currentStep.value === "map" || currentStep.value === "preview"
                     ? "step-primary"
                     : ""
                 }`}
               >
-                Map Columns
+                MAP COLUMNS
               </li>
               <li
-                class={`step ${
+                class={`step uppercase ${
                   currentStep.value === "preview" ? "step-primary" : ""
                 }`}
               >
-                Preview & Import
+                PREVIEW
               </li>
             </ul>
 
-            {/* Error Display */}
-            {error.value && (
-              <div class="alert alert-error mb-4">
-                <span>{error.value}</span>
-              </div>
-            )}
-
             {/* Step 1: Upload */}
             {currentStep.value === "upload" && (
-              <div class="space-y-4">
+              <div class="space-y-6">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Select File</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      SELECT DATA FILE (CSV, OFX, QFX)
+                    </span>
                   </label>
                   <input
                     type="file"
                     accept=".csv,.ofx,.qfx"
-                    class="file-input file-input-bordered w-full"
+                    class="file-input file-input-bordered w-full bg-[#0a0a0a] border-[#333] text-[#888] font-mono"
                     onChange={handleFileUpload}
                   />
-                  <label class="label">
-                    <span class="label-text-alt">
-                      Supported formats: CSV, OFX, QFX
-                    </span>
-                  </label>
                 </div>
 
                 {importFormat.value && (
-                  <div class="alert alert-info">
-                    <span>
-                      Detected format: {importFormat.value.toUpperCase()}
+                  <div class="alert bg-[#00d9ff]/10 border border-[#00d9ff]/30">
+                    <span class="font-mono text-xs text-[#00d9ff]">
+                      DETECTED FORMAT: {importFormat.value.toUpperCase()}
                     </span>
                   </div>
                 )}
@@ -473,18 +476,20 @@ export default function TransactionImportIsland(
 
             {/* Step 2: Map Columns (CSV only) */}
             {currentStep.value === "map" && (
-              <div class="space-y-4">
-                <p class="text-sm text-slate-600">
-                  Map your CSV columns to transaction fields:
+              <div class="space-y-6">
+                <p class="text-xs text-[#888] font-mono uppercase">
+                  MAP SYSTEM FIELDS TO FILE COLUMNS:
                 </p>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Date Column *</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        DATE FIELD *
+                      </span>
                     </label>
                     <select
-                      class="select select-bordered"
+                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                       value={columnMapping.value.date}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -492,7 +497,7 @@ export default function TransactionImportIsland(
                           date: e.currentTarget.value,
                         }}
                     >
-                      <option value="">-- Select --</option>
+                      <option value="">-- SELECT --</option>
                       {detectedHeaders.value.map((header) => (
                         <option key={header} value={header}>{header}</option>
                       ))}
@@ -501,10 +506,12 @@ export default function TransactionImportIsland(
 
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Payee Column *</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        PAYEE FIELD *
+                      </span>
                     </label>
                     <select
-                      class="select select-bordered"
+                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                       value={columnMapping.value.payee}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -512,7 +519,7 @@ export default function TransactionImportIsland(
                           payee: e.currentTarget.value,
                         }}
                     >
-                      <option value="">-- Select --</option>
+                      <option value="">-- SELECT --</option>
                       {detectedHeaders.value.map((header) => (
                         <option key={header} value={header}>{header}</option>
                       ))}
@@ -521,10 +528,12 @@ export default function TransactionImportIsland(
 
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Amount Column *</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        AMOUNT FIELD *
+                      </span>
                     </label>
                     <select
-                      class="select select-bordered"
+                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                       value={columnMapping.value.amount}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -532,7 +541,7 @@ export default function TransactionImportIsland(
                           amount: e.currentTarget.value,
                         }}
                     >
-                      <option value="">-- Select --</option>
+                      <option value="">-- SELECT --</option>
                       {detectedHeaders.value.map((header) => (
                         <option key={header} value={header}>{header}</option>
                       ))}
@@ -541,10 +550,12 @@ export default function TransactionImportIsland(
 
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Memo Column</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        MEMO FIELD
+                      </span>
                     </label>
                     <select
-                      class="select select-bordered"
+                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                       value={columnMapping.value.memo}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -552,7 +563,7 @@ export default function TransactionImportIsland(
                           memo: e.currentTarget.value,
                         }}
                     >
-                      <option value="">-- Select --</option>
+                      <option value="">-- SELECT --</option>
                       {detectedHeaders.value.map((header) => (
                         <option key={header} value={header}>{header}</option>
                       ))}
@@ -563,17 +574,17 @@ export default function TransactionImportIsland(
                 <div class="modal-action">
                   <button
                     type="button"
-                    class="btn"
+                    class="btn font-mono"
                     onClick={() => currentStep.value = "upload"}
                   >
-                    Back
+                    BACK
                   </button>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                     onClick={proceedToPreview}
                   >
-                    Next: Preview
+                    NEXT: PREVIEW
                   </button>
                 </div>
               </div>
@@ -581,72 +592,84 @@ export default function TransactionImportIsland(
 
             {/* Step 3: Preview */}
             {currentStep.value === "preview" && (
-              <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                  <p class="text-sm text-slate-600">
-                    {selectedTransactions.value.size} of{" "}
-                    {previewTransactions.value.length} transactions selected
+              <div class="space-y-6">
+                <div class="flex justify-between items-center bg-[#0a0a0a] p-3 border border-[#333] rounded">
+                  <p class="text-xs text-[#888] font-mono uppercase">
+                    {selectedTransactions.value.size} /{" "}
+                    {previewTransactions.value.length} RECORDS SELECTED
                   </p>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-sm"
+                    class="btn btn-ghost btn-xs text-[#00d9ff] font-mono"
                     onClick={toggleAll}
                   >
                     {selectedTransactions.value.size ===
                         previewTransactions.value.length
-                      ? "Deselect All"
-                      : "Select All"}
+                      ? "DESELECT ALL"
+                      : "SELECT ALL"}
                   </button>
                 </div>
 
-                <div class="overflow-x-auto max-h-96">
-                  <table class="table table-zebra table-sm">
+                <div class="overflow-x-auto max-h-96 border border-[#333]">
+                  <table class="table table-sm w-full">
                     <thead>
-                      <tr>
-                        <th>
+                      <tr class="bg-[#0a0a0a] border-b border-[#333]">
+                        <th class="w-10">
                           <input
                             type="checkbox"
-                            class="checkbox checkbox-sm"
+                            class="checkbox checkbox-xs checkbox-primary"
                             checked={selectedTransactions.value.size ===
                               previewTransactions.value.length}
                             onChange={toggleAll}
                           />
                         </th>
-                        <th>Date</th>
-                        <th>Payee</th>
-                        <th>Memo</th>
-                        <th class="text-right">Amount</th>
-                        <th>Status</th>
+                        <th class="text-[#888] font-mono text-[10px]">DATE</th>
+                        <th class="text-[#888] font-mono text-[10px]">PAYEE</th>
+                        <th class="text-[#888] font-mono text-[10px]">MEMO</th>
+                        <th class="text-right text-[#888] font-mono text-[10px]">
+                          AMOUNT
+                        </th>
+                        <th></th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-[#333]">
                       {previewTransactions.value.map((txn, index) => (
-                        <tr key={index}>
+                        <tr
+                          key={index}
+                          class={`hover:bg-[#222] ${
+                            selectedTransactions.value.has(index)
+                              ? ""
+                              : "opacity-40"
+                          }`}
+                        >
                           <td>
                             <input
                               type="checkbox"
-                              class="checkbox checkbox-sm"
+                              class="checkbox checkbox-xs checkbox-primary"
                               checked={selectedTransactions.value.has(index)}
-                              onChange={() =>
-                                toggleTransaction(index)}
+                              onChange={() => toggleTransaction(index)}
                             />
                           </td>
-                          <td>{txn.date}</td>
-                          <td>{txn.payee}</td>
-                          <td class="text-sm text-slate-500">{txn.memo}</td>
+                          <td class="text-[10px] text-white font-mono">
+                            {txn.date}
+                          </td>
+                          <td class="text-xs text-white font-bold">
+                            {txn.payee.toUpperCase()}
+                          </td>
+                          <td class="text-[10px] text-[#666] font-mono max-w-xs truncate">
+                            {txn.memo}
+                          </td>
                           <td
-                            class={`text-right font-semibold ${
-                              txn.amount >= 0
-                                ? "text-green-600"
-                                : "text-red-600"
+                            class={`text-right font-bold font-mono text-xs ${
+                              txn.amount >= 0 ? "text-[#00ff88]" : "text-white"
                             }`}
                           >
                             {formatCurrency(txn.amount)}
                           </td>
                           <td>
                             {txn.isDuplicate && (
-                              <span class="badge badge-warning badge-sm">
-                                Duplicate?
+                              <span class="badge badge-warning font-mono text-[8px] h-auto py-0 px-1">
+                                DUPE?
                               </span>
                             )}
                           </td>
@@ -659,27 +682,31 @@ export default function TransactionImportIsland(
                 <div class="modal-action">
                   <button
                     type="button"
-                    class="btn"
+                    class="btn font-mono"
                     onClick={() =>
                       currentStep.value = importFormat.value === "csv"
                         ? "map"
                         : "upload"}
                   >
-                    Back
-                  </button>
-                  <button type="button" class="btn" onClick={closeModal}>
-                    Cancel
+                    BACK
                   </button>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-ghost font-mono"
+                    onClick={closeModal}
+                  >
+                    CANCEL
+                  </button>
+                  <button
+                    type="button"
+                    class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
                     onClick={importTransactions}
                     disabled={isImporting.value ||
                       selectedTransactions.value.size === 0}
                   >
                     {isImporting.value
-                      ? <span class="loading loading-spinner loading-sm"></span>
-                      : `Import ${selectedTransactions.value.size} Transactions`}
+                      ? <span class="loading loading-spinner loading-xs"></span>
+                      : `IMPORT ${selectedTransactions.value.size} RECORDS`}
                   </button>
                 </div>
               </div>
@@ -687,8 +714,12 @@ export default function TransactionImportIsland(
 
             {currentStep.value === "upload" && !importFormat.value && (
               <div class="modal-action">
-                <button type="button" class="btn" onClick={closeModal}>
-                  Cancel
+                <button
+                  type="button"
+                  class="btn font-mono"
+                  onClick={closeModal}
+                >
+                  CANCEL
                 </button>
               </div>
             )}
@@ -697,5 +728,13 @@ export default function TransactionImportIsland(
         </div>
       )}
     </>
+  );
+}
+
+export default function TransactionImportIsland(props: Props) {
+  return (
+    <ErrorBoundary>
+      <TransactionImportContent {...props} />
+    </ErrorBoundary>
   );
 }

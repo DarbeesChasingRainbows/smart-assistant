@@ -1,5 +1,7 @@
 import { useSignal } from "@preact/signals";
 import type { Category, CategoryGroup, PayPeriod } from "../types/api.ts";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface Props {
   currentPeriod: PayPeriod | null;
@@ -12,7 +14,7 @@ const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
   : "/api/v1/budget";
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-export default function SettingsManager(
+function SettingsManagerContent(
   { currentPeriod, allPeriods, categories: initialCategories }: Props,
 ) {
   const periods = useSignal<PayPeriod[]>(allPeriods);
@@ -48,7 +50,9 @@ export default function SettingsManager(
     );
 
   const toUtcMidnight = (date: Date) =>
-    new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+    );
 
   const getPeriodLengthDays = (period?: PayPeriod | null) => {
     if (!period?.startDate || !period?.endDate) return 14;
@@ -83,11 +87,13 @@ export default function SettingsManager(
     startDate.setUTCDate(startDate.getUTCDate() + 1);
     const endDate = new Date(startDate);
     endDate.setUTCDate(endDate.getUTCDate() + periodLengthDays - 1);
-    periodName.value = formatMonthYear(new Date(
-      startDate.getUTCFullYear(),
-      startDate.getUTCMonth(),
-      startDate.getUTCDate(),
-    ));
+    periodName.value = formatMonthYear(
+      new Date(
+        startDate.getUTCFullYear(),
+        startDate.getUTCMonth(),
+        startDate.getUTCDate(),
+      ),
+    );
     periodStart.value = startDate.toISOString().split("T")[0];
     periodEnd.value = endDate.toISOString().split("T")[0];
     periodExpectedIncome.value = "";
@@ -123,9 +129,13 @@ export default function SettingsManager(
         const created = await res.json();
         periods.value = [...periods.value, created];
         isPeriodModalOpen.value = false;
+        toast.success(`Period "${periodName.value}" created`);
+      } else {
+        toast.error("Failed to create period");
       }
     } catch (error) {
       console.error("Error creating period:", error);
+      toast.error("Error creating period");
     } finally {
       isSubmitting.value = false;
     }
@@ -148,10 +158,12 @@ export default function SettingsManager(
       });
 
       if (res.ok || res.status === 204) {
+        toast.success("Period deleted");
         globalThis.location?.reload();
         return;
       }
 
+      toast.error("Delete pay period failed");
       console.error(
         "Delete pay period failed",
         res.status,
@@ -159,6 +171,7 @@ export default function SettingsManager(
       );
     } catch (error) {
       console.error("Error deleting period:", error);
+      toast.error("Error deleting period");
     } finally {
       isSubmitting.value = false;
     }
@@ -182,11 +195,13 @@ export default function SettingsManager(
       });
 
       if (res.ok) {
+        toast.success("Period updated");
         isEditPeriodModalOpen.value = false;
         globalThis.location?.reload();
         return;
       }
 
+      toast.error("Update pay period failed");
       console.error(
         "Update pay period failed",
         res.status,
@@ -194,6 +209,7 @@ export default function SettingsManager(
       );
     } catch (error) {
       console.error("Error updating period:", error);
+      toast.error("Error updating period");
     } finally {
       isSubmitting.value = false;
     }
@@ -202,7 +218,7 @@ export default function SettingsManager(
   const closePeriod = async () => {
     if (!currentPeriod?.key) return;
     if (currentPeriod.isClosed) {
-      alert("This period is already closed.");
+      toast.warning("This period is already closed.");
       return;
     }
 
@@ -224,7 +240,7 @@ export default function SettingsManager(
           );
           if (!proceed) return;
         } else if (summary.unassigned < 0) {
-          alert(
+          toast.error(
             `Cannot close period: You have over-assigned by $${
               Math.abs(summary.unassigned).toFixed(2)
             }.`,
@@ -274,11 +290,12 @@ export default function SettingsManager(
         console.warn("Recalculate year failed but period was closed");
       }
 
+      toast.success("Period closed successfully");
       // Reload to show updated state
       globalThis.location?.reload();
     } catch (error) {
       console.error("Error closing period:", error);
-      alert("Failed to close period. Please try again.");
+      toast.error("Failed to close period. Please try again.");
     } finally {
       isSubmitting.value = false;
     }
@@ -297,10 +314,12 @@ export default function SettingsManager(
       );
 
       if (res.ok) {
+        toast.success("Yearly recalculation complete");
         globalThis.location?.reload();
         return;
       }
 
+      toast.error("Recalculate year failed");
       console.error(
         "Recalculate year failed",
         res.status,
@@ -308,6 +327,7 @@ export default function SettingsManager(
       );
     } catch (error) {
       console.error("Error recalculating year:", error);
+      toast.error("Error recalculating year");
     } finally {
       isSubmitting.value = false;
     }
@@ -325,7 +345,7 @@ export default function SettingsManager(
     if (!currentPeriod?.key) return;
     isSubmitting.value = true;
     try {
-      await fetch(`${API_BASE}/income`, {
+      const res = await fetch(`${API_BASE}/income`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -335,11 +355,17 @@ export default function SettingsManager(
           receivedDate: incomeDate.value,
         }),
       });
-      isIncomeModalOpen.value = false;
-      // Refresh page to show updated income
-      globalThis.location?.reload();
+      if (res.ok) {
+        toast.success(`Income "${incomeDescription.value}" added`);
+        isIncomeModalOpen.value = false;
+        // Refresh page to show updated income
+        globalThis.location?.reload();
+      } else {
+        toast.error("Failed to add income");
+      }
     } catch (error) {
       console.error("Error adding income:", error);
+      toast.error("Error adding income");
     } finally {
       isSubmitting.value = false;
     }
@@ -348,42 +374,44 @@ export default function SettingsManager(
   return (
     <div class="space-y-6">
       {/* Current Period */}
-      <div class="card bg-white shadow-xl">
-        <div class="card-body">
-          <div class="flex justify-between items-center">
-            <h2 class="card-title text-xl">📅 Current Budget Period</h2>
-            <div class="flex gap-2">
+      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card-body p-4 md:p-6">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <h2 class="text-lg font-bold text-white font-mono">
+              📅 CURRENT BUDGET PERIOD
+            </h2>
+            <div class="flex flex-wrap gap-2">
               <button
                 type="button"
-                class="btn btn-success btn-sm"
+                class="btn bg-[#00ff88]/20 hover:bg-[#00ff88]/30 border border-[#00ff88] text-[#00ff88] btn-sm min-h-[36px] font-mono"
                 onClick={openIncomeModal}
               >
-                + Add Income
+                + INCOME
               </button>
               {currentPeriod && !currentPeriod.isClosed && (
                 <button
                   type="button"
-                  class="btn btn-warning btn-sm"
+                  class="btn bg-[#ffb000]/20 hover:bg-[#ffb000]/30 border border-[#ffb000] text-[#ffb000] btn-sm min-h-[36px] font-mono"
                   onClick={closePeriod}
                   disabled={isSubmitting.value}
                 >
-                  Close Period
+                  CLOSE PERIOD
                 </button>
               )}
               <button
                 type="button"
-                class="btn btn-outline btn-sm"
+                class="btn btn-ghost btn-sm min-h-[36px] border border-[#333] hover:border-white text-[#888] hover:text-white font-mono"
                 onClick={recalculateYear}
                 disabled={isSubmitting.value || !currentPeriod?.key}
               >
-                Recalculate Year
+                RECALC YEAR
               </button>
               <button
                 type="button"
-                class="btn btn-primary btn-sm"
+                class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
                 onClick={openPeriodModal}
               >
-                + New Period
+                + NEW PERIOD
               </button>
             </div>
           </div>
@@ -391,34 +419,50 @@ export default function SettingsManager(
           {currentPeriod
             ? (
               <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="stat bg-slate-50 rounded-lg">
-                  <div class="stat-title">Period</div>
-                  <div class="stat-value text-lg">{currentPeriod.name}</div>
-                  <div class="stat-desc">
+                <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
+                  <div class="stat-title text-[10px] text-[#888] font-mono">
+                    PERIOD
+                  </div>
+                  <div class="stat-value text-base text-white font-mono">
+                    {currentPeriod.name}
+                  </div>
+                  <div class="stat-desc text-[10px] text-[#666] font-mono">
                     {formatDate(currentPeriod.startDate)} -{" "}
                     {formatDate(currentPeriod.endDate)}
                   </div>
                 </div>
-                <div class="stat bg-green-50 rounded-lg">
-                  <div class="stat-title">Expected Income</div>
-                  <div class="stat-value text-lg text-green-600">
+                <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
+                  <div class="stat-title text-[10px] text-[#888] font-mono">
+                    EXPECTED INCOME
+                  </div>
+                  <div class="stat-value text-base text-[#00ff88] font-mono">
                     {formatCurrency(currentPeriod.expectedIncome)}
                   </div>
                 </div>
-                <div class="stat bg-blue-50 rounded-lg">
-                  <div class="stat-title">Status</div>
-                  <div class="stat-value text-lg">
+                <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
+                  <div class="stat-title text-[10px] text-[#888] font-mono">
+                    STATUS
+                  </div>
+                  <div class="stat-value pt-1">
                     {currentPeriod.isClosed
-                      ? <span class="badge badge-error">Closed</span>
-                      : <span class="badge badge-success">Active</span>}
+                      ? (
+                        <span class="badge badge-error border-red-500/50 font-mono badge-xs">
+                          CLOSED
+                        </span>
+                      )
+                      : (
+                        <span class="badge bg-[#00ff88]/20 text-[#00ff88] border-[#00ff88]/40 font-mono badge-xs">
+                          ACTIVE
+                        </span>
+                      )}
                   </div>
                 </div>
               </div>
             )
             : (
-              <div class="alert alert-warning mt-4">
-                <span>
-                  No active budget period. Create one to start budgeting!
+              <div class="alert bg-[#ffb000]/10 border border-[#ffb000]/30 mt-4">
+                <span class="text-[#ffb000] font-mono text-xs">
+                  NO ACTIVE BUDGET PERIOD. CREATE ONE TO START BUDGETING.
                 </span>
               </div>
             )}
@@ -426,18 +470,22 @@ export default function SettingsManager(
       </div>
 
       {/* All Periods */}
-      <div class="card bg-white shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title text-xl">📋 All Budget Periods</h2>
+      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card-body p-0">
+          <div class="px-4 md:px-6 py-4 border-b border-[#333]">
+            <h2 class="text-lg font-bold text-white font-mono">
+              📋 ALL BUDGET PERIODS
+            </h2>
+          </div>
           <div class="overflow-x-auto">
-            <table class="table">
+            <table class="table table-sm w-full">
               <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Start</th>
-                  <th>End</th>
-                  <th>Expected</th>
-                  <th>Status</th>
+                <tr class="bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
+                  <th class="text-[#888] font-mono text-xs">NAME</th>
+                  <th class="text-[#888] font-mono text-xs">START</th>
+                  <th class="text-[#888] font-mono text-xs">END</th>
+                  <th class="text-[#888] font-mono text-xs">EXPECTED</th>
+                  <th class="text-[#888] font-mono text-xs">STATUS</th>
                   <th></th>
                 </tr>
               </thead>
@@ -445,28 +493,42 @@ export default function SettingsManager(
                 {periods.value.map((period) => (
                   <tr
                     key={period.key ?? period.id}
-                    class={(period.key && currentPeriod?.key &&
-                        period.key === currentPeriod.key)
-                      ? "bg-blue-50"
-                      : ""}
+                    class={`border-b border-[#333] hover:bg-[#1a1a1a] ${
+                      (period.key && currentPeriod?.key &&
+                          period.key === currentPeriod.key)
+                        ? "bg-[#00d9ff]/5"
+                        : ""
+                    }`}
                   >
-                    <td class="font-medium">{period.name}</td>
-                    <td>{formatDate(period.startDate)}</td>
-                    <td>{formatDate(period.endDate)}</td>
-                    <td>{formatCurrency(period.expectedIncome)}</td>
+                    <td class="font-bold text-white font-mono">
+                      {period.name}
+                    </td>
+                    <td class="text-[#888] font-mono">
+                      {formatDate(period.startDate)}
+                    </td>
+                    <td class="text-[#888] font-mono">
+                      {formatDate(period.endDate)}
+                    </td>
+                    <td class="text-[#00ff88] font-mono">
+                      {formatCurrency(period.expectedIncome)}
+                    </td>
                     <td>
                       {period.isClosed
-                        ? <span class="badge badge-ghost badge-sm">Closed</span>
+                        ? (
+                          <span class="badge bg-[#333] text-[#666] border-[#444] font-mono badge-xs">
+                            CLOSED
+                          </span>
+                        )
                         : period.key && currentPeriod?.key &&
                             period.key === currentPeriod.key
                         ? (
-                          <span class="badge badge-success badge-sm">
-                            Current
+                          <span class="badge bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff]/40 font-mono badge-xs">
+                            CURRENT
                           </span>
                         )
                         : (
-                          <span class="badge badge-warning badge-sm">
-                            Upcoming
+                          <span class="badge bg-[#ffb000]/20 text-[#ffb000] border-[#ffb000]/40 font-mono badge-xs">
+                            UPCOMING
                           </span>
                         )}
                     </td>
@@ -478,22 +540,22 @@ export default function SettingsManager(
                           !isCurrent;
 
                         return (
-                          <div class="flex items-center justify-end gap-2">
+                          <div class="flex items-center justify-end gap-1">
                             <button
                               type="button"
-                              class="btn btn-ghost btn-xs"
+                              class="btn btn-ghost btn-xs min-h-[32px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff] font-mono"
                               onClick={() => openEditPeriodModal(period)}
                               disabled={!period.key}
                             >
-                              Edit
+                              EDIT
                             </button>
                             <button
                               type="button"
-                              class="btn btn-error btn-outline btn-xs"
+                              class="btn btn-ghost btn-xs min-h-[32px] border border-[#333] hover:border-red-500 text-[#888] hover:text-red-500 font-mono"
                               onClick={() => deletePeriod(period)}
                               disabled={!canDelete}
                             >
-                              Delete
+                              DELETE
                             </button>
                           </div>
                         );
@@ -508,21 +570,31 @@ export default function SettingsManager(
       </div>
 
       {/* Categories */}
-      <div class="card bg-white shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title text-xl">📁 Budget Categories</h2>
-          <p class="text-slate-500 text-sm mb-4">
-            Drag and drop to reorder categories (coming soon)
+      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card-body p-4 md:p-6">
+          <h2 class="text-lg font-bold text-white font-mono mb-2">
+            📁 BUDGET CATEGORIES
+          </h2>
+          <p class="text-[#666] text-xs mb-6 font-mono uppercase tracking-wider">
+            SYSTEM CATEGORIES AND GROUPS
           </p>
-          <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {categories.value.map((group) => (
-              <div key={group.id} class="border rounded-lg p-4">
-                <h3 class="font-semibold text-slate-700 mb-2">{group.name}</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div
+                key={group.id}
+                class="bg-[#0a0a0a] border border-[#333] rounded p-4"
+              >
+                <h3 class="font-bold text-[#00d9ff] font-mono text-xs mb-3 border-b border-[#333] pb-2">
+                  {group.name.toUpperCase()}
+                </h3>
+                <div class="flex flex-wrap gap-2">
                   {group.categories.map((cat: Category) => (
-                    <div key={cat.id} class="badge badge-lg badge-ghost">
-                      {cat.name}
-                      <span class="ml-2 text-xs text-slate-400">
+                    <div
+                      key={cat.id}
+                      class="badge bg-[#1a1a1a] text-[#888] border-[#333] font-mono text-[10px] h-auto py-1"
+                    >
+                      {cat.name.toUpperCase()}
+                      <span class="ml-2 text-[#00ff88]">
                         {formatCurrency(cat.targetAmount)}
                       </span>
                     </div>
@@ -537,16 +609,20 @@ export default function SettingsManager(
       {/* Period Modal */}
       {isPeriodModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Create Budget Period</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              CREATE BUDGET PERIOD
+            </h3>
             <form onSubmit={createPeriod}>
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text">Period Name</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    PERIOD NAME
+                  </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered"
+                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                   value={periodName.value}
                   onInput={(e) => periodName.value = e.currentTarget.value}
                   required
@@ -555,11 +631,13 @@ export default function SettingsManager(
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Start Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      START DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={periodStart.value}
                     onInput={(e) => periodStart.value = e.currentTarget.value}
                     required
@@ -567,11 +645,13 @@ export default function SettingsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">End Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      END DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={periodEnd.value}
                     onInput={(e) => periodEnd.value = e.currentTarget.value}
                     required
@@ -580,12 +660,14 @@ export default function SettingsManager(
               </div>
               <div class="form-control mt-4">
                 <label class="label">
-                  <span class="label-text">Expected Income</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    EXPECTED INCOME
+                  </span>
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  class="input input-bordered"
+                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                   placeholder="0.00"
                   value={periodExpectedIncome.value}
                   onInput={(e) =>
@@ -595,19 +677,19 @@ export default function SettingsManager(
               <div class="modal-action">
                 <button
                   type="button"
-                  class="btn"
+                  class="btn font-mono"
                   onClick={() => isPeriodModalOpen.value = false}
                 >
-                  Cancel
+                  CANCEL
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
                     ? <span class="loading loading-spinner loading-sm"></span>
-                    : "Create"}
+                    : "CREATE"}
                 </button>
               </div>
             </form>
@@ -623,16 +705,20 @@ export default function SettingsManager(
       {/* Edit Period Modal */}
       {isEditPeriodModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Edit Budget Period</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              EDIT BUDGET PERIOD
+            </h3>
             <form onSubmit={updatePeriod}>
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text">Period Name</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    PERIOD NAME
+                  </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered"
+                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                   value={periodName.value}
                   onInput={(e) => periodName.value = e.currentTarget.value}
                   required
@@ -641,11 +727,13 @@ export default function SettingsManager(
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Start Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      START DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={periodStart.value}
                     onInput={(e) => periodStart.value = e.currentTarget.value}
                     required
@@ -653,11 +741,13 @@ export default function SettingsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">End Date</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      END DATE
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={periodEnd.value}
                     onInput={(e) => periodEnd.value = e.currentTarget.value}
                     required
@@ -666,12 +756,14 @@ export default function SettingsManager(
               </div>
               <div class="form-control mt-4">
                 <label class="label">
-                  <span class="label-text">Expected Income</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    EXPECTED INCOME
+                  </span>
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  class="input input-bordered"
+                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                   placeholder="0.00"
                   value={periodExpectedIncome.value}
                   onInput={(e) =>
@@ -681,19 +773,19 @@ export default function SettingsManager(
               <div class="modal-action">
                 <button
                   type="button"
-                  class="btn"
+                  class="btn font-mono"
                   onClick={() => isEditPeriodModalOpen.value = false}
                 >
-                  Cancel
+                  CANCEL
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
                     ? <span class="loading loading-spinner loading-sm"></span>
-                    : "Save"}
+                    : "SAVE"}
                 </button>
               </div>
             </form>
@@ -709,17 +801,21 @@ export default function SettingsManager(
       {/* Income Modal */}
       {isIncomeModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Add Income</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#00ff88] font-mono">
+              ADD INCOME
+            </h3>
             <form onSubmit={addIncome}>
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text">Description</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    DESCRIPTION
+                  </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered"
-                  placeholder="e.g., Paycheck, Side Gig"
+                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  placeholder="e.g., PAYCHECK, SIDE GIG"
                   value={incomeDescription.value}
                   onInput={(e) =>
                     incomeDescription.value = e.currentTarget.value}
@@ -729,12 +825,14 @@ export default function SettingsManager(
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Amount</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      AMOUNT
+                    </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     placeholder="0.00"
                     value={incomeAmount.value}
                     onInput={(e) => incomeAmount.value = e.currentTarget.value}
@@ -743,11 +841,13 @@ export default function SettingsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Date Received</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      DATE RECEIVED
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={incomeDate.value}
                     onInput={(e) => incomeDate.value = e.currentTarget.value}
                     required
@@ -757,19 +857,19 @@ export default function SettingsManager(
               <div class="modal-action">
                 <button
                   type="button"
-                  class="btn"
+                  class="btn font-mono"
                   onClick={() => isIncomeModalOpen.value = false}
                 >
-                  Cancel
+                  CANCEL
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-success"
+                  class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
                     ? <span class="loading loading-spinner loading-sm"></span>
-                    : "Add Income"}
+                    : "ADD INCOME"}
                 </button>
               </div>
             </form>
@@ -782,5 +882,13 @@ export default function SettingsManager(
         </div>
       )}
     </div>
+  );
+}
+
+export default function SettingsManager(props: Props) {
+  return (
+    <ErrorBoundary>
+      <SettingsManagerContent {...props} />
+    </ErrorBoundary>
   );
 }

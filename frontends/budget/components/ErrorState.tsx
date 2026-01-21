@@ -57,6 +57,7 @@ export function ErrorState({
 
         {onRetry && (
           <button
+            type="button"
             onClick={onRetry}
             class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono w-full sm:w-auto"
           >
@@ -86,6 +87,7 @@ export function InlineError({ message, onRetry }: InlineErrorProps) {
       </div>
       {onRetry && (
         <button
+          type="button"
           onClick={onRetry}
           class="btn btn-sm bg-red-500/20 hover:bg-red-500/30 border border-red-400 text-red-400 min-h-[44px] font-mono flex-shrink-0"
         >
@@ -190,6 +192,7 @@ export function EmptyState({
         </p>
         {onAction && actionText && (
           <button
+            type="button"
             onClick={onAction}
             class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
           >

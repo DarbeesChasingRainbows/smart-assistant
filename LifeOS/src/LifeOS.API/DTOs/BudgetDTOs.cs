@@ -262,6 +262,15 @@ public record CreateBudgetTransactionRequest
     public DateTime TransactionDate { get; init; }
 }
 
+public record CreateBudgetTransferRequest
+{
+    public string FromAccountKey { get; init; } = string.Empty;
+    public string ToAccountKey { get; init; } = string.Empty;
+    public decimal Amount { get; init; }
+    public DateTime TransactionDate { get; init; }
+    public string? Memo { get; init; }
+}
+
 public record UpdateBudgetTransactionRequest
 {
     public string? CategoryKey { get; init; }

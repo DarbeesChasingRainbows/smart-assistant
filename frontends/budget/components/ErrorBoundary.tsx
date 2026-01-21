@@ -76,6 +76,7 @@ export function ErrorBoundary({
 
             <div class="flex flex-col sm:flex-row gap-2">
               <button
+                type="button"
                 onClick={resetError}
                 class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] flex-1 font-mono"
               >
@@ -83,6 +84,7 @@ export function ErrorBoundary({
                 Try Again
               </button>
               <button
+                type="button"
                 onClick={() => globalThis.location.reload()}
                 class="btn bg-[#333] hover:bg-[#444] border border-[#555] text-white min-h-[44px] flex-1 font-mono"
               >
@@ -118,6 +120,7 @@ export function CompactErrorBoundary({
           ⚠ Error: {error.message}
         </p>
         <button
+          type="button"
           onClick={resetError}
           class="btn btn-sm bg-red-500/20 hover:bg-red-500/30 border border-red-400 text-red-400 min-h-[44px] font-mono"
         >

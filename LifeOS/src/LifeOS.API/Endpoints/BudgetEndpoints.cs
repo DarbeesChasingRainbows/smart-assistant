@@ -30,6 +30,8 @@ public static class BudgetEndpoints
 
         // Dashboard (CQRS Query)
         group.MapGet("/dashboard", GetDashboard).WithName("GetBudgetDashboard");
+        group.MapGet("/balances/{payPeriodKey}", GetCategoryBalances)
+            .WithName("GetBudgetCategoryBalances");
 
         // Pay Periods
         var payPeriods = group.MapGroup("/pay-periods");
@@ -95,6 +97,7 @@ public static class BudgetEndpoints
         transactions.MapGet("/account/{accountKey}", GetAccountTransactions).WithName("GetBudgetAccountTransactions");
         transactions.MapGet("/{key}", GetTransaction).WithName("GetBudgetTransaction");
         transactions.MapPost("/", CreateTransaction).WithName("CreateBudgetTransaction");
+        transactions.MapPost("/transfer", CreateTransfer).WithName("CreateBudgetTransfer");
         transactions.MapPut("/{key}", UpdateTransaction).WithName("UpdateBudgetTransaction");
         transactions.MapPost("/{key}/clear", ClearTransaction).WithName("ClearBudgetTransaction");
         transactions.MapDelete("/{key}", DeleteTransaction).WithName("DeleteBudgetTransaction");
@@ -664,6 +667,16 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             Assigned = assigned,
             Spent = spent
         });
+    }
+
+    private static async Task<IResult> GetCategoryBalances(
+        string payPeriodKey,
+        [FromServices] ArangoDbContext db,
+        [FromQuery] string? familyId = null)
+    {
+        var family = familyId ?? "default";
+        var balances = await CalculateCategoryBalancesInternal(db, payPeriodKey, family);
+        return Results.Ok(balances);
     }
 
     // ==================== BUDGET ASSIGNMENTS (CQRS Command) ====================
@@ -1287,6 +1300,83 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         }
     }
 
+    private static async Task<IResult> CreateTransfer(
+        CreateBudgetTransferRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(request.FromAccountKey) || string.IsNullOrWhiteSpace(request.ToAccountKey))
+            {
+                return Results.BadRequest(new { error = "Both From and To accounts are required" });
+            }
+
+            if (request.FromAccountKey == request.ToAccountKey)
+            {
+                return Results.BadRequest(new { error = "Cannot transfer to the same account" });
+            }
+
+            if (request.Amount <= 0)
+            {
+                return Results.BadRequest(new { error = "Amount must be positive" });
+            }
+
+            var now = DateTime.UtcNow;
+            
+            // Get From Account Name for Payee
+            var fromAccountDoc = await db.Client.Document.GetDocumentAsync<dynamic>(AccountCollection, request.FromAccountKey);
+            string fromAccountName = fromAccountDoc?.name?.ToString() ?? "Unknown Account";
+
+            // Get To Account Name for Payee
+            var toAccountDoc = await db.Client.Document.GetDocumentAsync<dynamic>(AccountCollection, request.ToAccountKey);
+            string toAccountName = toAccountDoc?.name?.ToString() ?? "Unknown Account";
+
+            // 1. Create Withdrawal Transaction (From Account)
+            var withdrawalDoc = new
+            {
+                _key = Guid.NewGuid().ToString("N")[..12],
+                accountKey = request.FromAccountKey,
+                payee = $"Transfer to: {toAccountName}",
+                memo = request.Memo,
+                amount = -Math.Abs(request.Amount),
+                transactionDate = request.TransactionDate,
+                isCleared = false,
+                isReconciled = false,
+                splits = (object?)null,
+                createdAt = now
+            };
+            
+            // 2. Create Deposit Transaction (To Account)
+            var depositDoc = new
+            {
+                _key = Guid.NewGuid().ToString("N")[..12],
+                accountKey = request.ToAccountKey,
+                payee = $"Transfer from: {fromAccountName}",
+                memo = request.Memo,
+                amount = Math.Abs(request.Amount),
+                transactionDate = request.TransactionDate,
+                isCleared = false,
+                isReconciled = false,
+                splits = (object?)null,
+                createdAt = now
+            };
+
+            await db.Client.Document.PostDocumentAsync(TransactionCollection, withdrawalDoc);
+            await db.Client.Document.PostDocumentAsync(TransactionCollection, depositDoc);
+
+            // 3. Update Balances
+            await UpdateAccountBalance(db, request.FromAccountKey);
+            await UpdateAccountBalance(db, request.ToAccountKey);
+
+            return Results.Ok(new { message = "Transfer complete" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating transfer: {ex.Message}");
+            return Results.Problem(title: "Error creating transfer", detail: ex.Message, statusCode: 500);
+        }
+    }
+
     private static async Task<IResult> CreateTransaction(
         CreateBudgetTransactionRequest request,
         [FromServices] ArangoDbContext db)
@@ -1311,6 +1401,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
                 transactionDate = request.TransactionDate,
                 isCleared = false,
                 isReconciled = false,
+                splits = (object?)null,
                 createdAt = now
             };
 

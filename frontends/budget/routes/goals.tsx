@@ -1,5 +1,5 @@
 import { Head } from "fresh/runtime";
-import { define, url } from "../utils.ts";
+import { define } from "../utils.ts";
 import type { Goal } from "../types/api.ts";
 import { Navigation } from "../components/Navigation.tsx";
 import GoalsManager from "../islands/GoalsManager.tsx";

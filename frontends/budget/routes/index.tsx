@@ -21,8 +21,8 @@ export const handler = define.handlers({
 
     const rawApiUrl = Deno.env.get("VITE_API_URL");
     // Server-side fetch requires absolute URL - relative paths don't work
-    const apiUrl = (rawApiUrl && rawApiUrl.startsWith("http")) 
-      ? rawApiUrl 
+    const apiUrl = (rawApiUrl && rawApiUrl.startsWith("http"))
+      ? rawApiUrl
       : "http://api:5120/api";
     const endpoint = "v1/people";
     const normalizedBase = apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl;
@@ -160,12 +160,24 @@ function getCardColor(user: PickerUser): string {
   switch (user.role) {
     case "Parent":
       return user.name === "Mom"
-        ? "bg-pink-100 hover:bg-pink-200"
-        : "bg-blue-100 hover:bg-blue-200";
+        ? "border-[#00ff88]/30 hover:border-[#00ff88] bg-[#00ff88]/5"
+        : "border-[#00d9ff]/30 hover:border-[#00d9ff] bg-[#00d9ff]/5";
     case "Child":
-      return "bg-green-100 hover:bg-green-200";
+      return "border-[#ffb000]/30 hover:border-[#ffb000] bg-[#ffb000]/5";
     default:
-      return "bg-gray-100 hover:bg-gray-200";
+      return "border-[#333] hover:border-[#888] bg-[#1a1a1a]";
+  }
+}
+
+// Get text color based on role
+function getTextColor(user: PickerUser): string {
+  switch (user.role) {
+    case "Parent":
+      return user.name === "Mom" ? "text-[#00ff88]" : "text-[#00d9ff]";
+    case "Child":
+      return "text-[#ffb000]";
+    default:
+      return "text-white";
   }
 }
 
@@ -173,9 +185,9 @@ export default define.page<typeof handler>(function UserPicker(props) {
   const { users, error } = props.data as PageData;
 
   return (
-    <div class="min-h-screen bg-linear-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-center p-8">
+    <div class="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-8">
       <Head>
-        <title>Budget - Who's Budgeting?</title>
+        <title>Budget - ACCESS SELECTION</title>
         <link
           href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/daisyui.css"
           rel="stylesheet"
@@ -184,46 +196,83 @@ export default define.page<typeof handler>(function UserPicker(props) {
       </Head>
 
       <div class="text-center mb-12">
-        <h1 class="text-5xl font-bold text-white mb-4">
-          💰 Budget
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 font-mono tracking-tighter">
+          <span class="text-[#00d9ff]">$</span>
+          <span>BUDGET</span>
         </h1>
-        <p class="text-xl text-slate-300">
-          Who's budgeting today?
+        <p class="text-xs md:text-sm text-[#888] font-mono uppercase tracking-[0.3em]">
+          IDENTIFY OPERATOR FOR SYSTEM ACCESS
         </p>
       </div>
 
       {error && (
-        <div class="alert alert-error mb-8 max-w-md">
+        <div class="alert bg-red-500/10 border border-red-500 mb-8 max-w-md font-mono text-xs text-red-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="stroke-current shrink-0 w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            >
+            </path>
+          </svg>
           <span>{error}</span>
         </div>
       )}
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 max-w-5xl w-full">
         {users.map((user: PickerUser) => (
           <a
             key={user.id}
             href={url(`/dashboard?userId=${encodeURIComponent(user.id)}`)}
-            class={`card ${
+            class={`card border-2 ${
               getCardColor(user)
-            } shadow-xl cursor-pointer transform transition-all duration-200 hover:scale-105 hover:shadow-2xl`}
+            } cursor-pointer transition-all duration-300 group overflow-hidden`}
           >
-            <div class="card-body items-center text-center py-12">
-              <div class="text-7xl mb-4">
+            <div class="card-body items-center text-center py-12 relative">
+              {/* HUD scanline effect */}
+              <div class="absolute inset-0 bg-linear-to-b from-transparent via-white/5 to-transparent h-[200%] -top-full group-hover:top-0 transition-all duration-1000 pointer-events-none opacity-20">
+              </div>
+
+              <div class="text-7xl mb-6 grayscale group-hover:grayscale-0 transition-all duration-500 scale-90 group-hover:scale-110">
                 {getAvatar(user)}
               </div>
-              <h2 class="card-title text-2xl text-slate-800">
+              <h2
+                class={`card-title text-2xl font-mono font-bold uppercase tracking-tight ${
+                  getTextColor(user)
+                }`}
+              >
                 {user.name}
               </h2>
-              <p class="text-slate-600">
+              <p class="text-[#666] font-mono text-[10px] tracking-widest uppercase mt-1">
                 {user.role}
               </p>
+
+              <div class="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span
+                  class={`text-[10px] font-mono font-bold py-1 px-3 border rounded ${
+                    getCardColor(user).includes("ff88")
+                      ? "border-[#00ff88] text-[#00ff88]"
+                      : getCardColor(user).includes("d9ff")
+                      ? "border-[#00d9ff] text-[#00d9ff]"
+                      : "border-[#ffb000] text-[#ffb000]"
+                  }`}
+                >
+                  INITIALIZE ACCESS
+                </span>
+              </div>
             </div>
           </a>
         ))}
       </div>
 
-      <div class="mt-12 text-slate-500 text-sm">
-        Phase 1: Auth-Less Development Mode
+      <div class="mt-16 text-[#444] font-mono text-[10px] tracking-[0.2em] uppercase">
+        SYSTEM STATUS: ONLINE | PHASE 4.3 READY
       </div>
     </div>
   );

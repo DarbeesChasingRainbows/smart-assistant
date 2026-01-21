@@ -24,8 +24,8 @@ export function Navigation({ children, currentPath = "" }: NavigationProps) {
             <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3">
               <span class="text-xl">📡</span>
               <p class="font-mono text-sm text-[#ffb000]">
-                <strong>[OFFLINE MODE]</strong>
-                {" "}- Some features may be unavailable
+                <strong>[OFFLINE MODE]</strong>{" "}
+                - Some features may be unavailable
               </p>
             </div>
           </div>

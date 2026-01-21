@@ -5,6 +5,8 @@ import type {
   ReceiptItem,
   Transaction,
 } from "../types/api.ts";
+import { ErrorBoundary } from "../components/ErrorBoundary.tsx";
+import { toast } from "./Toast.tsx";
 
 interface Props {
   initialReceipts: Receipt[];
@@ -23,7 +25,7 @@ const API_BASE = globalThis.location?.pathname?.startsWith("/budget")
   ? "/budget/api/v1/budget"
   : "/api/v1/budget";
 
-export default function ReceiptsManager(
+function ReceiptsManagerContent(
   { initialReceipts, unmatchedTransactions, accounts, linkTransactionId }:
     Props,
 ) {
@@ -235,9 +237,13 @@ export default function ReceiptsManager(
         const newReceipt = await res.json();
         receipts.value = [newReceipt, ...receipts.value];
         isModalOpen.value = false;
+        toast.success("Receipt saved successfully!");
+      } else {
+        toast.error("Failed to save receipt");
       }
     } catch (error) {
       console.error("Error creating receipt:", error);
+      toast.error("Error creating receipt");
     } finally {
       isSubmitting.value = false;
     }
@@ -291,9 +297,13 @@ export default function ReceiptsManager(
           r.id === updated.id ? updated : r
         );
         isEditing.value = false;
+        toast.success("Receipt updated");
+      } else {
+        toast.error("Failed to update receipt");
       }
     } catch (error) {
       console.error("Error updating receipt:", error);
+      toast.error("Error updating receipt");
     } finally {
       isSubmitting.value = false;
     }
@@ -363,9 +373,13 @@ export default function ReceiptsManager(
         const newReceipt = await res.json();
         receipts.value = [newReceipt, ...receipts.value];
         isUploadModalOpen.value = false;
+        toast.success("Receipt uploaded and processed!");
+      } else {
+        toast.error("Failed to upload receipt");
       }
     } catch (error) {
       console.error("Error uploading receipt:", error);
+      toast.error("Error uploading receipt");
     } finally {
       isSubmitting.value = false;
     }
@@ -376,32 +390,38 @@ export default function ReceiptsManager(
     return (
       <div class="space-y-6">
         <div class="flex justify-between items-center">
-          <button type="button" class="btn btn-ghost" onClick={backToList}>
-            ← Back to Receipts
+          <button
+            type="button"
+            class="btn btn-ghost text-[#888] hover:text-[#00d9ff] font-mono"
+            onClick={backToList}
+          >
+            ← BACK TO RECEIPTS
           </button>
           {!isEditing.value && (
             <button
               type="button"
-              class="btn btn-outline btn-sm"
+              class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
               onClick={startEditing}
             >
-              ✏️ Edit
+              EDIT
             </button>
           )}
         </div>
 
-        <div class="card bg-white shadow-xl">
-          <div class="card-body">
+        <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+          <div class="card-body p-4 md:p-6">
             {isEditing.value
               ? (
                 <div class="space-y-4">
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Store Name</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        STORE NAME
+                      </span>
                     </label>
                     <input
                       type="text"
-                      class="input input-bordered"
+                      class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                       value={editStoreName.value}
                       onInput={(e) =>
                         editStoreName.value = e.currentTarget.value}
@@ -409,11 +429,13 @@ export default function ReceiptsManager(
                   </div>
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Receipt Date</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        RECEIPT DATE
+                      </span>
                     </label>
                     <input
                       type="date"
-                      class="input input-bordered"
+                      class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                       value={editReceiptDate.value}
                       onInput={(e) =>
                         editReceiptDate.value = e.currentTarget.value}
@@ -421,12 +443,14 @@ export default function ReceiptsManager(
                   </div>
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text">Total</span>
+                      <span class="label-text font-mono text-xs text-[#888]">
+                        TOTAL
+                      </span>
                     </label>
                     <input
                       type="number"
                       step="0.01"
-                      class="input input-bordered"
+                      class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                       value={editTotal.value}
                       onInput={(e) => editTotal.value = e.currentTarget.value}
                     />
@@ -434,7 +458,7 @@ export default function ReceiptsManager(
                   <div class="flex gap-2">
                     <button
                       type="button"
-                      class="btn btn-primary"
+                      class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
                       onClick={saveEditing}
                       disabled={isSubmitting.value}
                     >
@@ -443,10 +467,14 @@ export default function ReceiptsManager(
                           <span class="loading loading-spinner loading-sm">
                           </span>
                         )
-                        : "Save"}
+                        : "SAVE"}
                     </button>
-                    <button type="button" class="btn" onClick={cancelEditing}>
-                      Cancel
+                    <button
+                      type="button"
+                      class="btn btn-ghost font-mono"
+                      onClick={cancelEditing}
+                    >
+                      CANCEL
                     </button>
                   </div>
                 </div>
@@ -454,16 +482,16 @@ export default function ReceiptsManager(
               : (
                 <div class="flex justify-between items-start">
                   <div>
-                    <h2 class="text-2xl font-bold">
-                      {receipt.storeName || "Unknown Store"}
+                    <h2 class="text-xl md:text-2xl font-bold text-[#00d9ff] font-mono">
+                      {receipt.storeName?.toUpperCase() || "UNKNOWN STORE"}
                     </h2>
                     {receipt.storeNumber && (
-                      <div class="text-sm text-slate-500">
-                        Store #{receipt.storeNumber}
+                      <div class="text-xs text-[#888] font-mono">
+                        STORE #{receipt.storeNumber}
                       </div>
                     )}
                     {receipt.storeAddress && (
-                      <div class="text-sm text-slate-400">
+                      <div class="text-[10px] text-[#666] font-mono mt-1 uppercase">
                         {receipt.storeAddress}
                         <br />
                         {receipt.storeCity}, {receipt.storeState}{" "}
@@ -472,11 +500,11 @@ export default function ReceiptsManager(
                     )}
                   </div>
                   <div class="text-right">
-                    <div class="text-sm text-slate-500">
+                    <div class="text-sm text-white font-mono">
                       {formatDate(receipt.receiptDate)}
                     </div>
                     {receipt.receiptNumber && (
-                      <div class="text-xs text-slate-400">
+                      <div class="text-[10px] text-[#666] font-mono">
                         #{receipt.receiptNumber}
                       </div>
                     )}
@@ -484,50 +512,64 @@ export default function ReceiptsManager(
                 </div>
               )}
 
-            <div class="divider"></div>
+            <div class="divider before:bg-[#333] after:bg-[#333]"></div>
 
             {/* Items */}
             <div class="overflow-x-auto">
-              <table class="table table-sm">
+              <table class="table table-sm w-full">
                 <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>SKU/UPC</th>
-                    <th class="text-right">Qty</th>
-                    <th class="text-right">Price</th>
-                    <th class="text-right">Discount</th>
-                    <th class="text-right">Tax</th>
-                    <th class="text-right">Total</th>
+                  <tr class="bg-[#0a0a0a] border-b border-[#333]">
+                    <th class="text-[#888] font-mono text-[10px]">ITEM</th>
+                    <th class="text-[#888] font-mono text-[10px]">SKU/UPC</th>
+                    <th class="text-right text-[#888] font-mono text-[10px]">
+                      QTY
+                    </th>
+                    <th class="text-right text-[#888] font-mono text-[10px]">
+                      PRICE
+                    </th>
+                    <th class="text-right text-[#888] font-mono text-[10px]">
+                      DISC
+                    </th>
+                    <th class="text-right text-[#888] font-mono text-[10px]">
+                      TAX
+                    </th>
+                    <th class="text-right text-[#888] font-mono text-[10px]">
+                      TOTAL
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {(receipt.items || []).map((item, idx) => (
-                    <tr key={idx}>
+                    <tr key={idx} class="border-b border-[#333]/50">
                       <td>
-                        <div class="font-medium">{item.description}</div>
+                        <div class="font-medium text-white text-xs font-mono">
+                          {item.description.toUpperCase()}
+                        </div>
                         {item.department && (
-                          <div class="text-xs text-slate-400">
+                          <div class="text-[10px] text-[#666] font-mono uppercase">
                             {item.department}
                           </div>
                         )}
                       </td>
-                      <td class="text-xs text-slate-500">
-                        {item.sku && <div>SKU: {item.sku}</div>}
-                        {item.upc && <div>UPC: {item.upc}</div>}
+                      <td class="text-[10px] text-[#666] font-mono">
+                        {item.sku && <div>S: {item.sku}</div>}
+                        {item.upc && <div>U: {item.upc}</div>}
                       </td>
-                      <td class="text-right">{item.quantity}</td>
-                      <td class="text-right">
+                      <td class="text-right font-mono text-xs">
+                        {item.quantity}
+                      </td>
+                      <td class="text-right font-mono text-xs">
                         {formatCurrency(item.extendedPrice)}
                       </td>
-                      <td class="text-right text-green-600">
+                      <td class="text-right text-[#00ff88] font-mono text-xs">
                         {item.discountAmount > 0
                           ? `-${formatCurrency(item.discountAmount)}`
                           : "—"}
                       </td>
-                      <td class="text-right text-slate-500">
+                      <td class="text-right text-[#888] font-mono text-xs">
                         {formatCurrency(item.taxAmount)}
                       </td>
-                      <td class="text-right font-semibold">
+                      <td class="text-right font-bold text-white font-mono text-xs">
                         {formatCurrency(
                           item.extendedPrice - item.discountAmount +
                             item.taxAmount,
@@ -539,33 +581,33 @@ export default function ReceiptsManager(
               </table>
             </div>
 
-            <div class="divider"></div>
+            <div class="divider before:bg-[#333] after:bg-[#333]"></div>
 
             {/* Totals */}
             <div class="flex justify-end">
-              <div class="w-64 space-y-1">
-                <div class="flex justify-between">
-                  <span>Subtotal:</span>
+              <div class="w-full md:w-64 space-y-1 font-mono text-xs">
+                <div class="flex justify-between text-[#888]">
+                  <span>SUBTOTAL:</span>
                   <span>{formatCurrency(receipt.subtotal)}</span>
                 </div>
                 {receipt.discountTotal && receipt.discountTotal > 0 && (
-                  <div class="flex justify-between text-green-600">
-                    <span>Discounts:</span>
+                  <div class="flex justify-between text-[#00ff88]">
+                    <span>DISCOUNTS:</span>
                     <span>-{formatCurrency(receipt.discountTotal)}</span>
                   </div>
                 )}
-                <div class="flex justify-between">
-                  <span>Tax:</span>
+                <div class="flex justify-between text-[#888]">
+                  <span>TAX:</span>
                   <span>{formatCurrency(receipt.taxTotal)}</span>
                 </div>
-                <div class="flex justify-between font-bold text-lg border-t pt-2">
-                  <span>Total:</span>
+                <div class="flex justify-between font-bold text-lg border-t border-[#333] pt-2 text-[#00d9ff]">
+                  <span>TOTAL:</span>
                   <span>{formatCurrency(receipt.total)}</span>
                 </div>
                 {receipt.paymentMethod && (
-                  <div class="flex justify-between text-sm text-slate-500">
-                    <span>Paid with:</span>
-                    <span>
+                  <div class="flex justify-between text-[10px] text-[#666] pt-2">
+                    <span>PAID WITH:</span>
+                    <span class="uppercase">
                       {receipt.paymentMethod} {receipt.paymentLastFour &&
                         `****${receipt.paymentLastFour}`}
                     </span>
@@ -577,37 +619,37 @@ export default function ReceiptsManager(
             {/* Linked Transaction */}
             {receipt.transactionId
               ? (
-                <div class="mt-4 p-4 bg-green-50 rounded-lg">
-                  <div class="flex justify-between items-center">
+                <div class="mt-6 p-4 bg-[#00ff88]/5 border border-[#00ff88]/20 rounded">
+                  <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div>
-                      <span class="text-sm font-medium text-green-800">
-                        ✓ Linked to Transaction
+                      <span class="text-xs font-bold text-[#00ff88] font-mono uppercase tracking-wider">
+                        ✓ LINKED TO TRANSACTION
                       </span>
-                      <span class="text-sm text-green-600 ml-2">
+                      <span class="text-xs text-[#00ff88]/70 ml-2 font-mono">
                         #{receipt.transactionId}
                       </span>
                     </div>
                     <a
-                      href={`/transactions?highlight=${receipt.transactionId}`}
-                      class="btn btn-sm btn-outline btn-success"
+                      href={`/budget/transactions?highlight=${receipt.transactionId}`}
+                      class="btn btn-xs bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono min-h-[32px]"
                     >
-                      View Transaction →
+                      VIEW TRANSACTION
                     </a>
                   </div>
                 </div>
               )
               : (
-                <div class="mt-4 p-4 bg-slate-50 rounded-lg">
-                  <div class="flex justify-between items-center">
-                    <span class="text-sm text-slate-500">
-                      No linked transaction
+                <div class="mt-6 p-4 bg-[#ffb000]/5 border border-[#ffb000]/20 rounded">
+                  <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <span class="text-xs font-bold text-[#ffb000] font-mono uppercase">
+                      NO LINKED TRANSACTION
                     </span>
                     <button
                       type="button"
-                      class="btn btn-sm btn-outline"
+                      class="btn btn-xs bg-[#ffb000]/20 border-[#ffb000] text-[#ffb000] font-mono min-h-[32px]"
                       onClick={() => {/* TODO: Link modal */}}
                     >
-                      Link to Transaction
+                      LINK NOW
                     </button>
                   </div>
                 </div>
@@ -623,113 +665,127 @@ export default function ReceiptsManager(
   return (
     <div class="space-y-6">
       {/* Actions */}
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <span class="text-xs text-[#888] font-mono uppercase tracking-wider">
           {displayReceipts.length}{" "}
-          receipt{displayReceipts.length !== 1 ? "s" : ""}
+          RECEIPT{displayReceipts.length !== 1 ? "S" : ""} DETECTED
         </span>
         <div class="flex gap-2">
           <button
             type="button"
-            class="btn btn-outline btn-primary"
+            class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
             onClick={openUploadModal}
           >
-            📷 Upload Receipt
+            📷 UPLOAD
           </button>
-          <button type="button" class="btn btn-primary" onClick={openAddModal}>
-            + Add Receipt
+          <button
+            type="button"
+            class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            onClick={openAddModal}
+          >
+            + MANUAL ADD
           </button>
         </div>
       </div>
 
       {/* Filters */}
-      <div class="flex flex-wrap gap-4 items-end bg-white p-4 rounded-lg shadow">
+      <div class="flex flex-wrap gap-4 items-end bg-[#1a1a1a] p-4 border border-[#333] rounded">
         <div class="form-control">
-          <label class="label">
-            <span class="label-text text-xs">Store Name</span>
+          <label class="label pt-0">
+            <span class="label-text text-[10px] text-[#888] font-mono">
+              STORE NAME
+            </span>
           </label>
           <input
             type="text"
-            class="input input-bordered input-sm w-48"
-            placeholder="Search stores..."
+            class="input input-bordered input-sm w-48 bg-[#0a0a0a] border-[#333] text-white font-mono"
+            placeholder="SEARCH..."
             value={filterStoreName.value}
             onInput={(e) => filterStoreName.value = e.currentTarget.value}
           />
         </div>
         <div class="form-control">
-          <label class="label">
-            <span class="label-text text-xs">Link Status</span>
+          <label class="label pt-0">
+            <span class="label-text text-[10px] text-[#888] font-mono">
+              LINK STATUS
+            </span>
           </label>
           <select
-            class="select select-bordered select-sm"
+            class="select select-bordered select-sm bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
             value={filterLinked.value}
             onChange={(e) => filterLinked.value = e.currentTarget.value}
           >
-            <option value="all">All</option>
-            <option value="linked">Linked</option>
-            <option value="unlinked">Unlinked</option>
+            <option value="all">ALL RECEIPTS</option>
+            <option value="linked">LINKED ONLY</option>
+            <option value="unlinked">UNLINKED ONLY</option>
           </select>
         </div>
         {(filterStoreName.value || filterLinked.value !== "all") && (
           <button
             type="button"
-            class="btn btn-ghost btn-sm"
+            class="btn btn-ghost btn-sm text-[#666] hover:text-white font-mono text-xs"
             onClick={() => {
               filterStoreName.value = "";
               filterLinked.value = "all";
             }}
           >
-            Clear Filters
+            CLEAR FILTERS
           </button>
         )}
       </div>
 
       {/* Receipts List */}
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {displayReceipts.length === 0
           ? (
-            <div class="col-span-full text-center py-12 text-slate-500">
-              {receipts.value.length === 0
-                ? 'No receipts yet. Click "Add Receipt" to enter your first one.'
-                : "No receipts match your filters."}
+            <div class="col-span-full text-center py-16 bg-[#1a1a1a] border border-[#333] rounded">
+              <p class="text-[#666] font-mono uppercase tracking-widest">
+                {receipts.value.length === 0
+                  ? "NO DATA DETECTED"
+                  : "NO MATCHING RECORDS"}
+              </p>
             </div>
           )
           : displayReceipts.map((receipt) => (
             <div
               key={receipt.id}
-              class="card bg-white shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+              class="card bg-[#1a1a1a] border border-[#333] hover:border-[#00d9ff] transition-all cursor-pointer group"
               onClick={() => viewReceipt(receipt)}
             >
               <div class="card-body p-4">
                 <div class="flex justify-between items-start">
-                  <div>
-                    <h3 class="font-bold">
-                      {receipt.storeName || "Unknown Store"}
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-white font-mono truncate group-hover:text-[#00d9ff]">
+                      {receipt.storeName?.toUpperCase() || "UNKNOWN STORE"}
                     </h3>
                     {receipt.storeNumber && (
-                      <div class="text-xs text-slate-400">
-                        Store #{receipt.storeNumber}
+                      <div class="text-[10px] text-[#666] font-mono">
+                        ST#{receipt.storeNumber}
                       </div>
                     )}
                   </div>
                   <div class="text-right">
-                    <div class="text-lg font-bold">
+                    <div class="text-lg font-bold text-[#00ff88] font-mono">
                       {formatCurrency(receipt.total)}
                     </div>
-                    <div class="text-xs text-slate-500">
+                    <div class="text-[10px] text-[#888] font-mono uppercase">
                       {formatDate(receipt.receiptDate)}
                     </div>
                   </div>
                 </div>
-                <div class="text-sm text-slate-500 mt-2">
-                  {receipt.items?.length || 0}{" "}
-                  item{(receipt.items?.length || 0) !== 1 ? "s" : ""}
-                </div>
-                {receipt.transactionId && (
-                  <div class="badge badge-success badge-sm mt-2">
-                    Linked to Transaction
+                <div class="flex justify-between items-end mt-4">
+                  <div class="text-[10px] text-[#666] font-mono uppercase">
+                    {receipt.items?.length || 0} ITEM{receipt.items?.length !==
+                        1
+                      ? "S"
+                      : ""}
                   </div>
-                )}
+                  {receipt.transactionId && (
+                    <div class="badge bg-[#00ff88]/10 text-[#00ff88] border-[#00ff88]/20 font-mono text-[9px]">
+                      LINKED
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -738,19 +794,23 @@ export default function ReceiptsManager(
       {/* Add Receipt Modal */}
       {isModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box max-w-4xl max-h-[90vh] overflow-y-auto">
-            <h3 class="font-bold text-lg mb-4">Add Receipt</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-4xl max-h-[90vh] overflow-y-auto">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              ADD RECEIPT
+            </h3>
             <form onSubmit={handleSubmit}>
               {/* Store Info */}
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text">Store Name *</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      STORE NAME *
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
-                    placeholder="e.g., Walmart, Target"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    placeholder="e.g., WALMART, TARGET"
                     value={formStoreName.value}
                     onInput={(e) => formStoreName.value = e.currentTarget.value}
                     required
@@ -758,11 +818,13 @@ export default function ReceiptsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Store #</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      STORE #
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     placeholder="1234"
                     value={formStoreNumber.value}
                     onInput={(e) =>
@@ -771,12 +833,14 @@ export default function ReceiptsManager(
                 </div>
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text">Address</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      ADDRESS
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
-                    placeholder="123 Main St"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    placeholder="123 MAIN ST"
                     value={formStoreAddress.value}
                     onInput={(e) =>
                       formStoreAddress.value = e.currentTarget.value}
@@ -784,22 +848,26 @@ export default function ReceiptsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">City</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      CITY
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={formStoreCity.value}
                     onInput={(e) => formStoreCity.value = e.currentTarget.value}
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">State</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      STATE
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     maxLength={2}
                     value={formStoreState.value}
                     onInput={(e) =>
@@ -808,22 +876,26 @@ export default function ReceiptsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">ZIP</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      ZIP
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={formStoreZip.value}
                     onInput={(e) => formStoreZip.value = e.currentTarget.value}
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Receipt Date *</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      RECEIPT DATE *
+                    </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={formReceiptDate.value}
                     onInput={(e) =>
                       formReceiptDate.value = e.currentTarget.value}
@@ -832,11 +904,13 @@ export default function ReceiptsManager(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Receipt #</span>
+                    <span class="label-text font-mono text-xs text-[#888]">
+                      RECEIPT #
+                    </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={formReceiptNumber.value}
                     onInput={(e) =>
                       formReceiptNumber.value = e.currentTarget.value}
@@ -847,18 +921,20 @@ export default function ReceiptsManager(
               {/* Link to Transaction */}
               <div class="form-control mb-6">
                 <label class="label">
-                  <span class="label-text">Link to Transaction (optional)</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    LINK TO TRANSACTION (OPTIONAL)
+                  </span>
                 </label>
                 <select
-                  class="select select-bordered"
+                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                   value={formTransactionId.value}
                   onChange={(e) =>
                     formTransactionId.value = e.currentTarget.value}
                 >
-                  <option value="">— Create new transaction later —</option>
+                  <option value="">— CREATE NEW TRANSACTION LATER —</option>
                   {unmatchedTransactions.map((tx) => (
                     <option key={tx.id} value={tx.id}>
-                      {formatDate(tx.transactionDate)} - {tx.payee || "Unknown"}
+                      {formatDate(tx.transactionDate)} - {tx.payee || "UNKNOWN"}
                       {" "}
                       - {formatCurrency(tx.amount)}
                     </option>
@@ -870,28 +946,33 @@ export default function ReceiptsManager(
               <div class="mb-6">
                 <div class="flex justify-between items-center mb-2">
                   <label class="label">
-                    <span class="label-text font-semibold">Items</span>
+                    <span class="label-text font-bold text-[#00d9ff] font-mono text-sm uppercase">
+                      ITEMS
+                    </span>
                   </label>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-sm"
+                    class="btn btn-ghost btn-xs text-[#00d9ff] font-mono"
                     onClick={addItem}
                   >
-                    + Add Item
+                    + ADD ITEM
                   </button>
                 </div>
                 <div class="space-y-3">
                   {formItems.value.map((item, idx) => (
-                    <div key={idx} class="p-3 bg-slate-50 rounded-lg">
+                    <div
+                      key={idx}
+                      class="p-3 bg-[#0a0a0a] border border-[#333] rounded"
+                    >
                       <div class="grid grid-cols-12 gap-2 items-end mb-2">
                         <div class="col-span-5">
-                          <label class="text-xs text-slate-500">
-                            Description
+                          <label class="text-[10px] text-[#888] font-mono">
+                            DESCRIPTION
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-sm w-full"
-                            placeholder="Item name"
+                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            placeholder="ITEM NAME"
                             value={item.description || ""}
                             onInput={(e) =>
                               updateItem(
@@ -902,10 +983,12 @@ export default function ReceiptsManager(
                           />
                         </div>
                         <div class="col-span-2">
-                          <label class="text-xs text-slate-500">Qty</label>
+                          <label class="text-[10px] text-[#888] font-mono">
+                            QTY
+                          </label>
                           <input
                             type="number"
-                            class="input input-bordered input-sm w-full"
+                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
                             placeholder="1"
                             value={item.quantity || 1}
                             onInput={(e) =>
@@ -917,11 +1000,13 @@ export default function ReceiptsManager(
                           />
                         </div>
                         <div class="col-span-2">
-                          <label class="text-xs text-slate-500">Price</label>
+                          <label class="text-[10px] text-[#888] font-mono">
+                            PRICE
+                          </label>
                           <input
                             type="number"
                             step="0.01"
-                            class="input input-bordered input-sm w-full"
+                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
                             placeholder="0.00"
                             value={item.extendedPrice || ""}
                             onInput={(e) => {
@@ -935,12 +1020,14 @@ export default function ReceiptsManager(
                           />
                         </div>
                         <div class="col-span-2">
-                          <label class="text-xs text-green-600">Discount</label>
+                          <label class="text-[10px] text-[#00ff88] font-mono">
+                            DISC
+                          </label>
                           <input
                             type="number"
                             step="0.01"
-                            class="input input-bordered input-sm w-full text-green-600"
-                            placeholder="-0.00"
+                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-[#00ff88] font-mono"
+                            placeholder="0.00"
                             value={item.discountAmount || ""}
                             onInput={(e) => {
                               updateItem(
@@ -955,7 +1042,7 @@ export default function ReceiptsManager(
                         <div class="col-span-1">
                           <button
                             type="button"
-                            class="btn btn-ghost btn-sm text-error"
+                            class="btn btn-ghost btn-sm text-red-400"
                             onClick={() => removeItem(idx)}
                           >
                             ×
@@ -964,10 +1051,12 @@ export default function ReceiptsManager(
                       </div>
                       <div class="grid grid-cols-12 gap-2 items-end">
                         <div class="col-span-3">
-                          <label class="text-xs text-slate-500">SKU</label>
+                          <label class="text-[10px] text-[#666] font-mono">
+                            SKU
+                          </label>
                           <input
                             type="text"
-                            class="input input-bordered input-sm w-full"
+                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
                             placeholder="SKU"
                             value={item.sku || ""}
                             onInput={(e) =>
@@ -975,24 +1064,26 @@ export default function ReceiptsManager(
                           />
                         </div>
                         <div class="col-span-3">
-                          <label class="text-xs text-slate-500">UPC</label>
+                          <label class="text-[10px] text-[#666] font-mono">
+                            UPC
+                          </label>
                           <input
                             type="text"
-                            class="input input-bordered input-sm w-full"
-                            placeholder="UPC/Barcode"
+                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            placeholder="UPC"
                             value={item.upc || ""}
                             onInput={(e) =>
                               updateItem(idx, "upc", e.currentTarget.value)}
                           />
                         </div>
                         <div class="col-span-3">
-                          <label class="text-xs text-slate-500">
-                            Department
+                          <label class="text-[10px] text-[#666] font-mono">
+                            DEPT
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-sm w-full"
-                            placeholder="Dept"
+                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            placeholder="DEPT"
                             value={item.department || ""}
                             onInput={(e) =>
                               updateItem(
@@ -1003,13 +1094,13 @@ export default function ReceiptsManager(
                           />
                         </div>
                         <div class="col-span-3">
-                          <label class="text-xs text-slate-500">
-                            Discount Reason
+                          <label class="text-[10px] text-[#666] font-mono">
+                            DISC REASON
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-sm w-full"
-                            placeholder="Coupon, Sale, etc."
+                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            placeholder="COUPON, ETC"
                             value={item.discountDescription || ""}
                             onInput={(e) =>
                               updateItem(
@@ -1029,14 +1120,16 @@ export default function ReceiptsManager(
               <div class="mb-6">
                 <div class="flex justify-between items-center mb-2">
                   <label class="label">
-                    <span class="label-text font-semibold">Taxes</span>
+                    <span class="label-text font-bold text-[#00d9ff] font-mono text-sm uppercase">
+                      TAXES
+                    </span>
                   </label>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-sm"
+                    class="btn btn-ghost btn-xs text-[#00d9ff] font-mono"
                     onClick={addTaxRow}
                   >
-                    + Add Tax
+                    + ADD TAX
                   </button>
                 </div>
                 <div class="space-y-2">
@@ -1045,8 +1138,8 @@ export default function ReceiptsManager(
                       <div class="col-span-5">
                         <input
                           type="text"
-                          class="input input-bordered input-sm w-full"
-                          placeholder="Tax Name (e.g., State Sales Tax)"
+                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                          placeholder="TAX NAME"
                           value={tax.taxName}
                           onInput={(e) =>
                             updateTaxRow(idx, "taxName", e.currentTarget.value)}
@@ -1055,8 +1148,8 @@ export default function ReceiptsManager(
                       <div class="col-span-2">
                         <input
                           type="text"
-                          class="input input-bordered input-sm w-full"
-                          placeholder="Rate %"
+                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                          placeholder="RATE %"
                           value={tax.taxRate}
                           onInput={(e) =>
                             updateTaxRow(idx, "taxRate", e.currentTarget.value)}
@@ -1066,8 +1159,8 @@ export default function ReceiptsManager(
                         <input
                           type="number"
                           step="0.01"
-                          class="input input-bordered input-sm w-full"
-                          placeholder="Amount"
+                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                          placeholder="AMOUNT"
                           value={tax.taxAmount}
                           onInput={(e) =>
                             updateTaxRow(
@@ -1081,7 +1174,7 @@ export default function ReceiptsManager(
                         {formTaxes.value.length > 1 && (
                           <button
                             type="button"
-                            class="btn btn-ghost btn-sm text-error"
+                            class="btn btn-ghost btn-sm text-red-400"
                             onClick={() => removeTaxRow(idx)}
                           >
                             ×
@@ -1097,48 +1190,56 @@ export default function ReceiptsManager(
               <div class="grid grid-cols-4 gap-4 mb-6">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Subtotal</span>
+                    <span class="label-text font-mono text-[10px] text-[#888]">
+                      SUBTOTAL
+                    </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={formSubtotal.value}
                     readOnly
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text text-green-600">Discounts</span>
+                    <span class="label-text font-mono text-[10px] text-[#00ff88]">
+                      DISCOUNTS
+                    </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered text-green-600"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-[#00ff88] font-mono"
                     value={getTotalDiscount().toFixed(2)}
                     readOnly
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">Tax</span>
+                    <span class="label-text font-mono text-[10px] text-[#888]">
+                      TAX
+                    </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered"
+                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                     value={getTotalTax().toFixed(2)}
                     readOnly
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-bold">Total</span>
+                    <span class="label-text font-mono text-[10px] text-[#00d9ff] font-bold">
+                      TOTAL
+                    </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered font-bold"
+                    class="input input-bordered bg-[#0a0a0a] border-[#00d9ff]/30 text-[#00d9ff] font-bold font-mono"
                     value={formTotal.value}
                     readOnly
                   />
@@ -1148,18 +1249,22 @@ export default function ReceiptsManager(
               {/* Payment Account */}
               <div class="form-control mb-6">
                 <label class="label">
-                  <span class="label-text">Paid From Account</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    PAID FROM ACCOUNT
+                  </span>
                 </label>
                 <select
-                  class="select select-bordered"
+                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                   value={formPaymentAccountId.value}
                   onChange={(e) =>
                     formPaymentAccountId.value = e.currentTarget.value}
                 >
-                  <option value="">— Select Account —</option>
+                  <option value="">— SELECT ACCOUNT —</option>
                   {accounts.filter((a) => !a.isClosed).map((acc) => (
                     <option key={acc.id} value={acc.id}>
-                      {acc.name} ({acc.accountType})
+                      {(acc.name || "Unknown").toUpperCase()} ({(
+                        acc.accountType || "Unknown"
+                      ).toUpperCase()})
                     </option>
                   ))}
                 </select>
@@ -1168,19 +1273,19 @@ export default function ReceiptsManager(
               <div class="modal-action">
                 <button
                   type="button"
-                  class="btn"
+                  class="btn font-mono"
                   onClick={() => isModalOpen.value = false}
                 >
-                  Cancel
+                  CANCEL
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
                     ? <span class="loading loading-spinner loading-sm"></span>
-                    : "Save Receipt"}
+                    : "SAVE RECEIPT"}
                 </button>
               </div>
             </form>
@@ -1193,17 +1298,21 @@ export default function ReceiptsManager(
       {/* Upload Receipt Modal */}
       {isUploadModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">📷 Upload Receipt</h3>
+          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
+            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+              📷 UPLOAD RECEIPT
+            </h3>
             <form onSubmit={handleUploadSubmit}>
               {/* File Input */}
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text">Receipt Image *</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    RECEIPT IMAGE / PDF *
+                  </span>
                 </label>
                 <input
                   type="file"
-                  class="file-input file-input-bordered file-input-primary w-full"
+                  class="file-input file-input-bordered file-input-primary w-full bg-[#0a0a0a] border-[#333] text-[#888] font-mono"
                   accept="image/*,.pdf"
                   onChange={handleFileChange}
                   required
@@ -1212,11 +1321,11 @@ export default function ReceiptsManager(
 
               {/* Preview */}
               {uploadPreview.value && (
-                <div class="mb-4">
+                <div class="mb-4 bg-[#0a0a0a] p-2 border border-[#333] rounded">
                   <img
                     src={uploadPreview.value}
                     alt="Receipt preview"
-                    class="max-h-48 mx-auto rounded-lg shadow"
+                    class="max-h-48 mx-auto rounded shadow-lg"
                   />
                 </div>
               )}
@@ -1224,11 +1333,13 @@ export default function ReceiptsManager(
               {/* Receipt Date */}
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text">Receipt Date</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    RECEIPT DATE
+                  </span>
                 </label>
                 <input
                   type="date"
-                  class="input input-bordered"
+                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
                   value={uploadReceiptDate.value}
                   onInput={(e) =>
                     uploadReceiptDate.value = e.currentTarget.value}
@@ -1238,18 +1349,20 @@ export default function ReceiptsManager(
               {/* Link to Transaction */}
               <div class="form-control mb-6">
                 <label class="label">
-                  <span class="label-text">Link to Transaction (optional)</span>
+                  <span class="label-text font-mono text-xs text-[#888]">
+                    LINK TO TRANSACTION (OPTIONAL)
+                  </span>
                 </label>
                 <select
-                  class="select select-bordered"
+                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
                   value={uploadTransactionId.value}
                   onChange={(e) =>
                     uploadTransactionId.value = e.currentTarget.value}
                 >
-                  <option value="">— Link later —</option>
+                  <option value="">— LINK LATER —</option>
                   {unmatchedTransactions.map((tx) => (
                     <option key={tx.id} value={tx.id}>
-                      {formatDate(tx.transactionDate)} - {tx.payee || "Unknown"}
+                      {formatDate(tx.transactionDate)} - {tx.payee || "UNKNOWN"}
                       {" "}
                       - {formatCurrency(tx.amount)}
                     </option>
@@ -1260,19 +1373,19 @@ export default function ReceiptsManager(
               <div class="modal-action">
                 <button
                   type="button"
-                  class="btn"
+                  class="btn font-mono"
                   onClick={() => isUploadModalOpen.value = false}
                 >
-                  Cancel
+                  CANCEL
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
                   disabled={isSubmitting.value || !uploadFile.value}
                 >
                   {isSubmitting.value
                     ? <span class="loading loading-spinner loading-sm"></span>
-                    : "Upload"}
+                    : "UPLOAD"}
                 </button>
               </div>
             </form>
@@ -1285,5 +1398,13 @@ export default function ReceiptsManager(
         </div>
       )}
     </div>
+  );
+}
+
+export default function ReceiptsManager(props: Props) {
+  return (
+    <ErrorBoundary>
+      <ReceiptsManagerContent {...props} />
+    </ErrorBoundary>
   );
 }
