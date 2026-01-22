@@ -509,12 +509,15 @@ function TransactionsManagerContent({
 
   const deleteTransaction = async (tx: Transaction) => {
     if (!confirm("Delete this transaction?")) return;
+    const key = getTxKey(tx);
     try {
-      const res = await fetch(`${API_BASE}/transactions/${tx.id}`, {
+      const res = await fetch(`${API_BASE}/transactions/${key}`, {
         method: "DELETE",
       });
       if (res.ok) {
-        transactions.value = transactions.value.filter((t) => t.id !== tx.id);
+        transactions.value = transactions.value.filter((t) =>
+          getTxKey(t) !== key
+        );
         calculateAccountStats();
         toast.success("Transaction deleted");
       } else {
