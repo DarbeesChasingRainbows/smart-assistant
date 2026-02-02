@@ -7,11 +7,12 @@ services:
   api:
     build:
       target: build
+    working_dir: /src/src/LifeOS.API
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:5120
     volumes:
-      - ./LifeOS:/app
+      - ./LifeOS/src:/src/src
     command: ["dotnet", "watch", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:5120"]
 
   # Mount source for frontend development

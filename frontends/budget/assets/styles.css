@@ -1,4 +1,65 @@
 @import "tailwindcss";
+
+/* Theme CSS Variables */
+:root {
+  /* Dark theme (default) */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #111111;
+  --border-primary: #333;
+  --border-accent: #00d9ff;
+  --text-primary: #ffffff;
+  --text-secondary: #888888;
+  --text-muted: #666666;
+  --accent-cyan: #00d9ff;
+  --accent-green: #00ff88;
+  --accent-orange: #ffb000;
+  --accent-purple: #bd00ff;
+}
+
+.theme-light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --border-primary: #e2e8f0;
+  --border-accent: #0891b2;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent-cyan: #0891b2;
+  --accent-green: #059669;
+  --accent-orange: #d97706;
+  --accent-purple: #7c3aed;
+}
+
+/* Theme transition */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Theme-aware utility classes */
+.bg-theme-primary { background-color: var(--bg-primary); }
+.bg-theme-secondary { background-color: var(--bg-secondary); }
+.bg-theme-tertiary { background-color: var(--bg-tertiary); }
+.border-theme { border-color: var(--border-primary); }
+.border-theme-accent { border-color: var(--border-accent); }
+.text-theme-primary { color: var(--text-primary); }
+.text-theme-secondary { color: var(--text-secondary); }
+.text-theme-muted { color: var(--text-muted); }
+.text-accent-cyan { color: var(--accent-cyan); }
+.text-accent-green { color: var(--accent-green); }
+.text-accent-orange { color: var(--accent-orange); }
+
+/* Light theme specific overrides */
+.theme-light .card {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.theme-light .btn-ghost:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Fresh gradient (preserved) */
 .fresh-gradient {
   background-color: rgb(134, 239, 172);
   background-image: linear-gradient(

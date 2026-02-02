@@ -160,12 +160,12 @@ function getCardColor(user: PickerUser): string {
   switch (user.role) {
     case "Parent":
       return user.name === "Mom"
-        ? "border-[#00ff88]/30 hover:border-[#00ff88] bg-[#00ff88]/5"
-        : "border-[#00d9ff]/30 hover:border-[#00d9ff] bg-[#00d9ff]/5";
+        ? "border-accent-green/30 hover:border-accent-green bg-accent-green/5"
+        : "border-accent-cyan/30 hover:border-accent-cyan bg-accent-cyan/5";
     case "Child":
-      return "border-[#ffb000]/30 hover:border-[#ffb000] bg-[#ffb000]/5";
+      return "border-accent-orange/30 hover:border-accent-orange bg-accent-orange/5";
     default:
-      return "border-[#333] hover:border-[#888] bg-[#1a1a1a]";
+      return "border-theme hover:border-theme-secondary bg-theme-secondary";
   }
 }
 
@@ -173,11 +173,11 @@ function getCardColor(user: PickerUser): string {
 function getTextColor(user: PickerUser): string {
   switch (user.role) {
     case "Parent":
-      return user.name === "Mom" ? "text-[#00ff88]" : "text-[#00d9ff]";
+      return user.name === "Mom" ? "text-accent-green" : "text-accent-cyan";
     case "Child":
-      return "text-[#ffb000]";
+      return "text-accent-orange";
     default:
-      return "text-white";
+      return "text-theme-primary";
   }
 }
 
@@ -185,7 +185,7 @@ export default define.page<typeof handler>(function UserPicker(props) {
   const { users, error } = props.data as PageData;
 
   return (
-    <div class="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-8">
+    <div class="min-h-screen bg-theme-primary flex flex-col items-center justify-center p-8">
       <Head>
         <title>Budget - ACCESS SELECTION</title>
         <link
@@ -196,12 +196,12 @@ export default define.page<typeof handler>(function UserPicker(props) {
       </Head>
 
       <div class="text-center mb-12">
-        <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 font-mono tracking-tighter">
-          <span class="text-[#00d9ff]">$</span>
+        <h1 class="text-5xl md:text-6xl font-bold text-theme-primary mb-4 font-mono tracking-tighter">
+          <span class="text-accent-cyan">$</span>
           <span>BUDGET</span>
         </h1>
-        <p class="text-xs md:text-sm text-[#888] font-mono uppercase tracking-[0.3em]">
-          IDENTIFY OPERATOR FOR SYSTEM ACCESS
+        <p class="text-xs md:text-sm text-theme-secondary font-mono uppercase tracking-[0.3em]">
+          SELECT YOUR PROFILE TO CONTINUE
         </p>
       </div>
 
@@ -249,21 +249,23 @@ export default define.page<typeof handler>(function UserPicker(props) {
               >
                 {user.name}
               </h2>
-              <p class="text-[#666] font-mono text-[10px] tracking-widest uppercase mt-1">
+              <p class="text-theme-muted font-mono text-[10px] tracking-widest uppercase mt-1">
                 {user.role}
               </p>
 
               <div class="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span
                   class={`text-[10px] font-mono font-bold py-1 px-3 border rounded ${
-                    getCardColor(user).includes("ff88")
-                      ? "border-[#00ff88] text-[#00ff88]"
-                      : getCardColor(user).includes("d9ff")
-                      ? "border-[#00d9ff] text-[#00d9ff]"
-                      : "border-[#ffb000] text-[#ffb000]"
+                    getTextColor(user)
+                  } ${
+                    user.role === "Parent" && user.name === "Mom"
+                      ? "border-accent-green"
+                      : user.role === "Parent"
+                      ? "border-accent-cyan"
+                      : "border-accent-orange"
                   }`}
                 >
-                  INITIALIZE ACCESS
+                  CONTINUE
                 </span>
               </div>
             </div>
@@ -271,8 +273,8 @@ export default define.page<typeof handler>(function UserPicker(props) {
         ))}
       </div>
 
-      <div class="mt-16 text-[#444] font-mono text-[10px] tracking-[0.2em] uppercase">
-        SYSTEM STATUS: ONLINE | PHASE 4.3 READY
+      <div class="mt-16 text-theme-muted font-mono text-[10px] tracking-[0.2em] uppercase">
+        LifeOS Budget
       </div>
     </div>
   );

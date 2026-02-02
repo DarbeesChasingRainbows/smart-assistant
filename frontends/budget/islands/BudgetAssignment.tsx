@@ -63,7 +63,7 @@ function BudgetAssignmentContent(
 
   // Selection and display state
   const selectedCategoryId = useSignal<string | null>(null);
-  const showSpent = useSignal(false); // false = Remaining, true = Spent
+  const showSpent = useSignal(false); // false = Available (with carryover), true = Spent
 
   // Fund transfer modal state
   const isTransferModalOpen = useSignal(false);
@@ -96,6 +96,20 @@ function BudgetAssignmentContent(
     summary.value.totalIncome - totalAssigned.value
   );
 
+  // Count categories where spending exceeds available (overspent)
+  const overspentCategories = useComputed(() => {
+    const allCategories = groups.value.flatMap((g) => g.categories);
+    return allCategories.filter((cat) => {
+      const catKey = cat.key;
+      if (!catKey) return false;
+      const balance = categoryBalances.value.find((b) => b.categoryKey === catKey);
+      if (!balance) return false;
+      // Overspent = spent more than available (carryover + assigned - spent < 0)
+      const available = (balance.carryover || 0) + (assignments.value[catKey] || 0) - (balance.spent || 0);
+      return available < 0;
+    });
+  });
+
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
       .format(amount);
@@ -110,6 +124,22 @@ function BudgetAssignmentContent(
       b.categoryKey === categoryKey
     );
     return balance?.spent || 0;
+  };
+
+  // Get carryover amount from category balances
+  const getCarryoverAmount = (categoryKey: string): number => {
+    const balance = categoryBalances.value.find((b) =>
+      b.categoryKey === categoryKey
+    );
+    return balance?.carryover || 0;
+  };
+
+  // Get available amount (carryover + assigned - spent)
+  const getAvailableAmount = (categoryKey: string): number => {
+    const carryover = getCarryoverAmount(categoryKey);
+    const assigned = getAssignedAmount(categoryKey);
+    const spent = getSpentAmount(categoryKey);
+    return carryover + assigned - spent;
   };
 
   const toggleCategorySelection = (categoryKey: string) => {
@@ -684,64 +714,143 @@ function BudgetAssignmentContent(
   return (
     <div class="space-y-6">
       {/* Budget Summary Bar */}
-      <div class="card bg-[#1c1c1c] shadow-xl border border-[#444] sticky top-0 z-10">
+      <div class="card bg-theme-secondary shadow-xl border border-theme sticky top-0 z-10">
         <div class="card-body p-4 md:p-6">
+          {/* Section Title */}
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold font-mono text-theme-primary flex items-center gap-2">
+              <span class="text-accent-cyan">[</span>
+              <span>THIS PERIOD'S BUDGET</span>
+              <span class="text-accent-cyan">]</span>
+            </h2>
+            <div class="tooltip tooltip-left" data-tip="Assign all your income to categories to reach a zero-based budget">
+              <span class="text-theme-muted text-xs cursor-help">ⓘ</span>
+            </div>
+          </div>
+          
           <div class="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div class="text-xs md:text-sm text-[#a0a0a0] font-mono">
-                INCOME
-              </div>
-              <div class="text-lg md:text-xl font-bold text-[#00ff88] font-mono">
-                {formatCurrency(summary.value.totalIncome)}
-              </div>
-            </div>
-            <div>
-              <div class="text-xs md:text-sm text-[#a0a0a0] font-mono">
-                ASSIGNED
-              </div>
-              <div class="text-lg md:text-xl font-bold text-[#00d9ff] font-mono">
-                {formatCurrency(totalAssigned.value)}
+            {/* Income Column */}
+            <div class="group">
+              <div class="tooltip tooltip-bottom" data-tip="Total money received this pay period">
+                <div class="text-xs md:text-sm text-theme-secondary font-mono cursor-help">
+                  INCOME
+                </div>
+                <div class="text-lg md:text-xl font-bold text-accent-green font-mono">
+                  {formatCurrency(summary.value.totalIncome)}
+                </div>
+                <div class="text-[10px] text-theme-muted font-mono mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Money In
+                </div>
               </div>
             </div>
-            <div>
-              <div class="text-xs md:text-sm text-[#a0a0a0] font-mono">
-                UNASSIGNED
+            
+            {/* Assigned Column */}
+            <div class="group">
+              <div class="tooltip tooltip-bottom" data-tip="Money allocated to expense categories below">
+                <div class="text-xs md:text-sm text-theme-secondary font-mono cursor-help">
+                  ASSIGNED
+                </div>
+                <div class="text-lg md:text-xl font-bold text-accent-cyan font-mono">
+                  {formatCurrency(totalAssigned.value)}
+                </div>
+                <div class="text-[10px] text-theme-muted font-mono mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Budgeted
+                </div>
               </div>
+            </div>
+            
+            {/* Unassigned Column */}
+            <div class="group">
+              <div class="tooltip tooltip-bottom" data-tip={unassigned.value >= 0 ? "Money still available to budget to categories" : "You've budgeted more than your income"}>
+                <div class={`text-xs md:text-sm font-mono cursor-help ${unassigned.value > 0 ? "text-accent-orange animate-pulse" : "text-theme-secondary"}`}>
+                  {unassigned.value >= 0 ? "LEFT TO BUDGET" : "OVER BUDGETED"}
+                </div>
+                <div
+                  class={`text-lg md:text-xl font-bold font-mono ${
+                    unassigned.value === 0
+                      ? "text-accent-green"
+                      : unassigned.value > 0
+                      ? "text-accent-orange"
+                      : "text-red-500"
+                  }`}
+                >
+                  {formatCurrency(Math.abs(unassigned.value))}
+                </div>
+                <div class="text-[10px] text-theme-muted font-mono mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {unassigned.value === 0 ? "Every Dollar Has a Job!" : unassigned.value > 0 ? "Give Every Dollar a Job" : "Reduce Budgeted Amounts"}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Progress Bar */}
+          <div class="mt-4">
+            <div class="flex justify-between text-[10px] text-theme-muted font-mono mb-1">
+              <span>0%</span>
+              <span class={unassigned.value < 0 ? "text-red-500 font-bold" : ""}>
+                {Math.round((totalAssigned.value / summary.value.totalIncome) * 100)}% budgeted
+              </span>
+              <span>100%</span>
+            </div>
+            <div class="w-full bg-theme-tertiary border border-theme h-3 rounded-sm overflow-hidden relative">
+              {/* Main progress bar */}
               <div
-                class={`text-lg md:text-xl font-bold font-mono ${
+                class={`h-full transition-all duration-300 ${
                   unassigned.value === 0
-                    ? "text-[#00ff88]"
+                    ? "bg-accent-green"
                     : unassigned.value > 0
-                    ? "text-[#ffb000]"
-                    : "text-red-600"
+                    ? "bg-accent-cyan"
+                    : "bg-red-500"
                 }`}
-              >
-                {formatCurrency(unassigned.value)}
-              </div>
+                style={{
+                  width: `${
+                    Math.min(
+                      100,
+                      (totalAssigned.value / summary.value.totalIncome) * 100,
+                    )
+                  }%`,
+                }}
+              />
+              {/* 100% marker line */}
+              <div class="absolute right-0 top-0 h-full w-0.5 bg-theme-primary/50" />
             </div>
+            {/* Overflow indicator when over 100% */}
+            {unassigned.value < 0 && (
+              <div class="mt-1 text-[10px] text-red-500 font-mono text-center">
+                ↑ {Math.round((totalAssigned.value / summary.value.totalIncome) * 100) - 100}% over income
+              </div>
+            )}
           </div>
-          <div class="w-full bg-[#111111] border border-[#444] h-2 mt-4">
-            <div
-              class={`h-full transition-all duration-300 ${
-                unassigned.value === 0
-                  ? "bg-[#00ff88]"
-                  : unassigned.value > 0
-                  ? "bg-[#00d9ff]"
-                  : "bg-red-600"
-              }`}
-              style={{
-                width: `${
-                  Math.min(
-                    100,
-                    (totalAssigned.value / summary.value.totalIncome) * 100,
-                  )
-                }%`,
-              }}
-            />
-          </div>
-          {unassigned.value === 0 && (
-            <div class="text-center text-[#00ff88] font-bold mt-2 text-xs font-mono">
-              ✓ ZERO-BASED BUDGET ACHIEVED
+          
+          {/* Status Message */}
+          {unassigned.value === 0 ? (
+            <div class="text-center text-accent-green font-bold mt-3 text-xs font-mono flex items-center justify-center gap-2">
+              <span>✓</span>
+              <span>EVERY DOLLAR HAS A JOB!</span>
+            </div>
+          ) : unassigned.value > 0 ? (
+            <div class="text-center text-accent-orange mt-3 text-xs font-mono animate-pulse">
+              Budget the remaining {formatCurrency(unassigned.value)} to your categories below
+            </div>
+          ) : (
+            <div class="text-center text-red-500 mt-3 text-xs font-mono">
+              ⚠ You've budgeted {formatCurrency(Math.abs(unassigned.value))} more than your income
+            </div>
+          )}
+
+          {/* Per-Category Overspending Alert */}
+          {overspentCategories.value.length > 0 && (
+            <div class="mt-3 p-2 bg-red-500/10 border border-red-500/30 rounded text-center">
+              <div class="text-red-500 text-xs font-mono flex items-center justify-center gap-2">
+                <span>💸</span>
+                <span>
+                  {overspentCategories.value.length} {overspentCategories.value.length === 1 ? "category" : "categories"} overspent
+                </span>
+              </div>
+              <div class="text-[10px] text-red-400/80 font-mono mt-1">
+                {overspentCategories.value.slice(0, 3).map((c) => c.name).join(", ")}
+                {overspentCategories.value.length > 3 && ` +${overspentCategories.value.length - 3} more`}
+              </div>
             </div>
           )}
         </div>
@@ -757,7 +866,7 @@ function BudgetAssignmentContent(
           return (
             <div
               key={groupKey}
-              class={`card bg-[#1c1c1c] shadow-xl border border-[#444] overflow-hidden mb-6 ${
+              class={`card bg-theme-secondary shadow-xl border border-theme overflow-hidden mb-6 ${
                 draggedGroupKey.value === groupKey ? "opacity-50" : ""
               }`}
               draggable={!editingGroupId.value}
@@ -775,10 +884,10 @@ function BudgetAssignmentContent(
                 {/* Group Header - Editable */}
                 {editingGroupId.value === groupKey
                   ? (
-                    <div class="flex items-center gap-2 p-4 border-b border-[#444] bg-[#111111]">
+                    <div class="flex items-center gap-2 p-4 border-b border-theme bg-theme-tertiary">
                       <input
                         type="text"
-                        class="input input-bordered input-sm flex-1 bg-[#1c1c1c] border-[#444] text-[#e0e0e0] font-mono"
+                        class="input input-bordered input-sm flex-1 bg-theme-secondary border-theme text-theme-primary font-mono"
                         value={editName.value}
                         onInput={(e) => editName.value = e.currentTarget.value}
                         onKeyDown={(e) => e.key === "Enter" && saveEditGroup()}
@@ -786,14 +895,14 @@ function BudgetAssignmentContent(
                       />
                       <button
                         type="button"
-                        class="btn btn-sm bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                        class="btn btn-sm bg-accent-cyan/20 border-accent-cyan text-accent-cyan font-mono"
                         onClick={saveEditGroup}
                       >
                         SAVE
                       </button>
                       <button
                         type="button"
-                        class="btn btn-sm btn-ghost text-[#a0a0a0] font-mono"
+                        class="btn btn-sm btn-ghost text-theme-secondary font-mono"
                         onClick={() => editingGroupId.value = null}
                       >
                         CANCEL
@@ -809,27 +918,39 @@ function BudgetAssignmentContent(
                     </div>
                   )
                   : (
-                    <div class="flex items-center px-4 py-3 bg-[#111111] border-b-2 border-[#00d9ff]">
+                    <div class="flex items-center px-3 sm:px-4 py-2 sm:py-3 bg-theme-tertiary border-b-2 border-accent-cyan">
                       <h3
-                        class={`font-bold font-mono cursor-pointer hover:underline flex items-center gap-2 ${
-                          isIncomeGroup ? "text-[#00ff88]" : "text-[#00d9ff]"
+                        class={`font-bold font-mono cursor-pointer hover:underline flex items-center gap-2 text-sm sm:text-base ${
+                          isIncomeGroup ? "text-accent-green" : "text-accent-cyan"
                         }`}
                         onClick={() => startEditGroup(group)}
                       >
-                        {group.name.toUpperCase()}
-                        <span class="text-[10px] opacity-50">▼</span>
+                        <span class="truncate max-w-[120px] sm:max-w-none">
+                          {group.name.toUpperCase()}
+                        </span>
+                        <span class="text-[10px] opacity-50 shrink-0">▼</span>
                       </h3>
-                      <div class="ml-auto flex items-center gap-4 md:gap-8 text-[10px] md:text-xs text-[#a0a0a0] font-mono">
-                        <span class="w-16 md:w-24 text-right">PLANNED</span>
+                      <div class="ml-auto flex items-center gap-2 sm:gap-4 md:gap-8 text-[10px] sm:text-xs text-theme-secondary font-mono">
+                        <span class="w-12 sm:w-16 md:w-24 text-right hidden sm:inline">PLANNED</span>
+                        <span class="w-12 sm:w-16 md:w-24 text-right sm:hidden">PLN</span>
                         <span
-                          class="w-20 md:w-28 text-right cursor-pointer hover:text-[#00d9ff] flex items-center justify-end gap-1"
+                          class="w-16 sm:w-20 md:w-28 text-right cursor-pointer hover:text-accent-cyan flex items-center justify-end gap-1"
                           onClick={() => showSpent.value = !showSpent.value}
                         >
-                          {isIncomeGroup
-                            ? "RECEIVED"
-                            : showSpent.value
-                            ? "SPENT"
-                            : "REMAINING"}
+                          <span class="hidden sm:inline">
+                            {isIncomeGroup
+                              ? "RECEIVED"
+                              : showSpent.value
+                              ? "SPENT"
+                              : "AVAILABLE"}
+                          </span>
+                          <span class="sm:hidden">
+                            {isIncomeGroup
+                              ? "REC"
+                              : showSpent.value
+                              ? "SPT"
+                              : "AVL"}
+                          </span>
                           {!isIncomeGroup && <span class="text-[10px]">▼</span>}
                         </span>
                       </div>
@@ -837,14 +958,15 @@ function BudgetAssignmentContent(
                   )}
 
                 {/* Categories - Draggable */}
-                <div class="divide-y divide-[#333]">
+                <div class="divide-y divide-theme">
                   {group.categories.map((category: Category) => {
                     const categoryKey = category.key;
                     if (!categoryKey) return null;
 
                     const assigned = getAssignedAmount(categoryKey);
                     const spent = getSpentAmount(categoryKey);
-                    const remaining = assigned - spent;
+                    const carryover = getCarryoverAmount(categoryKey);
+                    const available = getAvailableAmount(categoryKey);
                     const isLoading = isUpdating.value[categoryKey];
                     const isEditing = editingCategoryId.value === categoryKey;
                     const isDragging = draggedCategoryId.value === categoryKey;
@@ -853,14 +975,14 @@ function BudgetAssignmentContent(
                     return (
                       <div
                         key={categoryKey}
-                        class={`flex items-center transition-all border-l-2 cursor-pointer
+                        class={`flex items-center transition-all border-l-2 cursor-pointer min-h-0
                       ${
                           isSelected
-                            ? "border-l-[#00d9ff] bg-[#00d9ff]/5"
-                            : "border-l-transparent hover:bg-[#222]"
+                            ? "border-l-accent-cyan bg-accent-cyan/5"
+                            : "border-l-transparent hover:bg-theme-tertiary"
                         }
                       ${isDragging ? "opacity-30" : ""}
-                    `}
+                    }`}
                         draggable={!isEditing}
                         onDragStart={(e) =>
                           handleDragStart(e, categoryKey, groupKey)}
@@ -872,7 +994,7 @@ function BudgetAssignmentContent(
                       >
                         {/* Drag Handle */}
                         <div
-                          class="px-2 py-4 cursor-grab active:cursor-grabbing text-[#333] hover:text-[#666]"
+                          class="px-1 sm:px-2 py-3 sm:py-4 cursor-grab active:cursor-grabbing text-theme-muted hover:text-theme-secondary shrink-0"
                           onClick={(e) => e.stopPropagation()}
                         >
                           ⋮⋮
@@ -887,7 +1009,7 @@ function BudgetAssignmentContent(
                             >
                               <input
                                 type="text"
-                                class="input input-bordered input-sm flex-1 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
+                                class="input input-bordered input-sm flex-1 bg-theme-tertiary border-theme text-theme-primary font-mono"
                                 value={editName.value}
                                 onInput={(e) =>
                                   editName.value = e.currentTarget.value}
@@ -896,7 +1018,7 @@ function BudgetAssignmentContent(
                               />
                               <input
                                 type="number"
-                                class="input input-bordered input-sm w-24 md:w-28 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
+                                class="input input-bordered input-sm w-24 md:w-28 bg-theme-tertiary border-theme text-theme-primary font-mono"
                                 value={editTarget.value}
                                 onInput={(e) =>
                                   editTarget.value = e.currentTarget.value}
@@ -905,7 +1027,7 @@ function BudgetAssignmentContent(
                               />
                               <button
                                 type="button"
-                                class="btn btn-sm bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                                class="btn btn-sm bg-accent-cyan/20 border-accent-cyan text-accent-cyan font-mono"
                                 onClick={saveEditCategory}
                               >
                                 OK
@@ -930,7 +1052,7 @@ function BudgetAssignmentContent(
                           : (
                             <>
                               <div
-                                class="flex-1 py-3"
+                                class="flex-1 py-2 sm:py-3 min-w-0"
                                 onClick={(e) => {
                                   if (isSelected) {
                                     e.stopPropagation();
@@ -939,16 +1061,16 @@ function BudgetAssignmentContent(
                                 }}
                               >
                                 <span
-                                  class={`font-medium font-mono text-sm ${
+                                  class={`font-medium font-mono text-sm wrap-break-word ${
                                     isSelected
-                                      ? "text-[#00d9ff] underline cursor-text"
-                                      : "text-[#e0e0e0]"
+                                      ? "text-accent-cyan underline cursor-text"
+                                      : "text-theme-primary"
                                   }`}
                                 >
                                   {category.name}
                                 </span>
                                 {category.targetAmount > 0 && (
-                                  <div class="text-[10px] text-[#666] font-mono mt-0.5">
+                                  <div class="text-[10px] text-theme-secondary font-mono mt-0.5">
                                     Target:{" "}
                                     {formatCurrency(category.targetAmount)}
                                   </div>
@@ -957,7 +1079,7 @@ function BudgetAssignmentContent(
 
                               {/* Planned (Assigned) Amount */}
                               <div
-                                class="w-16 md:w-24 text-right py-3"
+                                class="w-14 sm:w-16 md:w-24 text-right py-2 sm:py-3 shrink-0"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 {isSelected
@@ -965,7 +1087,7 @@ function BudgetAssignmentContent(
                                     <div class="relative inline-block">
                                       <input
                                         type="number"
-                                        class={`input input-bordered input-sm w-20 md:w-24 text-right bg-[#111111] border-[#00d9ff] text-[#00d9ff] font-mono text-sm ${
+                                        class={`input input-bordered input-sm w-20 md:w-24 text-right bg-theme-tertiary border-accent-cyan text-accent-cyan font-mono text-sm ${
                                           isLoading ? "opacity-50" : ""
                                         }`}
                                         value={assignmentInputs
@@ -1022,33 +1144,49 @@ function BudgetAssignmentContent(
                                     </div>
                                   )
                                   : (
-                                    <span class="text-[#e0e0e0] font-mono text-sm">
+                                    <span class="text-theme-primary font-mono text-sm">
                                       {formatCurrency(assigned)}
                                     </span>
                                   )}
                               </div>
 
-                              {/* Spent or Remaining - Toggleable */}
-                              <div class="w-20 md:w-28 text-right py-3 pr-4 flex items-center justify-end gap-2">
-                                <span
-                                  class={`font-bold font-mono text-sm ${
-                                    showSpent.value
-                                      ? (spent > 0
-                                        ? "text-[#00ff88]"
-                                        : "text-[#444]")
-                                      : (remaining >= 0
-                                        ? "text-[#00d9ff]"
-                                        : "text-red-500")
-                                  }`}
-                                >
-                                  {showSpent.value
-                                    ? formatCurrency(spent)
-                                    : formatCurrency(remaining)}
-                                </span>
+                              {/* Spent or Available - Toggleable */}
+                              <div class="w-20 sm:w-24 md:w-28 text-right py-2 sm:py-3 pr-2 sm:pr-4 flex items-center justify-end gap-1 sm:gap-2 shrink-0">
+                                <div class="flex flex-col items-end">
+                                  <span
+                                    class={`font-bold font-mono text-sm ${
+                                      showSpent.value
+                                        ? (spent > 0
+                                          ? "text-accent-green"
+                                          : "text-theme-muted")
+                                        : (available >= 0
+                                          ? "text-accent-cyan"
+                                          : "text-red-500")
+                                    }`}
+                                  >
+                                    {showSpent.value
+                                      ? formatCurrency(spent)
+                                      : formatCurrency(available)}
+                                  </span>
+                                  {/* Show carryover indicator if there's a carryover */}
+                                  {!showSpent.value && carryover !== 0 && (
+                                    <span
+                                      class={`text-[9px] font-mono ${
+                                        carryover > 0
+                                          ? "text-accent-green"
+                                          : "text-accent-orange"
+                                      }`}
+                                      title={`Carryover from previous period: ${formatCurrency(carryover)}`}
+                                    >
+                                      {carryover > 0 ? "↑" : "↓"}{" "}
+                                      {formatCurrency(Math.abs(carryover))}
+                                    </span>
+                                  )}
+                                </div>
                                 {isSelected && (
                                   <button
                                     type="button"
-                                    class="text-[#a0a0a0] hover:text-[#00d9ff] text-lg"
+                                    class="text-theme-muted hover:text-accent-cyan text-lg"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       openTransferModal(categoryKey);
@@ -1066,10 +1204,10 @@ function BudgetAssignmentContent(
                   })}
 
                   {/* Add Item link */}
-                  <div class="px-4 py-3 border-t">
+                  <div class="px-4 py-3 border-t border-theme">
                     <button
                       type="button"
-                      class="text-primary hover:text-primary-focus text-sm font-medium"
+                      class="text-accent-cyan hover:text-accent-cyan/80 text-sm font-medium font-mono"
                       onClick={() => {
                         addCategoryGroupId.value = groupKey;
                         newCategoryName.value = "";
@@ -1077,7 +1215,7 @@ function BudgetAssignmentContent(
                         isAddCategoryModalOpen.value = true;
                       }}
                     >
-                      Add Item
+                      + Add Category
                     </button>
                   </div>
                 </div>
@@ -1088,10 +1226,10 @@ function BudgetAssignmentContent(
       )}
 
       {/* Add Group Button */}
-      <div class="card bg-[#1c1c1c] border border-dashed border-[#444] hover:border-[#00d9ff]/50 transition-colors cursor-pointer">
+      <div class="card bg-theme-secondary border border-dashed border-theme hover:border-accent-cyan/50 transition-colors cursor-pointer">
         <button
           type="button"
-          class="card-body p-4 items-center justify-center text-[#a0a0a0] hover:text-[#00d9ff] font-mono"
+          class="card-body p-4 items-center justify-center text-theme-secondary hover:text-accent-cyan font-mono"
           onClick={() => {
             newGroupName.value = "";
             isAddGroupModalOpen.value = true;
@@ -1104,77 +1242,76 @@ function BudgetAssignmentContent(
       {/* Fund Transfer Modal */}
       {isTransferModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1c1c1c] border border-[#444] max-w-md">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-md">
             {/* Header */}
             <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded bg-[#00ff88]/20 flex items-center justify-center border border-[#00ff88]/30">
-                <span class="text-[#00ff88] text-lg">💵</span>
+              <div class="w-10 h-10 rounded bg-accent-green/20 flex items-center justify-center border border-accent-green/30">
+                <span class="text-accent-green text-lg">💵</span>
               </div>
-              <div class="w-10 h-10 rounded bg-[#333] flex items-center justify-center border border-[#444]">
-                <span class="text-[#a0a0a0]">⇄</span>
+              <div class="w-10 h-10 rounded bg-theme-tertiary flex items-center justify-center border border-theme">
+                <span class="text-theme-secondary">⇄</span>
               </div>
             </div>
 
-            <h3 class="font-bold text-xl mb-2 text-[#e0e0e0] font-mono">
+            <h3 class="font-bold text-xl mb-2 text-theme-primary font-mono">
               FUND TRANSFER
             </h3>
-            <p class="text-[#a0a0a0] text-xs mb-6 font-mono">
-              SELECT DESTINATION CATEGORY AND AMOUNT. PLANNED AMOUNTS WILL BE
-              ADJUSTED.
+            <p class="text-theme-secondary text-xs mb-6 font-mono">
+              Select destination category and amount. Planned amounts will be
+              adjusted.
             </p>
 
             {/* From/To Selection */}
             <div class="grid grid-cols-[1fr_auto_1fr] gap-2 items-start mb-6">
               {/* From */}
               <div>
-                <label class="text-[10px] text-[#a0a0a0] mb-1 block font-mono">
+                <label class="text-[10px] text-theme-secondary mb-1 block font-mono">
                   FROM
                 </label>
-                <div class="border border-[#444] bg-[#111111] rounded p-2">
+                <div class="border border-theme bg-theme-tertiary rounded p-2">
                   {(() => {
                     const fromCat = allCategories.value.find((c) =>
                       c.key === transferFromCategoryId.value
                     );
-                    const fromRemaining = fromCat?.key != null
-                      ? getAssignedAmount(fromCat.key) -
-                        getSpentAmount(fromCat.key)
+                    const fromAvailable = fromCat?.key != null
+                      ? getAvailableAmount(fromCat.key)
                       : 0;
                     return fromCat
                       ? (
                         <div>
-                          <div class="font-bold text-[#00d9ff] font-mono text-xs truncate">
+                          <div class="font-bold text-accent-cyan font-mono text-xs truncate">
                             {fromCat.name}
                           </div>
-                          <div class="text-[10px] text-[#a0a0a0] font-mono">
-                            {formatCurrency(fromRemaining)} AVL
+                          <div class="text-[10px] text-theme-secondary font-mono">
+                            {formatCurrency(fromAvailable)} AVL
                           </div>
                         </div>
                       )
-                      : <span class="text-[#444] font-mono text-xs">-</span>;
+                      : <span class="text-theme-muted font-mono text-xs">-</span>;
                   })()}
                 </div>
               </div>
 
               {/* Arrow */}
-              <div class="pt-8 text-[#00d9ff] text-xl">⇄</div>
+              <div class="pt-8 text-accent-cyan text-xl">⇄</div>
 
               {/* To */}
               <div>
-                <label class="text-[10px] text-[#a0a0a0] mb-1 block font-mono">
+                <label class="text-[10px] text-theme-secondary mb-1 block font-mono">
                   TO
                 </label>
                 <select
-                  class="select select-bordered select-sm w-full bg-[#111111] border-[#444] text-[#e0e0e0] font-mono text-xs"
+                  class="select select-bordered select-sm w-full bg-theme-tertiary border-theme text-theme-primary font-mono text-xs"
                   value={transferToCategoryId.value || ""}
                   onChange={(e) =>
                     transferToCategoryId.value = e.currentTarget.value || null}
                 >
-                  <option value="">SELECT...</option>
+                  <option value="">Select...</option>
                   {groups.value.map((group: CategoryGroup) => (
                     <optgroup
                       key={group.id ?? group.name}
                       label={group.name.toUpperCase()}
-                      class="bg-[#1c1c1c]"
+                      class="bg-theme-secondary"
                     >
                       {group.categories
                         .filter((c: Category) =>
@@ -1184,11 +1321,10 @@ function BudgetAssignmentContent(
                           if (!c.key) {
                             return null;
                           }
-                          const catRemaining = getAssignedAmount(c.key) -
-                            getSpentAmount(c.key);
+                          const catAvailable = getAvailableAmount(c.key);
                           return (
                             <option key={c.key} value={c.key}>
-                              {c.name} ({formatCurrency(catRemaining)})
+                              {c.name} ({formatCurrency(catAvailable)})
                             </option>
                           );
                         })}
@@ -1200,16 +1336,16 @@ function BudgetAssignmentContent(
 
             {/* Amount */}
             <div class="mb-6">
-              <label class="text-[10px] text-[#a0a0a0] mb-1 block font-mono">
+              <label class="text-[10px] text-theme-secondary mb-1 block font-mono">
                 AMOUNT
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#00d9ff] font-mono">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-accent-cyan font-mono">
                   $
                 </span>
                 <input
                   type="number"
-                  class="input input-bordered w-full pl-7 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
+                  class="input input-bordered w-full pl-7 bg-theme-tertiary border-theme text-theme-primary font-mono"
                   placeholder="0.00"
                   step="0.01"
                   min="0"
@@ -1221,14 +1357,14 @@ function BudgetAssignmentContent(
                 const fromCat = allCategories.value.find((c) =>
                   c.key === transferFromCategoryId.value
                 );
-                const available = fromCat?.key != null
-                  ? getAssignedAmount(fromCat.key) - getSpentAmount(fromCat.key)
+                const fromCatAvailable = fromCat?.key != null
+                  ? getAvailableAmount(fromCat.key)
                   : 0;
                 const transferAmt = parseFloat(transferAmount.value) || 0;
-                if (transferAmt > available) {
+                if (transferAmt > fromCatAvailable) {
                   return (
                     <p class="text-red-500 text-[10px] mt-1 font-mono uppercase">
-                      ⚠️ AMOUNT EXCEEDS AVAILABLE BALANCE
+                      ⚠️ Amount exceeds available balance
                     </p>
                   );
                 }
@@ -1247,7 +1383,7 @@ function BudgetAssignmentContent(
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono text-xs"
+                class="btn bg-accent-cyan/20 border-accent-cyan text-accent-cyan font-mono text-xs"
                 disabled={isTransferring.value || !transferToCategoryId.value ||
                   !transferAmount.value ||
                   parseFloat(transferAmount.value) <= 0}
@@ -1270,17 +1406,17 @@ function BudgetAssignmentContent(
       {/* Add Group Modal */}
       {isAddGroupModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1c1c1c] border border-[#444] max-w-md">
-            <h3 class="font-bold text-xl mb-4 text-[#e0e0e0] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-md">
+            <h3 class="font-bold text-xl mb-4 text-theme-primary font-mono">
               ADD CATEGORY GROUP
             </h3>
-            <p class="text-[#a0a0a0] text-xs mb-6 font-mono">
-              CREATE A NEW GROUP TO ORGANIZE YOUR BUDGET CATEGORIES.
+            <p class="text-theme-secondary text-xs mb-6 font-mono">
+              Create a new group to organize your budget categories.
             </p>
 
             <div class="mb-4">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#a0a0a0]">
+                <span class="label-text font-mono text-xs text-theme-secondary">
                   GROUP TYPE
                 </span>
               </label>
@@ -1293,7 +1429,7 @@ function BudgetAssignmentContent(
                     checked={newGroupType.value === "Expense"}
                     onChange={() => newGroupType.value = "Expense"}
                   />
-                  <span class="label-text font-mono text-xs text-[#e0e0e0]">
+                  <span class="label-text font-mono text-xs text-theme-primary">
                     EXPENSE
                   </span>
                 </label>
@@ -1305,7 +1441,7 @@ function BudgetAssignmentContent(
                     checked={newGroupType.value === "Income"}
                     onChange={() => newGroupType.value = "Income"}
                   />
-                  <span class="label-text font-mono text-xs text-[#e0e0e0]">
+                  <span class="label-text font-mono text-xs text-theme-primary">
                     INCOME
                   </span>
                 </label>
@@ -1314,13 +1450,13 @@ function BudgetAssignmentContent(
 
             <div class="mb-6">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#a0a0a0]">
+                <span class="label-text font-mono text-xs text-theme-secondary">
                   GROUP NAME *
                 </span>
               </label>
               <input
                 type="text"
-                class="input input-bordered w-full bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
+                class="input input-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                 placeholder="e.g., LIFESTYLE, DEBT"
                 value={newGroupName.value}
                 onInput={(e) => {
@@ -1342,7 +1478,7 @@ function BudgetAssignmentContent(
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono text-xs"
+                class="btn bg-accent-cyan/20 border-accent-cyan text-accent-cyan font-mono text-xs"
                 disabled={isCreatingGroup.value || !newGroupName.value.trim()}
                 onClick={createGroup}
               >
@@ -1365,11 +1501,11 @@ function BudgetAssignmentContent(
       {/* Add Category Modal */}
       {isAddCategoryModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1c1c1c] border border-[#444] max-w-md">
-            <h3 class="font-bold text-xl mb-4 text-[#e0e0e0] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-md">
+            <h3 class="font-bold text-xl mb-4 text-theme-primary font-mono">
               ADD CATEGORY
             </h3>
-            <p class="text-[#a0a0a0] text-xs mb-6 font-mono">
+            <p class="text-theme-secondary text-xs mb-6 font-mono">
               {(() => {
                 const group = groups.value.find((g) =>
                   g.key === addCategoryGroupId.value
@@ -1383,13 +1519,13 @@ function BudgetAssignmentContent(
             {/* Category Name */}
             <div class="mb-4">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#a0a0a0]">
+                <span class="label-text font-mono text-xs text-theme-secondary">
                   NAME *
                 </span>
               </label>
               <input
                 type="text"
-                class="input input-bordered w-full bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
+                class="input input-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                 placeholder="e.g., GROCERIES, GAS, ENTERTAINMENT"
                 value={newCategoryName.value}
                 onInput={(e) => {
@@ -1402,17 +1538,17 @@ function BudgetAssignmentContent(
             {/* Target Amount */}
             <div class="mb-6">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#a0a0a0]">
+                <span class="label-text font-mono text-xs text-theme-secondary">
                   MONTHLY TARGET (OPTIONAL)
                 </span>
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#00d9ff] font-mono">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-accent-cyan font-mono">
                   $
                 </span>
                 <input
                   type="number"
-                  class="input input-bordered w-full pl-7 bg-[#111111] border-[#444] text-[#e0e0e0] font-mono"
+                  class="input input-bordered w-full pl-7 bg-theme-tertiary border-theme text-theme-primary font-mono"
                   placeholder="0.00"
                   step="0.01"
                   min="0"
@@ -1440,7 +1576,7 @@ function BudgetAssignmentContent(
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono text-xs"
+                class="btn bg-accent-cyan/20 border-accent-cyan text-accent-cyan font-mono text-xs"
                 disabled={isCreatingCategory.value ||
                   !newCategoryName.value.trim()}
                 onClick={createCategory}

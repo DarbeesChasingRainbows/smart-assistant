@@ -413,17 +413,18 @@ function TransactionImportContent(
     <>
       <button
         type="button"
-        class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
+        class="btn bg-theme-tertiary border border-accent-cyan/50 hover:border-accent-cyan text-accent-cyan btn-sm min-h-[36px] font-mono"
         onClick={openImportModal}
       >
-        IMPORT DATA
+        📥 IMPORT
       </button>
 
       {isOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-5xl shadow-2xl">
-            <h3 class="font-bold text-xl mb-4 text-[#00d9ff] font-mono uppercase">
-              TRANSACTION IMPORT
+          <div class="modal-box bg-theme-secondary border border-theme max-w-5xl shadow-2xl">
+            <h3 class="font-bold text-xl mb-4 text-accent-cyan font-mono uppercase flex items-center gap-2">
+              <span>📥</span>
+              <span>TRANSACTION IMPORT</span>
             </h3>
 
             {/* Progress Steps */}
@@ -452,21 +453,21 @@ function TransactionImportContent(
               <div class="space-y-6">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       SELECT DATA FILE (CSV, OFX, QFX)
                     </span>
                   </label>
                   <input
                     type="file"
                     accept=".csv,.ofx,.qfx"
-                    class="file-input file-input-bordered w-full bg-[#0a0a0a] border-[#333] text-[#888] font-mono"
+                    class="file-input file-input-bordered w-full bg-theme-tertiary border-theme text-theme-secondary font-mono"
                     onChange={handleFileUpload}
                   />
                 </div>
 
                 {importFormat.value && (
-                  <div class="alert bg-[#00d9ff]/10 border border-[#00d9ff]/30">
-                    <span class="font-mono text-xs text-[#00d9ff]">
+                  <div class="alert bg-accent-cyan/10 border border-accent-cyan/30">
+                    <span class="font-mono text-xs text-accent-cyan">
                       DETECTED FORMAT: {importFormat.value.toUpperCase()}
                     </span>
                   </div>
@@ -477,19 +478,19 @@ function TransactionImportContent(
             {/* Step 2: Map Columns (CSV only) */}
             {currentStep.value === "map" && (
               <div class="space-y-6">
-                <p class="text-xs text-[#888] font-mono uppercase">
+                <p class="text-xs text-theme-secondary font-mono uppercase">
                   MAP SYSTEM FIELDS TO FILE COLUMNS:
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         DATE FIELD *
                       </span>
                     </label>
                     <select
-                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                      class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono text-xs"
                       value={columnMapping.value.date}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -506,12 +507,12 @@ function TransactionImportContent(
 
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         PAYEE FIELD *
                       </span>
                     </label>
                     <select
-                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                      class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono text-xs"
                       value={columnMapping.value.payee}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -528,12 +529,12 @@ function TransactionImportContent(
 
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         AMOUNT FIELD *
                       </span>
                     </label>
                     <select
-                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                      class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono text-xs"
                       value={columnMapping.value.amount}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -550,12 +551,12 @@ function TransactionImportContent(
 
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         MEMO FIELD
                       </span>
                     </label>
                     <select
-                      class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                      class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono text-xs"
                       value={columnMapping.value.memo}
                       onChange={(e) =>
                         columnMapping.value = {
@@ -581,7 +582,7 @@ function TransactionImportContent(
                   </button>
                   <button
                     type="button"
-                    class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                    class="btn bg-accent-cyan/20 border-accent-cyan text-accent-cyan font-mono"
                     onClick={proceedToPreview}
                   >
                     NEXT: PREVIEW
@@ -593,14 +594,14 @@ function TransactionImportContent(
             {/* Step 3: Preview */}
             {currentStep.value === "preview" && (
               <div class="space-y-6">
-                <div class="flex justify-between items-center bg-[#0a0a0a] p-3 border border-[#333] rounded">
-                  <p class="text-xs text-[#888] font-mono uppercase">
+                <div class="flex justify-between items-center bg-theme-tertiary p-3 border border-theme rounded">
+                  <p class="text-xs text-theme-secondary font-mono uppercase">
                     {selectedTransactions.value.size} /{" "}
                     {previewTransactions.value.length} RECORDS SELECTED
                   </p>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-xs text-[#00d9ff] font-mono"
+                    class="btn btn-ghost btn-xs text-accent-cyan font-mono"
                     onClick={toggleAll}
                   >
                     {selectedTransactions.value.size ===
@@ -610,10 +611,10 @@ function TransactionImportContent(
                   </button>
                 </div>
 
-                <div class="overflow-x-auto max-h-96 border border-[#333]">
+                <div class="overflow-x-auto max-h-96 border border-theme">
                   <table class="table table-sm w-full">
                     <thead>
-                      <tr class="bg-[#0a0a0a] border-b border-[#333]">
+                      <tr class="bg-theme-tertiary border-b border-theme">
                         <th class="w-10">
                           <input
                             type="checkbox"
@@ -623,20 +624,20 @@ function TransactionImportContent(
                             onChange={toggleAll}
                           />
                         </th>
-                        <th class="text-[#888] font-mono text-[10px]">DATE</th>
-                        <th class="text-[#888] font-mono text-[10px]">PAYEE</th>
-                        <th class="text-[#888] font-mono text-[10px]">MEMO</th>
-                        <th class="text-right text-[#888] font-mono text-[10px]">
+                        <th class="text-theme-secondary font-mono text-[10px]">DATE</th>
+                        <th class="text-theme-secondary font-mono text-[10px]">PAYEE</th>
+                        <th class="text-theme-secondary font-mono text-[10px]">MEMO</th>
+                        <th class="text-right text-theme-secondary font-mono text-[10px]">
                           AMOUNT
                         </th>
                         <th></th>
                       </tr>
                     </thead>
-                    <tbody class="divide-y divide-[#333]">
+                    <tbody class="divide-y divide-theme">
                       {previewTransactions.value.map((txn, index) => (
                         <tr
                           key={index}
-                          class={`hover:bg-[#222] ${
+                          class={`hover:bg-theme-tertiary ${
                             selectedTransactions.value.has(index)
                               ? ""
                               : "opacity-40"
@@ -650,18 +651,18 @@ function TransactionImportContent(
                               onChange={() => toggleTransaction(index)}
                             />
                           </td>
-                          <td class="text-[10px] text-white font-mono">
+                          <td class="text-[10px] text-theme-primary font-mono">
                             {txn.date}
                           </td>
-                          <td class="text-xs text-white font-bold">
+                          <td class="text-xs text-theme-primary font-bold">
                             {txn.payee.toUpperCase()}
                           </td>
-                          <td class="text-[10px] text-[#666] font-mono max-w-xs truncate">
+                          <td class="text-[10px] text-theme-muted font-mono max-w-xs truncate">
                             {txn.memo}
                           </td>
                           <td
                             class={`text-right font-bold font-mono text-xs ${
-                              txn.amount >= 0 ? "text-[#00ff88]" : "text-white"
+                              txn.amount >= 0 ? "text-accent-green" : "text-theme-primary"
                             }`}
                           >
                             {formatCurrency(txn.amount)}
@@ -699,7 +700,7 @@ function TransactionImportContent(
                   </button>
                   <button
                     type="button"
-                    class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
+                    class="btn bg-accent-green/20 border-accent-green text-accent-green font-mono"
                     onClick={importTransactions}
                     disabled={isImporting.value ||
                       selectedTransactions.value.size === 0}

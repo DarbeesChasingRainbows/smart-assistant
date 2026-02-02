@@ -204,6 +204,17 @@ public record BudgetBillDto
     public bool IsAutoPay { get; init; }
     public bool IsActive { get; init; }
     public DateTime CreatedAt { get; init; }
+    // Bill type differentiation
+    public string BillType { get; init; } = "bill"; // "bill", "subscription", "debt"
+    // Debt-specific fields
+    public string? DebtType { get; init; } // "credit_card", "auto_loan", "mortgage", "student_loan", "personal_loan", "medical", "other"
+    public decimal? TotalBalance { get; init; }
+    public decimal? InterestRate { get; init; }
+    public decimal? MinimumPayment { get; init; }
+    public decimal? OriginalAmount { get; init; }
+    public DateTime? PayoffDate { get; init; }
+    public DateTime? LastPaidDate { get; init; }
+    public DateTime? NextDueDate { get; init; }
 }
 
 public record CreateBudgetBillRequest
@@ -216,6 +227,14 @@ public record CreateBudgetBillRequest
     public int DueDay { get; init; }
     public string Frequency { get; init; } = string.Empty;
     public bool IsAutoPay { get; init; }
+    // Bill type differentiation
+    public string BillType { get; init; } = "bill"; // "bill", "subscription", "debt"
+    // Debt-specific fields (only applicable when BillType === "debt")
+    public string? DebtType { get; init; }
+    public decimal? TotalBalance { get; init; }
+    public decimal? InterestRate { get; init; }
+    public decimal? MinimumPayment { get; init; }
+    public decimal? OriginalAmount { get; init; }
 }
 
 public record UpdateBudgetBillRequest
@@ -228,6 +247,14 @@ public record UpdateBudgetBillRequest
     public string? Frequency { get; init; }
     public bool? IsAutoPay { get; init; }
     public bool? IsActive { get; init; }
+    // Bill type differentiation
+    public string? BillType { get; init; }
+    // Debt-specific fields
+    public string? DebtType { get; init; }
+    public decimal? TotalBalance { get; init; }
+    public decimal? InterestRate { get; init; }
+    public decimal? MinimumPayment { get; init; }
+    public decimal? OriginalAmount { get; init; }
 }
 
 public record MarkBillPaidRequest
@@ -235,6 +262,83 @@ public record MarkBillPaidRequest
     public DateTime PaidDate { get; init; }
     public decimal? ActualAmount { get; init; } // Optional: if paid amount differs from bill amount
     public string? Memo { get; init; } // Optional: additional notes for this payment
+}
+
+// Debt Summary DTOs
+public record DebtSummaryDto
+{
+    public decimal TotalDebt { get; init; }
+    public decimal TotalMonthlyPayments { get; init; }
+    public decimal TotalMonthlyInterest { get; init; }
+    public decimal AverageInterestRate { get; init; }
+    public int DebtCount { get; init; }
+    public List<DebtByTypeDto> DebtByType { get; init; } = new();
+    public DateTime? ProjectedDebtFreeDate { get; init; }
+}
+
+public record DebtByTypeDto
+{
+    public string DebtType { get; init; } = string.Empty;
+    public decimal TotalBalance { get; init; }
+    public decimal TotalMonthlyPayment { get; init; }
+    public int Count { get; init; }
+}
+
+public record CalculatePayoffRequest
+{
+    public decimal? ExtraPayment { get; init; } // Optional extra payment amount
+}
+
+public record PayoffProjectionDto
+{
+    public string BillKey { get; init; } = string.Empty;
+    public string BillName { get; init; } = string.Empty;
+    public decimal CurrentBalance { get; init; }
+    public decimal MonthlyPayment { get; init; }
+    public decimal InterestRate { get; init; }
+    public int MonthsToPayoff { get; init; }
+    public DateTime PayoffDate { get; init; }
+    public decimal TotalInterestPaid { get; init; }
+    public decimal TotalAmountPaid { get; init; }
+    // With extra payment
+    public int? MonthsToPayoffWithExtra { get; init; }
+    public DateTime? PayoffDateWithExtra { get; init; }
+    public decimal? TotalInterestWithExtra { get; init; }
+    public decimal? InterestSaved { get; init; }
+    public int? MonthsSaved { get; init; }
+}
+
+public record OptimalPaymentRequest
+{
+    public string FamilyId { get; init; } = string.Empty;
+    public decimal ExtraBudget { get; init; } // Extra money available to put toward debt
+    public string Strategy { get; init; } = "avalanche"; // "avalanche" or "snowball"
+}
+
+public record OptimalPaymentStrategyDto
+{
+    public string Strategy { get; init; } = string.Empty;
+    public string StrategyDescription { get; init; } = string.Empty;
+    public decimal TotalDebt { get; init; }
+    public decimal TotalMonthlyPayment { get; init; }
+    public int MonthsToDebtFree { get; init; }
+    public DateTime DebtFreeDate { get; init; }
+    public decimal TotalInterestPaid { get; init; }
+    public List<DebtPaymentOrderDto> PaymentOrder { get; init; } = new();
+}
+
+public record DebtPaymentOrderDto
+{
+    public int Order { get; init; }
+    public string BillKey { get; init; } = string.Empty;
+    public string BillName { get; init; } = string.Empty;
+    public string DebtType { get; init; } = string.Empty;
+    public decimal CurrentBalance { get; init; }
+    public decimal InterestRate { get; init; }
+    public decimal MonthlyPayment { get; init; }
+    public int MonthsToPayoff { get; init; }
+    public DateTime PayoffDate { get; init; }
+    public string Reason { get; init; } = string.Empty; // Why this debt is prioritized
 }
 
 // Budget Goal DTOs

@@ -165,6 +165,9 @@ export interface Account {
 // Bill Domain
 // ============================================
 
+export type BillType = "bill" | "subscription" | "debt";
+export type DebtType = "credit_card" | "auto_loan" | "mortgage" | "student_loan" | "personal_loan" | "medical" | "other";
+
 export interface Bill {
   id: number;
   familyId: number;
@@ -182,6 +185,15 @@ export interface Bill {
   notes: string | null;
   createdAt: string;
   updatedAt: string;
+  // Bill type differentiation
+  billType: BillType;
+  // Debt-specific fields (only applicable when billType === 'debt')
+  debtType?: DebtType | null;
+  totalBalance?: number | null;
+  interestRate?: number | null;
+  minimumPayment?: number | null;
+  originalAmount?: number | null;
+  payoffDate?: string | null;
 }
 
 // ============================================

@@ -1,0 +1,25 @@
+{
+  "hash": "cdb8ebc5",
+  "configHash": "83a9fc91",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "b1077343",
+  "optimized": {
+    "preact": {
+      "src": "../../node_modules/.deno/preact@10.28.2/node_modules/preact/dist/preact.module.js",
+      "file": "preact.js",
+      "fileHash": "2e43be5d",
+      "needsInterop": false
+    },
+    "@preact/signals": {
+      "src": "../../node_modules/.deno/@preact+signals@2.5.1/node_modules/@preact/signals/dist/signals.module.js",
+      "file": "@preact_signals.js",
+      "fileHash": "c23ec298",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-MLV7OOAR": {
+      "file": "chunk-MLV7OOAR.js"
+    }
+  }
+}

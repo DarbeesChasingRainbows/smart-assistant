@@ -1423,6 +1423,10 @@
       "integrity": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g=="
     }
   },
+  "remote": {
+    "https://esm.sh/@microsoft/signalr@8.0.7": "f1b317e62903429127f76efdad7bc5cb8aab487d629339a269e651abf3a6c453",
+    "https://esm.sh/@microsoft/signalr@8.0.7/denonext/signalr.mjs": "5c922976d4c158f8f6c37c7fd38fca1559cbe2547e2494560111e5a6c13cdfea"
+  },
   "workspace": {
     "dependencies": [
       "jsr:@fresh/core@^2.2.0",

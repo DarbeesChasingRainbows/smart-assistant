@@ -392,7 +392,7 @@ function ReceiptsManagerContent(
         <div class="flex justify-between items-center">
           <button
             type="button"
-            class="btn btn-ghost text-[#888] hover:text-[#00d9ff] font-mono"
+            class="btn btn-ghost text-theme-secondary hover:text-accent-cyan font-mono"
             onClick={backToList}
           >
             ← BACK TO RECEIPTS
@@ -400,7 +400,7 @@ function ReceiptsManagerContent(
           {!isEditing.value && (
             <button
               type="button"
-              class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
+              class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan btn-sm min-h-[36px] font-mono"
               onClick={startEditing}
             >
               EDIT
@@ -408,20 +408,20 @@ function ReceiptsManagerContent(
           )}
         </div>
 
-        <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card bg-theme-secondary shadow-xl border border-theme">
           <div class="card-body p-4 md:p-6">
             {isEditing.value
               ? (
                 <div class="space-y-4">
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         STORE NAME
                       </span>
                     </label>
                     <input
                       type="text"
-                      class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                      class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                       value={editStoreName.value}
                       onInput={(e) =>
                         editStoreName.value = e.currentTarget.value}
@@ -429,13 +429,13 @@ function ReceiptsManagerContent(
                   </div>
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         RECEIPT DATE
                       </span>
                     </label>
                     <input
                       type="date"
-                      class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                      class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                       value={editReceiptDate.value}
                       onInput={(e) =>
                         editReceiptDate.value = e.currentTarget.value}
@@ -443,14 +443,14 @@ function ReceiptsManagerContent(
                   </div>
                   <div class="form-control">
                     <label class="label">
-                      <span class="label-text font-mono text-xs text-[#888]">
+                      <span class="label-text font-mono text-xs text-theme-secondary">
                         TOTAL
                       </span>
                     </label>
                     <input
                       type="number"
                       step="0.01"
-                      class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                      class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                       value={editTotal.value}
                       onInput={(e) => editTotal.value = e.currentTarget.value}
                     />
@@ -458,7 +458,7 @@ function ReceiptsManagerContent(
                   <div class="flex gap-2">
                     <button
                       type="button"
-                      class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
+                      class="btn bg-[#00ff88]/20 border-[#00ff88] text-accent-green font-mono"
                       onClick={saveEditing}
                       disabled={isSubmitting.value}
                     >
@@ -482,11 +482,11 @@ function ReceiptsManagerContent(
               : (
                 <div class="flex justify-between items-start">
                   <div>
-                    <h2 class="text-xl md:text-2xl font-bold text-[#00d9ff] font-mono">
+                    <h2 class="text-xl md:text-2xl font-bold text-accent-cyan font-mono">
                       {receipt.storeName?.toUpperCase() || "UNKNOWN STORE"}
                     </h2>
                     {receipt.storeNumber && (
-                      <div class="text-xs text-[#888] font-mono">
+                      <div class="text-xs text-theme-secondary font-mono">
                         STORE #{receipt.storeNumber}
                       </div>
                     )}
@@ -518,29 +518,29 @@ function ReceiptsManagerContent(
             <div class="overflow-x-auto">
               <table class="table table-sm w-full">
                 <thead>
-                  <tr class="bg-[#0a0a0a] border-b border-[#333]">
-                    <th class="text-[#888] font-mono text-[10px]">ITEM</th>
-                    <th class="text-[#888] font-mono text-[10px]">SKU/UPC</th>
-                    <th class="text-right text-[#888] font-mono text-[10px]">
+                  <tr class="bg-[#0a0a0a] border-b border-theme">
+                    <th class="text-theme-secondary font-mono text-[10px]">ITEM</th>
+                    <th class="text-theme-secondary font-mono text-[10px]">SKU/UPC</th>
+                    <th class="text-right text-theme-secondary font-mono text-[10px]">
                       QTY
                     </th>
-                    <th class="text-right text-[#888] font-mono text-[10px]">
+                    <th class="text-right text-theme-secondary font-mono text-[10px]">
                       PRICE
                     </th>
-                    <th class="text-right text-[#888] font-mono text-[10px]">
+                    <th class="text-right text-theme-secondary font-mono text-[10px]">
                       DISC
                     </th>
-                    <th class="text-right text-[#888] font-mono text-[10px]">
+                    <th class="text-right text-theme-secondary font-mono text-[10px]">
                       TAX
                     </th>
-                    <th class="text-right text-[#888] font-mono text-[10px]">
+                    <th class="text-right text-theme-secondary font-mono text-[10px]">
                       TOTAL
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {(receipt.items || []).map((item, idx) => (
-                    <tr key={idx} class="border-b border-[#333]/50">
+                    <tr key={idx} class="border-b border-theme/50">
                       <td>
                         <div class="font-medium text-white text-xs font-mono">
                           {item.description.toUpperCase()}
@@ -561,12 +561,12 @@ function ReceiptsManagerContent(
                       <td class="text-right font-mono text-xs">
                         {formatCurrency(item.extendedPrice)}
                       </td>
-                      <td class="text-right text-[#00ff88] font-mono text-xs">
+                      <td class="text-right text-accent-green font-mono text-xs">
                         {item.discountAmount > 0
                           ? `-${formatCurrency(item.discountAmount)}`
                           : "—"}
                       </td>
-                      <td class="text-right text-[#888] font-mono text-xs">
+                      <td class="text-right text-theme-secondary font-mono text-xs">
                         {formatCurrency(item.taxAmount)}
                       </td>
                       <td class="text-right font-bold text-white font-mono text-xs">
@@ -586,21 +586,21 @@ function ReceiptsManagerContent(
             {/* Totals */}
             <div class="flex justify-end">
               <div class="w-full md:w-64 space-y-1 font-mono text-xs">
-                <div class="flex justify-between text-[#888]">
+                <div class="flex justify-between text-theme-secondary">
                   <span>SUBTOTAL:</span>
                   <span>{formatCurrency(receipt.subtotal)}</span>
                 </div>
                 {receipt.discountTotal && receipt.discountTotal > 0 && (
-                  <div class="flex justify-between text-[#00ff88]">
+                  <div class="flex justify-between text-accent-green">
                     <span>DISCOUNTS:</span>
                     <span>-{formatCurrency(receipt.discountTotal)}</span>
                   </div>
                 )}
-                <div class="flex justify-between text-[#888]">
+                <div class="flex justify-between text-theme-secondary">
                   <span>TAX:</span>
                   <span>{formatCurrency(receipt.taxTotal)}</span>
                 </div>
-                <div class="flex justify-between font-bold text-lg border-t border-[#333] pt-2 text-[#00d9ff]">
+                <div class="flex justify-between font-bold text-lg border-t border-theme pt-2 text-accent-cyan">
                   <span>TOTAL:</span>
                   <span>{formatCurrency(receipt.total)}</span>
                 </div>
@@ -622,16 +622,16 @@ function ReceiptsManagerContent(
                 <div class="mt-6 p-4 bg-[#00ff88]/5 border border-[#00ff88]/20 rounded">
                   <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div>
-                      <span class="text-xs font-bold text-[#00ff88] font-mono uppercase tracking-wider">
+                      <span class="text-xs font-bold text-accent-green font-mono uppercase tracking-wider">
                         ✓ LINKED TO TRANSACTION
                       </span>
-                      <span class="text-xs text-[#00ff88]/70 ml-2 font-mono">
+                      <span class="text-xs text-accent-green/70 ml-2 font-mono">
                         #{receipt.transactionId}
                       </span>
                     </div>
                     <a
                       href={`/budget/transactions?highlight=${receipt.transactionId}`}
-                      class="btn btn-xs bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono min-h-[32px]"
+                      class="btn btn-xs bg-[#00ff88]/20 border-[#00ff88] text-accent-green font-mono min-h-[32px]"
                     >
                       VIEW TRANSACTION
                     </a>
@@ -666,21 +666,21 @@ function ReceiptsManagerContent(
     <div class="space-y-6">
       {/* Actions */}
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <span class="text-xs text-[#888] font-mono uppercase tracking-wider">
+        <span class="text-xs text-theme-secondary font-mono uppercase tracking-wider">
           {displayReceipts.length}{" "}
           RECEIPT{displayReceipts.length !== 1 ? "S" : ""} DETECTED
         </span>
         <div class="flex gap-2">
           <button
             type="button"
-            class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-accent-cyan min-h-[44px] font-mono"
             onClick={openUploadModal}
           >
             📷 UPLOAD
           </button>
           <button
             type="button"
-            class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-accent-cyan min-h-[44px] font-mono"
             onClick={openAddModal}
           >
             + MANUAL ADD
@@ -689,16 +689,16 @@ function ReceiptsManagerContent(
       </div>
 
       {/* Filters */}
-      <div class="flex flex-wrap gap-4 items-end bg-[#1a1a1a] p-4 border border-[#333] rounded">
+      <div class="flex flex-wrap gap-4 items-end bg-theme-secondary p-4 border border-theme rounded">
         <div class="form-control">
           <label class="label pt-0">
-            <span class="label-text text-[10px] text-[#888] font-mono">
+            <span class="label-text text-[10px] text-theme-secondary font-mono">
               STORE NAME
             </span>
           </label>
           <input
             type="text"
-            class="input input-bordered input-sm w-48 bg-[#0a0a0a] border-[#333] text-white font-mono"
+            class="input input-bordered input-sm w-48 bg-[#0a0a0a] border-theme text-white font-mono"
             placeholder="SEARCH..."
             value={filterStoreName.value}
             onInput={(e) => filterStoreName.value = e.currentTarget.value}
@@ -706,12 +706,12 @@ function ReceiptsManagerContent(
         </div>
         <div class="form-control">
           <label class="label pt-0">
-            <span class="label-text text-[10px] text-[#888] font-mono">
+            <span class="label-text text-[10px] text-theme-secondary font-mono">
               LINK STATUS
             </span>
           </label>
           <select
-            class="select select-bordered select-sm bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+            class="select select-bordered select-sm bg-[#0a0a0a] border-theme text-white font-mono text-xs"
             value={filterLinked.value}
             onChange={(e) => filterLinked.value = e.currentTarget.value}
           >
@@ -738,7 +738,7 @@ function ReceiptsManagerContent(
       <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {displayReceipts.length === 0
           ? (
-            <div class="col-span-full text-center py-16 bg-[#1a1a1a] border border-[#333] rounded">
+            <div class="col-span-full text-center py-16 bg-theme-secondary border border-theme rounded">
               <p class="text-[#666] font-mono uppercase tracking-widest">
                 {receipts.value.length === 0
                   ? "NO DATA DETECTED"
@@ -749,13 +749,13 @@ function ReceiptsManagerContent(
           : displayReceipts.map((receipt) => (
             <div
               key={receipt.id}
-              class="card bg-[#1a1a1a] border border-[#333] hover:border-[#00d9ff] transition-all cursor-pointer group"
+              class="card bg-theme-secondary border border-theme hover:border-[#00d9ff] transition-all cursor-pointer group"
               onClick={() => viewReceipt(receipt)}
             >
               <div class="card-body p-4">
                 <div class="flex justify-between items-start">
                   <div class="flex-1 min-w-0">
-                    <h3 class="font-bold text-white font-mono truncate group-hover:text-[#00d9ff]">
+                    <h3 class="font-bold text-white font-mono truncate group-hover:text-accent-cyan">
                       {receipt.storeName?.toUpperCase() || "UNKNOWN STORE"}
                     </h3>
                     {receipt.storeNumber && (
@@ -765,10 +765,10 @@ function ReceiptsManagerContent(
                     )}
                   </div>
                   <div class="text-right">
-                    <div class="text-lg font-bold text-[#00ff88] font-mono">
+                    <div class="text-lg font-bold text-accent-green font-mono">
                       {formatCurrency(receipt.total)}
                     </div>
-                    <div class="text-[10px] text-[#888] font-mono uppercase">
+                    <div class="text-[10px] text-theme-secondary font-mono uppercase">
                       {formatDate(receipt.receiptDate)}
                     </div>
                   </div>
@@ -781,7 +781,7 @@ function ReceiptsManagerContent(
                       : ""}
                   </div>
                   {receipt.transactionId && (
-                    <div class="badge bg-[#00ff88]/10 text-[#00ff88] border-[#00ff88]/20 font-mono text-[9px]">
+                    <div class="badge bg-[#00ff88]/10 text-accent-green border-[#00ff88]/20 font-mono text-[9px]">
                       LINKED
                     </div>
                   )}
@@ -794,8 +794,8 @@ function ReceiptsManagerContent(
       {/* Add Receipt Modal */}
       {isModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-4xl max-h-[90vh] overflow-y-auto">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-4xl max-h-[90vh] overflow-y-auto">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               ADD RECEIPT
             </h3>
             <form onSubmit={handleSubmit}>
@@ -803,13 +803,13 @@ function ReceiptsManagerContent(
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       STORE NAME *
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     placeholder="e.g., WALMART, TARGET"
                     value={formStoreName.value}
                     onInput={(e) => formStoreName.value = e.currentTarget.value}
@@ -818,13 +818,13 @@ function ReceiptsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       STORE #
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     placeholder="1234"
                     value={formStoreNumber.value}
                     onInput={(e) =>
@@ -833,13 +833,13 @@ function ReceiptsManagerContent(
                 </div>
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       ADDRESS
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     placeholder="123 MAIN ST"
                     value={formStoreAddress.value}
                     onInput={(e) =>
@@ -848,26 +848,26 @@ function ReceiptsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       CITY
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={formStoreCity.value}
                     onInput={(e) => formStoreCity.value = e.currentTarget.value}
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       STATE
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     maxLength={2}
                     value={formStoreState.value}
                     onInput={(e) =>
@@ -876,26 +876,26 @@ function ReceiptsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       ZIP
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={formStoreZip.value}
                     onInput={(e) => formStoreZip.value = e.currentTarget.value}
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       RECEIPT DATE *
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={formReceiptDate.value}
                     onInput={(e) =>
                       formReceiptDate.value = e.currentTarget.value}
@@ -904,13 +904,13 @@ function ReceiptsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       RECEIPT #
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={formReceiptNumber.value}
                     onInput={(e) =>
                       formReceiptNumber.value = e.currentTarget.value}
@@ -921,12 +921,12 @@ function ReceiptsManagerContent(
               {/* Link to Transaction */}
               <div class="form-control mb-6">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     LINK TO TRANSACTION (OPTIONAL)
                   </span>
                 </label>
                 <select
-                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                  class="select select-bordered bg-[#0a0a0a] border-theme text-white font-mono text-xs"
                   value={formTransactionId.value}
                   onChange={(e) =>
                     formTransactionId.value = e.currentTarget.value}
@@ -946,13 +946,13 @@ function ReceiptsManagerContent(
               <div class="mb-6">
                 <div class="flex justify-between items-center mb-2">
                   <label class="label">
-                    <span class="label-text font-bold text-[#00d9ff] font-mono text-sm uppercase">
+                    <span class="label-text font-bold text-accent-cyan font-mono text-sm uppercase">
                       ITEMS
                     </span>
                   </label>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-xs text-[#00d9ff] font-mono"
+                    class="btn btn-ghost btn-xs text-accent-cyan font-mono"
                     onClick={addItem}
                   >
                     + ADD ITEM
@@ -962,16 +962,16 @@ function ReceiptsManagerContent(
                   {formItems.value.map((item, idx) => (
                     <div
                       key={idx}
-                      class="p-3 bg-[#0a0a0a] border border-[#333] rounded"
+                      class="p-3 bg-[#0a0a0a] border border-theme rounded"
                     >
                       <div class="grid grid-cols-12 gap-2 items-end mb-2">
                         <div class="col-span-5">
-                          <label class="text-[10px] text-[#888] font-mono">
+                          <label class="text-[10px] text-theme-secondary font-mono">
                             DESCRIPTION
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-sm w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="ITEM NAME"
                             value={item.description || ""}
                             onInput={(e) =>
@@ -983,12 +983,12 @@ function ReceiptsManagerContent(
                           />
                         </div>
                         <div class="col-span-2">
-                          <label class="text-[10px] text-[#888] font-mono">
+                          <label class="text-[10px] text-theme-secondary font-mono">
                             QTY
                           </label>
                           <input
                             type="number"
-                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-sm w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="1"
                             value={item.quantity || 1}
                             onInput={(e) =>
@@ -1000,13 +1000,13 @@ function ReceiptsManagerContent(
                           />
                         </div>
                         <div class="col-span-2">
-                          <label class="text-[10px] text-[#888] font-mono">
+                          <label class="text-[10px] text-theme-secondary font-mono">
                             PRICE
                           </label>
                           <input
                             type="number"
                             step="0.01"
-                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-sm w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="0.00"
                             value={item.extendedPrice || ""}
                             onInput={(e) => {
@@ -1020,13 +1020,13 @@ function ReceiptsManagerContent(
                           />
                         </div>
                         <div class="col-span-2">
-                          <label class="text-[10px] text-[#00ff88] font-mono">
+                          <label class="text-[10px] text-accent-green font-mono">
                             DISC
                           </label>
                           <input
                             type="number"
                             step="0.01"
-                            class="input input-bordered input-sm w-full bg-[#1a1a1a] border-[#333] text-[#00ff88] font-mono"
+                            class="input input-bordered input-sm w-full bg-theme-secondary border-theme text-accent-green font-mono"
                             placeholder="0.00"
                             value={item.discountAmount || ""}
                             onInput={(e) => {
@@ -1056,7 +1056,7 @@ function ReceiptsManagerContent(
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-xs w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="SKU"
                             value={item.sku || ""}
                             onInput={(e) =>
@@ -1069,7 +1069,7 @@ function ReceiptsManagerContent(
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-xs w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="UPC"
                             value={item.upc || ""}
                             onInput={(e) =>
@@ -1082,7 +1082,7 @@ function ReceiptsManagerContent(
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-xs w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="DEPT"
                             value={item.department || ""}
                             onInput={(e) =>
@@ -1099,7 +1099,7 @@ function ReceiptsManagerContent(
                           </label>
                           <input
                             type="text"
-                            class="input input-bordered input-xs w-full bg-[#1a1a1a] border-[#333] text-white font-mono"
+                            class="input input-bordered input-xs w-full bg-theme-secondary border-theme text-white font-mono"
                             placeholder="COUPON, ETC"
                             value={item.discountDescription || ""}
                             onInput={(e) =>
@@ -1120,13 +1120,13 @@ function ReceiptsManagerContent(
               <div class="mb-6">
                 <div class="flex justify-between items-center mb-2">
                   <label class="label">
-                    <span class="label-text font-bold text-[#00d9ff] font-mono text-sm uppercase">
+                    <span class="label-text font-bold text-accent-cyan font-mono text-sm uppercase">
                       TAXES
                     </span>
                   </label>
                   <button
                     type="button"
-                    class="btn btn-ghost btn-xs text-[#00d9ff] font-mono"
+                    class="btn btn-ghost btn-xs text-accent-cyan font-mono"
                     onClick={addTaxRow}
                   >
                     + ADD TAX
@@ -1138,7 +1138,7 @@ function ReceiptsManagerContent(
                       <div class="col-span-5">
                         <input
                           type="text"
-                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-theme text-white font-mono"
                           placeholder="TAX NAME"
                           value={tax.taxName}
                           onInput={(e) =>
@@ -1148,7 +1148,7 @@ function ReceiptsManagerContent(
                       <div class="col-span-2">
                         <input
                           type="text"
-                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-theme text-white font-mono"
                           placeholder="RATE %"
                           value={tax.taxRate}
                           onInput={(e) =>
@@ -1159,7 +1159,7 @@ function ReceiptsManagerContent(
                         <input
                           type="number"
                           step="0.01"
-                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-[#333] text-white font-mono"
+                          class="input input-bordered input-sm w-full bg-[#0a0a0a] border-theme text-white font-mono"
                           placeholder="AMOUNT"
                           value={tax.taxAmount}
                           onInput={(e) =>
@@ -1190,56 +1190,56 @@ function ReceiptsManagerContent(
               <div class="grid grid-cols-4 gap-4 mb-6">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-[10px] text-[#888]">
+                    <span class="label-text font-mono text-[10px] text-theme-secondary">
                       SUBTOTAL
                     </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={formSubtotal.value}
                     readOnly
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-[10px] text-[#00ff88]">
+                    <span class="label-text font-mono text-[10px] text-accent-green">
                       DISCOUNTS
                     </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-[#00ff88] font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-accent-green font-mono"
                     value={getTotalDiscount().toFixed(2)}
                     readOnly
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-[10px] text-[#888]">
+                    <span class="label-text font-mono text-[10px] text-theme-secondary">
                       TAX
                     </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={getTotalTax().toFixed(2)}
                     readOnly
                   />
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-[10px] text-[#00d9ff] font-bold">
+                    <span class="label-text font-mono text-[10px] text-accent-cyan font-bold">
                       TOTAL
                     </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered bg-[#0a0a0a] border-[#00d9ff]/30 text-[#00d9ff] font-bold font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-[#00d9ff]/30 text-accent-cyan font-bold font-mono"
                     value={formTotal.value}
                     readOnly
                   />
@@ -1249,12 +1249,12 @@ function ReceiptsManagerContent(
               {/* Payment Account */}
               <div class="form-control mb-6">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     PAID FROM ACCOUNT
                   </span>
                 </label>
                 <select
-                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                  class="select select-bordered bg-[#0a0a0a] border-theme text-white font-mono text-xs"
                   value={formPaymentAccountId.value}
                   onChange={(e) =>
                     formPaymentAccountId.value = e.currentTarget.value}
@@ -1280,7 +1280,7 @@ function ReceiptsManagerContent(
                 </button>
                 <button
                   type="submit"
-                  class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
+                  class="btn bg-[#00ff88]/20 border-[#00ff88] text-accent-green font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
@@ -1298,21 +1298,21 @@ function ReceiptsManagerContent(
       {/* Upload Receipt Modal */}
       {isUploadModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               📷 UPLOAD RECEIPT
             </h3>
             <form onSubmit={handleUploadSubmit}>
               {/* File Input */}
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     RECEIPT IMAGE / PDF *
                   </span>
                 </label>
                 <input
                   type="file"
-                  class="file-input file-input-bordered file-input-primary w-full bg-[#0a0a0a] border-[#333] text-[#888] font-mono"
+                  class="file-input file-input-bordered file-input-primary w-full bg-[#0a0a0a] border-theme text-theme-secondary font-mono"
                   accept="image/*,.pdf"
                   onChange={handleFileChange}
                   required
@@ -1321,7 +1321,7 @@ function ReceiptsManagerContent(
 
               {/* Preview */}
               {uploadPreview.value && (
-                <div class="mb-4 bg-[#0a0a0a] p-2 border border-[#333] rounded">
+                <div class="mb-4 bg-[#0a0a0a] p-2 border border-theme rounded">
                   <img
                     src={uploadPreview.value}
                     alt="Receipt preview"
@@ -1333,13 +1333,13 @@ function ReceiptsManagerContent(
               {/* Receipt Date */}
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     RECEIPT DATE
                   </span>
                 </label>
                 <input
                   type="date"
-                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                   value={uploadReceiptDate.value}
                   onInput={(e) =>
                     uploadReceiptDate.value = e.currentTarget.value}
@@ -1349,12 +1349,12 @@ function ReceiptsManagerContent(
               {/* Link to Transaction */}
               <div class="form-control mb-6">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     LINK TO TRANSACTION (OPTIONAL)
                   </span>
                 </label>
                 <select
-                  class="select select-bordered bg-[#0a0a0a] border-[#333] text-white font-mono text-xs"
+                  class="select select-bordered bg-[#0a0a0a] border-theme text-white font-mono text-xs"
                   value={uploadTransactionId.value}
                   onChange={(e) =>
                     uploadTransactionId.value = e.currentTarget.value}
@@ -1380,7 +1380,7 @@ function ReceiptsManagerContent(
                 </button>
                 <button
                   type="submit"
-                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                   disabled={isSubmitting.value || !uploadFile.value}
                 >
                   {isSubmitting.value
