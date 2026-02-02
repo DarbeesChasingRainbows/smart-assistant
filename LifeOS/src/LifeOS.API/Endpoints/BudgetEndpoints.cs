@@ -1327,9 +1327,10 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
     }
 
     private static async Task<IResult> GetDebtSummary(
-        [FromQuery] string familyId,
-        [FromServices] ArangoDbContext db)
+        [FromServices] ArangoDbContext db,
+        [FromQuery] string? familyId = null)
     {
+        var family = familyId ?? "default";
         var query = $@"
             FOR bill IN {BillCollection}
                 FILTER bill.familyId == @familyId
@@ -1337,7 +1338,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
                 FILTER bill.billType == 'debt'
                 RETURN bill";
 
-        var debts = await db.Client.Cursor.PostCursorAsync<dynamic>(query, new Dictionary<string, object> { { "familyId", familyId } });
+        var debts = await db.Client.Cursor.PostCursorAsync<dynamic>(query, new Dictionary<string, object> { { "familyId", family } });
         var debtList = debts.Result.ToList();
 
         if (debtList.Count == 0)
