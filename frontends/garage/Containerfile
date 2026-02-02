@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM denoland/deno:2.6.4 AS base
+FROM denoland/deno:2.6.7 AS base
 
 ARG GIT_REVISION
 ENV DENO_DEPLOYMENT_ID=${GIT_REVISION}
