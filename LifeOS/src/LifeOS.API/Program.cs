@@ -1,5 +1,6 @@
 using LifeOS.API.BackgroundServices;
 using LifeOS.API.Endpoints;
+using LifeOS.API.Hubs;
 using LifeOS.Application;
 using LifeOS.Infrastructure;
 using LifeOS.Infrastructure.Persistence.ArangoDB;
@@ -49,19 +50,25 @@ builder.Services.AddCors(options =>
             policy
                 .WithOrigins(
                     "http://localhost:8000",
+                    "http://localhost:8040", // Budget frontend
                     "http://localhost:3000",
                     "http://localhost:5173",
-                    "http://127.0.0.1:5173"
+                    "http://127.0.0.1:5173",
+                    "http://budget:8000" // Docker internal
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials(); // Added for future auth support and preflight consistency
+                .AllowCredentials(); // Required for SignalR
         }
     );
 });
 
 // Add Background Services
 builder.Services.AddHostedService<RecurringBillService>();
+
+// Add SignalR for real-time updates
+builder.Services.AddSignalR();
+builder.Services.AddScoped<BudgetNotificationService>();
 
 var app = builder.Build();
 
@@ -90,6 +97,9 @@ app.MapVehicleEventsExample();
 app.MapEventsEndpoints();
 app.MapVinEndpoints();
 app.MapBudgetEndpoints();
+
+// Map SignalR hubs
+app.MapHub<BudgetHub>("/hubs/budget");
 
 // Health check endpoint
 app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }))

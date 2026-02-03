@@ -374,16 +374,16 @@ function SettingsManagerContent(
   return (
     <div class="space-y-6">
       {/* Current Period */}
-      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+      <div class="card bg-theme-secondary shadow-xl border border-theme">
         <div class="card-body p-4 md:p-6">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <h2 class="text-lg font-bold text-white font-mono">
+            <h2 class="text-lg font-bold text-theme-primary font-mono">
               📅 CURRENT BUDGET PERIOD
             </h2>
             <div class="flex flex-wrap gap-2">
               <button
                 type="button"
-                class="btn bg-[#00ff88]/20 hover:bg-[#00ff88]/30 border border-[#00ff88] text-[#00ff88] btn-sm min-h-[36px] font-mono"
+                class="btn bg-[#00ff88]/20 hover:bg-[#00ff88]/30 border border-[#00ff88] text-accent-green btn-sm min-h-[36px] font-mono"
                 onClick={openIncomeModal}
               >
                 + INCOME
@@ -400,7 +400,7 @@ function SettingsManagerContent(
               )}
               <button
                 type="button"
-                class="btn btn-ghost btn-sm min-h-[36px] border border-[#333] hover:border-white text-[#888] hover:text-white font-mono"
+                class="btn btn-ghost btn-sm min-h-[36px] border border-theme hover:border-white text-theme-secondary hover:text-white font-mono"
                 onClick={recalculateYear}
                 disabled={isSubmitting.value || !currentPeriod?.key}
               >
@@ -408,7 +408,7 @@ function SettingsManagerContent(
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] btn-sm min-h-[36px] font-mono"
+                class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-accent-cyan btn-sm min-h-[36px] font-mono"
                 onClick={openPeriodModal}
               >
                 + NEW PERIOD
@@ -419,8 +419,8 @@ function SettingsManagerContent(
           {currentPeriod
             ? (
               <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
-                  <div class="stat-title text-[10px] text-[#888] font-mono">
+                <div class="stat bg-[#0a0a0a] rounded border border-theme p-4">
+                  <div class="stat-title text-[10px] text-theme-secondary font-mono">
                     PERIOD
                   </div>
                   <div class="stat-value text-base text-white font-mono">
@@ -431,16 +431,16 @@ function SettingsManagerContent(
                     {formatDate(currentPeriod.endDate)}
                   </div>
                 </div>
-                <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
-                  <div class="stat-title text-[10px] text-[#888] font-mono">
+                <div class="stat bg-[#0a0a0a] rounded border border-theme p-4">
+                  <div class="stat-title text-[10px] text-theme-secondary font-mono">
                     EXPECTED INCOME
                   </div>
-                  <div class="stat-value text-base text-[#00ff88] font-mono">
+                  <div class="stat-value text-base text-accent-green font-mono">
                     {formatCurrency(currentPeriod.expectedIncome)}
                   </div>
                 </div>
-                <div class="stat bg-[#0a0a0a] rounded border border-[#333] p-4">
-                  <div class="stat-title text-[10px] text-[#888] font-mono">
+                <div class="stat bg-[#0a0a0a] rounded border border-theme p-4">
+                  <div class="stat-title text-[10px] text-theme-secondary font-mono">
                     STATUS
                   </div>
                   <div class="stat-value pt-1">
@@ -451,7 +451,7 @@ function SettingsManagerContent(
                         </span>
                       )
                       : (
-                        <span class="badge bg-[#00ff88]/20 text-[#00ff88] border-[#00ff88]/40 font-mono badge-xs">
+                        <span class="badge bg-[#00ff88]/20 text-accent-green border-[#00ff88]/40 font-mono badge-xs">
                           ACTIVE
                         </span>
                       )}
@@ -470,10 +470,10 @@ function SettingsManagerContent(
       </div>
 
       {/* All Periods */}
-      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+      <div class="card bg-theme-secondary shadow-xl border border-theme">
         <div class="card-body p-0">
-          <div class="px-4 md:px-6 py-4 border-b border-[#333]">
-            <h2 class="text-lg font-bold text-white font-mono">
+          <div class="px-4 md:px-6 py-4 border-b border-theme">
+            <h2 class="text-lg font-bold text-theme-primary font-mono">
               📋 ALL BUDGET PERIODS
             </h2>
           </div>
@@ -481,11 +481,11 @@ function SettingsManagerContent(
             <table class="table table-sm w-full">
               <thead>
                 <tr class="bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
-                  <th class="text-[#888] font-mono text-xs">NAME</th>
-                  <th class="text-[#888] font-mono text-xs">START</th>
-                  <th class="text-[#888] font-mono text-xs">END</th>
-                  <th class="text-[#888] font-mono text-xs">EXPECTED</th>
-                  <th class="text-[#888] font-mono text-xs">STATUS</th>
+                  <th class="text-theme-secondary font-mono text-xs">NAME</th>
+                  <th class="text-theme-secondary font-mono text-xs">START</th>
+                  <th class="text-theme-secondary font-mono text-xs">END</th>
+                  <th class="text-theme-secondary font-mono text-xs">EXPECTED</th>
+                  <th class="text-theme-secondary font-mono text-xs">STATUS</th>
                   <th></th>
                 </tr>
               </thead>
@@ -493,7 +493,7 @@ function SettingsManagerContent(
                 {periods.value.map((period) => (
                   <tr
                     key={period.key ?? period.id}
-                    class={`border-b border-[#333] hover:bg-[#1a1a1a] ${
+                    class={`border-b border-theme hover:bg-theme-secondary ${
                       (period.key && currentPeriod?.key &&
                           period.key === currentPeriod.key)
                         ? "bg-[#00d9ff]/5"
@@ -503,13 +503,13 @@ function SettingsManagerContent(
                     <td class="font-bold text-white font-mono">
                       {period.name}
                     </td>
-                    <td class="text-[#888] font-mono">
+                    <td class="text-theme-secondary font-mono">
                       {formatDate(period.startDate)}
                     </td>
-                    <td class="text-[#888] font-mono">
+                    <td class="text-theme-secondary font-mono">
                       {formatDate(period.endDate)}
                     </td>
-                    <td class="text-[#00ff88] font-mono">
+                    <td class="text-accent-green font-mono">
                       {formatCurrency(period.expectedIncome)}
                     </td>
                     <td>
@@ -522,7 +522,7 @@ function SettingsManagerContent(
                         : period.key && currentPeriod?.key &&
                             period.key === currentPeriod.key
                         ? (
-                          <span class="badge bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff]/40 font-mono badge-xs">
+                          <span class="badge bg-[#00d9ff]/20 text-accent-cyan border-[#00d9ff]/40 font-mono badge-xs">
                             CURRENT
                           </span>
                         )
@@ -543,7 +543,7 @@ function SettingsManagerContent(
                           <div class="flex items-center justify-end gap-1">
                             <button
                               type="button"
-                              class="btn btn-ghost btn-xs min-h-[32px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff] font-mono"
+                              class="btn btn-ghost btn-xs min-h-[32px] border border-theme hover:border-[#00d9ff] text-theme-secondary hover:text-accent-cyan font-mono"
                               onClick={() => openEditPeriodModal(period)}
                               disabled={!period.key}
                             >
@@ -551,7 +551,7 @@ function SettingsManagerContent(
                             </button>
                             <button
                               type="button"
-                              class="btn btn-ghost btn-xs min-h-[32px] border border-[#333] hover:border-red-500 text-[#888] hover:text-red-500 font-mono"
+                              class="btn btn-ghost btn-xs min-h-[32px] border border-theme hover:border-red-500 text-theme-secondary hover:text-red-500 font-mono"
                               onClick={() => deletePeriod(period)}
                               disabled={!canDelete}
                             >
@@ -570,9 +570,9 @@ function SettingsManagerContent(
       </div>
 
       {/* Categories */}
-      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+      <div class="card bg-theme-secondary shadow-xl border border-theme">
         <div class="card-body p-4 md:p-6">
-          <h2 class="text-lg font-bold text-white font-mono mb-2">
+          <h2 class="text-lg font-bold text-theme-primary font-mono mb-2">
             📁 BUDGET CATEGORIES
           </h2>
           <p class="text-[#666] text-xs mb-6 font-mono uppercase tracking-wider">
@@ -582,19 +582,19 @@ function SettingsManagerContent(
             {categories.value.map((group) => (
               <div
                 key={group.id}
-                class="bg-[#0a0a0a] border border-[#333] rounded p-4"
+                class="bg-[#0a0a0a] border border-theme rounded p-4"
               >
-                <h3 class="font-bold text-[#00d9ff] font-mono text-xs mb-3 border-b border-[#333] pb-2">
+                <h3 class="font-bold text-accent-cyan font-mono text-xs mb-3 border-b border-theme pb-2">
                   {group.name.toUpperCase()}
                 </h3>
                 <div class="flex flex-wrap gap-2">
                   {group.categories.map((cat: Category) => (
                     <div
                       key={cat.id}
-                      class="badge bg-[#1a1a1a] text-[#888] border-[#333] font-mono text-[10px] h-auto py-1"
+                      class="badge bg-theme-secondary text-theme-secondary border-theme font-mono text-[10px] h-auto py-1"
                     >
                       {cat.name.toUpperCase()}
-                      <span class="ml-2 text-[#00ff88]">
+                      <span class="ml-2 text-accent-green">
                         {formatCurrency(cat.targetAmount)}
                       </span>
                     </div>
@@ -609,20 +609,20 @@ function SettingsManagerContent(
       {/* Period Modal */}
       {isPeriodModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               CREATE BUDGET PERIOD
             </h3>
             <form onSubmit={createPeriod}>
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     PERIOD NAME
                   </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                   value={periodName.value}
                   onInput={(e) => periodName.value = e.currentTarget.value}
                   required
@@ -631,13 +631,13 @@ function SettingsManagerContent(
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       START DATE
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={periodStart.value}
                     onInput={(e) => periodStart.value = e.currentTarget.value}
                     required
@@ -645,13 +645,13 @@ function SettingsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       END DATE
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={periodEnd.value}
                     onInput={(e) => periodEnd.value = e.currentTarget.value}
                     required
@@ -660,14 +660,14 @@ function SettingsManagerContent(
               </div>
               <div class="form-control mt-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     EXPECTED INCOME
                   </span>
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                   placeholder="0.00"
                   value={periodExpectedIncome.value}
                   onInput={(e) =>
@@ -684,7 +684,7 @@ function SettingsManagerContent(
                 </button>
                 <button
                   type="submit"
-                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
@@ -705,20 +705,20 @@ function SettingsManagerContent(
       {/* Edit Period Modal */}
       {isEditPeriodModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               EDIT BUDGET PERIOD
             </h3>
             <form onSubmit={updatePeriod}>
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     PERIOD NAME
                   </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                   value={periodName.value}
                   onInput={(e) => periodName.value = e.currentTarget.value}
                   required
@@ -727,13 +727,13 @@ function SettingsManagerContent(
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       START DATE
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={periodStart.value}
                     onInput={(e) => periodStart.value = e.currentTarget.value}
                     required
@@ -741,13 +741,13 @@ function SettingsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       END DATE
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={periodEnd.value}
                     onInput={(e) => periodEnd.value = e.currentTarget.value}
                     required
@@ -756,14 +756,14 @@ function SettingsManagerContent(
               </div>
               <div class="form-control mt-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     EXPECTED INCOME
                   </span>
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                   placeholder="0.00"
                   value={periodExpectedIncome.value}
                   onInput={(e) =>
@@ -780,7 +780,7 @@ function SettingsManagerContent(
                 </button>
                 <button
                   type="submit"
-                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
@@ -801,20 +801,20 @@ function SettingsManagerContent(
       {/* Income Modal */}
       {isIncomeModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] shadow-2xl">
-            <h3 class="font-bold text-lg mb-4 text-[#00ff88] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-accent-green font-mono">
               ADD INCOME
             </h3>
             <form onSubmit={addIncome}>
               <div class="form-control mb-4">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     DESCRIPTION
                   </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                   placeholder="e.g., PAYCHECK, SIDE GIG"
                   value={incomeDescription.value}
                   onInput={(e) =>
@@ -825,14 +825,14 @@ function SettingsManagerContent(
               <div class="grid grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       AMOUNT
                     </span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     placeholder="0.00"
                     value={incomeAmount.value}
                     onInput={(e) => incomeAmount.value = e.currentTarget.value}
@@ -841,13 +841,13 @@ function SettingsManagerContent(
                 </div>
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       DATE RECEIVED
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered bg-[#0a0a0a] border-[#333] text-white font-mono"
+                    class="input input-bordered bg-[#0a0a0a] border-theme text-white font-mono"
                     value={incomeDate.value}
                     onInput={(e) => incomeDate.value = e.currentTarget.value}
                     required
@@ -864,7 +864,7 @@ function SettingsManagerContent(
                 </button>
                 <button
                   type="submit"
-                  class="btn bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
+                  class="btn bg-[#00ff88]/20 border-[#00ff88] text-accent-green font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value

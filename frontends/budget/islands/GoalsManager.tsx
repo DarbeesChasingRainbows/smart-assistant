@@ -248,7 +248,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
       <div class="flex justify-end">
         <button
           type="button"
-          class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+          class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-accent-cyan min-h-[44px] font-mono"
           onClick={openAddModal}
         >
           <span class="mr-2">+</span>Add Goal
@@ -266,34 +266,34 @@ function GoalsManagerContent({ initialGoals }: Props) {
           return (
             <div
               key={goal.id}
-              class="card bg-[#1a1a1a] shadow-xl border border-[#333]"
+              class="card bg-theme-secondary shadow-xl border border-theme"
             >
               <div class="card-body p-4 md:p-6">
                 <div class="flex justify-between items-start gap-2">
                   <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-bold text-white font-mono truncate">
+                    <h3 class="text-lg font-bold text-theme-primary font-mono truncate">
                       {goal.name}
                     </h3>
-                    <span class="badge bg-[#333] text-[#888] border-[#444] badge-sm font-mono mt-1">
+                    <span class="badge bg-[#333] text-theme-secondary border-[#444] badge-sm font-mono mt-1">
                       {GOAL_TYPES.find((t) => t.value === goal.goalType)?.label}
                     </span>
                   </div>
                   <div class="dropdown dropdown-end">
                     <label
                       tabIndex={0}
-                      class="btn btn-ghost btn-xs min-h-[36px] min-w-[36px] text-[#888] hover:text-[#00d9ff]"
+                      class="btn btn-ghost btn-xs min-h-[36px] min-w-[36px] text-theme-secondary hover:text-accent-cyan"
                       aria-label="Goal options"
                     >
                       <span class="text-xl">⋮</span>
                     </label>
                     <ul
                       tabIndex={0}
-                      class="dropdown-content menu p-2 shadow bg-[#1a1a1a] border border-[#333] rounded w-32 z-10"
+                      class="dropdown-content menu p-2 shadow bg-theme-secondary border border-theme rounded w-32 z-10"
                     >
                       <li>
                         <a
                           onClick={() => openEditModal(goal)}
-                          class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10 font-mono min-h-[36px]"
+                          class="text-theme-secondary hover:text-accent-cyan hover:bg-[#00d9ff]/10 font-mono min-h-[36px]"
                         >
                           Edit
                         </a>
@@ -301,7 +301,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                       <li>
                         <a
                           onClick={() => markComplete(goal)}
-                          class="text-[#888] hover:text-[#00ff88] hover:bg-[#00ff88]/10 font-mono min-h-[36px]"
+                          class="text-theme-secondary hover:text-accent-green hover:bg-[#00ff88]/10 font-mono min-h-[36px]"
                         >
                           Complete
                         </a>
@@ -325,11 +325,11 @@ function GoalsManagerContent({ initialGoals }: Props) {
                       <div
                         class={`radial-progress ${
                           percent >= 100
-                            ? "text-[#00ff88]"
+                            ? "text-accent-green"
                             : percent >= 75
-                            ? "text-[#00d9ff]"
-                            : "text-[#ffb000]"
-                        } border-4 border-[#333]`}
+                            ? "text-accent-cyan"
+                            : "text-accent-orange"
+                        } border-4 border-theme`}
                         style={{
                           "--value": Math.min(100, percent),
                           "--size": "5rem",
@@ -340,17 +340,17 @@ function GoalsManagerContent({ initialGoals }: Props) {
                         aria-valuemin={0}
                         aria-valuemax={100}
                       >
-                        <span class="text-white font-mono text-sm">
+                        <span class="text-theme-primary font-mono text-sm">
                           {percent.toFixed(0)}%
                         </span>
                       </div>
                     </div>
                     <div class="flex-1 min-w-0">
                       <div class="flex justify-between text-sm mb-2">
-                        <span class="font-medium text-white font-mono">
+                        <span class="font-medium text-theme-primary font-mono">
                           {formatCurrency(goal.currentAmount)}
                         </span>
-                        <span class="text-[#888] font-mono">
+                        <span class="text-theme-secondary font-mono">
                           {formatCurrency(goal.targetAmount)}
                         </span>
                       </div>
@@ -366,7 +366,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                           style={{ width: `${Math.min(100, percent)}%` }}
                         />
                       </div>
-                      <div class="flex flex-col sm:flex-row sm:justify-between text-xs mt-2 text-[#888] font-mono gap-1">
+                      <div class="flex flex-col sm:flex-row sm:justify-between text-xs mt-2 text-theme-secondary font-mono gap-1">
                         <span>{formatCurrency(remaining)} remaining</span>
                         {goal.targetDate && (
                           <span>
@@ -388,7 +388,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            class="stroke-current shrink-0 w-4 h-4 text-[#00d9ff]"
+                            class="stroke-current shrink-0 w-4 h-4 text-accent-cyan"
                           >
                             <path
                               stroke-linecap="round"
@@ -397,7 +397,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                           </svg>
-                          <span class="text-[#00d9ff] font-mono text-xs">
+                          <span class="text-accent-cyan font-mono text-xs">
                             {schedule.suggestion}
                           </span>
                         </div>
@@ -411,8 +411,8 @@ function GoalsManagerContent({ initialGoals }: Props) {
                   type="button"
                   class={`btn btn-sm min-h-[44px] mt-4 w-full font-mono ${
                     percent >= 100
-                      ? "bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] cursor-not-allowed"
-                      : "bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border-[#00d9ff] text-[#00d9ff]"
+                      ? "bg-[#00ff88]/20 border-[#00ff88] text-accent-green cursor-not-allowed"
+                      : "bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border-[#00d9ff] text-accent-cyan"
                   }`}
                   onClick={() => openContributionModal(goal)}
                   disabled={percent >= 100}
@@ -439,9 +439,9 @@ function GoalsManagerContent({ initialGoals }: Props) {
       </div>
 
       {activeGoals.length === 0 && (
-        <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+        <div class="card bg-theme-secondary shadow-xl border border-theme">
           <div class="card-body text-center py-12">
-            <p class="text-[#888] font-mono">
+            <p class="text-theme-secondary font-mono">
               No active goals. Create one to start tracking!
             </p>
           </div>
@@ -451,21 +451,21 @@ function GoalsManagerContent({ initialGoals }: Props) {
       {/* Completed Goals */}
       {completedGoals.length > 0 && (
         <div class="mt-8">
-          <h2 class="text-xl font-semibold text-white font-mono mb-4 flex items-center gap-2">
-            <span class="text-[#00ff88]">✓</span>
+          <h2 class="text-xl font-semibold text-theme-primary font-mono mb-4 flex items-center gap-2">
+            <span class="text-accent-green">✓</span>
             <span>COMPLETED GOALS</span>
           </h2>
           <div class="space-y-2">
             {completedGoals.map((goal) => (
               <div
                 key={goal.id}
-                class="card bg-[#1a1a1a] shadow border border-[#00ff88]/20"
+                class="card bg-theme-secondary shadow border border-[#00ff88]/20"
               >
                 <div class="card-body py-3 px-4 flex flex-row justify-between items-center">
-                  <span class="font-medium text-white font-mono">
+                  <span class="font-medium text-theme-primary font-mono">
                     {goal.name}
                   </span>
-                  <span class="text-[#00ff88] font-mono">
+                  <span class="text-accent-green font-mono">
                     {formatCurrency(goal.targetAmount)}
                   </span>
                 </div>
@@ -608,12 +608,12 @@ function GoalsManagerContent({ initialGoals }: Props) {
             </h3>
 
             {/* Goal Progress Summary */}
-            <div class="bg-[#0a0a0a] border border-[#333] p-4 rounded mb-4">
+            <div class="bg-[#0a0a0a] border border-theme p-4 rounded mb-4">
               <div class="flex justify-between items-center mb-2">
-                <span class="text-sm text-[#888] font-mono">
+                <span class="text-sm text-theme-secondary font-mono">
                   Current Progress
                 </span>
-                <span class="font-bold text-lg text-white font-mono">
+                <span class="font-bold text-lg text-theme-primary font-mono">
                   {(
                     (contributionModalGoal.value.currentAmount /
                       contributionModalGoal.value.targetAmount) * 100
@@ -634,7 +634,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                   }}
                 />
               </div>
-              <div class="flex justify-between text-xs text-[#888] font-mono">
+              <div class="flex justify-between text-xs text-theme-secondary font-mono">
                 <span>
                   {formatCurrency(contributionModalGoal.value.currentAmount)}
                 </span>
@@ -656,7 +656,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      class="stroke-current shrink-0 w-4 h-4 text-[#00d9ff]"
+                      class="stroke-current shrink-0 w-4 h-4 text-accent-cyan"
                     >
                       <path
                         stroke-linecap="round"
@@ -666,10 +666,10 @@ function GoalsManagerContent({ initialGoals }: Props) {
                       />
                     </svg>
                     <div>
-                      <div class="font-medium text-[#00d9ff] font-mono">
+                      <div class="font-medium text-accent-cyan font-mono">
                         Suggested Schedule:
                       </div>
-                      <div class="text-[#00d9ff] font-mono text-xs">
+                      <div class="text-accent-cyan font-mono text-xs">
                         {schedule.suggestion}
                       </div>
                     </div>
@@ -685,14 +685,14 @@ function GoalsManagerContent({ initialGoals }: Props) {
                 <span class="label-text">Contribution Amount</span>
               </label>
               <div class="join w-full">
-                <span class="join-item bg-[#0a0a0a] border border-[#333] flex items-center px-4 text-[#00d9ff] font-mono">
+                <span class="join-item bg-[#0a0a0a] border border-theme flex items-center px-4 text-accent-cyan font-mono">
                   $
                 </span>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
-                  class="input input-bordered join-item flex-1 bg-[#0a0a0a] border-[#333] text-white font-mono"
+                  class="input input-bordered join-item flex-1 bg-[#0a0a0a] border-theme text-theme-primary font-mono"
                   placeholder="0.00"
                   value={contributionAmount.value}
                   onInput={(e) =>
@@ -717,7 +717,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                     <button
                       key="week"
                       type="button"
-                      class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] flex-1 font-mono"
+                      class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-theme-secondary hover:border-[#00d9ff] hover:text-accent-cyan flex-1 font-mono"
                       onClick={() =>
                         contributionAmount.value = schedule.perWeekAmount!
                           .toFixed(2)}
@@ -731,7 +731,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                     <button
                       key="month"
                       type="button"
-                      class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] flex-1 font-mono"
+                      class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-theme-secondary hover:border-[#00d9ff] hover:text-accent-cyan flex-1 font-mono"
                       onClick={() =>
                         contributionAmount.value = schedule.perMonthAmount!
                           .toFixed(2)}
@@ -744,7 +744,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
                   <button
                     key="full"
                     type="button"
-                    class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] flex-1 font-mono"
+                    class="btn btn-xs min-h-[36px] bg-[#333] border-[#444] text-theme-secondary hover:border-[#00d9ff] hover:text-accent-cyan flex-1 font-mono"
                     onClick={() =>
                       contributionAmount.value = remaining.toFixed(2)}
                   >
@@ -766,7 +766,7 @@ function GoalsManagerContent({ initialGoals }: Props) {
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+                class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-accent-cyan min-h-[44px] font-mono"
                 onClick={() => addContribution(contributionModalGoal.value!.id)}
                 disabled={isSubmitting.value ||
                   !contributionAmount.value ||

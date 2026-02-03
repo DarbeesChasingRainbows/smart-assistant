@@ -1,6 +1,7 @@
 using System.Globalization;
 using LifeOS.API.BackgroundServices;
 using LifeOS.API.DTOs;
+using LifeOS.API.Hubs;
 using LifeOS.Infrastructure.Persistence.ArangoDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,12 @@ namespace LifeOS.API.Endpoints;
 /// </summary>
 public static class BudgetEndpoints
 {
+    private static decimal? TryParseNullableDecimal(object? value)
+    {
+        if (value == null) return null;
+        return decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result) ? result : null;
+    }
+
     private const string PayPeriodCollection = ArangoDbContext.Collections.BudgetPayPeriods;
     private const string CategoryGroupCollection = ArangoDbContext.Collections.BudgetCategoryGroups;
     private const string CategoryCollection = ArangoDbContext.Collections.BudgetCategories;
@@ -83,10 +90,13 @@ public static class BudgetEndpoints
         var bills = group.MapGroup("/bills");
         bills.MapGet("/", GetBills).WithName("GetBudgetBills");
         bills.MapGet("/upcoming", GetUpcomingBills).WithName("GetUpcomingBudgetBills");
+        bills.MapGet("/debt-summary", GetDebtSummary).WithName("GetBudgetDebtSummary");
         bills.MapGet("/{key}", GetBill).WithName("GetBudgetBill");
         bills.MapPost("/", CreateBill).WithName("CreateBudgetBill");
         bills.MapPut("/{key}", UpdateBill).WithName("UpdateBudgetBill");
         bills.MapPost("/{key}/paid", MarkBillPaid).WithName("MarkBudgetBillPaid");
+        bills.MapPost("/{key}/calculate-payoff", CalculatePayoff).WithName("CalculateBudgetBillPayoff");
+        bills.MapPost("/optimal-payment", GetOptimalPaymentStrategy).WithName("GetOptimalPaymentStrategy");
         bills.MapPost("/generate-instances", GenerateRecurringBillInstances).WithName("GenerateRecurringBillInstances");
 
         // Goals
@@ -321,6 +331,7 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
     private static async Task<IResult> RecalculateYear(
         string key,
         [FromServices] ArangoDbContext db,
+        [FromServices] BudgetNotificationService? notificationService = null,
         [FromQuery] string? familyId = null)
     {
         var family = familyId ?? "default";
@@ -496,6 +507,12 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             previousEnding = ending;
         }
 
+        // Send real-time notification
+        if (notificationService != null)
+        {
+            _ = notificationService.NotifyCarryoverRecalculated(family, key);
+        }
+
         return Results.Ok(new { affectedPeriods = periods.Count });
     }
 
@@ -598,20 +615,67 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
     {
         try
         {
-            // Check for categories
-            var checkQuery = $"FOR c IN {CategoryCollection} FILTER c.groupKey == @key LIMIT 1 RETURN 1";
-            var cursor = await db.Client.Cursor.PostCursorAsync<int>(checkQuery, new Dictionary<string, object> { { "key", key } });
-            if (cursor.Result.Any())
+            // Get all categories in this group
+            var categoriesQuery = $"FOR c IN {CategoryCollection} FILTER c.groupKey == @key RETURN c";
+            var categoriesCursor = await db.Client.Cursor.PostCursorAsync<dynamic>(categoriesQuery, new Dictionary<string, object> { { "key", key } });
+            var categories = categoriesCursor.Result.ToList();
+
+            if (categories.Count > 0)
             {
-                return Results.BadRequest("Cannot delete group with categories. Move or delete categories first.");
+                var categoryKeys = categories.Select(c => (string)c._key).ToList();
+                
+                // Check for transactions in ANY of these categories
+                var transactionCheckQuery = $@"
+                    FOR t IN {TransactionCollection}
+                    FILTER t.categoryKey IN @categoryKeys
+                    LIMIT 1
+                    RETURN 1";
+                
+                var txCursor = await db.Client.Cursor.PostCursorAsync<int>(
+                    transactionCheckQuery, 
+                    new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+                
+                if (txCursor.Result.Any())
+                {
+                     return Results.BadRequest("Cannot delete group: One or more categories have transactions associated with them.");
+                }
+
+                // Safe to cascade delete
+                // 1. Assignments
+                var deleteAssignments = $@"
+                    FOR a IN {AssignmentCollection}
+                    FILTER a.categoryKey IN @categoryKeys
+                    REMOVE a IN {AssignmentCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(deleteAssignments, new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+
+                // 2. Goals
+                var deleteGoals = $@"
+                    FOR g IN {GoalCollection}
+                    FILTER g.categoryKey IN @categoryKeys
+                    REMOVE g IN {GoalCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(deleteGoals, new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+
+                // 3. Bills (Unlink)
+                var unlinkBills = $@"
+                    FOR b IN {BillCollection}
+                    FILTER b.categoryKey IN @categoryKeys
+                    UPDATE b WITH {{ categoryKey: null }} IN {BillCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(unlinkBills, new Dictionary<string, object> { { "categoryKeys", categoryKeys } });
+
+                // 4. Categories
+                var deleteCategories = $@"
+                    FOR c IN {CategoryCollection}
+                    FILTER c.groupKey == @key
+                    REMOVE c IN {CategoryCollection}";
+                await db.Client.Cursor.PostCursorAsync<dynamic>(deleteCategories, new Dictionary<string, object> { { "key", key } });
             }
 
             await db.Client.Document.DeleteDocumentAsync(CategoryGroupCollection, key);
             return Results.NoContent();
         }
-        catch
+        catch (Exception ex)
         {
-            return Results.NotFound();
+            return Results.Problem(ex.Message);
         }
     }
 
@@ -827,56 +891,54 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
     private static async Task<IResult> AssignMoney(
         AssignMoneyRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] ArangoDbContext db,
+        [FromServices] BudgetNotificationService? notificationService = null)
     {
         var now = DateTime.UtcNow;
+        var newKey = Guid.NewGuid().ToString("N")[..12];
 
-        // Check if assignment already exists (upsert)
-        var existingQuery = $@"
-            FOR doc IN {AssignmentCollection}
-            FILTER doc.payPeriodKey == @payPeriodKey AND doc.categoryKey == @categoryKey
-            RETURN doc";
+        var query = $@"
+            UPSERT {{ payPeriodKey: @payPeriodKey, categoryKey: @categoryKey }}
+            INSERT {{ 
+                _key: @newKey, 
+                payPeriodKey: @payPeriodKey, 
+                categoryKey: @categoryKey, 
+                assignedAmount: @amount, 
+                createdAt: @now, 
+                updatedAt: @now 
+            }}
+            UPDATE {{ 
+                assignedAmount: @amount, 
+                updatedAt: @now 
+            }} IN {AssignmentCollection}
+            RETURN NEW";
 
-        var existingCursor = await db.Client.Cursor.PostCursorAsync<dynamic>(
-            existingQuery,
+        var cursor = await db.Client.Cursor.PostCursorAsync<dynamic>(
+            query,
             new Dictionary<string, object>
             {
                 { "payPeriodKey", request.PayPeriodKey },
-                { "categoryKey", request.CategoryKey }
+                { "categoryKey", request.CategoryKey },
+                { "amount", request.Amount },
+                { "newKey", newKey },
+                { "now", now }
             });
 
-        var existing = existingCursor.Result.FirstOrDefault();
-
-        if (existing != null)
+        var doc = cursor.Result.FirstOrDefault();
+        
+        // Send real-time notification
+        if (notificationService != null)
         {
-            // Update existing assignment
-            var updates = new Dictionary<string, object>
-            {
-                { "assignedAmount", request.Amount },
-                { "updatedAt", now }
-            };
-            await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(
-                AssignmentCollection, existing._key.ToString(), updates);
-
-            return Results.Ok(new { message = "Assignment updated", key = existing._key.ToString() });
+            _ = notificationService.NotifyAssignmentUpdated(
+                "default", // familyId - TODO: get from request context
+                request.CategoryKey,
+                request.PayPeriodKey,
+                request.Amount,
+                request.Amount // available - simplified for now
+            );
         }
-        else
-        {
-            // Create new assignment
-            var doc = new
-            {
-                _key = Guid.NewGuid().ToString("N")[..12],
-                payPeriodKey = request.PayPeriodKey,
-                categoryKey = request.CategoryKey,
-                assignedAmount = request.Amount,
-                createdByUserKey = (string?)null,
-                createdAt = now,
-                updatedAt = now
-            };
-
-            var result = await db.Client.Document.PostDocumentAsync(AssignmentCollection, doc);
-            return Results.Created($"/api/v1/budget/assignments/{result._key}", MapAssignment(doc));
-        }
+        
+        return Results.Ok(MapAssignment(doc));
     }
 
     // ==================== INCOME ENTRIES ====================
@@ -1086,7 +1148,19 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             frequency = request.Frequency,
             isAutoPay = request.IsAutoPay,
             isActive = true,
-            createdAt = now
+            createdAt = now,
+            // Bill type differentiation
+            billType = request.BillType ?? "bill",
+            // Debt-specific fields
+            debtType = request.DebtType,
+            totalBalance = request.TotalBalance,
+            interestRate = request.InterestRate,
+            minimumPayment = request.MinimumPayment,
+            originalAmount = request.OriginalAmount,
+            // Date fields (null on creation)
+            payoffDate = (DateTime?)null,
+            lastPaidDate = (DateTime?)null,
+            nextDueDate = (DateTime?)null
         };
 
         var result = await db.Client.Document.PostDocumentAsync(BillCollection, doc);
@@ -1109,6 +1183,14 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             if (request.Frequency != null) updates["frequency"] = request.Frequency;
             if (request.IsAutoPay.HasValue) updates["isAutoPay"] = request.IsAutoPay.Value;
             if (request.IsActive.HasValue) updates["isActive"] = request.IsActive.Value;
+            // Bill type differentiation
+            if (request.BillType != null) updates["billType"] = request.BillType;
+            // Debt-specific fields
+            if (request.DebtType != null) updates["debtType"] = request.DebtType;
+            if (request.TotalBalance.HasValue) updates["totalBalance"] = request.TotalBalance.Value;
+            if (request.InterestRate.HasValue) updates["interestRate"] = request.InterestRate.Value;
+            if (request.MinimumPayment.HasValue) updates["minimumPayment"] = request.MinimumPayment.Value;
+            if (request.OriginalAmount.HasValue) updates["originalAmount"] = request.OriginalAmount.Value;
 
             await db.Client.Document.PatchDocumentAsync<dynamic, dynamic>(BillCollection, key, updates);
             return Results.Ok();
@@ -1242,6 +1324,322 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         }
 
         return nextDate;
+    }
+
+    private static async Task<IResult> GetDebtSummary(
+        [FromServices] ArangoDbContext db,
+        [FromQuery] string? familyId = null)
+    {
+        var family = familyId ?? "default";
+        var query = $@"
+            FOR bill IN {BillCollection}
+                FILTER bill.familyId == @familyId
+                FILTER bill.isActive == true
+                FILTER bill.billType == 'debt'
+                RETURN bill";
+
+        var debts = await db.Client.Cursor.PostCursorAsync<dynamic>(query, new Dictionary<string, object> { { "familyId", family } });
+        var debtList = debts.Result.ToList();
+
+        if (debtList.Count == 0)
+        {
+            return Results.Ok(new DebtSummaryDto
+            {
+                TotalDebt = 0,
+                TotalMonthlyPayments = 0,
+                TotalMonthlyInterest = 0,
+                AverageInterestRate = 0,
+                DebtCount = 0,
+                DebtByType = new List<DebtByTypeDto>(),
+                ProjectedDebtFreeDate = null
+            });
+        }
+
+        decimal totalDebt = 0;
+        decimal totalMonthlyPayments = 0;
+        decimal totalMonthlyInterest = 0;
+        decimal totalWeightedRate = 0;
+        var debtByType = new Dictionary<string, (decimal balance, decimal payment, int count)>();
+
+        foreach (var debt in debtList)
+        {
+            decimal balance = TryParseNullableDecimal(debt.totalBalance) ?? 0;
+            decimal payment = decimal.TryParse(debt.amount?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amt) ? amt : 0;
+            decimal rate = TryParseNullableDecimal(debt.interestRate) ?? 0;
+            string debtType = debt.debtType?.ToString() ?? "other";
+
+            totalDebt += balance;
+            totalMonthlyPayments += payment;
+            totalMonthlyInterest += balance * (rate / 100 / 12);
+            totalWeightedRate += balance * rate;
+
+            if (!debtByType.ContainsKey(debtType))
+                debtByType[debtType] = (0, 0, 0);
+            
+            var current = debtByType[debtType];
+            debtByType[debtType] = (current.balance + balance, current.payment + payment, current.count + 1);
+        }
+
+        decimal avgRate = totalDebt > 0 ? totalWeightedRate / totalDebt : 0;
+
+        // Calculate projected debt-free date using average values
+        DateTime? debtFreeDate = null;
+        if (totalMonthlyPayments > totalMonthlyInterest && totalDebt > 0)
+        {
+            int months = CalculatePayoffMonths(totalDebt, totalMonthlyPayments, avgRate);
+            if (months > 0)
+            {
+                debtFreeDate = DateTime.UtcNow.AddMonths(months);
+            }
+        }
+
+        return Results.Ok(new DebtSummaryDto
+        {
+            TotalDebt = totalDebt,
+            TotalMonthlyPayments = totalMonthlyPayments,
+            TotalMonthlyInterest = Math.Round(totalMonthlyInterest, 2),
+            AverageInterestRate = Math.Round(avgRate, 2),
+            DebtCount = debtList.Count,
+            DebtByType = debtByType.Select(kvp => new DebtByTypeDto
+            {
+                DebtType = kvp.Key,
+                TotalBalance = kvp.Value.balance,
+                TotalMonthlyPayment = kvp.Value.payment,
+                Count = kvp.Value.count
+            }).ToList(),
+            ProjectedDebtFreeDate = debtFreeDate
+        });
+    }
+
+    private static async Task<IResult> CalculatePayoff(
+        string key,
+        CalculatePayoffRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        try
+        {
+            var bill = await db.Client.Document.GetDocumentAsync<dynamic>(BillCollection, key);
+            if (bill == null)
+            {
+                return Results.NotFound(new { error = "Bill not found" });
+            }
+
+            if (bill.billType?.ToString() != "debt")
+            {
+                return Results.BadRequest(new { error = "Payoff calculation is only available for debt bills" });
+            }
+
+            decimal balance = TryParseNullableDecimal(bill.totalBalance) ?? 0;
+            decimal payment = decimal.TryParse(bill.amount?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amt) ? amt : 0;
+            decimal rate = TryParseNullableDecimal(bill.interestRate) ?? 0;
+            string billName = bill.name?.ToString() ?? "Unknown";
+
+            if (balance <= 0 || payment <= 0)
+            {
+                return Results.BadRequest(new { error = "Balance and payment must be greater than zero" });
+            }
+
+            // Calculate standard payoff
+            int months = CalculatePayoffMonths(balance, payment, rate);
+            var (totalInterest, totalPaid) = CalculateTotalInterestPaid(balance, payment, rate, months);
+
+            var projection = new PayoffProjectionDto
+            {
+                BillKey = key,
+                BillName = billName,
+                CurrentBalance = balance,
+                MonthlyPayment = payment,
+                InterestRate = rate,
+                MonthsToPayoff = months,
+                PayoffDate = DateTime.UtcNow.AddMonths(months),
+                TotalInterestPaid = Math.Round(totalInterest, 2),
+                TotalAmountPaid = Math.Round(totalPaid, 2)
+            };
+
+            // Calculate with extra payment if provided
+            if (request.ExtraPayment.HasValue && request.ExtraPayment.Value > 0)
+            {
+                decimal extraPayment = payment + request.ExtraPayment.Value;
+                int monthsWithExtra = CalculatePayoffMonths(balance, extraPayment, rate);
+                var (interestWithExtra, paidWithExtra) = CalculateTotalInterestPaid(balance, extraPayment, rate, monthsWithExtra);
+
+                projection = projection with
+                {
+                    MonthsToPayoffWithExtra = monthsWithExtra,
+                    PayoffDateWithExtra = DateTime.UtcNow.AddMonths(monthsWithExtra),
+                    TotalInterestWithExtra = Math.Round(interestWithExtra, 2),
+                    InterestSaved = Math.Round(totalInterest - interestWithExtra, 2),
+                    MonthsSaved = months - monthsWithExtra
+                };
+            }
+
+            return Results.Ok(projection);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(title: "Error calculating payoff", detail: ex.Message, statusCode: 500);
+        }
+    }
+
+    private static async Task<IResult> GetOptimalPaymentStrategy(
+        OptimalPaymentRequest request,
+        [FromServices] ArangoDbContext db)
+    {
+        var query = $@"
+            FOR bill IN {BillCollection}
+                FILTER bill.familyId == @familyId
+                FILTER bill.isActive == true
+                FILTER bill.billType == 'debt'
+                FILTER bill.totalBalance > 0
+                RETURN bill";
+
+        var debts = await db.Client.Cursor.PostCursorAsync<dynamic>(query, new Dictionary<string, object> { { "familyId", request.FamilyId } });
+        var debtList = debts.Result.ToList();
+
+        if (debtList.Count == 0)
+        {
+            return Results.Ok(new OptimalPaymentStrategyDto
+            {
+                Strategy = request.Strategy,
+                StrategyDescription = "No active debts found",
+                TotalDebt = 0,
+                TotalMonthlyPayment = 0,
+                MonthsToDebtFree = 0,
+                DebtFreeDate = DateTime.UtcNow,
+                TotalInterestPaid = 0,
+                PaymentOrder = new List<DebtPaymentOrderDto>()
+            });
+        }
+
+        // Parse debt data
+        var parsedDebts = debtList.Select(d => new
+        {
+            Key = d._key?.ToString() ?? "",
+            Name = d.name?.ToString() ?? "Unknown",
+            DebtType = d.debtType?.ToString() ?? "other",
+            Balance = TryParseNullableDecimal(d.totalBalance) ?? 0,
+            Rate = TryParseNullableDecimal(d.interestRate) ?? 0,
+            Payment = decimal.TryParse(d.amount?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amt) ? amt : 0
+        }).ToList();
+
+        // Sort based on strategy
+        var sortedDebts = request.Strategy.ToLower() == "snowball"
+            ? parsedDebts.OrderBy(d => d.Balance).ToList()
+            : parsedDebts.OrderByDescending(d => d.Rate).ToList();
+
+        string strategyDescription = request.Strategy.ToLower() == "snowball"
+            ? "Pay smallest balances first for quick wins and motivation"
+            : "Pay highest interest rates first to minimize total interest paid";
+
+        decimal totalDebt = sortedDebts.Sum(d => d.Balance);
+        decimal totalMonthlyPayment = sortedDebts.Sum(d => d.Payment) + request.ExtraBudget;
+        decimal totalInterestPaid = 0;
+        int totalMonths = 0;
+
+        var paymentOrder = new List<DebtPaymentOrderDto>();
+        // Use a mutable class to track remaining balances
+        var remainingBalances = sortedDebts.ToDictionary(d => d.Key, d => d.Balance);
+        decimal extraBudget = request.ExtraBudget;
+        int order = 1;
+
+        // Simulate payoff
+        while (remainingBalances.Values.Any(b => b > 0))
+        {
+            totalMonths++;
+            if (totalMonths > 600) break; // Safety limit: 50 years
+
+            // Find the priority debt (first one with balance > 0 in sorted order)
+            var priorityDebtKey = sortedDebts.FirstOrDefault(d => remainingBalances[d.Key] > 0)?.Key;
+
+            // Apply payments to all debts
+            foreach (var debt in sortedDebts)
+            {
+                if (remainingBalances[debt.Key] <= 0) continue;
+
+                decimal currentBalance = remainingBalances[debt.Key];
+                decimal monthlyInterest = currentBalance * (debt.Rate / 100 / 12);
+                totalInterestPaid += monthlyInterest;
+
+                decimal payment = debt.Payment;
+                // Add extra budget to the priority debt
+                if (debt.Key == priorityDebtKey)
+                {
+                    payment += extraBudget;
+                }
+
+                decimal newBalance = currentBalance + monthlyInterest - payment;
+                
+                if (newBalance <= 0)
+                {
+                    // Debt paid off
+                    paymentOrder.Add(new DebtPaymentOrderDto
+                    {
+                        Order = order++,
+                        BillKey = debt.Key,
+                        BillName = debt.Name,
+                        DebtType = debt.DebtType,
+                        CurrentBalance = debt.Balance,
+                        InterestRate = debt.Rate,
+                        MonthlyPayment = debt.Payment,
+                        MonthsToPayoff = totalMonths,
+                        PayoffDate = DateTime.UtcNow.AddMonths(totalMonths),
+                        Reason = request.Strategy.ToLower() == "snowball"
+                            ? "Smallest balance - quick win"
+                            : "Highest interest rate - saves most money"
+                    });
+
+                    // Roll over freed payment to extra budget
+                    extraBudget += debt.Payment;
+                    remainingBalances[debt.Key] = 0;
+                }
+                else
+                {
+                    remainingBalances[debt.Key] = newBalance;
+                }
+            }
+        }
+
+        return Results.Ok(new OptimalPaymentStrategyDto
+        {
+            Strategy = request.Strategy,
+            StrategyDescription = strategyDescription,
+            TotalDebt = totalDebt,
+            TotalMonthlyPayment = totalMonthlyPayment,
+            MonthsToDebtFree = totalMonths,
+            DebtFreeDate = DateTime.UtcNow.AddMonths(totalMonths),
+            TotalInterestPaid = Math.Round(totalInterestPaid, 2),
+            PaymentOrder = paymentOrder
+        });
+    }
+
+    private static int CalculatePayoffMonths(decimal balance, decimal payment, decimal apr)
+    {
+        if (payment <= 0 || balance <= 0) return 0;
+        decimal monthlyRate = apr / 100 / 12;
+        if (monthlyRate == 0) return (int)Math.Ceiling(balance / payment);
+        
+        decimal monthlyInterest = balance * monthlyRate;
+        if (payment <= monthlyInterest) return int.MaxValue; // Payment doesn't cover interest
+        
+        // Formula: n = -log(1 - (r * P) / M) / log(1 + r)
+        double n = -Math.Log((double)(1 - (monthlyRate * balance) / payment)) / Math.Log((double)(1 + monthlyRate));
+        return (int)Math.Ceiling(n);
+    }
+
+    private static (decimal totalInterest, decimal totalPaid) CalculateTotalInterestPaid(decimal balance, decimal payment, decimal apr, int months)
+    {
+        decimal monthlyRate = apr / 100 / 12;
+        decimal totalInterest = 0;
+        decimal remainingBalance = balance;
+
+        for (int i = 0; i < months && remainingBalance > 0; i++)
+        {
+            decimal interest = remainingBalance * monthlyRate;
+            totalInterest += interest;
+            remainingBalance = remainingBalance + interest - payment;
+        }
+
+        return (totalInterest, balance + totalInterest);
     }
 
     private static async Task<IResult> GenerateRecurringBillInstances(
@@ -1507,7 +1905,8 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
 
     private static async Task<IResult> CreateTransaction(
         CreateBudgetTransactionRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] ArangoDbContext db,
+        [FromServices] BudgetNotificationService? notificationService = null)
     {
         try
         {
@@ -1517,9 +1916,10 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             }
 
             var now = DateTime.UtcNow;
+            var transactionKey = Guid.NewGuid().ToString("N")[..12];
             var doc = new
             {
-                _key = Guid.NewGuid().ToString("N")[..12],
+                _key = transactionKey,
                 accountKey = request.AccountKey,
                 categoryKey = request.CategoryKey,
                 payPeriodKey = (string?)null, // Will be determined based on transaction date
@@ -1545,6 +1945,19 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
                 return Results.BadRequest(new { error = ex.Message });
             }
 
+            // Send real-time notification
+            if (notificationService != null)
+            {
+                _ = notificationService.NotifyTransactionCreated(
+                    "default", // familyId
+                    transactionKey,
+                    request.CategoryKey ?? "",
+                    request.AccountKey,
+                    request.Amount,
+                    request.Payee
+                );
+            }
+
             return Results.Created($"/api/v1/budget/transactions/{result._key}", MapTransaction(doc));
         }
         catch (Exception ex)
@@ -1561,12 +1974,14 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
     private static async Task<IResult> UpdateTransaction(
         string key,
         UpdateBudgetTransactionRequest request,
-        [FromServices] ArangoDbContext db)
+        [FromServices] ArangoDbContext db,
+        [FromServices] BudgetNotificationService? notificationService = null)
     {
         try
         {
             var existing = await db.Client.Document.GetDocumentAsync<dynamic>(TransactionCollection, key);
             var accountKey = existing.accountKey?.ToString();
+            var familyId = existing.familyId?.ToString() ?? "default";
 
             var updates = new Dictionary<string, object>();
             if (request.CategoryKey != null) updates["categoryKey"] = request.CategoryKey;
@@ -1582,6 +1997,18 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
             if (request.Amount.HasValue && accountKey != null)
             {
                 await UpdateAccountBalance(db, accountKey);
+            }
+
+            // Send real-time notification
+            if (notificationService != null)
+            {
+                _ = notificationService.NotifyTransactionUpdated(
+                    familyId,
+                    key,
+                    request.CategoryKey ?? existing.categoryKey?.ToString() ?? "",
+                    accountKey ?? "",
+                    request.Amount ?? (decimal)(existing.amount ?? 0m),
+                    request.Payee ?? existing.payee?.ToString() ?? "");
             }
 
             return Results.Ok();
@@ -2014,12 +2441,23 @@ REMOVE {{ _key: @payPeriodKey }} IN {PayPeriodCollection}
         Name = doc.name?.ToString() ?? "",
         CategoryKey = doc.categoryKey?.ToString() ?? "",
         AccountKey = doc.accountKey?.ToString() ?? "",
-        Amount = decimal.TryParse(doc.amount?.ToString(), out decimal amount) ? amount : 0,
+        Amount = decimal.TryParse(doc.amount?.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal amount) ? amount : 0m,
         DueDay = int.TryParse(doc.dueDay?.ToString(), out int day) ? day : 1,
         Frequency = doc.frequency?.ToString() ?? "",
         IsAutoPay = doc.isAutoPay == true,
         IsActive = doc.isActive == true,
-        CreatedAt = DateTime.TryParse(doc.createdAt?.ToString(), out DateTime created) ? created : DateTime.MinValue
+        CreatedAt = DateTime.TryParse(doc.createdAt?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime created) ? created : DateTime.MinValue,
+        // Bill type differentiation
+        BillType = doc.billType?.ToString() ?? "bill",
+        // Debt-specific fields
+        DebtType = doc.debtType?.ToString(),
+        TotalBalance = TryParseNullableDecimal(doc.totalBalance),
+        InterestRate = TryParseNullableDecimal(doc.interestRate),
+        MinimumPayment = TryParseNullableDecimal(doc.minimumPayment),
+        OriginalAmount = TryParseNullableDecimal(doc.originalAmount),
+        PayoffDate = DateTime.TryParse(doc.payoffDate?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime payoff) ? payoff : null,
+        LastPaidDate = DateTime.TryParse(doc.lastPaidDate?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lastPaid) ? lastPaid : null,
+        NextDueDate = DateTime.TryParse(doc.nextDueDate?.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime nextDue) ? nextDue : null
     };
 
     private static BudgetGoalDto MapGoal(dynamic doc) => new()

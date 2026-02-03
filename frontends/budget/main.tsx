@@ -1,5 +1,6 @@
 import { App, staticFiles } from "fresh";
 import { asset, type State, url } from "./utils.ts";
+import ThemeInitializer from "./islands/ThemeInitializer.tsx";
 
 // 1. Set the Base Path for internal routing
 export const app = new App<State>({ basePath: "/budget" });
@@ -9,7 +10,7 @@ app.use(staticFiles());
 // 2. The HTML Shell (App Wrapper) - Manual CSS Injection
 app.appWrapper(({ Component }) => {
   return (
-    <html lang="en" data-theme="emerald">
+    <html lang="en" class="theme-dark">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,6 +19,7 @@ app.appWrapper(({ Component }) => {
         <link rel="stylesheet" href={asset("/assets/styles.css")} />
       </head>
       <body>
+        <ThemeInitializer />
         <Component />
       </body>
     </html>

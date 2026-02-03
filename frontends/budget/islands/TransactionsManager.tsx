@@ -92,7 +92,11 @@ function TransactionsManagerContent({
   const transferDate = useSignal(new Date().toISOString().split("T")[0]);
   const transferMemo = useSignal("");
 
-  // Form state
+  // Edit transaction state
+  const isEditModalOpen = useSignal(false);
+  const editingTransactionId = useSignal<string | null>(null);
+
+  // Form state (shared between add and edit)
   const formAccountId = useSignal<string>(
     accounts[0]?.accountKey ?? accounts[0]?.id?.toString() ?? "",
   );
@@ -228,7 +232,71 @@ function TransactionsManagerContent({
     formCategoryId.value = "";
     formMemo.value = "";
     formIsInflow.value = false;
+    editingTransactionId.value = null;
     isModalOpen.value = true;
+  };
+
+  const openEditModal = (tx: Transaction) => {
+    const txKey = getTxKey(tx);
+    if (!txKey) return;
+    
+    editingTransactionId.value = txKey;
+    formAccountId.value = getTxAccountKey(tx) || "";
+    formPayee.value = tx.payee || "";
+    formAmount.value = Math.abs(tx.amount).toString();
+    formDate.value = tx.transactionDate?.split("T")[0] || new Date().toISOString().split("T")[0];
+    formCategoryId.value = tx.categoryKey || "";
+    formMemo.value = tx.memo || "";
+    formIsInflow.value = tx.amount >= 0;
+    isEditModalOpen.value = true;
+  };
+
+  const handleEditSubmit = async (e: Event) => {
+    e.preventDefault();
+    if (!editingTransactionId.value) return;
+    
+    isSubmitting.value = true;
+
+    const amount = parseFloat(formAmount.value) || 0;
+    const finalAmount = formIsInflow.value
+      ? Math.abs(amount)
+      : -Math.abs(amount);
+
+    try {
+      const res = await fetch(`${API_BASE}/transactions/${editingTransactionId.value}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accountKey: formAccountId.value,
+          categoryKey: formCategoryId.value || null,
+          payee: formPayee.value || "",
+          memo: formMemo.value || null,
+          amount: finalAmount,
+          transactionDate: formDate.value,
+        }),
+      });
+      if (res.ok) {
+        toast.success("Transaction updated");
+        await loadAllTransactions();
+        await refreshCategoryBalances();
+        isEditModalOpen.value = false;
+        editingTransactionId.value = null;
+      } else {
+        const body = await res.text().catch(() => "");
+        console.error(
+          "Error updating transaction:",
+          res.status,
+          res.statusText,
+          body,
+        );
+        toast.error("Failed to update transaction");
+      }
+    } catch (error) {
+      console.error("Error updating transaction:", error);
+      toast.error("Error updating transaction");
+    } finally {
+      isSubmitting.value = false;
+    }
   };
 
   const handleSubmit = async (e: Event) => {
@@ -509,12 +577,16 @@ function TransactionsManagerContent({
 
   const deleteTransaction = async (tx: Transaction) => {
     if (!confirm("Delete this transaction?")) return;
+    const key = getTxKey(tx);
+    if (!key) return;
     try {
-      const res = await fetch(`${API_BASE}/transactions/${tx.id}`, {
+      const res = await fetch(`${API_BASE}/transactions/${key}`, {
         method: "DELETE",
       });
       if (res.ok) {
-        transactions.value = transactions.value.filter((t) => t.id !== tx.id);
+        transactions.value = transactions.value.filter((t) =>
+          getTxKey(t) !== key
+        );
         calculateAccountStats();
         toast.success("Transaction deleted");
       } else {
@@ -934,7 +1006,7 @@ function TransactionsManagerContent({
       <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div class="flex flex-wrap items-center gap-2">
           {filterAccountId.value !== null && (
-            <div class="badge bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff] gap-2 font-mono min-h-[32px]">
+            <div class="badge bg-[#00d9ff]/20 text-accent-cyan border-[#00d9ff] gap-2 font-mono min-h-[32px]">
               {getAccountNameByKey(filterAccountId.value)}
               <button
                 type="button"
@@ -946,7 +1018,7 @@ function TransactionsManagerContent({
               </button>
             </div>
           )}
-          <span class="text-sm text-[#888] font-mono">
+          <span class="text-sm text-theme-secondary font-mono">
             {filteredTransactions.value.length}{" "}
             transaction{filteredTransactions.value.length !== 1 ? "s" : ""}
           </span>
@@ -955,7 +1027,7 @@ function TransactionsManagerContent({
           <div class="flex gap-1">
             <button
               type="button"
-              class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff]"
+              class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px] border border-[#333] hover:border-[#00d9ff] text-theme-secondary hover:text-accent-cyan"
               onClick={undo}
               disabled={undoHistory.value.length === 0}
               title={undoHistory.value.length > 0
@@ -982,7 +1054,7 @@ function TransactionsManagerContent({
             </button>
             <button
               type="button"
-              class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px] border border-[#333] hover:border-[#00d9ff] text-[#888] hover:text-[#00d9ff]"
+              class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px] border border-[#333] hover:border-[#00d9ff] text-theme-secondary hover:text-accent-cyan"
               onClick={redo}
               disabled={redoHistory.value.length === 0}
               title={redoHistory.value.length > 0
@@ -1012,14 +1084,14 @@ function TransactionsManagerContent({
         <div class="flex gap-2 flex-wrap">
           <button
             type="button"
-            class="btn bg-[#0a0a0a] border border-[#00d9ff]/50 hover:border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            class="btn bg-theme-tertiary border border-accent-cyan/50 hover:border-accent-cyan text-accent-cyan min-h-[44px] font-mono"
             onClick={openTransferModal}
           >
             <span class="mr-2">⇄</span>Transfer
           </button>
           <button
             type="button"
-            class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-[#00d9ff] min-h-[44px] font-mono"
+            class="btn bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 border border-[#00d9ff] text-accent-cyan min-h-[44px] font-mono"
             onClick={openAddModal}
           >
             <span class="mr-2">+</span>Add Transaction
@@ -1029,16 +1101,16 @@ function TransactionsManagerContent({
 
       {/* Bulk Actions Toolbar */}
       {selectedTxIds.value.size > 0 && (
-        <div class="flex items-center gap-2 p-3 bg-[#00d9ff]/10 border border-[#00d9ff]/30 rounded flex-wrap">
-          <span class="font-bold text-[#00d9ff] font-mono text-sm">
+        <div class="flex items-center gap-2 p-3 bg-accent-cyan/10 border border-accent-cyan/30 rounded flex-wrap">
+          <span class="font-bold text-accent-cyan font-mono text-sm">
             {selectedTxIds.value.size} SELECTED
           </span>
 
           {/* Bulk Edit Dropdown */}
-          <div class="dropdown">
+          <div class="dropdown dropdown-bottom">
             <label
               tabIndex={0}
-              class="btn btn-xs min-h-[32px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] font-mono"
+              class="btn btn-xs min-h-[32px] bg-theme-tertiary border-theme text-theme-secondary hover:border-accent-cyan hover:text-accent-cyan font-mono"
             >
               EDIT
               <svg
@@ -1058,12 +1130,12 @@ function TransactionsManagerContent({
             </label>
             <ul
               tabIndex={0}
-              class="dropdown-content z-[1] menu p-2 shadow bg-[#1a1a1a] border border-[#333] rounded w-52 font-mono text-xs"
+              class="dropdown-content z-[1] menu p-2 shadow bg-theme-secondary border border-theme rounded w-52 font-mono text-xs"
             >
               <li>
                 <a
                   onClick={() => openBulkEditModal("date")}
-                  class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10"
+                  class="text-theme-secondary hover:text-accent-cyan hover:bg-accent-cyan/10"
                 >
                   📅 CHANGE DATE
                 </a>
@@ -1071,7 +1143,7 @@ function TransactionsManagerContent({
               <li>
                 <a
                   onClick={() => openBulkEditModal("payee")}
-                  class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10"
+                  class="text-theme-secondary hover:text-accent-cyan hover:bg-accent-cyan/10"
                 >
                   👤 CHANGE PAYEE
                 </a>
@@ -1079,7 +1151,7 @@ function TransactionsManagerContent({
               <li>
                 <a
                   onClick={() => openBulkEditModal("memo")}
-                  class="text-[#888] hover:text-[#00d9ff] hover:bg-[#00d9ff]/10"
+                  class="text-theme-secondary hover:text-accent-cyan hover:bg-accent-cyan/10"
                 >
                   📝 CHANGE MEMO
                 </a>
@@ -1089,14 +1161,14 @@ function TransactionsManagerContent({
 
           <button
             type="button"
-            class="btn btn-xs min-h-[32px] bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] font-mono"
+            class="btn btn-xs min-h-[32px] bg-theme-tertiary border-theme text-theme-secondary hover:border-accent-cyan hover:text-accent-cyan font-mono"
             onClick={openBulkCategoryModal}
           >
             CATEGORY
           </button>
           <button
             type="button"
-            class="btn btn-xs min-h-[32px] bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
+            class="btn btn-xs min-h-[32px] bg-accent-green/20 border-accent-green text-accent-green font-mono"
             onClick={bulkClear}
             disabled={isSubmitting.value}
           >
@@ -1112,7 +1184,7 @@ function TransactionsManagerContent({
           </button>
           <button
             type="button"
-            class="btn btn-xs min-h-[32px] btn-ghost text-[#666] hover:text-white font-mono"
+            class="btn btn-xs min-h-[32px] btn-ghost text-theme-muted hover:text-theme-primary font-mono"
             onClick={clearSelection}
           >
             CLEAR SELECTION
@@ -1121,14 +1193,14 @@ function TransactionsManagerContent({
       )}
 
       {/* Transactions List */}
-      <div class="card bg-[#1a1a1a] shadow-xl border border-[#333]">
+      <div class="card bg-theme-secondary shadow-xl border border-theme">
         <div class="card-body p-0">
           {/* Mobile: Horizontal scroll wrapper */}
           <div class="overflow-x-auto">
             <table class="table table-sm w-full">
               <thead>
-                <tr class="bg-[#0a0a0a] border-b-2 border-[#00d9ff]">
-                  <th class="w-10 text-[#888] font-mono text-xs">
+                <tr class="bg-theme-tertiary border-b-2 border-accent-cyan">
+                  <th class="w-10 text-theme-secondary font-mono text-xs">
                     <input
                       type="checkbox"
                       class="checkbox checkbox-sm checkbox-primary"
@@ -1142,18 +1214,18 @@ function TransactionsManagerContent({
                       aria-label="Select all transactions"
                     />
                   </th>
-                  <th class="w-10 text-[#888] font-mono text-xs">CLR</th>
-                  <th class="text-[#888] font-mono text-xs">DATE</th>
-                  <th class="text-[#888] font-mono text-xs">ACCOUNT</th>
-                  <th class="text-[#888] font-mono text-xs">PAYEE</th>
-                  <th class="text-[#888] font-mono text-xs">CATEGORY</th>
-                  <th class="text-[#888] font-mono text-xs hidden sm:table-cell">
+                  <th class="w-10 text-theme-secondary font-mono text-xs">CLR</th>
+                  <th class="text-theme-secondary font-mono text-xs">DATE</th>
+                  <th class="text-theme-secondary font-mono text-xs">ACCOUNT</th>
+                  <th class="text-theme-secondary font-mono text-xs">PAYEE</th>
+                  <th class="text-theme-secondary font-mono text-xs">CATEGORY</th>
+                  <th class="text-theme-secondary font-mono text-xs hidden sm:table-cell">
                     MEMO
                   </th>
-                  <th class="text-right text-[#888] font-mono text-xs">
+                  <th class="text-right text-theme-secondary font-mono text-xs">
                     AMOUNT
                   </th>
-                  <th class="w-10 text-[#888] font-mono text-xs hidden md:table-cell">
+                  <th class="w-10 text-theme-secondary font-mono text-xs hidden md:table-cell">
                     RCP
                   </th>
                   <th class="w-10"></th>
@@ -1165,7 +1237,7 @@ function TransactionsManagerContent({
                     <tr>
                       <td
                         colSpan={10}
-                        class="text-center text-[#888] py-8 font-mono"
+                        class="text-center text-theme-secondary py-8 font-mono"
                       >
                         No transactions yet
                       </td>
@@ -1174,7 +1246,7 @@ function TransactionsManagerContent({
                   : filteredTransactions.value.map((tx) => (
                     <tr
                       key={getTxKey(tx)}
-                      class={`border-b border-[#333] hover:bg-[#1a1a1a] ${
+                      class={`border-b border-theme hover:bg-theme-tertiary ${
                         ((tx as unknown as { isReconciled?: boolean })
                             .isReconciled ??
                             ((tx as unknown as { clearedStatus?: string })
@@ -1183,7 +1255,7 @@ function TransactionsManagerContent({
                           : ""
                       } ${
                         selectedTxIds.value.has(getTxKey(tx))
-                          ? "bg-[#00d9ff]/10"
+                          ? "bg-accent-cyan/10"
                           : ""
                       }`}
                     >
@@ -1206,8 +1278,8 @@ function TransactionsManagerContent({
                                 .isCleared ??
                                 ((tx as unknown as { clearedStatus?: string })
                                   .clearedStatus !== "uncleared"))
-                              ? "bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88]"
-                              : "btn-ghost border border-[#333] text-[#888]"
+                              ? "bg-accent-green/20 border-accent-green text-accent-green"
+                              : "btn-ghost border border-theme text-theme-secondary"
                           }`}
                           onClick={() => toggleCleared(tx)}
                           aria-label="Toggle cleared status"
@@ -1220,37 +1292,46 @@ function TransactionsManagerContent({
                             : ""}
                         </button>
                       </td>
-                      <td class="text-sm whitespace-nowrap text-white font-mono">
+                      <td class="text-sm whitespace-nowrap text-theme-primary font-mono">
                         {formatDate(tx.transactionDate)}
                       </td>
                       <td class="text-sm">
-                        <span class="badge bg-[#333] text-[#888] border-[#444] badge-sm font-mono">
+                        <span class="badge bg-theme-tertiary text-theme-secondary border-theme badge-sm font-mono">
                           {getAccountName(tx)}
                         </span>
                       </td>
-                      <td class="font-medium text-white">{tx.payee || "—"}</td>
-                      <td class="text-sm text-[#888]">
+                      <td class="font-medium text-theme-primary">{tx.payee || "—"}</td>
+                      <td class="text-sm text-theme-secondary">
                         <div class="flex items-center gap-1">
                           {tx.splits && tx.splits.length > 1
                             ? (
-                              <span class="badge bg-[#00d9ff]/20 text-[#00d9ff] border-[#00d9ff]/40 badge-xs font-mono">
+                              <span class="badge bg-accent-cyan/20 text-accent-cyan border-accent-cyan/40 badge-xs font-mono">
                                 SPLIT ({tx.splits.length})
                               </span>
                             )
                             : (
                               <span class="font-mono text-xs">
-                                {categories.find((c) => c.id === tx.categoryId)
-                                  ?.name ||
-                                  (
-                                    <span class="text-[#888] italic">
+                                {(() => {
+                                  // Try to find category by key first (new shape), then by id (legacy shape)
+                                  let foundCategory = null;
+                                  
+                                  if (tx.categoryKey) {
+                                    foundCategory = categories.find((c) => c.key === tx.categoryKey);
+                                  } else if (tx.categoryId) {
+                                    foundCategory = categories.find((c) => c.id === tx.categoryId);
+                                  }
+                                  
+                                  return foundCategory?.name || (
+                                    <span class="text-theme-muted italic">
                                       Uncategorized
                                     </span>
-                                  )}
+                                  );
+                                })()}
                               </span>
                             )}
                           <button
                             type="button"
-                            class="btn btn-ghost btn-xs min-h-[28px] min-w-[28px] opacity-50 hover:opacity-100 text-[#888] hover:text-[#00d9ff]"
+                            class="btn btn-ghost btn-xs min-h-[28px] min-w-[28px] opacity-50 hover:opacity-100 text-theme-secondary hover:text-accent-cyan"
                             onClick={(e) => {
                               e.stopPropagation();
                               openSplitEditor(tx);
@@ -1262,12 +1343,12 @@ function TransactionsManagerContent({
                           </button>
                         </div>
                       </td>
-                      <td class="text-sm text-[#888] max-w-xs truncate font-mono hidden sm:table-cell">
+                      <td class="text-sm text-theme-secondary max-w-xs truncate font-mono hidden sm:table-cell">
                         {tx.memo || ""}
                       </td>
                       <td
                         class={`text-right font-semibold whitespace-nowrap font-mono ${
-                          tx.amount >= 0 ? "text-[#00ff88]" : "text-white"
+                          tx.amount >= 0 ? "text-accent-green" : "text-theme-primary"
                         }`}
                       >
                         {tx.amount >= 0 ? "+" : ""}
@@ -1278,7 +1359,7 @@ function TransactionsManagerContent({
                           ? (
                             <a
                               href={`${UI_BASE}/receipts?view=${tx.receipt.id}`}
-                              class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-[#00ff88] hover:text-[#00ff88]/80"
+                              class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-accent-green hover:text-accent-green/80"
                               title="View Receipt"
                               aria-label="View receipt"
                             >
@@ -1288,7 +1369,7 @@ function TransactionsManagerContent({
                           : (
                             <a
                               href={`${UI_BASE}/receipts?link=${tx.id}`}
-                              class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-[#888] hover:text-[#00d9ff]"
+                              class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-theme-secondary hover:text-accent-cyan"
                               title="Add Receipt"
                               aria-label="Add receipt"
                             >
@@ -1297,14 +1378,28 @@ function TransactionsManagerContent({
                           )}
                       </td>
                       <td>
-                        <button
-                          type="button"
-                          class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-red-400 hover:text-red-300"
-                          onClick={() => deleteTransaction(tx)}
-                          aria-label="Delete transaction"
-                        >
-                          <span class="text-lg">×</span>
-                        </button>
+                        <div class="flex items-center gap-1">
+                          <button
+                            type="button"
+                            class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-theme-secondary hover:text-accent-cyan"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEditModal(tx);
+                            }}
+                            aria-label="Edit transaction"
+                            title="Edit transaction"
+                          >
+                            <span class="text-sm">✏️</span>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-ghost btn-xs min-h-[32px] min-w-[32px] text-red-400 hover:text-red-300"
+                            onClick={() => deleteTransaction(tx)}
+                            aria-label="Delete transaction"
+                          >
+                            <span class="text-lg">×</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -1317,8 +1412,8 @@ function TransactionsManagerContent({
       {/* Add Transaction Modal */}
       {isModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-2xl">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-2xl">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               ADD TRANSACTION
             </h3>
             <form onSubmit={handleSubmit}>
@@ -1341,7 +1436,7 @@ function TransactionsManagerContent({
                   />
                   <span
                     class={`font-bold font-mono text-xs ${
-                      formIsInflow.value ? "text-[#00ff88]" : "text-[#444]"
+                      formIsInflow.value ? "text-accent-green" : "text-[#444]"
                     }`}
                   >
                     INFLOW
@@ -1353,12 +1448,12 @@ function TransactionsManagerContent({
                 {/* Account Selector */}
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       ACCOUNT
                     </span>
                   </label>
                   <select
-                    class="select select-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                     value={formAccountId.value}
                     onChange={(e) =>
                       formAccountId.value = e.currentTarget.value}
@@ -1379,13 +1474,13 @@ function TransactionsManagerContent({
 
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       DATE
                     </span>
                   </label>
                   <input
                     type="date"
-                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                     value={formDate.value}
                     onInput={(e) => formDate.value = e.currentTarget.value}
                     required
@@ -1394,13 +1489,13 @@ function TransactionsManagerContent({
 
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       PAYEE
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                     placeholder="e.g., WALMART, SHELL GAS"
                     value={formPayee.value}
                     onInput={(e) => formPayee.value = e.currentTarget.value}
@@ -1409,7 +1504,7 @@ function TransactionsManagerContent({
 
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       AMOUNT
                     </span>
                   </label>
@@ -1417,7 +1512,7 @@ function TransactionsManagerContent({
                     type="number"
                     step="0.01"
                     min="0"
-                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                     placeholder="0.00"
                     value={formAmount.value}
                     onInput={(e) => formAmount.value = e.currentTarget.value}
@@ -1428,12 +1523,12 @@ function TransactionsManagerContent({
                 {/* Category with Available Balance */}
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       CATEGORY
                     </span>
                   </label>
                   <select
-                    class="select select-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                     value={formCategoryId.value}
                     onChange={(e) =>
                       formCategoryId.value = e.currentTarget.value}
@@ -1443,7 +1538,7 @@ function TransactionsManagerContent({
                       <optgroup
                         key={group.id}
                         label={group.name.toUpperCase()}
-                        class="bg-[#1a1a1a]"
+                        class="bg-theme-secondary text-theme-primary"
                       >
                         {(group.categories || []).map((cat) => {
                           const catKey = cat.key || cat.id?.toString();
@@ -1466,13 +1561,13 @@ function TransactionsManagerContent({
 
                 <div class="form-control col-span-2">
                   <label class="label">
-                    <span class="label-text font-mono text-xs text-[#888]">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
                       MEMO
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                     placeholder="OPTIONAL NOTE"
                     value={formMemo.value}
                     onInput={(e) => formMemo.value = e.currentTarget.value}
@@ -1499,8 +1594,8 @@ function TransactionsManagerContent({
                             key={bal.categoryKey}
                             class={`flex justify-between p-1 rounded cursor-pointer border border-transparent hover:border-[#00d9ff]/30 hover:bg-[#00d9ff]/5 ${
                               formCategoryId.value === bal.categoryKey
-                                ? "bg-[#00d9ff]/10 border-[#00d9ff]/30 text-[#00d9ff]"
-                                : "text-[#888]"
+                                ? "bg-[#00d9ff]/10 border-[#00d9ff]/30 text-accent-cyan"
+                                : "text-theme-secondary"
                             }`}
                             onClick={() =>
                               formCategoryId.value = bal.categoryKey}
@@ -1510,7 +1605,7 @@ function TransactionsManagerContent({
                             </span>
                             <span
                               class={bal.available >= 0
-                                ? "text-[#00ff88]"
+                                ? "text-accent-green"
                                 : "text-red-500"}
                             >
                               {formatCurrency(bal.available)}
@@ -1531,7 +1626,7 @@ function TransactionsManagerContent({
                 </button>
                 <button
                   type="submit"
-                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                  class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value
@@ -1546,18 +1641,260 @@ function TransactionsManagerContent({
         </div>
       )}
 
+      {/* Edit Transaction Modal */}
+      {isEditModalOpen.value && (
+        <div class="modal modal-open">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#ffb000] font-mono">
+              ✏️ EDIT TRANSACTION
+            </h3>
+            <form onSubmit={handleEditSubmit}>
+              {/* Inflow/Outflow Toggle */}
+              <div class="form-control mb-4">
+                <label class="label cursor-pointer justify-start gap-4">
+                  <span
+                    class={`font-bold font-mono text-xs ${
+                      !formIsInflow.value ? "text-red-500" : "text-[#444]"
+                    }`}
+                  >
+                    OUTFLOW
+                  </span>
+                  <input
+                    type="checkbox"
+                    class="toggle toggle-success"
+                    checked={formIsInflow.value}
+                    onChange={(e) =>
+                      formIsInflow.value = e.currentTarget.checked}
+                  />
+                  <span
+                    class={`font-bold font-mono text-xs ${
+                      formIsInflow.value ? "text-accent-green" : "text-[#444]"
+                    }`}
+                  >
+                    INFLOW
+                  </span>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                {/* Account Selector */}
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
+                      ACCOUNT
+                    </span>
+                  </label>
+                  <select
+                    class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
+                    value={formAccountId.value}
+                    onChange={(e) =>
+                      formAccountId.value = e.currentTarget.value}
+                    required
+                  >
+                    {(accounts || []).filter((a) =>
+                      !(a as unknown as { isClosed?: boolean }).isClosed
+                    ).map((acc) => (
+                      <option
+                        key={getAccountKey(acc)}
+                        value={getAccountKey(acc)}
+                      >
+                        {getAccountLabel(acc).toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
+                      DATE
+                    </span>
+                  </label>
+                  <input
+                    type="date"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
+                    value={formDate.value}
+                    onInput={(e) => formDate.value = e.currentTarget.value}
+                    required
+                  />
+                </div>
+
+                <div class="form-control col-span-2">
+                  <label class="label">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
+                      PAYEE
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
+                    placeholder="WHO DID YOU PAY?"
+                    value={formPayee.value}
+                    onInput={(e) => formPayee.value = e.currentTarget.value}
+                  />
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
+                      CATEGORY
+                    </span>
+                  </label>
+                  <select
+                    class="select select-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
+                    value={formCategoryId.value}
+                    onChange={(e) =>
+                      formCategoryId.value = e.currentTarget.value}
+                  >
+                    <option value="">-- SELECT CATEGORY --</option>
+                    {categoryGroups.map((
+                      group,
+                    ) => (
+                      <optgroup
+                        key={group.key || group.id}
+                        label={group.name.toUpperCase()}
+                        class="bg-theme-secondary text-theme-primary"
+                      >
+                        {group.categories.map((cat) => {
+                          const catKey = cat.key || cat.id?.toString();
+                          const bal = categoryBalancesSignal.value.find((
+                            b: CategoryBalance,
+                          ) => b.categoryKey === catKey);
+                          const available = bal?.available ?? cat.targetAmount ?? 0;
+                          return (
+                            <option
+                              key={catKey}
+                              value={catKey || ""}
+                            >
+                              {cat.name.toUpperCase()} ({formatCurrency(available)})
+                            </option>
+                          );
+                        })}
+                      </optgroup>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
+                      AMOUNT
+                    </span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
+                    placeholder="0.00"
+                    value={formAmount.value}
+                    onInput={(e) => formAmount.value = e.currentTarget.value}
+                    required
+                  />
+                </div>
+
+                <div class="form-control col-span-2">
+                  <label class="label">
+                    <span class="label-text font-mono text-xs text-theme-secondary">
+                      MEMO (OPTIONAL)
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
+                    placeholder="OPTIONAL NOTE"
+                    value={formMemo.value}
+                    onInput={(e) => formMemo.value = e.currentTarget.value}
+                  />
+                </div>
+              </div>
+
+              {/* Quick Category Picker */}
+              {!formIsInflow.value && categoryBalancesSignal.value.length > 0 &&
+                (
+                  <div class="mt-4 p-3 bg-[#0a0a0a] border border-[#333] rounded">
+                    <label class="label py-0">
+                      <span class="label-text font-mono text-[10px] text-theme-secondary">
+                        QUICK PICK (BY AVAILABLE):
+                      </span>
+                    </label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-1 mt-2 text-xs font-mono">
+                      {categoryBalancesSignal.value
+                        .filter((b: CategoryBalance) => b.available > 0)
+                        .sort((a: CategoryBalance, b: CategoryBalance) =>
+                          b.available - a.available
+                        )
+                        .slice(0, 12)
+                        .map((bal: CategoryBalance) => (
+                          <div
+                            key={bal.categoryKey}
+                            class={`flex justify-between p-1 rounded cursor-pointer border border-transparent hover:border-[#00d9ff]/30 hover:bg-[#00d9ff]/5 ${
+                              formCategoryId.value === bal.categoryKey
+                                ? "bg-[#00d9ff]/10 border-[#00d9ff]/30 text-accent-cyan"
+                                : "text-theme-secondary"
+                            }`}
+                            onClick={() =>
+                              formCategoryId.value = bal.categoryKey}
+                          >
+                            <span class="truncate">
+                              {bal.categoryName.toUpperCase()}
+                            </span>
+                            <span
+                              class={bal.available >= 0
+                                ? "text-accent-green"
+                                : "text-red-500"}
+                            >
+                              {formatCurrency(bal.available)}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+              <div class="modal-action">
+                <button
+                  type="button"
+                  class="btn font-mono"
+                  onClick={() => {
+                    isEditModalOpen.value = false;
+                    editingTransactionId.value = null;
+                  }}
+                >
+                  CANCEL
+                </button>
+                <button
+                  type="submit"
+                  class="btn bg-[#ffb000]/20 border-[#ffb000] text-[#ffb000] font-mono"
+                  disabled={isSubmitting.value}
+                >
+                  {isSubmitting.value
+                    ? <span class="loading loading-spinner loading-sm"></span>
+                    : "UPDATE TRANSACTION"}
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-backdrop" onClick={() => {
+            isEditModalOpen.value = false;
+            editingTransactionId.value = null;
+          }}>
+          </div>
+        </div>
+      )}
+
       {/* Split Transaction Modal - ENHANCED */}
       {isSplitModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333] max-w-2xl">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme max-w-2xl">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               ✂️ SPLIT TRANSACTION
             </h3>
 
             {/* Preset Buttons */}
             <div class="mb-4">
               <label class="label py-0">
-                <span class="label-text font-mono text-[10px] text-[#888]">
+                <span class="label-text font-mono text-[10px] text-theme-secondary">
                   QUICK PRESETS:
                 </span>
               </label>
@@ -1566,7 +1903,7 @@ function TransactionsManagerContent({
                   <button
                     key={p}
                     type="button"
-                    class="btn btn-xs bg-[#333] border-[#444] text-[#888] hover:border-[#00d9ff] hover:text-[#00d9ff] font-mono"
+                    class="btn btn-xs bg-[#333] border-[#444] text-theme-secondary hover:border-[#00d9ff] hover:text-accent-cyan font-mono"
                     onClick={() =>
                       applySplitPreset(p as "50/50" | "thirds" | "quarters")}
                   >
@@ -1594,21 +1931,21 @@ function TransactionsManagerContent({
               }`}
             >
               <div class="flex justify-between items-center mb-2">
-                <span class="text-[10px] text-[#888]">TRANSACTION TOTAL:</span>
+                <span class="text-[10px] text-theme-secondary">TRANSACTION TOTAL:</span>
                 <span class="text-lg font-bold text-white">
                   {formatCurrency(Math.abs(splitTransactionAmount.value))}
                 </span>
               </div>
               <div class="divider before:bg-[#333] after:bg-[#333] my-1"></div>
               <div class="flex justify-between items-center">
-                <span class="text-[10px] text-[#888]">SPLITS TOTAL:</span>
+                <span class="text-[10px] text-theme-secondary">SPLITS TOTAL:</span>
                 <span
                   class={`text-lg font-bold ${
                     Math.abs(
                         getSplitsTotal() -
                           Math.abs(splitTransactionAmount.value),
                       ) < 0.01
-                      ? "text-[#00ff88]"
+                      ? "text-accent-green"
                       : "text-red-500"
                   }`}
                 >
@@ -1619,7 +1956,7 @@ function TransactionsManagerContent({
                     getSplitsTotal() - Math.abs(splitTransactionAmount.value),
                   ) >= 0.01 && (
                 <div class="flex justify-between items-center mt-2 pt-2 border-t border-[#333]">
-                  <span class="text-[10px] text-[#888]">
+                  <span class="text-[10px] text-theme-secondary">
                     {getSplitsTotal() < Math.abs(splitTransactionAmount.value)
                       ? "REMAINING:"
                       : "OVER BY:"}
@@ -1637,7 +1974,7 @@ function TransactionsManagerContent({
                         Math.abs(splitTransactionAmount.value) && (
                       <button
                         type="button"
-                        class="btn btn-xs bg-[#00ff88]/20 border-[#00ff88] text-[#00ff88] font-mono"
+                        class="btn btn-xs bg-[#00ff88]/20 border-[#00ff88] text-accent-green font-mono"
                         onClick={autoDistributeRemaining}
                       >
                         AUTO-FIX
@@ -1660,12 +1997,12 @@ function TransactionsManagerContent({
                 >
                   <div class="form-control">
                     <label class="label py-0">
-                      <span class="label-text text-[10px] text-[#888] font-mono">
+                      <span class="label-text text-[10px] text-theme-secondary font-mono">
                         CATEGORY
                       </span>
                     </label>
                     <select
-                      class="select select-bordered select-xs w-full !bg-[#1a1a1a] border-[#333] !text-white font-mono"
+                      class="select select-bordered select-xs w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                       value={row.categoryId}
                       onChange={(e) =>
                         updateSplitRow(
@@ -1679,7 +2016,7 @@ function TransactionsManagerContent({
                         <optgroup
                           key={group.id}
                           label={group.name.toUpperCase()}
-                          class="bg-[#1a1a1a]"
+                          class="bg-theme-secondary text-theme-primary"
                         >
                           {(categories || []).filter((c) => {
                             const groupKey = group.key || group.id?.toString();
@@ -1687,9 +2024,13 @@ function TransactionsManagerContent({
                               c.categoryGroupId === group.id;
                           }).map((cat) => {
                             const catKey = cat.key || cat.id?.toString();
+                            const bal = categoryBalancesSignal.value.find((
+                              b: CategoryBalance,
+                            ) => b.categoryKey === catKey);
+                            const available = bal?.available ?? cat.targetAmount ?? 0;
                             return (
                               <option key={catKey} value={catKey}>
-                                {cat.name.toUpperCase()}
+                                {cat.name.toUpperCase()} ({formatCurrency(available)})
                               </option>
                             );
                           })}
@@ -1699,7 +2040,7 @@ function TransactionsManagerContent({
                   </div>
                   <div class="form-control">
                     <label class="label py-0">
-                      <span class="label-text text-[10px] text-[#888] font-mono">
+                      <span class="label-text text-[10px] text-theme-secondary font-mono">
                         AMOUNT
                       </span>
                     </label>
@@ -1714,7 +2055,7 @@ function TransactionsManagerContent({
                   </div>
                   <div class="form-control">
                     <label class="label py-0">
-                      <span class="label-text text-[10px] text-[#888] font-mono">
+                      <span class="label-text text-[10px] text-theme-secondary font-mono">
                         MEMO
                       </span>
                     </label>
@@ -1741,7 +2082,7 @@ function TransactionsManagerContent({
 
             <button
               type="button"
-              class="btn btn-ghost btn-xs mt-3 text-[#00d9ff] font-mono"
+              class="btn btn-ghost btn-xs mt-3 text-accent-cyan font-mono"
               onClick={addSplitRow}
             >
               + ADD SPLIT ROW
@@ -1757,7 +2098,7 @@ function TransactionsManagerContent({
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                 onClick={saveSplits}
                 disabled={isSubmitting.value ||
                   Math.abs(
@@ -1781,21 +2122,21 @@ function TransactionsManagerContent({
       {/* Bulk Category Modal */}
       {isBulkCategoryModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               BULK CATEGORIZE
             </h3>
-            <p class="text-[#888] text-xs mb-4 font-mono">
+            <p class="text-theme-secondary text-xs mb-4 font-mono">
               ASSIGN CATEGORY TO {selectedTxIds.value.size} TRANSACTIONS.
             </p>
             <div class="form-control">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#888]">
+                <span class="label-text font-mono text-xs text-theme-secondary">
                   CATEGORY
                 </span>
               </label>
               <select
-                class="select select-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                class="select select-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                 value={bulkCategoryId.value}
                 onChange={(e) => bulkCategoryId.value = e.currentTarget.value}
               >
@@ -1804,13 +2145,20 @@ function TransactionsManagerContent({
                   <optgroup
                     key={group.id}
                     label={group.name.toUpperCase()}
-                    class="bg-[#1a1a1a]"
+                    class="bg-theme-secondary text-theme-primary"
                   >
-                    {(group.categories || []).map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name.toUpperCase()}
-                      </option>
-                    ))}
+                    {(group.categories || []).map((cat) => {
+                      const catKey = cat.key || cat.id?.toString();
+                      const bal = categoryBalancesSignal.value.find((
+                        b: CategoryBalance,
+                      ) => b.categoryKey === catKey);
+                      const available = bal?.available ?? cat.targetAmount ?? 0;
+                      return (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name.toUpperCase()} ({formatCurrency(available)})
+                        </option>
+                      );
+                    })}
                   </optgroup>
                 ))}
               </select>
@@ -1825,7 +2173,7 @@ function TransactionsManagerContent({
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                 onClick={applyBulkCategory}
                 disabled={isSubmitting.value || !bulkCategoryId.value}
               >
@@ -1846,19 +2194,19 @@ function TransactionsManagerContent({
       {/* Transfer Modal */}
       {isTransferModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               ↔️ ACCOUNT TRANSFER
             </h3>
             <div class="space-y-4">
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     FROM ACCOUNT
                   </span>
                 </label>
                 <select
-                  class="select select-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                  class="select select-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                   value={transferFromAccountId.value}
                   onChange={(e) =>
                     transferFromAccountId.value = e.currentTarget.value}
@@ -1874,12 +2222,12 @@ function TransactionsManagerContent({
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     TO ACCOUNT
                   </span>
                 </label>
                 <select
-                  class="select select-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                  class="select select-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                   value={transferToAccountId.value}
                   onChange={(e) =>
                     transferToAccountId.value = e.currentTarget.value}
@@ -1900,7 +2248,7 @@ function TransactionsManagerContent({
               )}
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     AMOUNT
                   </span>
                 </label>
@@ -1908,7 +2256,7 @@ function TransactionsManagerContent({
                   type="number"
                   step="0.01"
                   min="0.01"
-                  class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                  class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                   placeholder="0.00"
                   value={transferAmount.value}
                   onInput={(e) => transferAmount.value = e.currentTarget.value}
@@ -1916,26 +2264,26 @@ function TransactionsManagerContent({
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     DATE
                   </span>
                 </label>
                 <input
                   type="date"
-                  class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                  class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                   value={transferDate.value}
                   onInput={(e) => transferDate.value = e.currentTarget.value}
                 />
               </div>
               <div class="form-control">
                 <label class="label">
-                  <span class="label-text font-mono text-xs text-[#888]">
+                  <span class="label-text font-mono text-xs text-theme-secondary">
                     MEMO (OPTIONAL)
                   </span>
                 </label>
                 <input
                   type="text"
-                  class="input input-bordered !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                  class="input input-bordered bg-theme-tertiary border-theme text-theme-primary font-mono"
                   placeholder="OPTIONAL NOTE"
                   value={transferMemo.value}
                   onInput={(e) => transferMemo.value = e.currentTarget.value}
@@ -1952,7 +2300,7 @@ function TransactionsManagerContent({
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                 onClick={createTransfer}
                 disabled={isSubmitting.value || !transferAmount.value ||
                   transferFromAccountId.value === transferToAccountId.value}
@@ -1974,16 +2322,16 @@ function TransactionsManagerContent({
       {/* Bulk Edit Modal */}
       {isBulkEditModalOpen.value && (
         <div class="modal modal-open">
-          <div class="modal-box bg-[#1a1a1a] border border-[#333]">
-            <h3 class="font-bold text-lg mb-4 text-[#00d9ff] font-mono">
+          <div class="modal-box bg-theme-secondary border border-theme">
+            <h3 class="font-bold text-lg mb-4 text-accent-cyan font-mono">
               BULK EDIT {bulkEditField.value.toUpperCase()}
             </h3>
-            <p class="text-[#888] text-xs mb-4 font-mono">
+            <p class="text-theme-secondary text-xs mb-4 font-mono">
               UPDATING {selectedTxIds.value.size} TRANSACTIONS.
             </p>
             <div class="form-control">
               <label class="label">
-                <span class="label-text font-mono text-xs text-[#888]">
+                <span class="label-text font-mono text-xs text-theme-secondary">
                   NEW {bulkEditField.value.toUpperCase()}
                 </span>
               </label>
@@ -1991,7 +2339,7 @@ function TransactionsManagerContent({
                 ? (
                   <input
                     type="date"
-                    class="input input-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="input input-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                     value={bulkEditValue.value}
                     onInput={(e) => bulkEditValue.value = e.currentTarget.value}
                   />
@@ -1999,7 +2347,7 @@ function TransactionsManagerContent({
                 : (
                   <input
                     type="text"
-                    class="input input-bordered w-full !bg-[#0a0a0a] border-[#333] !text-white font-mono"
+                    class="input input-bordered w-full bg-theme-tertiary border-theme text-theme-primary font-mono"
                     placeholder={`ENTER NEW ${bulkEditField.value.toUpperCase()}...`}
                     value={bulkEditValue.value}
                     onInput={(e) => bulkEditValue.value = e.currentTarget.value}
@@ -2016,7 +2364,7 @@ function TransactionsManagerContent({
               </button>
               <button
                 type="button"
-                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-[#00d9ff] font-mono"
+                class="btn bg-[#00d9ff]/20 border-[#00d9ff] text-accent-cyan font-mono"
                 onClick={applyBulkEdit}
                 disabled={isSubmitting.value || !bulkEditValue.value.trim()}
               >
@@ -2040,12 +2388,12 @@ function TransactionsManagerContent({
           <div class="alert bg-[#0a0a0a] border-2 border-[#00d9ff] shadow-2xl min-w-[300px]">
             <div class="flex flex-col w-full gap-2">
               <div class="flex items-center gap-3">
-                <span class="loading loading-spinner text-[#00d9ff]"></span>
-                <div class="font-bold text-[#00d9ff] font-mono text-xs uppercase">
+                <span class="loading loading-spinner text-accent-cyan"></span>
+                <div class="font-bold text-accent-cyan font-mono text-xs uppercase">
                   {bulkProgressMessage.value}
                 </div>
               </div>
-              <div class="text-[10px] text-[#888] font-mono">
+              <div class="text-[10px] text-theme-secondary font-mono">
                 {bulkProgressCurrent.value} / {bulkProgressTotal.value}{" "}
                 OPERATIONS COMPLETED
               </div>

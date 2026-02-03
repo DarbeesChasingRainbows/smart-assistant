@@ -1,0 +1,7 @@
+name: darbeeschasingrainbows/smart-assistant-csharp
+version: 0.0.0
+library: true
+extensionTargets:
+  codeql/csharp-all: '*'
+dataExtensions:
+  - models/**/*.yml
